@@ -398,7 +398,7 @@ Door in het project aan te geven met welke klasse (het *__startup object__*) wor
 ****
 [.underline]#Laten we het eens uitproberen...#
 
-Voeg een `static void Main` toe aan het ___OtherProgram.cs__ document...
+Voeg een `static void Main` toe aan het __OtherProgram.cs__ document...
 
 .OtherProgram.cs
 [source,csharp,linenums]
