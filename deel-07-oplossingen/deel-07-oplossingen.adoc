@@ -1,0 +1,354 @@
+= Programmeren Basis - Deel 07 - Oplossingen
+Yanic Inghelbrecht
+v2022.03.08.12.08
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+// geen auto section numbering voor oefeningen (handigere titels en toc)
+//:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+
+== Visual Studio project en opstartobject
+
+=== Oplossing D07opstartobject
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
+ 
+== String bewerkingen en char datatype
+ 
+=== Een getal omzetten naar een geformatteerde string
+
+==== Oplossing D07veelvoudenvan9
+[source,csharp,linenums]
+----
+for (int i=1;i<=15;i+=2) {
+	int resultaat = 9 * i;
+	Console.WriteLine($"{i,2:d} x 9 = {resultaat,3:d}"); // <1>
+}
+----
+<1> voor `i` en `resultaat` voorzien we ruimte voor 2 resp. 3 cijfers
+
+
+==== Oplossing D07cirkel
+
+[source,csharp,linenums]
+----
+Console.Write("Geef de straal van een cirkel : ");
+string straalAlsTekst = Console.ReadLine();
+double straal = double.Parse(straalAlsTekst);
+
+double omtrek = 2 * Math.PI * straal;
+double oppervlakte = Math.PI * Math.Pow(straal, 2);
+
+Console.WriteLine($"De omtrek is {omtrek,0:f3}.");           // <1>
+Console.WriteLine($"De oppervlakte is {oppervlakte,0:f3}."); // <1>
+----
+<1> de eindige wijziging is de toevoeging van `,0:f3` tussen de accolades
+
+
+=== String bewerkingen
+
+
+==== Oplossing D07dotdotdot
+[source,csharp,linenums]
+----
+Console.Write("Geef een tekst : ");
+string input = Console.ReadLine();
+
+foreach (char c in input) {
+   Console.Write($"{c}.");
+}
+----
+
+
+==== Oplossing D07karakterperpositie
+// Y.01
+[source,csharp,linenums]
+----
+Console.Write("Geef een tekst : ");
+string input = Console.ReadLine();
+
+for (int i=0;i<input.Length;i++) {
+	char c = input[i];
+	Console.WriteLine($"{i,2:d} = {c}");
+}
+----
+
+We gebruiken hier geen foreach loop omdat we sowieso een teller nodig hebben om de positie te kunnen tonen.
+
+
+==== Oplossing D07achterstevoren
+[source,csharp,linenums]
+----
+Console.Write("Geef een tekst : ");
+string input = Console.ReadLine();
+
+for (int i = input.Length-1; i >=0; i--) { 
+	char c = input[i];
+	Console.Write(c);
+}
+----
+
+
+==== Oplossing D07bevatleesteken
+
+Merk vooreerst op dat `.IndexOf()` en `.Contains()` ons niet kunnen helpen omdat we niet op zoek zijn naar 1 specifieke zoektekst maar eerder naar één karakter uit een lijst van mogelijke leestekens (`.,;:!?"'` enz.)
+
+We zullen dus de string overlopen en elk karakter met `Char.IsPunctuation()` testen om te zien of het een leesteken is.
+
+[source,csharp,linenums]
+----
+Console.Write("Geef een tekst : ");
+string input = Console.ReadLine();
+
+bool leestekenGevonden = false;
+foreach (char c in input) {
+	if (Char.IsPunctuation(c)) {
+		leestekenGevonden = true; // <1>
+	}
+}
+
+if (leestekenGevonden) {
+	Console.WriteLine("De tekst bevat minstens 1 leesteken.");
+} else {
+	Console.WriteLine("De tekst bevat geen enkel leesteken.");
+}
+----
+<1> Variabele `leestekenGevonden` begint met waarde `false` en kan enkel `true` worden als we hier geraken.
+
+Eigenlijk kunnen we de loop stoppen zodra we het eerste leesteken vinden i.p.v. verder te zoeken. Het kan geen kwaad om de volledige tekst te doorlopen : het enige dat er gebeurt is dat `leestekenGevonden` meermaals op `true` gezet wordt. Als we echter met teksten te maken hebben die uit miljoenen symbolen bestaan, dan is deze oplossing natuurlijk niet erg efficiënt.
+
+In een volgende deel zullen we zien dat de `break` opdracht eender welke herhaling onmiddellijk kan beëindigen.
+
+Om de loop vroegtijdig te beëindigen zonder `break` opdracht, moeten we overschakelen op een while loop (en zelf een teller bijhouden om het einde van de tekst te kunnen detecteren). Het middenstuk van de oplossing wordt dan :
+
+[source,csharp,linenums]
+----
+bool leestekenGevonden = false;
+int index = 0;
+while (!leestekenGevonden && index < input.Length) {
+	char c = input[index];
+	if (Char.IsPunctuation(c)) {
+		leestekenGevonden = true;
+	}
+	index++;
+}
+----
+
+==== Oefening D07begintmethoofdletter
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
+
+
+==== Oplossing D07aantalkeere
+// Y1.02
+
+Een mogelijke oplossing is
+
+[source,csharp,linenums]
+----
+Console.Write("Geef een tekst : ");
+string input = Console.ReadLine();
+
+int aantal=0;
+foreach (char c in input) {
+	if (c == 'e' || c=='E') { // <1>
+		aantal++;
+	}
+}
+Console.WriteLine($"'e' komt {aantal} keer voor");
+----
+<1> is het karakter gelijk aan `e` of `E` (`||` duidt op een or-bewerking)
+
+Een alternatieve oplossing met `.ToLower()` op de `input` string
+
+[source,csharp,linenums]
+----	
+Console.Write("Geef een tekst : ");
+string input = Console.ReadLine();
+
+int aantal=0;
+foreach (char c in input.ToLower()) { // <1>
+	if (c == 'e') { // <2>
+		aantal++;
+	}
+}
+Console.WriteLine($"'e' komt {aantal} keer voor");
+----
+<1> we bekijken elk karakter uit de 'kleine letter' versie van de `input` string
+<2> nu moeten we enkel met een kleine `e` vergelijken
+
+Nog een alternatieve oplossing waarbij we `Char.ToLower()` gebruiken :
+
+[source,csharp,linenums]
+----
+Console.Write("Geef een tekst : ");
+string input = Console.ReadLine();
+
+int aantal=0;
+foreach (char c in input) {
+	if (Char.ToLower(c) == 'e') { // <1>
+		aantal++;
+	}
+}
+Console.WriteLine($"'e' komt {aantal} keer voor");
+----		
+<1> we nemen de 'kleine letter' versie van elk karakter en moeten dit dus enkel met `e` vergelijken
+		
+		
+==== Oplossing D07beginmethoofdletters
+
+Een oplossing waarbij we elke karakter overlopen en `Char.ToUpper()` toepassen zolang we nog niet voorbij de vijfde zijn :
+
+[source,csharp,linenums]
+----
+Console.Write("Geef een tekst : ");
+string input = Console.ReadLine();
+
+for (int i = 0 ; i < input.Length; i++) {
+	char c = input[i];
+	if (i < 5) {               // <1>
+		c = Char.ToUpper(c);
+	}
+	Console.Write(c);
+}
+----
+<1> de omzetting is enkel nodig voor de eerste vijf posities (nl. posities `0` t.e.m. `4`).
+
+We gebruiken geen forach loop omdat we sowieso een teller nodig hebben om bij te houden op welke positie we aangekomen zijn in de tekst.
+
+Een alternatieve oplossing met `.Substring()` :
+
+[source,csharp,linenums]
+----
+Console.Write("Geef een tekst : ");
+string input = Console.ReadLine();
+
+int index = 0;
+while (index < input.Length && index < 5) {
+	char c = Char.ToUpper( input[index] );
+	Console.Write(c);
+	index++;
+}
+
+// toon de rest van de tekst, indien er nog iets overschiet
+if (index < input.Length) { // <1>
+	string rest = input.Substring(index);
+	Console.Write(rest);
+}
+----
+
+
+=== String bewerkingen (moeilijker)
+
+
+==== Oplossing D07klinkersenmedeklinkers
+// Y1.08
+
+[source,csharp,linenums]
+----
+string klinkers = "aeiou";
+string medeklinkers = "bcdfghjklmnpqrstvwxyz";
+
+Console.Write("Geef een tekst : ");
+string tekst = Console.ReadLine();
+
+int aantalKlinkers = 0;
+int aantalMedeklinkers = 0;
+foreach (char c in tekst) {
+	char cKlein = Char.ToLower(c);
+
+	if (klinkers.Contains(cKlein)) {
+		aantalKlinkers++;
+	} else if (medeklinkers.Contains(cKlein)) {
+		aantalMedeklinkers++;
+	}
+}
+
+Console.WriteLine($"{aantalKlinkers} klinker(s) en {aantalMedeklinkers} medeklinker(s)");
+----
+
+
+==== Oplossing D07tussenaccolades
+// Y1.10
+
+[source,csharp,linenums]
+----
+Console.Write("Geef een tekst : ");
+string tekst = Console.ReadLine();
+
+int indexLinks = tekst.IndexOf("{");
+int indexRechts = tekst.IndexOf("}");
+
+if (indexLinks!=-1 && indexRechts!=-1 && indexLinks<indexRechts) {
+	int lengteTekstErtussen = indexRechts - indexLinks - 1;
+	int indexTekstErtussen = indexLinks + 1;
+	string tekstErtussen = tekst.Substring(indexTekstErtussen, lengteTekstErtussen);
+	Console.WriteLine($"gevonden : {tekstErtussen}");
+} else {
+    Console.WriteLine("niet gevonden");
+}
+----
+
+
+==== Oplossing D07zoeken
+// Y1.11
+[source,csharp,linenums]
+----
+Console.Write("Geef een tekst : ");
+string tekst = Console.ReadLine();
+
+Console.Write("Geef de zoektekst : ");
+string zoekTekst = Console.ReadLine();
+
+int aantalHits = 0;
+if (zoekTekst != "") {
+	string tekstKlein = tekst.ToLower();         // <1>
+	string zoekTekstKlein = zoekTekst.ToLower(); // <1>
+
+	int index = tekstKlein.IndexOf(zoekTekstKlein);
+	while (index != -1) {
+		// gevonden
+		aantalHits++;
+
+		// zoek nogmaals
+		int indexNaZoekTekst = index + 1; // zoek verder op volgende positie // <2>
+		index = tekstKlein.IndexOf(zoekTekst, indexNaZoekTekst);
+	}
+}
+Console.WriteLine($"De zoektekst komt {aantalHits} keer voor");
+----
+<1> om hoofdletterongevoelig te zoeken, werken we met de kleine-letter versies van de teksten
+<2> deze regel bepaalt waar de zoektocht verdergezet wordt
+
+Indien je de regel <2> zou vervangen door,
+
+[source,csharp,linenums]
+----
+int indexNaZoekTekst = index + zoekTekstKlein.Length; // zoek verder na de gevonden zoektekst
+----
+
+dan zou het programma de zoektekst `aa` slechts 3x vinden in `aaaaaa`. Probeer dit zeker eens uit!
+
+==== Oplossing D07zoekennavorige
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.

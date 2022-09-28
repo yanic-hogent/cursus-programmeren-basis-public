@@ -1,0 +1,1640 @@
+﻿= Programmeren Basis - Deel 13
+Frederiek De Wolf
+v2022.05.17.12.16
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+
+// Common I/O Tasks: https://docs.microsoft.com/en-us/dotnet/standard/io/common-i-o-tasks
+// How to: Enumerate directories and files: https://docs.microsoft.com/en-us/dotnet/standard/io/how-to-enumerate-directories-and-files
+// How to: Create a Directory Listing: https://docs.microsoft.com/en-us/previous-versions/dotnet/netframework-4.0/5cf8zcfh(v=vs.100)
+
+== Tekst lezen uit, of schrijven naar bestanden
+
+=== Bewaren van informatie (buiten het werkgeheugen)
+
+Zo goed als alle programma's die we tot dus ver gecreëerd hebben, manipuleren op één of ander manier [.underline]*informatie*.  Ze stellen doorgaans een bepaald resultaat samen, en rapporteren dit resultaat aan de eindgebruiker.
+
+De informatie waarmee deze programma's aan de slag gaan, komt tot dus ver van het programma zelf.  Zijn bijvoorbeeld *als literals opgenomen*...
+
+[source,csharp,linenums]
+----
+string item1 = "brood";  // <1>
+string item2 = "krant";  // <1>
+
+string boodschappenLijst = $"Boodschappenlijst:\n";
+boodschappenLijst += $"- {item1}\n";  // <2>
+boodschappenLijst += $"- {item2}\n";  // <2>
+
+Console.WriteLine(boodschappenLijst);
+----
+<1> Hier is alvast tijdens het coderen bepaald dat we steeds vers __brood__ en een nieuwe __krant__ nodig hebben.
+<2> Deze worden op onze `boodschappenLijst` geplaatst.
+
+[source,shell]
+----
+Boodschappenlijst:
+- brood
+- krant
+----
+
+Of, de informatie waar onze programma's mee aan slag gaan, komt van de eindgebruiker.  Werden bijvoorbeeld *door de gebruiker ingevoerd*...
+
+[source,csharp,linenums]
+----
+...
+
+do {
+    Console.WriteLine(boodschappenLijst);
+
+    Console.Write("Toevoegen?: ");
+    string item = Console.ReadLine();  // <1>
+
+    boodschappenLijst += $"- {item}\n";  // <2>
+
+    Console.WriteLine();
+} while (true);
+----
+<1> Deze keer wordt bepaald door de gebruiker welke __items__ ...
+<2> ...aan de `boodschappenLijst` worden toegevoegd.
+
+Voegt de gebruiker hier pakweg __kaas__ en __melk__ toe, dan ziet ons programmaverloop er zo uit...
+
+[source,shell]
+----
+Boodschappenlijst:
+- brood
+- krant
+
+Toevoegen?: kaas
+
+Boodschappenlijst:
+- brood
+- krant
+- kaas
+
+Toevoegen?: melk
+
+Boodschappenlijst:
+- brood
+- krant
+- kaas
+- melk
+
+Toevoegen?: 
+----
+
+Een fraai resultaat, maar *wat als de gebruiker het programma afsluit*?  
+Uiteraard gaan zijn toegevoegde items dan verloren.  __Brood__ en __krant__ mogen dan nog wel aanwezig zijn, __kaas__ en __melk__ werden niet onthouden...
+
+[source,shell]
+----
+Boodschappenlijst:
+- brood
+- krant
+
+Toevoegen?: 
+----
+
+Informatie (of __data__) laten we tijdens uitvoer onthouden door __dataholders__.  Meer specifiek __variabelen__ of __constanten__.  Variabelen in het geval er tijdens uitvoer beslist wordt welke waarde wordt bewaard.
+
+*Variabelen (of constanten) zitten* echter *slechts in het __(werk)geheugen__ zolang het programma in uitvoer is.  Eens het programma wordt afgesloten, gaan al deze waardes verloren.*  De totale hoeveelheid aan __werkgeheugen__ is immers gelimiteerd, of zelfs schaars.  Om die reden wordt bij het afsluiten van een applicatie het (aan dit programma) toebedeelde werkgeheugen weer vrijgegeven.
+
+Voor onze applicatie betekent dit dus dat deze informatie verloren gaat.  *Wens je dat niet, dan ga je die informatie op één of ander manier moeten __persisteren__ (__bewaren__) buiten het werkgeheugen.*  Dat kan *bijvoorbeeld aan de hand van databanken, of overige bestanden*.
+De daar bijgehouden informatie kan dan op een ander moment door ons programma weer worden ingeladen.
+
+Veel programma's gaan aan de gebruiker mogelijkheden bieden zelf te sturen wanneer informatie wordt opgeslaan, en wanneer deze weer op te halen.  Denk aan de typische menu:File[Save] en menu:File[Open...] opties die vele programma's aanreiken.
+
+Andere (of dezelfde) programma's gaan ook automatisch bij het afsluiten (en op andere gepaste tijdstippen) de opgegeven informatie wegschrijven.  Om ze dan bijvoorbeelbeed bij het opstarten van het programma weer in te laden.  Ook voor onze __boodschappenlijst applicatie__ zou dat vanpas komen.  
+
+=== Volledig inhoud overschrijven of inlezen
+
+Laten we het eens proberen.  We voegen logica toe die de volledige lijst (de inhoud van de `string` variabele `boodschappenLijst`) wegschrijft...
+
+[source,csharp,linenums]
+----
+const string bestandsnaam = "boodschappenLijst.txt";
+string boodschappenLijst = $"Boodschappenlijst:\n";
+
+...
+
+File.WriteAllText(bestandsnaam, boodschappenLijst);
+----
+
+De `WriteAllText` method schrijft de `string` informatie weg naar een bestand, en sluit daarna dit bestand af.
+Indien het bestaat nog niet bestaat wordt het gecreëerd, indien ze wel reeds bestaat wordt ze overschreven!
+
+Bij het opstarten van het programma kan vervolgens de inhoud van het bestand gebruikt worden om de `boodschappenLijst` te herstellen...
+
+[source,csharp,linenums]
+----
+boodschappenLijst = File.ReadAllText(bestandsnaam);
+----
+
+De `ReadAllText` method opent het bestand, leest alle tekst uit en levert ze in `string` vorm op.  Na het uitlezen van het bestand wordt dit bestand afgesloten.
+
+.Afsluiten van bestanden, of omgaan met schaarse resources.
+[TIP]
+====
+Zowel bij het __schrijven naar__, als bij het __lezen uit__ een bestand is het naderhand afsluiten van dat bestand cruciaal.  
+
+Bij het openen van bestanden worden een __lock__ (__afgrendeling__) geplaatst op deze resource.  Dit verhindert dat anderen (andere gebruikers, andere applicaties, ...) gelijktijdig met dezelfde (eventueel schaarse) bron aan de slag gaan.
+Het afsluiten van het bestand heft de __lock__ op, of stelt de resource met andere woorden weer beschikbaar voor anderen.
+
+Het is uiteraard een __good practice__ om zo kort mogelijke (schaarse) resources te reserveren voor specifiek gebruik.  Methods als `WriteAllText` en `ReadAllText` gaan daarom ook inderdaad zo kort mogelijk van deze bestanden gebruik maken.  Ze openen ze, doen hun ding (__schrijven naar__, of __lezen uit__ deze bestanden), en sluiten ze weer af.
+====
+
+****
+[.underline]#Voorbeeld met File.ReadAllText en .WriteAllText#
+
+Eens alle code samen...
+
+[source,csharp,linenums]
+----
+using System;
+using System.IO;  // <1>
+
+const string bestandsnaam = "boodschappenLijst.txt";
+
+string boodschappenLijst = $"Boodschappenlijst:\n";
+if (File.Exists(bestandsnaam)) {  // <2>
+    boodschappenLijst = File.ReadAllText(bestandsnaam);
+}
+
+string item;
+bool doorgaanMetToevoegen = true;
+do {
+    Console.WriteLine(boodschappenLijst);
+
+    Console.Write("Toevoegen (STOP om af te sluiten)?: ");
+    item = Console.ReadLine();
+
+    if (item.Trim().ToUpper() != "STOP") {
+        boodschappenLijst += $"- {item}\n";
+    } else {
+        doorgaanMetToevoegen = false;
+    }
+
+    Console.WriteLine();
+} while (doorgaanMetToevoegen);
+
+File.WriteAllText(bestandsnaam, boodschappenLijst);
+----
+<1> De `using System.IO` directive helpt op verkorte manier te verwijzen naar de klasse `File` (die in deze namespace is gedefinieerd).  Zonder deze was het noodzakelijk in de code spreken over `System.IO.File`.
+<2> Merk op dat we controleren of de inhoud van de `boodschappenLijst` variabele wel overschreven moet worden.  Dit door na te gaan of het bestand wel bestaat.
+****
+
+.Controleren of een bestand bestaat.
+[TIP]
+====
+De `File.Exist` method gaat na of het opgeven bestand terug te vinden is.  De opgeleverde `bool` waarde zal `true` zijn indien dat het geval is, `false` dan uiteraard indien het bestand niet wordt teruggevonden.
+====
+
+****
+Bij invoer van __melk__, __choco__, __kaas__ en __STOP__ krijgen we bijvoorbeeld volgend programmaverloop...
+
+[source,shell]
+----
+Boodschappenlijst:
+
+Toevoegen (STOP om af te sluiten)?: melk
+
+Boodschappenlijst:
+- melk
+
+Toevoegen (STOP om af te sluiten)?: choco
+
+Boodschappenlijst:
+- melk
+- choco
+
+Toevoegen (STOP om af te sluiten)?: kaas
+
+Boodschappenlijst:
+- melk
+- choco
+- kaas
+
+Toevoegen (STOP om af te sluiten)?: STOP
+----
+
+Na de invoer van __STOP__ sluit het programma af, en wordt alle ingezette werkgeheugen voor deze applicatie vrijgegeven.
+
+Starten we de applicatie opnieuw op, dan slaagt deze er toch in zijn voorgaand opgestelde lijst te herladen...
+
+[source,shell]
+----
+Boodschappenlijst:
+- melk
+- choco
+- kaas
+
+Toevoegen (STOP om af te sluiten)?: STOP
+----
+****
+
+.System.IO namespace
+[IMPORTANT]
+====
+Merk op hoe in voorgaand voorbeeld sprake was een `using System.IO` directive.  Hiermee maak je voor compiler duidelijk hoe de `File` constructie (__klasse__) terug te vinden is in de `System.IO` namespace.  
+
+Deze namespace bevat allerhande constructies die te maken hebben met __I__nput of __O__utput naar bestanden.
+
+Zonder deze `using` directive, had je natuurlijk ook kunnen spreken over bijvoorbeeld de method `System.IO.File.WriteAllText`.  Ook dan was voor de compiler voldoende duidelijk waar hij die method of de `File` klasse moest gaan zoeken.   Omdat we echter willen vermijden dat we elke keer bij het gebruik van `File` moeten spreken over `System.IO.File` gaan we éénmalig dergelijke `using System.IO` bovenaan onze code toevoegen.
+
+Als we straks van meerdere code-eenheden (__klassen__ als `File`, `Path`, `Directory`, ...) gebruik maken uit dezelfde namespace (`System.IO`), komt deze éénmalig `using System.IO` directive van pas.
+
+Ter herinnering: Hetzelfde doen we bijvoorbeeld met `System.Console`.  Ook daar hanteren we een `using` directive als `using System`.  Hiermee wordt het bijvoorbeeld mogelijk de `Write` method als `Console.Write` aan te spreken, dit in plaats van `System.Console.Write`.
+==== 
+
+=== Relatieve bestandspaden versus absolute paden
+
+Aan methods als `Read`- en `WriteAllText` kunnen we eigenlijk __volledige bestandspaden__ meegeven.  Een volledig (__absoluut__) bestandspad bestaat niet alleen uit de bestandsnaam, maar ook uit de locatie (bijvoorbeeld in het bestandssysteem) waar dit bestand zich bevindt.  Bijvoorbeeld: __"C:\Mijn Documenten\boodschappenLijst.txt"__.
+
+Voorgaande code sprak echter eenvoudigweg over __"boodschappenLijst.txt"__, enkel de bestandsnaam werd vermeld.  In dergelijk geval wordt verondersteld dat dit bestand zich in de actuele folder zal bevinden, ook wel de __current directory__ genoemd.  De positie is dan eerder __relatief__ ten opzichte van deze actuele folder.  
+Een ander voorbeeld van een relatieve folder zou bijvoorbeeld zijn __"Boodschappen\boodschappenLijst.txt"__, dan wordt gewezen naar het bestand __boodschappenLijst.txt__ uit de __subfolder Boodschappen__ in de actuele folder.
+
+Bij het uitvoeren van ons programma is de __actuele folder__ de folder waarin de executable is terechtgekomen. 
+Die __executable__ (het .exe bestand in geval van een __Console App__ op __Windows__) is het eindresultaat van het __build proces__ dat de compiler verricht.   Het is deze executable die bij het klikken in __Visual Studio__ op de __play__ knop (of kiezen voor menu:Debug[Start Debugging]) binnen de commandline-omgeving tot uitvoering wordt gebracht.
+
+****
+Activeer de __Show All Files__ knop in de __Solution Explorer__ van __Visual Studio__.  Klap de __bin\Debug__ folder (en eventuele __.NET versie subfolder__ als __net5.0__, __net6.0__, ...) open, en vind daar inderdaad ons __boodschappenLijst.txt__ bestand terug.
+
+image:Solution Explorer - boodschappenLijst.txt.png[Solution Explorer - boodschappenLijst.txt]
+
+Je kan dit bestand uiteraard gewoon met __Visual Studio__ openen (dubbelklik erop) om de inhoud te bekijken, of aan te passen.
+
+Rechterklik eventueel op deze bestandsnaam en kies voor __menu:Open Containing Folder[]__ om aan de hand van de __Windows Verkenner__ dit bestand terug te vinden.
+
+Indien je zelf een tekstbestand wenst toe te voegen aan een bepaalde folder (die getoond wordt in de __Solution Explorer__), kan je bijvoorbeeld rechtklikken op deze folder en kiezen voor menu:Add[New Item...].  Je selecteert de __Text File__ template in de __General__ rubriek, voert een bestandsnaam in, en klikt op de __Add__ knop...
+
+image:Add New Item - Text File.png[Add New Item - Text File]
+****
+
+Wens je gebruik te maken van een systeem specifieke __speciale folders__, die op het niveau van het besturingssysteem zijn ingesteld, dan kan dit aan de hand van de `Environment.GetFolderPath` method en een `System.Environment.SpecialFolder` enumeratie argumentwaarde.
+
+Enkele voorbeelden...
+
+[%autowidth]
+|====
+| System.Environment. | Omschrijving 
+
+|`SpecialFolder.ApplicationData` | De folder die dient als centrale opslagplaats voor applicatie-specifieke informatie voor de huidige (__roaming__) gebruiker.  
+|`SpecialFolder.Desktop` | De virtuele bureaublad folder.
+|`SpecialFolder.MyDocuments` | De __Mijn Documenten__ folder.
+|====
+
+Bekijk eventueel link:https://docs.microsoft.com/en-us/dotnet/api/system.environment.specialfolder[Microsoft Docs - Environment.SpecialFolder Enum] voor meer details, en een volledig overzicht.
+
+Geef aan de `Environment.GetFolderPath` method een `SpecialFolder` argementwaarde mee, om in `string` vorm het bestandssysteem specifieke pad te bekomen.  Bijvoorbeeld `Environment.GetFolderPath(Environment.SpecialFolder.Desktop)`. 
+
+
+****
+[.underline]#Voorbeeld van Environment.SpecialFolder en GetFolderPath#
+
+Een uitgebreider voorbeeld...
+
+[source,csharp,linenums]
+----
+const string bestandsnaam = "boodschappenLijst.txt";
+
+string padNaarFolder;
+string padNaarFile;
+
+padNaarFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+padNaarFile = Path.Combine(padNaarFolder, bestandsnaam);  // <1>
+Console.WriteLine(padNaarFile);
+
+padNaarFolder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+padNaarFile = Path.Combine(padNaarFolder, bestandsnaam);
+Console.WriteLine(padNaarFile);
+
+padNaarFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+padNaarFile = Path.Combine(padNaarFolder, bestandsnaam);
+Console.WriteLine(padNaarFile);
+
+padNaarFolder = Environment.CurrentDirectory;  // <2>
+padNaarFile = Path.Combine(padNaarFolder, bestandsnaam);
+Console.WriteLine(padNaarFile);
+----
+
+Zou bijvoorbeeld bij gebruiker __JanJanssens__ volgende bestandspaden kunnen opleveren...
+
+[source,shell]
+----
+C:\Users\JanJanssens\AppData\Roaming\boodschappenLijst.txt
+C:\Users\JanJanssens\Desktop\boodschappenLijst.txt
+C:\Users\JanJanssens\Documents\boodschappenLijst.txt
+C:\Users\JanJanssens\source\repos\BoodschappenApp\bin\Debug\net6.0\boodschappenLijst.txt
+----
+
+Al kan dat op jouw configuratie sterk verschillend zijn.
+
+<1> De `Path.Combine` method wordt in het voorbeeld gebruikt om een folderpad en bestandsnaam netjes samen te plakken.  Eventuele separator (doorgaans een `\`) worden tussen het folderpad en de bestandsnaam geplaatst.
+
+<2> De `Environment.CurrentDirectory` property levert meteen in `string` vorm de actuele folder op.
+****  
+
+
+=== Achteraan toevoegen
+
+In onze __BoodschappenApp__ is het eigenlijk niet noodzakelijk de volledige bestandinhoud telkens volledig te overschrijven, we zouden ook gewoon de nieuwe __items__ achteraan het bestand toevoegen.
+
+We gebruiken daarvoor de `AppendAllText` method, opnieuw uit de `File` klasse, gedefinieerd in de `System.IO` namespace.
+
+[source,csharp,linenums]
+----
+using System;
+using System.IO;
+
+const string bestandsnaam = "boodschappenLijst.txt";
+
+string boodschappenLijst = $"Boodschappenlijst:\n";
+if (File.Exists(bestandsnaam)) {
+    boodschappenLijst = File.ReadAllText(bestandsnaam);
+}
+
+string nieuweItems = "";  // <1>
+string item;
+bool doorgaanMetToevoegen = true;
+do {
+    Console.WriteLine(boodschappenLijst);
+
+    Console.Write("Toevoegen (STOP om af te sluiten)?: ");
+    item = Console.ReadLine();
+
+    if (item.Trim().ToUpper() != "STOP") {
+        boodschappenLijst += $"- {item}\n";  // <2>
+        nieuweItems += $"- {item}\n";        // <3>
+    } else {
+        doorgaanMetToevoegen = false;
+    }
+
+    Console.WriteLine();
+} while (doorgaanMetToevoegen);
+
+File.AppendAllText(bestandsnaam, nieuweItems);  // <4>
+----
+<1> Een aparte `string` variabele `nieuweItems` registreert welke de __toegevoegde items__ zijn.
+<2> Naast toevoegen van dit __item__ aan de `boodschappenLijst`...
+<3> ...wordt het __toegevoegde item__ ook aan de `nieuweItems` variabele toegevoegd.
+<4> De `AppendAllText` method staat ons toe de `nieuweItems` achteraan in het bestand (na alle voorgaande inhoud) weg te schrijven.
+
+.Eén- of meermalig lezen of schrijven.
+[TIP]
+====
+Zeker bij het gebruik van methods als `AppendAllText` (of straks ook `AppendAllLines`) zou de neiging kunnen ontstaan deze iteratief in te zetten...
+
+[source,csharp,linenums]
+----
+do {
+    ...
+    item = Console.ReadLine();
+    ...
+    File.AppendAllText(bestandsnaam, item);  // <1>
+} while (doorgaanMetToevoegen);
+----
+<1> Elke toegevoegd item wordt meteen weggeschreven naar het bestand.
+
+Dit heeft als voordeel dat bij eventueel falen, neem nu bijvoorbeeld dat het toestel waarop de applicatie wordt uitgevoerd zonder stroom valt, toch telkens -vanaf zinvol- toegevoegde informatie werd opgeslagen.  
+Het einde van de applicatie wordt daarvoor dan immers niet meer afgewacht.
+
+Houdt hierbij echter rekening dat bij elke call naar methods als `File.ReadAllText`,  `.WriteAllText`, `.AppendAllText`, en straks ook `.ReadAllLines`,`.WriteAllLines` of `.AppendAllLines` het bestand zal worden ge-opend, en na verloop van handeling weer zal worden gesloten.  
+Tijdelijk is daarmee op de resource een bepaalde __lock__ van toepassing.  En is bijgevolg het bestand niet beschikbaar voor __anderen__.
+
+Overweeg daarom steeds of meerdere calls wel zijn aangewezen, en je niet met minder calls (bijvoorbeeld éénmalig) hetzelfde effect kunt bekomen...
+
+[source,csharp,linenums]
+----
+string nieuweItems = "";
+do {
+    ...
+    item = Console.ReadLine();
+    nieuweItems += item;
+    ...
+} while (doorgaanMetToevoegen);
+
+File.AppendAllText(bestandsnaam, nieuweItems);  // <1>
+----
+<1> Bij deze aanpak wordt wel het eind van het programma afgewacht.
+
+Minder schrijfbewerkingen zijn logischerwijs het gevolg (een voordeel).  Bij eventueel vroegtijdig falen van de applicatie, gaat alle toegevoegde informatie echter verloren (een nadeel).
+====
+
+=== Regels inlezen of overschrijven
+
+Stel dat we de __items__ op onze __boodschappenlijst__ willen nummeren, of de lijst alfabetisch willen sorteren...  
+
+[source,shell]
+----
+Boodschappenlijst:
+
+1) appels
+2) bananen
+3) peren
+----
+
+Dan zou het handig zijn de items niet allemaal samen (als één grote `string`) te kunnen benaderen.  Maar wel als elementen van een `string[]` (__string array__).  Een array kan je immers sorteren, en de elementen hebben per definitie een positie (of __rangnummer__).
+
+De `File.ReadAllLines` method maakt het mogelijk alle regels uit een bestand apart, maar verzamelt in één `string[]`, op te vragen.
+De method opent een tekstbestand, plaatst regel voor regel in een `string[]`, sluit het bestand, en levert de `string[]` op. 
+
+[source,csharp,linenums]
+----
+string boodschappenLijst = $"Boodschappenlijst:\n";
+string[] boodschappen = File.ReadAllLines(bestandsnaam);  // <1>
+
+Array.Sort(boodschappen);  // <2>
+for (int index = 0; index < boodschappen.Length; index++) {
+    boodschappenLijst += $"{index + 1} {boodschappen[index]}\n";  // <3>
+}
+
+Console.WriteLine(boodschappenLijst);
+----
+<1> `ReadAllLines` levert een `string[]` op, we vangen hier de verwijzing naar deze array op in de variabele `boodschappen`.
+<1> Een voorgedefinieerde sorteer functionaliteit (`Array.Sort`) maakt het ordenen eenvoudig.  Geef als parameterwaarde eenvoudigweg op van welke array de elementen moeten geordend worden.
+<2> Elk slot heeft een soort rangnummer (`index + 1`).
+
+Is de inhoud van ons bestand bijvoorbeeld...
+
+.boodschappenLijst.txt
+[source,shell]
+----
+appels
+peren
+bananen
+
+----
+
+Dan bekomen we bij uitvoer van voorgaande code netjes...
+
+[source,shell]
+----
+Boodschappenlijst:
+
+1) appels
+2) bananen
+3) peren
+----
+
+De lijst is gesorteerd, en alle items zijn genummerd.
+
+Indien je op een gegeven moment beschik over __nieuwe items__ kan je deze wegschrijven naar het bestand, of toevoegen aan het bestand.  Hiervoor gebruik je de `WriteAllLine` of `AppendAllLines` methods...
+
+[source,csharp,linenums]
+----
+string[] nieuweItems = {"kiwis", "citroenen"};
+
+// File.AppendAllLines(bestandsnaam, nieuweItems);
+// of
+File.WriteAllLines(bestandsnaam, nieuweItems);
+----
+
+`WriteAllLines` gaat de volledige bestandsinhoud overschrijven.  `AppendAllLines` behoudt dan uiteraard de huidige inhoud, maar voegt de nieuwe ontvangen waardes als nieuwe regels achteraan toe.
+Tussen elke elementwaarde (van de doorgegeven `string[]`) wordt dus bij beide methods een __newline karakter__ (__enter__) geplaatst.
+
+Bestaat het bestand nog niet, dan zal `Append`- of `WriteAllLines` het bestand voor ons creëren.  Best handig!
+
+.Convenience methods
+[TIP]
+====
+Het vrij makkelijk bestanden laten creëren, openen, uitlezen of opvullen, om daarna het bestand te sluiten, met methods als `File.ReadAllText`, `.ReadAllLines` , `.WriteAllText`, `.AppendAllText`, `.WriteAllLines` of `.AppendAllLines` is erg __praktisch__ of __handig__.
+
+Men noemt ze om die redenen soms ook wel *__convenience methods__*.
+
+Een beetje verderop gaan we het lezen van tekst, of schrijven van tekst naar bestanden eens op een andere manier proberen.  Meer specifiek aan de hand van __stream objecten__.  Daar ga je de stappen van het openen, lezen, schrijven en sluiten eerder manueel verrichten.  Dit is wat krachtiger, heeft je meer sturing, maar is wat minder __praktisch__.
+====
+
+=== Bestanden verplaatsen, kopiëren of verwijderen
+
+Voor het verplaatsen of hernoemen (`File.Move`), kopiëren (`File.Copy`) en verwijderen (`File.Delete`) van bestanden zijn eveneens enkele __praktisch__ functionaliteiten voorzien... 
+
+[source,csharp,linenums]
+----
+// Maak twee backups...
+string bronFolder = Environment.CurrentDirectory;
+string bronBestand = Path.Combine(bronFolder, "boodschappenLijst.txt");
+string backupBestand1 = Path.Combine(bronFolder, "boodschappenLijst-backup1.txt");
+string backupBestand2 = Path.Combine(bronFolder, "boodschappenLijst-backup2.txt");
+File.Copy(bronBestand, backupBestand1);
+File.Copy(bronBestand, backupBestand2);
+
+// Verplaats (en hernoem) de tweede backup naar Mijn Documenten...
+string doelFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+File.Move(backupBestand2, Path.Combine(doelFolder, "boodschappenLijst-old.txt"));
+
+// Hernoem de eerste backup (zonder hem in een andere folder te plaatsen)...
+File.Move(backupBestand1, Path.Combine(bronFolder, "boodschappenLijst-backup.txt"));
+
+// Verwijder het orginele bestand...
+File.Delete(bronBestand);              
+----
+
+Ook folders (__directories__) kan je creëren (`Directory.CreateDirectory` en `.CreateSubdirectory`), verplaatsen (`Directory.Move`) of verwijderen (`Directory.Delete`).  Net als bij bestanden (`File.Exists`) kan je bij folders nagaan of ze effectief bestaan (`Directory.Exists`).
+
+== Exception handling
+
+We hebben het reeds gehad over de verschillende soorten van fouten bij het programmeren.  We spraken over __compilefouten__, __logische fouten__ en __runtimefouten__ (ook wel __exceptions__ genoemd).
+
+=== Programma-afbreking
+	
+Optredende runtimefouten leiden tot programma-afbreking.  Zonder dat de gebruiker bijvoorbeeld nog de kans krijgt zijn verrichte werk op te slaan.  
+
+****
+[.underline]#Voorbeeld van programma-afbreking bij runtimefout#
+
+Probeer het maar eens uit.  Stel je voor dat je volgende code in een programma voorziet...
+
+[source,csharp,linenums]
+----
+int index = int.Parse(Console.ReadLine());
+
+string tekst = "Hello World!";
+Console.WriteLine(tekst[index]);
+----
+
+Deze code zal bij invoer van __99__ leiden tot een runtimefout.  Tijdens uitvoer blijkt dat er helemaal geen honderdste karakter (op __index 99__) te benaderen valt.
+
+Voer je binnen __Visual Studio__ deze code uit, dat is het effect iets als...
+
+image::Optredende exception in Visual Studio.png[Optredende exception in Visual Studio]
+
+Vrij elegant geeft __Visual Studio__ aan om wat voor soort __exception__ het gaat, en welke code deze __runtimefout__ heeft veroorzaakt.  
+
+Tijdens het ontwikkelen, zeg maar tijdens het __coderen__ en tussendoor __uittesten__, is het optreden van exceptions niet zo'n groot obstakel.  Je wordt netjes gewezen op de code die het potentiële probleem veroorzaakt.
+Je kan vervolgens, daar hebben we het straks over, de nodig aanpassingen in je code aanbrengen om het optreden van exceptions te vermijden.
+
+Stel dat je dit niet doet, en je zou bijvoorbeeld op __Windows__ de __executable__ gaan opstarten, dan wordt je als gebruiker geconfronteerd met het plotse afbreken.
+
+Rechterklik in de __Solution Explorer__ op de __executable__ (__.exe bestand__) die je terugvindt in de __bin\Debug__ folder, en kies voor __Open Containing Folder__...
+
+image::Debug Executable - Open Containing Folder.png[Debug Executable - Open Containing Folder]
+
+[TIP]
+====
+Indien je in de __Solution Explorer__ geen __bin\Debug__ folder te zien krijgt, klik je op de __Show All Files__ knop bovenaan deze __Solution Explorer__.
+====
+
+Start de __executable__ op en vraag naar het karakter op index __99__...  
+
+Kort krijg je een melding te zien van het feit dat een bepaalde exception optrad (hier de __IndexOutOfRangeException__), waarna de console zich weer zal afsluiten.
+
+image::Optredende exception in Verkenner.png[Optredende exception in Verkenner]
+
+Voor de eindgebruiker is dit uiteraard een nare ervaring.  Plots brak de applicatie zich (onverwachts) af.
+Voor hem was misschien helemaal niet duidelijk dat hij hiermee ons algoritme in de problemen bracht.
+****
+
+=== Exceptions vermijden
+
+Het plotse afbreken, of met andere woorden het *optreden van runtimefouten, proberen we te vermijden*.
+
+Je kan dit doen...
+
+- door zelf *__programmatorisch controles__ in te bouwen*, met controlestructuren als een `if`
+- aan de hand van *__exception handling__*
+
+Laten we eerst nog eens kijken naar een voorbeeld met __programmatorische controles__...
+
+****
+[.underline]#Voorbeeld met programmatorische controles#
+
+Door de nodige controles in te bouwen kan je bepaald falen afvangen.  Bij het inlezen van informatie uit een bestand, heb je niet alles onder controle.  Is dat bestand bijvoorbeeld wel beschikbaar?  Of zit daar bijvoorbeeld wel informatie in die __correct__ (zoals verwacht) werd geformateerd?
+
+Start met het aanmaken van een bestand __vrienden.csv__ in de voor het programma __actuele folder__...
+
+.vrienden.csv
+[source,csharp,linenums]
+----
+Jan;23;9000
+Piet;24;8000
+Rita;22;2000
+----
+
+Dit __csv bestand__ bevat per regel de __naam__, de __leeftijd__ en de __postcode__ van een bepaalde __vriend__.
+
+.Wat is een __csv__ of __comma separated values__ bestand?
+[TIP]
+====
+In een __comma separated values__ bestand (vaak opgeslaan in een bestand met de extensie __.csv__) worden per regel informatie over een bepaalde entiteit bijgehouden.  In dit geval gaat het bijvoorbeeld over __vrienden__.  Elke regel bevat dan ook informatie over één specifieke vriend.
+
+Op die regel worden de verschillende informatieblokjes van elkaar gescheiden aan de hand van een bepaalde __separator__, bijvoorbeeld een komma, puntkomma of vertical bar (__|__).  In ons geval hier wordt de __naam__, de __leeftijd__ en de __postcode__ voor deze __vriend__ geregistreerd.
+====
+
+Voer daar volgende code op uit...
+
+[source,csharp,linenums]
+----
+using System;
+using System.IO;
+
+class Program {
+
+    static void Main() {
+        PrintGemiddeldeLeeftijd("vrienden.csv");
+    }
+
+    static void PrintGemiddeldeLeeftijd(string padNaarBestand) {
+        if (File.Exists(padNaarBestand)) {  // <1>
+            // Laad alle regels apart (als een apart element) in...
+            string[] vrienden = File.ReadAllLines(padNaarBestand);  // <2>
+
+            if (vrienden.Length > 0) {
+
+                // Tel alle leeftijden samen...
+                int totaleLeeftijd = 0;
+                foreach (string vriend in vrienden) {
+
+                    // Splits elke regel op in verschillende blokjes informatie...
+                    string[] vriendInformatie = vriend.Split(";");
+
+                    if (vriendInformatie.Length >= 2) {  // <3>
+
+                        // Haal daaruit de leeftijd van elke vriend...                   
+                        bool leeftijdOk = int.TryParse(vriendInformatie[1], out int leeftijd);   // <4>
+
+                        // Indien leeftijd geldig tel ze op bij het totaal...
+                        if (leeftijdOk) {  
+                            totaleLeeftijd += leeftijd;
+                        } else {
+                            RapporteerProbleem($"Voor {naam} vinden we geen geldige leeftijd terug.");
+                            break;
+                        }
+                    } else {
+                        RapporteerProbleem($"Voor een bepaald vriend vinden we geen geldige informatie terug.");
+                        break;
+                    }
+
+                }
+
+                // Bereken de gemiddelde leeftijd, en druk ze af...
+                int gemiddeldeLeeftijd = totaleLeeftijd / vrienden.Length;
+                Console.WriteLine($"Gemiddelde leeftijd: {gemiddeldeLeeftijd}");
+
+            } else {
+                RapporteerProbleem($"Geen vrienden teruggevonden.");
+            }
+        } else {
+            RapporteerProbleem($"Bestand {padNaarBestand} niet teruggevonden.");
+        }
+    }
+
+    static void RapporteerProbleem(string melding) {
+        Console.WriteLine($"Probleem: {melding}");
+    }
+}
+----
+<1> We gaan na of het bestand wel bestaat.
+<2> Zonder deze controle riskeer je een `FileNotFoundException` indien het bestand niet wordt teruggevonden bij de uitvoer van de `ReadAllLines` method.
+<3> We controleren of elke regel wel op zijn minst 2 informatieblokjes bevat.
+<4> We veronderstellen daarbij dat de __leeftijd__ het tweede informatieblokje is.  Het risico is dat -wanneer dat niet het geval is- een `IndexOutOfRangeException` optreedt bij het aanspreken van dat tweede element.
+
+Omdat we de toegang naar het bestand, en het formaat van de informatie binnen het bestand, niet onder controle hebben, werd enige voorzichtigheid ingebouwd.
+
+We houden ondermeer rekening met volgende mogelijkheden (test het zelf maar eens uit):
+
+- __"Bestand {padNaarBestand} niet teruggevonden."__
+- __"Geen vrienden teruggevonden."__, bijvoorbeeld indien het bestand leeg zou zijn.
+- __"Voor een bepaald vriend vinden we geen geldige informatie terug."__, bijvoorbeeld indien we de tweede regel van het bestand aanpassen in `Piet` (zonder de __leeftijd__ of __postcode__).
+- __"Voor {naam} vinden we geen geldige leeftijd terug."__, bijvoorbeeld als je de tweede regel van het bestand aanpast in `Piet;xyz;8000`.
+****
+
+Volledig robuust is deze code nog steeds niet.  Vooral de call naar de `ReadAllLines` method is potentieel nog problematisch.  
+Kijk maar eens naar de lijst van exceptions die je te zien krijg wanneer je met je muis gaat hangen boven de naam van deze method in je code.
+
+image:Files.ReadAllLines exceptions.png[Files.ReadAllLines exceptions]
+
+Niet alleen een `FileNotFoundException` kan optreden, maar bijvoorbeeld ook een `DirectoryNotFoundException` of `PathTooLongException` kan optreden.  
+
+Bekijk de documentatie op __Microsoft Docs__ link:https://docs.microsoft.com/en-us/dotnet/api/system.io.file.readalllines[File.ReadAllLines Method] voor volledig gedetailleerde informatie.  Welke exception kunnen optreden, en wanneer die optreden, staat daar in groter detail opgelijst.
+
+==== Aan de hand van exception handling
+
+Ook *exception handling* is bruikbaar, voor het vermijden van optredende runtimefouten.  Soms is het zelfs aangewezen omdat:
+
+- de resem van exceptions die kan optreden (denk aan die bij __file handlings methods__ als `ReadAllLines`) zo groot is, dat het vervelend (en moeilijk leesbaar) zou worden, indien je daar telkens programmatorische controles voor moet inbouwen, graag willen we iets als `if (__bestand-bestaat__ && __voldoende-toegangsrechten__ && __voldoende-werkgeheugen__ && __...__)` vermijden
+
+- niet altijd programmatorisch controles mogelijk zijn, je kan wel controleren of het bestand bestaat (bv. aan de hand van `File.Exists`) om ze later te openen (bv. met `File.ReadAllText`), maar wie zegt dat ze __later__ (verderop in de code en dus tijd) nog wel bestaat?
+
+- de kans dat deze __uitzonderlijke__ (__exceptionele__) omstandigheden optreden toch erg klein zijn
+
+In exception handling *__proberen__* we voorzichtig (met een *`try` statement*) bepaalde instructies uit te voeren.
+Een bijhorend *`catch` gedeelte* definieert hoe we een __opgegooide__ exceptie gaan *__opvangen__*, of met andere woorden afhandelen.
+
+****
+[.underline]#Voorbeeld met exception handling#
+
+[source,csharp,linenums]
+----
+static void PrintGemiddeldeLeeftijd(string padNaarBestand) {
+    try {
+        string[] vrienden = File.ReadAllLines(padNaarBestand);  // <1>
+
+        int totaleLeeftijd = 0;
+        foreach (string vriend in vrienden) {
+            string[] vriendInformatie = vriend.Split(";");
+
+            int leeftijd = int.Parse(vriendInformatie[1]);  // <2> <3>
+
+            totaleLeeftijd += leeftijd;
+        }
+
+        int gemiddeldeLeeftijd = totaleLeeftijd / vrienden.Length;
+        Console.WriteLine($"Gemiddelde leeftijd: {gemiddeldeLeeftijd}");
+    } catch (Exception ex) {
+        RapporteerProbleem($"Een probleem trad op, interne message: [{ex.Message}].");
+    }
+}
+----
+
+Een hele reeks van controles, zoals in de vorige aanpak nog werden ingezet, zijn hier weggelaten.  Indien een exception optreedt als...
+
+<1> `FileNotFound`-, `DirectoryNotFound`-, `PathTooLongException`
+<2> `IndexOutOfRangeException` 
+<3> `InvalidCastException`
+
+...zal steeds een foutmelding worden gerapporteerd.  En dat meteen als de exceptie optreedt.
+
+Wordt een exceptie __opgegooid__ dan wordt onmiddelijk een sprong gemaakt naar een afhandelend `catch` blok.  Er wordt niet meer teruggekeerd naar het `try` gedeelte.  Alle code die immers deze exceptions kon __opwerpen__ staat in het `try` gedeelte van het `try` statement dat een `catch` gedeelte die deze excepties kan __opvangen__.  
+
+In dit geval wordt, om meer details te kunnen bevragen van de optredende exception, in het `catch` gedeelte een `Exception` variabele gedeclareerd.  Het is in deze variabele dat de verwijzing naar de opgegooide exception zal terechtkomen.
+Aan de hand van de `Message` property kunnen we uit dergelijk `Exception` object een bijhorende __boodschap__ opvragen.  In ons programma hebben we ondermeer volgende mogelijke problemen die worden gerapporteerd...
+
+In geval van een *FileNotFoundException*, bijvoorbeeld bij een call als `PrintGemiddeldeLeeftijd("niet-gevonden.csv")`:
+
+[source,shell]
+----
+Probleem: Een probleem trad op, interne message: [Could not find file 
+   'C:\Users\JanJanssens\source\repos\VriendenApp\bin\Debug\net6.0\niet-gevonden.csv'.].
+----
+
+In geval van een *IndexOutOfRangeException*, bijvoorbeeld indien we de tweede regel van het bestand aanpassen in `Piet` (zonder de __leeftijd__ of __postcode__), of dus bij `vriendInformatie[1]`:
+
+[source,shell]
+----
+Probleem: Een probleem trad op, interne message: [Index was outside the 
+   bounds of the array.].
+----
+
+In geval van een *InvalidCastException*, bijvoorbeeld als je de tweede regel van het bestand aanpast in `Piet;xyz;8000`, of dus bij `int.Parse(vriendInformatie[1]`:
+
+[source,shell]
+----
+Probleem: Een probleem trad op, interne message: [Input string was not in a 
+   correct format.].
+----
+****
+
+Voor welk van deze methodes (__met of zonder exception handling__) je kiest is ondermeer afhankelijk van *hoe vaak deze ongeldige operatie zou kunnen voorvallen*...
+
+- Gebruik *programmatorisch controles* indien de *omstandigheid regelmatig kan voorvallen* en beschouwd kan worden als een *normaal programmaverloop*.   Je vermijdt zo ook optredende excepties, en de bijkomende overhead van het mechanisme in de runtime die de exceptions beheert. (Het registreren van optredende excepties, en doorspelen van dit voorkomen doorheen de code, neemt enige tijd in beslag.)
+- Gebruik *exception handling* indien deze *omstandigheid zelden voorkomt*, indien het werkelijk *uitzondelijk* is.  Minder code wordt uitgevoerd bij normale condities.  Dit is met andere woorden vlugger indien er geen exceptions optreden.
+
+In de praktijk worden combinaties van beide aanpakken (__met en zonder exception handling__) vaak gebruikt.  Acht je de kans vrij groot dat bijvoorbeeld een niet naar `int` te parsen leeftijd wordt vermeld, dan opteer je daar misschien toch voor een `int.TryParse` aanpak...
+
+[source,csharp,linenums]
+----
+static void PrintGemiddeldeLeeftijd(string padNaarBestand) {
+    try {
+        string[] vrienden = File.ReadAllLines(padNaarBestand);
+
+        int totaleLeeftijd = 0;
+        foreach (string vriend in vrienden) {
+            string[] vriendInformatie = vriend.Split(";");
+
+            string naam = vriendInformatie[0];              
+            bool leeftijdOk = int.TryParse(vriendInformatie[1], out int leeftijd);   
+
+            if (leeftijdOk) {  
+                totaleLeeftijd += leeftijd;
+            } else {
+                RapporteerProbleem($"Voor {naam} vinden we geen geldige leeftijd terug.");  // <1>
+            }
+        }
+
+        int gemiddeldeLeeftijd = totaleLeeftijd / vrienden.Length;  
+        Console.WriteLine($"Gemiddelde leeftijd: {gemiddeldeLeeftijd}");
+    } catch (Exception ex) {
+        RapporteerProbleem($"Een probleem trad op, interne message: [{ex.Message}].");
+    }
+}
+----
+<1> Meteen heb je ook een meer verfijnde afhandeling (meer specifieke foutmelding) in dergelijke omstandigheid.
+
+Het blijft eenvoudiger aan de hand van __programmatorische controles__ fijnmazigere __fout-afhandelingslogica__ in je algoritme te verweven.  __Exception handling__, of het werken met `try` statements, staat wel vlot toe grotere blokken code (in het `try` gedeelte) rekening te laten houden met bepaalde problematische omstandigheden.
+
+==== Exception handling bij file IO
+
+Hoe dan ook is aan te raden bij het werken met externe resources als bestanden, bijvoorbeeld aan de hand van de besproken convenience methods, telkens de uitzondelijke omstandigheden, aan de hand van `try` statements in rekening te brengen.
+
+Ga dus elke call naar methods als `ReadAllText`, `ReadAllLines`, `WriteAllText`, `WriteAllLines`, `AppendAllText` of `AppendAllLines` steeds in het `try` gedeelte van `try` statement uitschrijven.
+
+[source,csharp,linenums]
+----
+    try {
+        ... = File.ReadAllText(...);
+        ... = File.ReadAllLines(...);
+        File.WriteAllText(...);
+        File.WriteAllLines(...);
+        File.AppendAllText(...);
+        File.AppendAllLines(...);
+        ...
+    } catch (Exception ex) {
+        // fout-afhandelingslogica
+    }
+----
+
+=== Sprong naar het catch gedeelte
+
+Wordt een exceptie __opgegooid__ ergens in het `try` gedeelte, dan wordt meteen een sprong gemaakt naar een afhandelend `catch` blok.  Er wordt niet meer teruggekeerd naar het `try` gedeelte.
+
+Dat betekent dat alle code die volgt op een statement die mogelijks een exceptie opwerpt (bijvoorbeeld alle code die volgt op `instructie A`), eigenlijk enkel wordt uitgevoerd indien `instructie A` geen exceptie opgooit.
+
+Een stuk code als...
+
+[source,csharp,linenums]
+----
+try {
+    instructie A
+    instructie B
+    instructie C
+} catch (Exception ex) {
+    fout-afhandelingslogica X (voor A, B en C)
+}
+----
+
+Komt dus eigenlijk neer op iets als...
+
+[source,csharp,linenums]
+----
+instructie A
+if (instructie A werpt een exceptie op) {
+    fout-afhandelingslogica X
+} else {
+    instructie B
+    if (instructie B werpt een exceptie op) {
+        fout-afhandelingslogica X
+    } else {
+        instructie C
+        if (instructie C werpt een exceptie op) {
+            fout-afhandelingslogica X
+        }
+    }
+}
+----
+
+Wat natuurlijk __pseudo code__ is (geen echt zo uit te coderen code is).  Maar je begrijpt vast wat we bedoelen...  
+
+Elk stukje code in het `try` gedeelte wordt slechts voorwaardelijk uitgevoerd.  Onder voorwaarde dat voorafgaande instructies in dat `Try` gedeelte geen exceptions hadden opgeworpen.
+
+Het spreekt voor zich dat indien dergelijke voorwaardelijkheid gewenst is, het spronggedrag uit een `try` gedeelte goed uitkomt.
+
+=== Meerdere catch blokken
+
+Onze tweede aanpak (met exception handling) van het __vrienden voorbeeld__ had als nadeel dat wat minder specieke foutafhandeling, of op zijn minst minder specifieke foutmeldingen, aan deze uitzonderlijke omstandigheden werden gekoppeld.  Alle mogelijk exceptions die konden optreden in het `try` gedeelte werden op gezamelijk wijze afgehandeld.  We hadden dan ook één `catch` gedeelte voorzien...
+
+[source,csharp,linenums]
+----
+try {
+    instructie A
+    instructie B
+    instructie C
+} catch (Exception ex) {  // <1> <2>
+    fout-afhandelingslogica X (voor A, B en C)
+}
+----
+<1> Er is sprake van één `catch` blok.
+<2> Met een declaratie van een `Exception` variabele.
+
+Indien je in de __afhandelingslogica__ trouwens geen interesse had in de `Message` hoefde je ook geen `Exception` variabele als `ex` te declareren.  Dan zou je dus hetzelfde resultaat kunnen bereiken als volgt...
+
+[source,csharp,linenums]
+----
+try {
+    instructie A
+    instructie B
+    instructie C
+} catch {  // <1> <2>
+    fout-afhandelingslogica X (voor A, B en C)
+}
+----
+<1> Er is nog steeds sprake van *één `catch` blok*.
+<2> Deze keer *zonder* declaratie van een `Exception` variabele.
+
+Indien je toch een `Exception` variabele gaat declareren in een `catch` gedeelte, maakt de naam niet uit.  Doorgaans noemt men deze `ex` als afkorting voor __ex__ception, maar dat mag eender welke naam zijn.  Dit is vrij uit te kiezen.
+
+Wens je toch wat meer in detail te bepalen wat voor soort afhandelingslogica nodig is, dan kan je ofwel opteren voor meerdere `try` statements...
+
+[source,csharp,linenums]
+----
+try {
+    instructie A
+} catch {
+    fout-afhandelingslogica X (voor A)
+}
+
+try {
+    instructie B
+} catch {
+    fout-afhandelingslogica Y (voor B)
+}
+
+try {
+    instructie C
+} catch {
+    fout-afhandelingslogica Z (voor C)
+}
+----
+
+Of meerdere `catch` gedeeltes in één `try` statement...
+
+[source,csharp,linenums]
+----
+try {
+    instructie D
+} catch (InvalidCastException ex) {   // <1>
+    fout-afhandelingslogica X
+} catch (FileNotFoundException ex) {  // <1>
+    fout-afhandelingslogica Y
+} catch (IOException ex) {            // <1>
+    fout-afhandelingslogica Z
+}
+----
+<1> Met declaraties van een `Exception` variabelen.
+
+Elke `catch` gedeelte bevat dan zijn eigen declaratie van `Exception` variabele.  
+
+Het datatype vermeldt in deze declaratie, bijvoorbeeld `InvalidCast`- of `FileNotFoundException` geeft dan aan wat voor type runtimefout dat `catch` gedeelte gaat afhandelen.
+
+.Volgorde van de catch gedeeltes.
+[IMPORTANT]
+====
+Soms is het belangrijk op de volgorde van de `catch` gedeeltes te letten.  Een `FileNotFoundException` is bijvoorbeeld een __subtype__ van `IOException`.  Deze laatste is de meer algemene noemer waar alle __I__nput __O__utput exceptions (`FileNotFoundException`, `DirectoryNotFound`, `UnauthorizeException`, ...) onder vallen.
+
+Wil je vermijden dat je in de meer algemene fout-afhandelingslogica van pakweg een `IOException` terechtkomt wanneer een meer specifieke `FileNotFoundException` optreedt, dan moet je het `catch` gedeelte voor deze laatste eerst vermelden.
+
+De fout-afhandelingslogica van ten hoogste één `catch` gedeelte zal immers worden uitgevoerd.  En voor alle duidelijkheid: dit zal het eerste `catch` blok zijn dat van toepassing is. 
+Na de uitvoer van de code in een `catch` gedeelte, gaat de uitvoer verder met wat in sequentie volgt op het `try` statement.
+
+Het omgekeerde (eerst `IOException` opvangen, nog voor `FileNotFoundException` op te vangen) houdt geen steek.  Alle __FileNotFoundExceptions__ zijn immers ook __IOExceptions__.  Het laatste `catch` blok van deze twee zou dan compleet genegeerd worden.
+
+Rechterklik in de code-editor van __Visual Studio__ eens op `FileNotFoundException` en kies voor een optie als __Go To Base__.  Een __Bases__ toolvenster zal verschijnen die alle __supertypes__ (__bovenliggende basissen__ of __basistypes__) van dit __exception subtype__ weergeeft...
+
+image:FileNotFoundException bases.png[FileNotFoundException bases]
+
+Uit deze lijst, en de volgorde waarin de __bases__ worden weergegeven, kan je afleiden hoe je eventueel de volgordes van je verschillende `catch` gedeeltes kan optimaliseren.
+
+Een `FileNotFoundException` is een (subtype van) `IOException`.  Dit is dan weer een (subtype van) `SystemException`.  En deze is dan een (subtype van) `Exception`.
+====
+
+=== Documentatie over exceptions
+
+In principe zou je van alle functionaliteiten (__methods__ of __properties__ bijvoorbeeld) die je gebruikt, moeten nagaan of ze exceptions kunnen opwerpen, en wat daar dan wel de oorzaak van zou zijn.
+
+Die informatie kan je uiteraard terugvinden *in de tooltip* zoals voorheen getoond voor de exceptions van `ReadAllLines`... 
+
+image:Files.ReadAllLines exceptions.png[Files.ReadAllLines exceptions]
+
+Of terugvinden *op __Microsoft Docs__*...
+
+Daar probeert men ook uitvoerig weer te geven wanneer deze excepties zullen optreden.
+
+Het mogelijkse optreden van de `IndexOutOfRangeException` bijvoorbeeld bij het aanspreken van een `char` op een bepaalde __index__ positie in een `string` wordt vermeld op...
+
+https://docs.microsoft.com/en-us/dotnet/api/system.string.chars?view=net-5.0#System_String_Chars_System_Int32_
+
+Dat de `Next` method, bijvoorbeeld bij...
+
+[source,csharp,linenums]
+----
+Random rnd = new Random();
+rnd.Next(5, 1);
+----
+
+...een `ArgumentOutOfRangeException` zal opwerpen, wordt verteld op...
+
+https://docs.microsoft.com/en-us/dotnet/api/system.random.next?view=net-5.0#System_Random_Next_System_Int32_System_Int32_
+
+Heel duidelijk wordt aangegeven dat dit het geval zal zijn indien: __minValue is greater than maxValue__.
+
+.Documentatie van verschillende overloads op __Microsoft Docs__.
+[TIP]
+====
+Geef in je code de focus aan de `Next` method (ga er bijvoorbeeld met je cursor in staan), en druk op __F1__.
+
+In je browser zal een gerelateerde pagina uit __Microsoft Docs__ geopend worden.
+
+Soms moet je op deze pagina nog selecteren van welke versie (__overload__) van een bepaalde functionaliteit (__method__ bijvoorbeeld) je de informatie wenst te zien.  
+
+Er bestaan bijvoorbeeld drie versies van `Random.Next`.  Op __Microsoft Docs__ krijg je iets te zien als...
+
+image::Random.Next Overloads.png[Random.Next Overloads]
+
+Het is de laatste versie die je in dit geval zou gaan aanklikken.
+====
+
+.Denk nog steeds na of exception handling wel is aangewezen...
+[IMPORTANT]
+====
+Let op, het is niet omdat je terugvindt dat er eventueel exceptions kunnen optreden, dat je persé met __exception handling__ aan de slag gaat.
+
+Net zo goed, kan je dit als een signaal opvatten om __programmatorische controles__ in je algoritme te voorzien.
+====
+
+== Tekst lezen uit, of schrijven naar bestanden met stream objecten
+
+Om tekstuele informatie uit bestanden te lezen, of naar bestanden te schrijven maken we gebruik van *file__stream__ objecten*.  Deze zet je in om informatie van of naar bestanden te laten __stromen__.
+
+Aan de hand van een `StreamWriter` object kan je tekst naar een bestand versturen.  Met een `StreamReader` kan je tekst uit een bestand lezen.
+
+De volledige naam van deze datatypes is `System.IO.StreamWriter` en `System.IO.StreamReader`.  Gebruik dus eventueel een `using System.IO` directive bovenaan het codedocument om op verkorte wijze naar deze types te kunnen verwijzen. 
+
+=== StreamReader en Using
+
+==== Aanmaken van het StreamReader object
+
+Je start bij het uitlezen van tekst uit een bestand met het aanmaken van een `StreamReader` object, bijvoorbeeld...
+
+[source,csharp,linenums]
+----
+using System.IO;
+
+StreamReader sr = new StreamReader("test.txt");
+----
+
+Merk dus op dat er bij bovenstaande code inderdaad sprake moet zijn van een `using System.IO` directive bovenaan het codedocument.  Indien dat niet het geval is moet je een vollediger naam hanteren...
+
+[source,csharp,linenums]
+----
+System.IO.StreamReader sr = new System.IO.StreamReader("test.txt");
+----
+
+Bij het instantiëren (__aanmaken van een object__) van type `StreamReader` kan je het bestandspad opgeven van het bestand dat je wenst uit te lezen.  Dit pad kan absoluut zijn, zoals __"C:\Mijn Documenten\test.txt"__, of eerder relatief (ten opzichte van de __actuele folder__), zoals __"Mijn Documenten\test.txt"__, of gewoon __"test.txt"__.
+
+==== Leesbewerkingen
+
+Vervolgens ga je gebruik maken van een __Read*__ method, bijvoorbeeld `Read`, `ReadLine` of `ReadToEnd` om een bepaalde portie van het bestand uit te lezen.  
+
+Er wordt steeds vanaf een __huidige cursorpositie__ ingelezen.   Deze __cursor__ dient net voor het bijhouden van de actuele lees- of schrijfpositie.  
+Waar deze zich bevindt is afhankelijk van wat voorgaand gebeurd is:
+
+- Indien het `StreamReader` nog maar net is aangemaakt, staat de cursor in het begin van het bestand.  
+- Als er echter reeds leesbewerkingen zijn uitgevoerd, zal deze positie zich bevinden na de tekst (in geval van `Read` of `ReadToEnd`) die is ingelezen.  Of na de daarop volgende __newline__ in geval van van `ReadLine`.
+
+==== Een concreet voorbeeld
+
+****
+[.underline]#Aanmaken van een nieuw tekstbestand#
+
+Laten we het eens uitproberen.  Maak om te beginnen een tekstbestand __test.txt__ aan met de inhoud...
+
+.test.txt
+[source,shell]
+----
+Hallo
+wereld
+!!!
+----
+
+Bewaar dit bestand in de __actuele folder__ voor je applicatie, om er makkelijk (relatief) naartoe te kunnen verwijzen.  
+****
+
+****
+[.underline]#Voorbeeld van het volledig uitlezen van een bestand#
+
+Indien we meteen na het aanmaken van het `StreamReader` object, met een `ReadToEnd()` method call (aangeroepen op het `StreamReader` object) gaan lezen, vragen we alle informatie als tekst (`string`) op...
+
+[source,csharp,linenums]
+----
+try {
+    string inhoud;
+
+    StreamReader sr = new StreamReader("test.txt");
+    using (sr) {                    // <1>
+        inhoud = sr.ReadToEnd();    // <2>
+    }                               // <1>
+
+    Console.WriteLine(inhoud);      // <3>
+} catch (Exception ex) {
+    Console.WriteLine($"Fout: {ex.Message}");
+}
+----
+<1> Het `using` statement geeft aan waar we klaar zijn met het gebruik van __stream__ object, hier meer specifiek bij de afsluitende accolade.
+<2> De bestandsinhoud wordt in een `string` variabele opgevangen.
+<3> Het uitlezen van die `inhoud` variabele levert ons de volledige bestandinhoud...
+
+[source,shell]
+----
+Hallo
+wereld
+!!!
+----
+****
+
+==== Beëindigen van het gebruik (__using__) van __stream__ objecten
+
+Nieuw is het gebruik van het `using` statement(blok).  Tussen haakjes, naast het `using` sleutelwoord, vermeld je welk __stream__ object we __gebruiken__.    Tussen de bijhorende accolades geef je aan wat voor handelingen worden uitgevoerd op dit object.  Doorgaans zijn dit leesbewerkingen, zoals een `ReadToEnd()` method call.
+
+Belangrijk aan het `using` statementblok is dat ze aangeeft (bijvoorbeeld met de afsluitende accolade) waar je klaar bent met dat __stream__ object.  Waar je, met andere woorden, de __stream__ toelaat zijn afsluitend gedrag te voltooien, zoals het vrijgeven van de gebruikte resource (het bestand).
+
+Bij het aanmaken van het `StreamReader` object wordt het bestand __geopend__ of __vergrendeld__.  Dit verhindert __anderen__ (andere gebruiker, andere processen, andere applicaties, ...) op het zelfde moment met dit bestand aan de slag te gaan.  Wat uiteraard problematisch kan zijn.  
+
+Op het eind van het `using` statement wordt het bestand __afgesloten__ of dus __ontgrendeld__.
+
+Je moet maar eens proberen de uitvoer van de code te pauzeren net voor het __finaliseren__ (einde van het gebruik).  Plaats bijvoorbeeld een breakpoint op de regel van de afsluitende accolade, en voer de code tot daar uit.
+
+Ga nu een poging ondernemen om de inhoud van het __test.txt__ aan te passen, en deze wijziging te bewaren...
+
+image::Process cannot access the file.png[Process cannot access the file]
+
+Bij een poging tot het overschrijven van de huidige bestandinhoud zal __Visual Studio__ een foutmelding produceren.  Deze melding maakt duidelijk dat een ander proces, namelijk deze waarin onze applicatie wordt uitgevoerd, nog bezig is met het __gebruik__ van deze resource.
+
+.Schaarse bronnen
+[TIP]
+====
+Om tijdens het lezen in geval van een `StreamReader`, of schrijven in geval van een `StreamWriter`, niet opeens met een aangepaste onderliggende bron geconfronteerd te worden, wordt bij het openen van de __stream__ (bij het aanmaken van het `StreamReader` of -`Writer` object) dus een __lock__ (een __slot__, een __vergrendeling__) geplaatst op deze resource.  Dit verhindert dat anderen gelijktijdig met dezelfde bron aan de slag gaan.
+
+Het is uiteraard een __good practice__ om zo kort mogelijke (schaarse) resources te reserveren voor specifiek gebruik.  Geef ze zo spoedig mogelijk weer vrij voor anderen.  Ga met andere woorden zo snel als mogelijk aangeven dat je klaar bent met het gebruik.  
+
+Handeling als het omzetten naar een hoofdletterrepresentatie (`ToUpper`), of het afdrukken (`Write`), hoeven bijvoorbeeld niet binnen het `using` statementblok te worden opgenomen...
+
+[source,csharp,linenums]
+----
+try {
+    string inhoud;
+
+    StreamReader sr = new StreamReader("test.txt");
+    using (sr) {
+        inhoud = sr.ReadToEnd();
+        //Console.Write(inhoud.ToUpper());   // <1>
+    }                                        // <2>
+
+    Console.Write(inhoud.ToUpper());         // <3>
+} catch (Exception ex) {
+    Console.WriteLine($"Fout: {ex.Message}");
+}
+----
+<1> Het is niet nodig het vrijgeven van de resource te vertragen...
+<2> Ook na het __finaliseren__ van de __stream__...
+<3> Kunnen we taken als het omzetten laten uitvoeren.
+
+Zeker indien het om echt __processor intensieve taken__ (__langdurige taken__) zou gaan, is het belangrijk deze zo vaak als mogelijk na het vrijgegeven van de resources te laten plaatsvinden.
+====
+
+==== using introduceert een nieuwe scope 
+
+Het declareren, en initialiseren, van de `StreamReader` variabele (`sr`) mag ook in het `using` statement gebeuren...
+
+[source,csharp,linenums]
+----
+try {
+    string inhoud;
+
+    using (StreamReader sr = new StreamReader("test.txt")) {               // <1>
+        inhoud = sr.ReadToEnd();
+    }
+
+    Console.WriteLine(inhoud);
+
+    //inhoud = sr.ReadToEnd();  // kan gelukkig niet (vanwege compilefout) // <2>
+} catch (Exception ex) {
+    Console.WriteLine($"Fout: {ex.Message}");
+}
+----
+<1> Hier pas wordt de `StreamReader` variabele gedeclareerd.
+<2> Compilefout: __"The name 'sr' does not exist in the current context"__
+
+De scope van de `StreamReader` variabele loopt zo af bij het eind van het `using` statementblok.  Je vermijdt zo -per ongeluk- nog van dit __stream__ object gebruik te maken.
+
+[source,csharp,linenums]
+----
+try {
+    string inhoud;
+
+    StreamReader sr = new StreamReader("test.txt");                        // <1>
+    using (sr) {
+        inhoud = sr.ReadToEnd();
+    }
+
+    Console.WriteLine(inhoud);
+    inhoud = sr.ReadToEnd();  // kan jammergenoeg wel (geen compilefout)   // <2>
+} catch (Exception ex) {
+    Console.WriteLine($"Fout: {ex.Message}");
+}
+----
+<1> Om de misplaatste tweede `ReadToEnd` method call mogelijk te maken, is de variabele opnieuw voor het `using` statement gedeclareerd.
+<2> Waardoor nu geen compilefout, maar een `ObjectDisposedException` optreedt.
+
+Een runtime fout treedt op.  Op het eind van het `using` statement werd de __stream__ immers gefinaliseerd, noem het __weggegooid__ (__disposed__) of __afgesloten__.  
+
+Omdat we liever __at compiletime__ verhinderd worden fouten te maken, in tegenstelling tot het pas __at runtime__ opmerken van een probleem; is het dus best een aanrader onze `StreamReader` variabele in het `using` statement te declareren.
+
+==== Voorzie zelf exception handling 
+
+Wanneer iets foutloopt bij het aanmaken van het `StreamReader` object, of bij het aanroepen van de `ReadToEnd` method, zal (door het gebruik van een `using` statement) nog geprobeerd worden de __stream__ af te sluiten.  
+Dit bijvoorbeeld om een poging te doen de aangesproken resource nog vrij te geven.
+
+Er is verder geen __fout-afhandelingslogica__ (ondanks gebruik van een `using` statement) voorzien.  Het `using` statement zal zelf nog in één of ander `try` statement moeten opgenomen worden om correcte afhandeling mogelijk te maken.  
+
+Bijvoorbeeld...
+
+[source,csharp,linenums]
+----
+try {
+    string inhoud;
+
+    using (StreamReader sr = new StreamReader("test.txt")) {
+        inhoud = sr.ReadToEnd();
+    }
+
+    Console.WriteLine(inhoud);
+} catch (Exception ex) {
+    Console.WriteLine($"Fout: {ex.Message}");
+}
+----  
+
+Of __fout-afhandelingslogica__ kan natuurlijk ook in een __aanroepende method__ worden voorzien...
+
+[source,csharp,linenums]
+----
+static string Inhoud(string bestandsPad) {
+    string inhoud;
+
+    using (StreamReader sr = new StreamReader("test.txt")) {
+        inhoud = sr.ReadToEnd();
+    }
+
+    return inhoud;
+}
+
+static void Test1() {
+    try {
+        string inhoud = Inhoud("test.txt");               // <1>
+    } catch (Exception ex) {
+        Console.WriteLine($"Fout-afhandelingslogica 1");  // <2>
+    }
+}
+static void Test2() {
+    try {
+        string inhoud = Inhoud("test.txt");               // <1>
+    } catch (Exception ex) {
+        Console.WriteLine($"Fout-afhandelingslogica 2");  // <3>
+    }
+}
+----  
+<1> Ondanks dezelfde code (`Inhoud()` method) wordt geprobeerd...
+<2> voorziet `Test1` in andere __fout-afhandelingslogica__...
+<3> ...dan `Test2`.
+
+.Exceptions bij het aanmaken van een StreamReader, of leesbewerkingen als ReadToEnd, ReadLine en Read.
+[TIP]
+====
+Het blijft een aanrader bij het werken met `StreamReader` en (straks ook) `StreamWriter` objecten enige voorzichtigheid in te bouwen.  Je kan maar beter het openen van dergelijke __stream__, en het uitvoeren van lees- of schrijfbewerkingen __proberen__.
+
+Met __proberen__ bedoelen we hier uiteraard ze opnemen in het `try` gedeelte van een `try` statement.
+
+Bij het aanmaken van een `StreamReader` object (`new StreamReader(...)`) kan al vanalles fout lopen, ondermeer...
+
+[%autowidth]
+|====
+| Exception | Omschrijving
+
+| `FileNotFoundException` | Het bestand kan niet worden gevonden.
+| `DirectoryNotFoundException` | Het folderpad is ongeldig.
+| `IOException` | Het bestandspad is ongeldig opgebouwd.
+|====
+
+Het aanroepen van de de `ReadToEnd` method kan ook problematisch zijn...
+
+[%autowidth]
+|====
+| Exception | Omschrijving
+
+| `OutOfMemoryException` | Er is onvoldoende geheugen om de ingelezen informatie te __bufferen__ (te bewaren).
+| `IOException` | Een andere IO fout treedt op.
+|====
+
+Dezelfde hier vermelde exceptions kunnen straks ook optreden als we aan de slag gaan met de `ReadLine` of `Read` method.
+
+Lees telkens op __Microsoft Docs__ de gepast documentatie na voor gedetailleerde informatie:
+
+- link:https://docs.microsoft.com/en-us/dotnet/api/system.io.streamreader.-ctor[StreamReader Constructor]
+- link:https://docs.microsoft.com/en-us/dotnet/api/system.io.streamreader.readtoend[StreamReader.ReadToEnd Method]
+- link:https://docs.microsoft.com/en-us/dotnet/api/system.io.streamreader.readline[StreamReader.ReadLine Method]
+- link:https://docs.microsoft.com/en-us/dotnet/api/system.io.streamreader.read[StreamReader.Read Method]
+====
+
+==== Karakter per karakter, of regel per regel uitlezen
+
+In plaats van tot het eind van het bestand alle inhoud uit te lezen (met `ReadToEnd`), kan je ook fijnmaziger karakter per karakter (met de `Read` method), of regel per regel (met de `ReadLine` method) informatie opvragen.
+
+Telkens start de `Read`, `ReadLine` of `ReadToEnd` leesbewerking bij het inlezen vanaf de __actuele leespositie__ (__cursor__).   De `StreamReader` houdt deze cursor bij om te weten waar een volgende leesbewerking start met het ophalen van informatie. 
+
+De cursor staat na het openen van de __stroom__ (na creatie van het `StreamReader`) uiteraard aan het begin van dit bestand.
+
+Je kan vervolgens door een gepast __sequentieel gebruik__ van (de ene na de andere call naar) de `Read`, `ReadLine` of `ReadToEnd` methods sturen wat bij die bepaalde leesbewerking wordt ingelezen.  Maar je keuze voor één van die methods bepaald ook hoe de actuele leespositie (__cursor__) verder wordt verplaatst.  
+
+Een overzicht van wat wordt ingelezen, en hoe de cursor wordt verplaatst...
+
+[%autowidth]
+|====
+| Leesbewerking | Terugkeerwaarde | Bijeffect (en acctuele leespositie)
+
+|`int Read(buffer, index, count)` | Aantal ingelezen karakters. | `buffer` wordt opgevuld.  
+
+Cursor komt te staan na de ingelezen karakters.
+|`string ReadLine()` | Tekst vanaf de cursor tot voor volgend __newline karakter__. | Cursor komt te staan na het __newline karakter__.
+|`string ReadToEnd()` | Tekst vanaf de cursor tot en met het laatste karakter. | Cursor komt helemaal achteraan te staan.
+|====
+
+Naast die leesbewerkingen, is `StreamReader` niet verder voorzien op mogelijkheden om de cursurpositie te manipuleren.  (Dat is ook niet het geval voor `StreamWriter`.)
+
+****
+[.underline]#Voorbeeld van het lezen regel voor regel#
+
+In volgend __adoc document__...
+
+.test.adoc
+[source,shell]
+----
+Mijn verhaal
+============
+Piet Pieters
+v2.3.4
+
+= Inleiding
+Er was eens...
+----
+
+Staat de `titel` op de eerste regel, de `auteur` op de derde en de `versie` op de vierde.  
+
+Aan de hand van enkele `ReadLine()` method calls, aangeroepen op ons `StreamReader` object, kunnen we deze regels één voor één opvragen.
+
+[source,csharp,linenums]
+----
+try {
+    string titel;
+    string auteur;
+    string versie;
+    string body;
+    using (StreamReader sr = new StreamReader("test.adoc")) {
+        titel = sr.ReadLine();   // <1>
+        sr.ReadLine();                  // <2>
+        auteur = sr.ReadLine();  // <1>
+        versie = sr.ReadLine();  // <1>
+        sr.ReadLine();                  // <2>
+        body = sr.ReadToEnd();                 // <3>
+    }
+
+    Console.WriteLine($"Auteur: {auteur}");
+    Console.WriteLine($"Versie: {versie}");
+    Console.WriteLine($"\n Titel: {titel.ToUpper()}");
+    Console.Write($"\n  Body: {body}");
+} catch (Exception ex) {
+    Console.WriteLine($"Fout: {ex.Message}");
+}
+----
+<1> De eerste, derde en vierde regel leveren ons interessante informatie op.
+<2> De tweede en vijfde regel boeien ons niet.
+<3> Een uiteindelijke `ReadToEnd` levert ons de rest, tot het eind van het bestand, op.
+
+Vergeet inderdaad geen rekening te houden met de opgenomen oninteressante regels.  De tweede en vijfde call naar de `ReadLine` method lijken dan op het eerste zicht misschien overbodig.  Toch is dat niet zo, door ze daar effectief op te nemen, laten we de cursor (__actuele leespositie__) een regel opschuiven.
+
+[source,shell]
+----
+Auteur: Piet Pieters
+Versie: v2.3.4
+
+ Titel: MIJN VERHAAL
+
+  Body: = Inleiding
+Er was eens...
+----
+****
+
+****
+[.underline]#Voorbeeld van het uitlezen van enkele karakters#
+
+Stel dat we in een __bestsellers.csv__ bestand gegevens bijhouden van de meest verkochte boeken in onze boekenwinkel.
+
+.bestsellers.csv
+[source,shell]
+----
+9780306406157; To Kill a Mockingbird; 23
+9781861978769; The Great Gatsby; 21
+9790123456786; Don Quixote; 18
+----
+
+Dan zouden we de ISBN-13 nummers kunnen opvragen door telkens de eerste dertien karakters uit te lezen van elke regel.
+
+We maken hiervoor gebruik van een `Read` method.  Deze verwacht een verwijzing naar een `char[] buffer` waarin de ingelezen karakter worden geplaatst.
+Als tweede argument wordt de startpositie verwacht binnen de `buffer` waar men begint met het opvullen van de slots.  Het laatste argument is dan het aantal slots dat zal worden opgevuld.
+
+[source,csharp,linenums]
+----
+try {
+    const int lengteIsbn13Nummer = 13;
+
+    using (StreamReader sr = new StreamReader("bestsellers.csv")) {
+        while (sr.Peek() >= 0) {                           // <1>
+            char[] buffer = new char[lengteIsbn13Nummer];  // <2>
+            sr.Read(buffer, 0, lengteIsbn13Nummer);        // <3>
+
+            string isbn = new string(buffer);              // <4>
+            Console.WriteLine($"ISBN: {isbn}");
+
+            sr.ReadLine();                                 // <5>
+        }
+    }
+} catch (Exception ex) {
+    Console.WriteLine($"Fout: {ex.Message}");
+}
+----
+<1> De `Peek` method levert __-1__ op indien er niets meer te lezen valt.
+<2> Vergeet niet de `buffer` array reeds te instantiëren, en voldoende groot te maken, nog voor je ze meegeeft aan de `Read` method.
+<3> De `Read` method zal hier de eerste __13 karakters__ van elke regel gaan inlezen, en overnemen in de `buffer` array vanaf slotpositie (__index__) `0`.
+<4> Op basis van een `char[]` kan je makkelijk een `string` creëren door ze tussen haakjes te vermelden bij een `string` __initializer__ (`new string(...)`).
+<5> Om de cursorpositie alvast goed te positioneren, om met andere woorden bij volgende body iteratie weer vooraan de regel te starten met lezen, gaan we ook de rest van de regel laten verwerken.
+
+[source,shell]
+----
+ISBN: 9780306406157
+ISBN: 9781861978769
+ISBN: 9790123456786
+----
+****
+
+===== EndOfStream
+
+In het laatste voorbeeld werd aan de hand van de `Peek` method __gegluurd__ of het nog zinvol is verdere leesopdrachten uit te voeren...
+
+- method `Peek` zal __-1__ opleveren indien  het __einde van__ de __stroom__ is bereikt, bijvoorbeeld `if (sr.Peek() != -1) { /* er valt nog meer in te lezen */ }`
+
+Dit is lang niet de enigste mogelijkheid om na te gaan of er nog iets uit te lezen valt.  Je kan bijvoorbeeld ook kijken naar de terugkeerwaarde van...
+
+- de property `EndOfStream`, deze zal in `bool` vorm `true` opleveren indien het __einde van__ de __stroom__ is bereikt, bijvoorbeeld `if (!sr.EndOfStream) { /* er valt nog meer in te lezen */ }`
+- de voorheen geïllustreerde `ReadToEnd` method, deze zal `string.Empty` (de lege `string ""`) opleveren bij `EndOfStream`, bijvoorbeeld `if (sr.ReadToEnd() != "") { /* er valt nog meer in te lezen */ }`
+- de voorheen geïllustreerde `ReadLine` method, deze zal __null__ opleveren bij `EndOfStream`, bijvoorbeeld `if (sr.ReadLine() != null) { /* er valt nog meer in te lezen */ }`
+- de voorheen geïllustreerde variant (met `buffer`) van de `Read` method, deze zal __0__ opleveren bij `EndOfStream`, bijvoorbeeld `if (sr.Read(buffer, index, count) != 0) { /* er valt nog meer in te lezen */ }`
+
+Soms zie je dat het aftoetsen van de terugkeerwaarde gepaard gaat met het toekenning van deze waarde aan een dataholder...
+
+[source,csharp,linenums]
+----
+string lijn;
+int regelNummer = 1;
+while ((lijn = sr.ReadLine()) != null) {                // <1>
+    Console.Write($"Regel {regelNummer}: {lijn}");
+    regelNummer++;
+}
+----
+<1> Zowel de toekenning `(lijn = sr.ReadLine())`, als de vergelijking `(...) != null` zit hierin vervat.
+
+[source,shell]
+----
+Regel 1: Hallo
+Regel 2: wereld
+Regel 3: !!!
+----
+
+.Toekenning als expressie
+[TIP]
+====
+Een toekenning is ook bruikbaar als expressie.  De expressie zal evalueren naar de waarde die wordt toegekend.
+
+Zo wordt het mogelijk code op te stellen als...
+
+[source,csharp,linenums]
+----
+int x;
+int y;
+int z;
+
+x = y = z = 5;
+----
+
+Alles variabelen (`x`, `y` en `z`) zullen hier op `5` worden ingesteld.
+
+De toekenning `z = 5` evalueert naar `5`.  Ook aan `y` wordt dus `5` toegekend (`x = y = 5`).
+
+De toekenning `y = 5` evalueert naar `5`, dus ook aan `x` wordt uiteindelijk `5` toegekend.
+
+Haakjes kunnen eventueel de leesbaarheid bevorderen...
+
+[source,csharp,linenums]
+----
+x = (y = (z = 5));
+----
+====
+
+=== StreamWriter
+
+Een `StreamWriter` object kan gebruikt worden om tekst naar een bestand weg te schrijven.  Methods als `Write` of `WriteLine` staan je toe (zonder of met afsluitende newline karakter) bepaalde tekst over de __stroom__ mee te sturen.
+
+[source,csharp,linenums]
+----
+try {
+    string nieuweInhoud = "Hello world!";
+
+    using (StreamWriter sw = new StreamWriter("test.txt")) {
+        sw.WriteLine(nieuweInhoud);
+    }
+} catch (Exception ex) {
+    Console.WriteLine($"Fout: {ex.Message}");
+}
+----
+
+De inhoud van het bestand __test.txt__ zal volledig overschreven worden met de `nieuweInhoud`...
+
+.test.txt
+[source,shell]
+----
+Hello world!
+
+----
+
+Indien het bestand nog niet bestond, dan zal deze eerst worden gecreëerd.
+
+Wens je toe te voegen, in plaats van volledig te overschrijven, dan kan je aan de `append` parameter `true` meegeven...
+
+[source,csharp,linenums]
+----
+try {
+    string toeTeVoegenInhoud = "Hallo wereld!!!";
+
+    using (StreamWriter sw = new StreamWriter("test.txt", true)) {
+        sw.Write(toeTeVoegenInhoud);
+    }
+} catch (Exception ex) {
+    Console.WriteLine($"Fout: {ex.Message}");
+}
+----
+
+.test.txt
+[source,shell]
+----
+Hello world!
+Hallo wereld!!!
+----
+
+__Stream__ objecten zo hebben we reeds gesteld, kan je maar beter altijd __finaliseren__ (__afsluiten__).  Dat kan door ze in een `using` statement in te zetten.  De __stream__ afsluiten kan eigenlijk ook daar er zelf de `Close()` method op aan te roepen.  Als je hierover meer informatie wil, dan kan je in de __verdieping__ terecht.
+
+Het finaliseren van een __stream__ zal de onderliggend gebruikte resource vrijgeven, maar ook overig voltooings-gedrag verwezelijken.  Zo wordt in een `StreamWriter` de geschreven informatie (meegegeven aan methods als `WriteLine()` of `Write()`) eerst in een interne __buffer__ bewaard.
+Op geregelde tijdstippen, zoals bij het overlopen van die buffer of bij het finaliseren van de stream zal die informatie worden __doorgesast__ naar het bestand.
+
+=== Waarom StreamReader of StreamWriter objecten gebruiken
+
+Om eenvoudige lees- of schrijfbewerkingen op tekstbestanden uit te voeren, ga je allicht eerder aan de slag met de __convenience methods__ als `ReadAllText`, `WriteAllText`, `AppendAllText`, ..., uit de `System.IO.File` klasse.
+Deze zijn een stuk eenvoudiger (praktischer) in gebruik dan het eerder __manueel__ aan de slag gaan met `StreamReader` of `StreamWriter` objecten.  
+
+Bij die laatste is het immers noodzakelijk zelf expliciet: 
+
+- de __streams__ (of dus toegang tot de bestanden) te openen, bijvoorbeeld door objecten aan te maken van type `StreamReader` of `StreamWriter`
+
+- de __streams__ te laten afsluiten (of dus de bestanden weer vrij te geven), door bijvoorbeeld aan de hand van `using` statement aan te geven waar we klaar zijn met het gebruik van die __stream__
+
+De convenience methods regelen die stappen echter voor ons.
+
+Leren werken met __stream__ objecten kan toch zinvol blijken.  Zeker als je later nog aan de slag gaat met andere types van __streams__.  Bijvoorbeeld `BinaryReader` en -`Writer` __streams__ bijvoorbeeld die je toelaten informatie in andere vorm dan __tekst__ naar bestanden te schrijven.  Of `NetworkStream` objecten waarmee je informatie over een netwerkinfrastructuur kan verzenden.
+Daar zou je zien hoe het openen en afsluiten van dergelijke __streams__ ook noodzakelijk is.  Convenience methods om die stappen voor je te automatiseren zijn daar echter niet steeds ter beschikking.  
+
+In een aantal scenario's kan het gebruik van `StreamReader` en -`Writer` ook de voorkeur genieten boven het inzetten van de convenience methods.  Meer specifiek indien:
+
+- je met grote bestanden aan de slag gaat.  Aan de hand van een `StreamReader` bijvoorbeeld kan je preciezer bepalen wat wordt ingelezen, je hoeft bijvoorbeeld niet het volledige bestand uit te lezen.  Je kan de __stream__ al vroeger afsluiten.  Werk je echter met `File.ReadAllText` of `File.ReadAllLines` dan zal de (zoals de naam van deze methods al aangeeft) volledige bestandsinhoud worden uitgelezen.
+
+- de vergrendeling (of momenten van vergrendeling en ontgrendeling) meer zelf wil sturen.  Wens je bijvoorbeeld twee bestanden samen te vergrendelen dan is dit mogelijk wanneer je __stream objecten__ gebruikt...
+
+[source,csharp,linenums]
+----
+using (StreamReader sr = new StreamReader("test1.txt"))       // <1>
+    using (StreamWriter sw = new StreamWriter("test2.txt")) { // <1>
+        while (sr.Peek() != -1) {
+            sw.WriteLine(sr.ReadLine());
+        }  // <2>
+    }      // <2>
+----
+<1> Beide worden op ongeveer hetzelfde moment geopend, ...
+<2> ...en op hetzelfde moment afgesloten (vrijgegeven).
+
+Deze scenario's vallen niet zo vaak voor, allicht ga je dus doorgaans eerder aan de hand van de convenience methods tekstbestanden uitlezen of opvullen.

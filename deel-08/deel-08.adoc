@@ -1,0 +1,1127 @@
+= Programmeren Basis - Deel 08
+Frederiek De Wolf
+v2021.10.28.15.12
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+
+== Inleiding tot arrays
+
+Zo goed als elke applicatie werkt met __verzamelingen van gegevens__.
+Dit kan gaan over verzamelingen van werknemers, artikels of recent geopende documenten, enzovoort ... .
+
+Enerzijds moeten we de verzameling van waardes -in het geheugen- kunnen bijhouden, anderzijds moeten we op, of met die verzameling allerhande operaties uitvoeren.  
+
+Typisch gaan veel programma's...
+
+- Waardes *toevoegen* aan, of *verwijderen* uit een verzameling.  __Nieuwe werknemers worden bijvoorbeeld aanvaard of ontslaan.__
+- Waardes *wijzigen* binnen een verzameling.  __Het adres van werknemer moet bijvoorbeeld worden aangepast indien zij/hij verhuist.__
+- Waardes in een verzameling *opzoeken*.  __Werknemers moeten bijvoorbeeld worden opgezocht om ze te kunnen wijzigen of verwijderen.__
+- De volgorde van de waardes in de verzameling aanpassen (*ordenen*).  __Bij het tonen van overzichtelijke lijsten helpt het bijvoorbeeld om onze werknemers op naam, adres, ... te kunnen sorteren.__
+
+Zowel voor het bijhouden van de verzameling waardes, als het voorzien in handelingen als toevoegen, verwijderen, wijzigen, opzoeken, ordenen, ..., kan je aan de slag met *__arrays__*.   
+
+Arrays beschikken typisch over *meerdere elementen*, soms ook __slots__ genoemd.  Elk element/slot in deze array kan een waarde uit je verzameling bevatten.
+
+****
+[.underline]#Voorbeeld van een eerste array#
+
+Een array met zes `int` elementen, kan zes `int` waardes bijhouden. Bijvoorbeeld de __temperaturen__ die op verschillende tijdstippen zijn opgemeten...
+
+image::Array%20-%20Temperaturen.png[Temperaturen die op verschillende tijdstippen zijn opgemeten.]
+
+Elke waarde neemt een bepaalde positie aan binnen deze verzameling.  Waarde __8__ is terug te vinden in het __eerste__ element van de array, __10__ zit in het tweede element, ... .
+
+Array variabelen (zoals `temperaturen`) bevatten verwijzingen naar de plaats in het geheugen waarop deze array terug te vinden is.  Om die reden werken we vaak in visualisaties als bovenstaande met een __pijltje__.
+****
+
+[NOTE]
+====
+Een belangrijke technische beperking is dat binnen één array *alle elementen van hetzelfde datatype* zijn.  
+
+Een array zou bijvoorbeeld kunnen bestaan uit allemaal `int` elementen, of allemaal `double` elementen, maar geen combinatie van beide.
+====
+
+Ten opzicht van het werken met aparte variabelen, heeft het *werken met een array verschillende voordelen*.  Zo kan je tijdens uitvoer beslissen...
+
+- hoeveel waardes je wenst bij het houden.
+- welke waarde uit de verzameling je wenst aan te spreken. 
+
+Beide voordelen zijn cruciaal.  Zonder deze mogelijkheden kan je nooit programma's bouwen die met een dynamisch aantal (een op voorhand niet gekend aantal) waardes overweg kunnen.  Aan de hand van enkele voorbeelden worden deze voordelen verderop in detail geïllustreerd.
+
+****
+In dit voorbeeld zal de array `dagen` ruimte voorzien voor de zeven dagen van de week.  Alvast een viertal elementen van deze array worden opgevuld.
+
+[source,csharp,linenums]
+----
+string[] dagen;                                     // <1>
+dagen = new string[7];                              // <2>
+
+dagen[0] = "maandag";                               // <3>
+dagen[1] = "dinsdag";
+//...
+dagen[5] = "zaterdag";
+dagen[6] = "zondag";
+
+Console.WriteLine("De 6de dag is: " + dagen[5]);    // <4>
+Console.WriteLine("Aantal dagen: " + dagen.Length); // <5>
+----
+<1> Declaratie van de array-variabele.
+<2> Creatie van de array, en initialisatie van de array-variabele.
+<3> Toekennen van een waarde aan het eerste slot.
+<4> Uitlezen van het 6de element.
+<5> Opvragen van het aantal elementen.
+
+Indien we het voorbeeld uitvoeren dan krijgen we volgende output...
+
+[source,shell]
+----
+De 6de dag is: zaterdag
+Aantal dagen: 7
+----
+
+De lengte, of het aantal elementen van een array, kan je makkelijk bevragen aan de hand van de *Length property*.  
+****
+
+Alle overige aspecten uit voorgaand voorbeeld, het werken met array-variabelen, het aanmaken van de array zelf, het benaderen van elementen, ..., worden hierna in detail besproken.
+
+[NOTE]
+====
+We spreken in onze uitleg zowel over *__de__* __ array__ als *__het__* __array__.  Beide mogelijkheden worden in taalreferenties vermeld, en we slaagden er zelf ook niet in een keuze te maken ;).
+====
+
+== Array variabelen
+
+Om in de code gebruik te kunnen maken van een array moeten we naar deze array kunnen wijzen.
+We gebruiken hiervoor de __array-variabele__.
+
+Net als overige variabelen moet je deze declareren voor gebruik.
+
+Het datatype van de elementen van deze array wordt in de declaratie gevolgd door vierkante haken.
+
+****
+[.underline]#Voorbeelden van declaraties van array-variabelen#
+
+- `int[] lottoGetallen` om te kunnen verwijzen naar een array van `int` elementen
+- `string[] dagen` in het geval van een verzameling van `string` waardes
+
+Let goed op de vierkante haakje.  Het gaat hier niet om de mogelijkheid één `int` of `string` te bewaren, maar een verzameling van verschillende `int` of `string` waardes.
+****
+
+[IMPORTANT]
+====
+Let op, het is niet omdat er een __array-variabele__ bestaat, dat er ook sprake is van een array.  De declaratie zorgt voor de mogelijkheid te wijzen naar een array, maar het aanmaken van de array is een aparte stap.
+====
+
+****
+[.underline]#Voorbeeld#
+
+Plaats je ons voorgaand voorbeeld een breakpoint op de tweede regel, en voer de code tot daar uit...
+
+image::Array%20-%20null.png[Er is nog geen array.]
+
+De array-variabele staat op `null`, wat aangeeft dat er nog geen sprake is van een array.  De variabele is er wel, maar wijst nog niet naar een array.
+
+Zet je een breakpoint een regel verder, en voer je uit tot daar...
+
+image::Array%20-%20Niet null.png[Er is wel een array.]
+
+Dan zie je hoe er wel sprake zal zijn van dergelijke array.  In dit geval een array met zeven elementen van type `string`.
+****
+
+[discrete]
+=== Samen declareren en initialiseren
+
+Je kan uiteraard code als...
+
+[source,csharp,linenums]
+----
+string[] dagen;                                     
+dagen = new string[7];                              
+----
+
+Ook op één regel uitschrijven...
+
+[source,csharp,linenums]
+----
+string[] dagen = new string[7];                              
+----
+
+Declareren en initialiseren van de array-variabele mag met andere woorden op één regel gebeuren.
+
+[discrete]
+=== Namen van onze array-variabelen.
+Doorgaans wordt met de naam van een array-variabele in *meervoudsvorm* verwezen naar de inhoud van deze array.
+
+Zo spreken we over *__dagen__* omdat er meerdere dagen in de array worden bijgehouden.  Of *__lottoGetallen__* omdat het over meerdere getallen gaat.
+
+== Datatypes en hun defaultwaardes
+
+De defaultwaardes van de datatypes die we tot dus ver hebben gebruikt zijn:
+
+- `*0*` voor `int`, `double` en alle overige numerieke datatypes
+- `*false*` voor `bool`
+- `*null*` voor `string`
+- `*' '*` (__een spatie__) voor `char`
+- `*null*` voor __array datatypes__
+
+Een variabele van voorvermeld datatype zal tijdens uitvoer, nog voor je er een waarde aan zou toekennen, deze defaultwaarde bevatten.
+
+****
+[.underline]#Defaultwaarde van een double#
+
+Neem je in volgend voorbeeld een breakpoint op om de code te onderbreken nog vóór een waarde aan `getal` wordt toegekend...
+
+[source,csharp,linenums]
+----
+double getal;
+
+getal = 12.3;  // <1>
+----
+<1> Neem hier een breakpoint op.
+
+Dan krijg je in __debugmodus__ te zien hoe deze variabele op dat moment tijdens uitvoer op __0__ komt te staan...
+
+image::Double - Defaultwaarde.png[Defaultwaarde van een double.]
+****
+
+=== Null en reference types
+
+Net als array-datatypes is het `string` datatype een zogenaamde __reference type__.
+
+Dit maakt dat een variabele van dergelijke __reference type__ ofwel niets (`null`) bevat, ofwel een verwijzing (__referentie__) naar de plaats in het geheugen waar deze informatie terug te vinden is.  
+
+Om die reden visualiseren we hier vaak de inhoud van dergelijke variabele met een pijltje.  
+
+Stel dat we over volgende code zouden beschikken...
+
+[source,csharp,linenums]
+----
+string a = "b";
+int c = 123;
+----
+
+Dan zouden we dat zo kunnen visualiseren...
+
+image::Reference types vs Value types.png[Reference types vs value types.]
+
+De `c` variabele is van het type `int` wat een zogenaamd __value type__ is.  Daar worden variabelen rechtstreeks aan hun waarde gekoppeld.  In onze visualisaties daarvan gebruiken we dan ook geen pijltjes.
+
+Het werken met __reference types__ kan bepaalde voordelen opleveren.  Later komen we uitvoerig terug op deze __reference types__, en hun voordelen.
+
+== Array initializers
+
+We geven in onze code aan over __hoeveel elementen__ een array moet beschikken.  Tijdens uitvoer wordt geheugenruimte voor deze elementen voorzien.  
+
+Zo werd in ons voorgaand voorbeeld de mogelijkheid voorzien zeven namen van dagen op te nemen.
+
+Het opgeven van het aantal elementen kan op twee manieren:
+
+- Je kan bij het aanmaken van een *nieuwe lege array* __expliciet opgegeven over hoeveel  slots de array moet beschikken__.  Bijvoorbeeld `string[] dagen = *new string[7]*`.
+
+- Je kan, door op te lijsten over welke waardes een *nieuwe meteen opgevulde array* moet beschikken, __impliciet duidelijk maken hoeveel elementen aanwezig zijn__.  Bijvoorbeeld `string[] namen = *{ "Jan", "Piet", "Rita" }*`.  Door __drie waardes__ op te lijsten maak je duidelijk dat __drie slots__ vereist zijn.
+
+Bij het creëren van een __nieuwe array__ moet je dus een onderscheid maken tussen twee situaties:
+
+- We kennen (op de plaats in onze code waar we de array-variabele willen introduceren) de waardes voor onze array nog niet.  In dat geval wensen we een __nieuwe lege array__.
+- We weten op voorhand reeds over welke waardes onze array moet beschikken.  Waarbij we vertrekken van een __(nieuwe) opgevulde array__.
+
+=== Nieuwe lege array
+
+Om een nieuwe array te creëren maken we typisch gebruik van het `new` sleutelwoord.  Na `new` vermeld je het datatype van de elementen.   Op dit datatype volgt, tussen vierkante haken, het aantal elementen van deze array.  
+
+****
+[.underline]#Voorbeelden van array initializers voor lege arrays#
+
+- `int[] lottoGetallen = *new int[6]*` voor een array met __6__ `int` elementen
+
+image::Array - Defaultwaardes van een int array.png[Array - Defaultwaardes van een int array.]
+
+- `bool[] voorwaardes = *new bool[3]*` voor een array met __3__ `bool` elementen
+
+image::Array - Defaultwaardes van een bool array.png[Array - Defaultwaardes van een bool array.]
+
+- `int x = 4; string[] namen = *new string[x]*` voor een array met __x aantal__ (of dus __4__) `string` elementen
+
+image::Array - Defaultwaardes van een string array.png[Array - Defaultwaardes van een string array.]
+
+[NOTE]
+====
+Elk element van een nog niet opgevulde array is op de defaultwaarde ingesteld van het elementtype van deze array.
+
+Alle zes elementen van de `new int[6]` array bijvoorbeeld zijn initieel met waarde __0__ opgevuld.
+====
+****
+
+=== Meteen opgevulde array
+
+Je kan meteen tijdens creatie van een nieuwe array-instantie opgeven welke waardes aan de verschillende elementen worden toegekend.
+
+Je gebruikt hiervoor accolades.  Tussen accolades vermeld je voor elke slot de initiële waarde.
+
+****
+[.underline]#Voorbeeld van een array initializer voor een meteen opgevulde arrays#
+
+We kennen reeds alle namen van de verschillende __maanden__ in een jaar.  
+
+[source,csharp,linenums]
+----
+string[] maanden = new string[12] { "jan", "feb", "mrt", "apr", 
+									"mei", "jun", "jul", "aug", 
+									"sep", "okt", "nov", "dec" };
+----
+****
+
+Het geeft hier bijvoorbeeld geen nut voor elke maandnaam een aparte toekenning in te zetten...
+
+[source,csharp,linenums]
+----
+string[] maanden = new string[12];
+maanden[0] = "jan";
+maanden[1] = "feb";
+//...
+maanden[11] = "dec";
+----
+
+Deze code is meer omslachtig om op te stellen, én is minder leesbaar. 
+
+Je kan tussen accolades ook van variabele expressies gebruik maken...
+
+****
+[.underline]#Nog een voorbeeld van een array initializer voor een meteen opgevulde arrays#
+
+Het maximum aantal __dagen__ is voor elke maand op voorhand geweten.
+
+Voor __februari__ echter moeten we opletten, daar zijn we afhankelijk van het `jaar`...
+
+[source,csharp,linenums]
+----
+int jaar = 2020;
+
+int dagenFeb = 28;
+if (jaar % 400 == 0 || jaar % 4 == 0 && jaar % 100 != 0) {
+    dagenFeb = 29;
+}
+
+int[] dagen = new int[12]{ 31, dagenFeb, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+----
+
+Omdat we op voorhand niet weten of het om __28__ of __29__ dagen gaat, verwijzen we eenvoudigweg naar onze variabele `dagenFeb`.
+****
+
+[discrete]
+==== Verkorte notatie en type inference
+
+Een stukje code als...
+
+`string[] namen = new int[*3*]{ "Jan", "Piet", "Rita" };`
+
+...kan ook als...
+
+`string[] namen = *new int[]*{ "Jan", "Piet", "Rita" };`
+
+Het aantal elementen (de __3__) is alvast weggelaten.  Op basis van het aantal waardes, opgelijst tussen accolades, is immers duidelijk hoeveel slots worden voorzien.
+
+Het vermelden van deze __3__ heeft weinig nut, of het zou zijn om expliciet te benadrukken dat het om een array met __3__ elementen zal gaan.
+
+Op een declaratieregel kan het nog korter, we kunnen ook het `new string[]` gedeelte weglaten...
+
+`string[] namen = { "Jan", "Piet", "Rita" };`
+
+Ook het elementtype voor deze array kan worden afgeleid (__type inference__).  Deze keer op basis van het datatype van onze array-variabele, en het datatype van de tussen accolades vermelde waardes.
+
+Indien de toekenning, aan de array-variabele, niet op de declaratieregel gebeurt, moet je op zijn minst aangeven wat het type van de creëren array is... 
+
+[source,csharp,linenums]
+----
+string[] namen;                                 // <1>
+...
+//namen = { "Jan", "Piet", "Rita" };            // <2>
+namen = new string[] { "Jan", "Piet", "Rita" }; // <3>
+----
+<1> Op deze regel wordt de array-variabele enkel gedeclareerd.
+<2> Dit kan niet, de compiler geeft te weinig informatie om te begrijpen welk type array je wenst te creëren.
+<3> Vermeld op zijn minst het `new string[]` gedeelte.
+
+== Aanspreken van array-elementen
+
+Om in de code een array-element aan te spreken kan je na de naam van de array-variabele tussen vierkante haakjes de __index__ plaatsen van het desbetreffende element. 
+
+De __index__ is een rangnummer dat aangeeft wat de positie is van dat element binnen de tabel.  
+
+****
+[.underline]#Voorbeeld van het benaderen van array-elementen#
+
+In volgend voorbeeld lezen we het __eerste__, __derde__ en __laatste__ element uit van de array `werkdagen`...
+
+[source,csharp,linenums]
+----
+string[] werkdagen = { "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag" };
+
+int index;
+
+index = 0;
+Console.WriteLine(werkdagen[index]);
+
+index = 2;
+Console.WriteLine(werkdagen[index]);
+
+index = werkdagen.Length - 1;
+Console.WriteLine(werkdagen[index]);
+----
+
+Geeft onze volgende uitvoer...
+
+[source,shell]
+----
+maandag
+woensdag
+vrijdag
+----
+
+.Werk steeds met de Length property.
+[NOTE]
+====
+In plaats van de expressie `werkdagen.Length - 1` hadden we hier ook gebruik kunnen maken van de literal `4`.  De uitvoer had niet anders geweest.
+
+Toch is dat niet aan te raden.  Je zou die regel code immers zo afhankelijk maken van het gegeven dat er zich 5 elementen in de array bevinden.  Wordt onze __werkweek__ aangepast naar __maandag tot en met donderdag__, dan zou je van die `4` een `3` moeten maken.
+
+Had je echter gewerkt met `werkdagen.Length - 1`, dan hoefde er niets te veranderen.
+====
+****
+
+Om het eerste element te benaderen maak je gebruik van de laagste index (ook wel *__lowerbound__* genoemd).  Deze is steeds `0`.  __Resistance is futile ;)__
+
+
+De hoogste index (ook wel *__upperbound__* genoemd) is één minder dan het aantal elementen.
+
+.Uitlezen van slots kan quasi ogenblikkelijk.
+[NOTE]
+====
+De waardes in een array staan in het geheugen allemaal naast elkaar.  
+
+Alle slots hebben overigens dezelfde omvang (evenveel bits) omdat elk slot voorzien is voor een waarde van hetzelfde datatype.  In een `ìnt[]` (lees __int array__) bijvoorbeeld zijn alle elementen van type `int` (op niveau van .NET ook wel `Int32` genoemd).  Wat maakt dat elke element 32 bits volume (in het geheugen steeds volgend op het voorgaand element) in beslag neemt.
+
+Een array-variabele bevat een __verwijzing__ (ook wel __referentie__ genoemd) naar het beginadres van het totale blok geheugen (waarin alle bitsgewijze representaties voor de opeenvolgende elementen ook opeenvolgend in dat geheugenblok zijn opgenomen).  
+
+Vraag je naar het eerste element van een array, met iets als `eenIntArray[0]` bijvoorbeeld, dan zal op __0 offset__ van het beginadres gekeken worden naar de eerstvolgende 32 bits.  `eenIntArray[3]` zal dan bijvoorbeeld op __3 keer 32bits offset ten opzicht van het beginadres__ kijken naar de daar gevonden 32 bits.
+
+Dit soort van benaderingstechniek maakt het __adresseren__ (__aanspreken van__) array-elementen natuurlijk razendsnel.  Quasi ogenblikkelijk.
+Het vereist natuurlijk wel dat alle elementen van hetzelfde datatype zijn.  Of met andere woorden evenveel bits beslaan.
+====
+
+=== Opvullen van een array-element
+
+Naast het uitlezen van array-elementen, kan je aan de hand van een index uiteraard ook opgeven aan welke element je een waarde wenst toe te kennen.
+
+****
+[.underline]#Voorbeeld van het benaderen van array-elementen#
+
+Om de inhoud van elementen van de `labels` array aan te passen, kennen we aan deze elementen (bijvoorbeeld op indices __0__ en __1__) een nieuwe waarde toe.
+
+[source,csharp,linenums]
+----
+string[] labels = { "Jan", "Piet" };
+
+labels[0] = "Pol";
+labels[1] = "Rita";
+
+Console.WriteLine(labels[0]);  // <1>
+Console.WriteLine(labels[1]);  // <2>
+----
+<1> Pol
+<2> Rita
+****
+
+
+=== Vergelijking met het benaderen van karakters van een 'string'
+
+Het werken met __indices__ bij arrays doet je allicht denken aan het werken met een __index__ bij het benaderen van een karakter (`char`) van een `string`.  
+
+Ook daar was het zo dat het eerste element, het eerste karakter in dat geval, te bereiken  via __index 0__.
+
+****
+[.underline]#Voorbeeld van arrays vs strings#
+
+Net zoals bij een array, kan je bij een `string` het aantal elementen, het aantal karakters in dat geval, met de `Length` property bevragen...
+
+[source,csharp,linenums]
+----
+int[] getallen = { 1, 2, 3 };
+
+Console.WriteLine($"Eerste waarde uit de array: {getallen[0]}");
+Console.WriteLine($"Laatste waarde uit de array: {getallen[getallen.Length - 1]}");
+
+Console.WriteLine("Aanpassen van de tweede waarde van de array...")
+getallen[1] = 20;
+Console.WriteLine($"De tweede waarde uit de array is nu: {getallen[1]}");
+----
+
+Geeft...
+
+[source,shell]
+----
+Eerste waarde uit de array: 1
+Laatste waarde uit de array: 3
+Aanpassen van de tweede waarde van de array...
+De tweede waarde uit de array is nu: 20
+----
+
+Het aanpassen van één karakter van een `string` is niet mogelijk.  
+
+[source,csharp,linenums]
+----
+string tekst = "abc";
+
+Console.WriteLine($"Eerste karakter uit de string: {tekst[0]}");
+Console.WriteLine($"Laatste karakter uit de string: {tekst[tekst.Length - 1]}");
+
+Console.WriteLine("Aanpassen van het tweede karakter van de string kan niet!")
+//tekst[1] = 'd';  // <1>
+----
+<1> Zou een compilefout opleveren.
+
+Geeft...
+
+[source,shell]
+----
+Eerste karakter uit de string: a
+Laatste karakter uit de string: c
+Aanpassen van het tweede karakter van de string kan niet!"
+----
+
+Zoals reeds eerder aangehaald is het `string` datatype __immutable__.
+****
+
+
+=== IndexOutOfRange exceptions
+
+Let ook bij het aanspreken van array-elementen op voor een __off by one__ fout...
+
+****
+[.underline]#Voorbeeld van een IndexOutOfRange exception#
+
+Spreek je (per ongeluk) een element aan op een index kleiner dan __0__ (lager dan de __lowerbound__), of hoger dan de __lengte + 1__ (hoger dan de __upperbound__) dan treedt een `IndexOutOfRange` exception op...
+
+[source,csharp,linenums]
+----
+int[] getallen = { 1, 2, 3 };
+
+Console.WriteLine(getallen[-1]); // <1>
+Console.WriteLine(getallen[3]);  // <2>
+----
+<1> De gebruikte index is lager dan de lowerbound => IndexOutOfRangeException
+<2> De gebruikte index is hoger dan de upperbound => IndexOutOfRangeException
+
+image::Array - IndexOutOfRangeException.png[Array - IndexOutOfRange exception.]
+
+Merk ook de __exception details__ op.  Ook daar wordt aangegeven dat de index __buiten de grenzen__ (__"outside the bounds"__) valt.
+****
+
+== Itereren met for en foreach
+
+=== Dynamisch elementen benaderen
+
+Op basis van een __index__ bepaal je als programmeur welk slot van de array je wenst te benaderen.
+
+Vaak gebeurt dit aan de hand van een `int` literal, bijvoorbeeld `werkdagen[2]`.  De `int` literal `2` legt vast dat je het __derde element__ wenst aan te spreken.  
+
+Het gebruik van een `int` literal -tussen de vierkante haken- is niet de enigste mogelijkheid. Men kan net zo goed aan de hand van een variabele `int` expressie bepalen wil slot van de array je wenst te benaderen.
+
+****
+[.underline]#Voorbeeld van het dynamisch benaderen van array-elementen#
+
+In ons vorig voorbeeld is je misschien opgevallen hoe we het __eerste__, __derde__ en __laatste__ element op exact dezelfde wijze benaderen...
+
+[source,csharp,linenums]
+----
+string[] werkdagen = { "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag" };
+
+int index;
+
+index = 0;
+Console.WriteLine(werkdagen[index]); // <1>
+
+index = 2;
+Console.WriteLine(werkdagen[index]); // <1>
+
+index = werkdagen.Length - 1;
+Console.WriteLine(werkdagen[index]); // <1>
+----
+<1> Telkens wordt op exact dezelfde wijze een bepaald element, op een bepaalde index aangesproken.
+
+Toch krijgen we telkens een andere waarde te zien.  Het voorbeeld geeft onze volgende uitvoer...
+
+[source,shell]
+----
+maandag
+woensdag
+vrijdag
+----
+
+Het is de waarde van onze `index` variabele die bepaald welk slot van de array wordt aangesproken.  
+
+Dit levert ons een __dynamische wijze__ op om elementen te benaderen.  Tijdens uitvoer van de code wordt, op basis van de variabele expressie, bepaald welk slot wordt uitgelezen.
+
+.Array vs aparte variabelen
+[NOTE]
+====
+Merk op dat dit aan de hand van aparte variabelen onmogelijk is.
+
+[source,csharp,linenums]
+----
+string werkdag1 = "maandag";
+string werkdag2 = "dinsdag";
+string werkdag3 = "woensdag";
+string werkdag4 = "donderdag";
+string werkdag5 = "vrijdag";
+
+Console.WriteLine(werkdag1);
+Console.WriteLine(werkdag3);
+Console.WriteLine(werkdag5);
+----
+
+Indien je met aparte variabelen werkt, die elke een unieke naam (moeten) hebben, heb je geen andere mogelijkheid dan het specifiek aanspreken van die ene of die andere variabele.  Dit op basis van hun eigen (unieke) naam.
+====
+****
+
+****
+[.underline]#Voorbeeld van het dynamisch benaderen op basis van invoer#
+
+Uiteraard kan je ook basis van een ingevoerde positie (__positie__) beslissen welk slot in de array aan te spreken.
+
+[source,csharp,linenums]
+----
+string[] werkdagen = { "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag" };
+
+Console.Write("Positie van de werkdag?: ");
+int positie = int.Parse(Console.ReadLine());
+
+if (positie >= 1 && positie < werkdagen.Length) {
+	int index = positie - 1;
+	string werkdag = werkdagen[index];
+	Console.WriteLine($"Werkdag {positie} is {werkdag}.");
+}
+----
+
+Indien de gebruiker __3__ invoert, wordt hiervan `index` __2__ gemaakt, en krijgen we __woensdag__ als werkdag...  
+
+[source,shell]
+----
+Positie van de werkdag?: 3
+Werkdag 3 is woensdag.
+----
+
+Bij een `positie` kleiner dan __1__, of groter of gelijk aan het aantal elementen, vermijden we een `IndexOutOfRange` exception.
+****
+
+=== Itereren met for 
+
+Een belangrijk voordeel van het werken met een array -in vergelijking met losse variabelen- is de mogelijkheid dezelfde operatie uit te kunnen voeren op alle, of een aantal, van deze array-elementen.
+
+****
+[.underline]#Voorbeeld van iteratieve benadering met for#
+
+Als we in onderstaand voorbeeld de elementen van de array `zenders` willen uitlezen, kunnen we herhaaldelijk een element op een bepaalde variabele `index` in de array aanspreken.
+
+Doen we dit voor elke waarde die `index` aanneemt in het __index-bereik__ van deze array (van lowerbound __0__ tot upperbound __3__) dan benaderen we zo elke array-element.
+
+[source,csharp,linenums]
+----
+string[] zenders = new string[4];
+zenders[0] = "mozaïek";
+zenders[1] = "Eén";
+zenders[2] = "Canvas/Ketnet";
+zenders[3] = "VTM";
+
+for (int index = 0; index < zenders.Length; index++) {
+	Console.WriteLine(zenders[index]);
+}
+----
+
+Indien we het voorbeeld uitvoeren dan krijgen we volgende output...
+
+[source,shell]
+----
+mozaïek
+Eén
+Canvas/Ketnet
+VTM
+----
+
+[NOTE]
+====
+Het kan ook met een `do while` of `while`...
+
+[source,csharp,linenums]
+----
+int index = 0;
+while (index < zenders.Length) {
+	Console.WriteLine(zenders[index]);
+	index++;
+}
+----
+
+Maar omdat je hier weet hoeveel iteraties er zijn (evenveel als het aantal elementen) is een `for` logischer.
+
+Er is hier sprake van een soort van __tellervariabele__ (onze `index`).  Je weet perfect waar deze __teller__ moet starten (bij de __lowerbound__), welke stap hij onderneemt (hier `+ 1`), en wat de waarde voor deze __teller__ tijdens de laatste iteratie moet zijn (__upperbound__).
+
+Geen enkel ervaren programmeur zou hier een voor `while` (of `do while`) kiezen.  In onze `for` is elk deelaspect van onze herhaling (__van waar__, __tot waar__ en __met welke stap__) immers meer geconcentreerd (samen in de __hoofding__ terug te vinden) en zo beter leesbaar.
+====
+****
+
+Het iteratief benaderen van de elementen van een array kan je ook gebruiken om de array op te vullen.  Of met andere woorden aan de array-elementen een waarde toe te kennen.
+
+****
+[.underline]#Voorbeeld van iteratieve benadering met for om de array op te vullen#
+
+In volgende code wordt een array `veelvouden` opgevuld met tien veelvouden van __5__.
+
+Voor elk volgend element in de array, vanaf index __0__ tot __9__, wordt...
+
+- aan dat element een bepaald `veelvoud` toegekend
+- het `veelvoud` alvast verhoogd voor de volgende iteratie (voor het volgend array-element)
+
+[source,csharp,linenums]
+----
+int[] veelvouden = new int[10];
+int veelvoud = 5;
+
+// opvullen:
+for (int index = 0; index < veelvouden.Length; index++) {
+	veelvouden[index] = veelvoud;
+	veelvoud += 5;
+}
+
+// afdrukken:
+for (int index = 0; index < veelvouden.Length; index++) {
+	Console.Write(veelvouden[index] + " ");
+}
+----
+
+Indien we het voorbeeld uitvoeren dan krijgen we volgende output...
+
+[source,shell]
+----
+5 10 15 20 25 30 35 40 45 50
+----
+
+Hetzelfde resultaat zou je kunnen bereiken zonder een variabele als `veelvoud` steeds met __5__ te moeten verhogen.
+
+De waarde voor onze array-elementen kan hier immers worden gebaseerd op de positie (`index`).  Het vierde element (op index __3__) bijvoorbeeld moet worden opgevuld met __4__ (`index + 1`) keer __5__.
+
+[source,csharp,linenums]
+----
+int[] veelvouden = new int[10];
+
+// opvullen:
+for (int index = 0; index < veelvouden.Length; index++) {
+	veelvouden[index] = 5 * (index + 1);
+}
+
+// afdrukken:
+for (int index = 0; index < veelvouden.Length; index++) {
+	Console.Write(veelvouden[index] + " ");
+}
+----
+
+Indien we het voorbeeld uitvoeren bekomen we dezelfde output.
+****
+
+=== Itereren met foreach
+
+Om op eenvoudige wijze, van voor naar achter, alle elementen van een array uit te lezen kunnen we ook gebruik maken van een `foreach` statement.
+
+Aan de __elementvariabele__ wordt steeds een kopie van het volgende array-element toegekend.
+Je code geeft zo, door de eenvoud, beter aan __wat het met elke waarde doet__, in tegenstelling tot code die naast dit __wat__ ook nog doorweven is met code die aangeeft __hoe we elke waarde bekomen__.
+
+****
+[.underline]#Voorbeeld van iteratieve benadering met foreach#
+
+In dit voorbeeld gaan we alle elementen van de array `woorden` benaderen, en elke waarde afdrukken.
+
+[source,csharp,linenums]
+----
+string[] woorden = { "dit", "is", "een", "test" };
+
+foreach (string woord in woorden) {
+	Console.Write(woord + " ");
+}
+----
+
+Indien we het voorbeeld uitvoeren dan krijgen we volgende output...
+
+[source,shell]
+----
+dit is een test
+----
+****
+
+Deze `foreach` is een verkorte notatie voor...
+
+[source,csharp,linenums]
+----
+for (int index = 0; index < woorden.Length; index++) {
+    string woord = woorden[index];
+    Console.Write(woord + " ");
+}
+----
+
+In de `in` clausule geef je aan over welke array je wenst te itereren.  
+
+[NOTE]
+====
+De elementvariabele (`woord` in dit voorbeeld) moet gedeclareerd worden in de hoofding van `foreach`, en moet van hetzelfde datatype zijn als de elementen van de array.
+
+Bij een `string[]` (__string array__) als in dit voorbeeld kiezen we dus voor onze elementvariabele `woord` type `string`.
+====
+
+Je hoeft geen gebruik meer te maken van een __index-variabele__ die je over het __index-bereik__ van de array laat lopen.  Je code wordt niet meer vervuild met technische details als __lower__- en __upperbounds__ van de array.  
+
+Op die manier is een `foreach`, in vergelijking met een gewone `for`, beter leesbaar.
+
+[discrete]
+==== Enkel van voor naar achter uitlezen van alle elementen
+
+Een `for` kan vaak door een beter leesbare `foreach` vervangen worden, maar er zijn een aantal beperkingen:
+
+- je benadert er altijd *alle elementen* mee
+- je benadert ze altijd van *voor naar achter*
+- je kan de *elementen enkel uitlezen*
+
+Wens je de waardes in de array te veranderen, wil je ze niet allemaal aanspreken, of is het noodzakelijk dat dit in een andere volgorde gebeurt dan van __voor naar achter__, dan is een `foreach` bijgevolg niet bruikbaar.
+
+****
+[.underline]#Voorbeeld waar we niet met een foreach kunnen werken#
+
+Stel dat we de waardes in de `getallen` array wensen te verdubbelen.
+
+Indien je een poging onderneemt om aan de __elementvariabele__ een waarde toe te kennen, levert de compiler ons een fout op.
+
+[source,csharp,linenums]
+----
+int[] getallen = { 1, 2, 3, 4, 5 };
+
+// aanpassen
+foreach (int getal in getallen) {
+    getal = getal * 2;  // <1>
+}
+----
+<1> Compilefout: Cannot assign to 'getal' because it is a 'foreach iteration variable'.
+
+Omdat de elementvariabele telkens met een kopie werkt van een volgend array-element, zou je ten hoogste deze kopie kunnen veranderen.  Omdat de code dan echter zou suggereren dat ook het array-element zelf wordt aangepast, gaat de compiler ons dit verhinderen.
+****
+
+Uiteraard zou je met een gewone `for` wel kunnen...
+
+[source,csharp,linenums]
+----
+int[] getallen = { 1, 2, 3, 4, 5 };
+
+// aanpassen
+for (int index = 0; index < getallen.Length; index++) {
+	getallen[index] = getallen[index] * 2;
+}
+
+// afdrukken	
+foreach (int getal in getallen) {
+	Console.Write(getal + " ");
+}
+----
+
+Deze keer zijn de waardes effectief verdubbeld.
+
+== Elementwaardes samenstellen
+
+Bij het opvullen van een element van een array kan je de nieuwe waarde voor dit element baseren op een andere element van de array.
+
+****
+[.underline]#Voorbeeld van opvullen elementen op basis van andere elementen#
+
+In dit voorbeeld willen we array `machten` opvullen met de eerste tien machten van __2__, van __2__ tot de __1e__, tot en met __2__ tot de __10de__.
+
+Het eerste element wordt statisch ingesteld op __2__.  Alle hieropvolgende elementen, van index __1__ tot en met __9__, worden ingesteld op de waarde van het voorgaande element vermenigvuldigd met __2__.
+Het voorgaande element is het element op een index die __1__ kleiner is dan de __doelIndex__.
+
+[source,csharp,linenums]
+----
+int[] machten = new int[10];
+
+machten[0] = 2;
+for (int doelIndex = 1; doelIndex < machten.Length; doelIndex++) {
+	machten[doelIndex] = machten[doelIndex - 1] * 2;
+}
+
+foreach (int macht in machten) {
+	Console.Write(macht + " ");
+}
+----
+
+Indien we het voorbeeld uitvoeren dan krijgen we volgende output...
+
+[source,shell]
+----
+2 4 8 16 32 64 128 256 512 1024
+----
+****
+
+De meeste programmeurs zouden `doelIndex` allicht gewoon `index` noemen.  Hier werd voor de duidelijkheid toch maar even de naam __doel-index__ gebruikt, om verwarring met de __bron-index__ (hier `doelIndex - 1`) te vermijden. 
+
+== Dynamische grootte van een array
+
+In alle voorbeelden tot dusver werd in de array-initializer aan de hand van een `int` literal bepaald hoeveel slots in de array werden voorzien.  Bijvoorbeeld: `new int[*6*]` indien we over __6__ elementen willen beschikken.
+
+Je kan echter ook een variabele `int` expressie inzetten om dat aantal te bepalen.  Bijvoorbeeld: `new int[*x*]`, waarbij de inhoud die variabele `x` op dat moment tijdens uitvoer aanneemt, zal bepalen hoeveel slots worden voorzien.
+
+****
+[.underline]#Voorbeeld van een array met een dynamische grootte#
+
+Zo zal in volgend programma -tijdens uitvoer- de inhoud van de `aantalGetallen` variabele gebruikt worden om te bepalen over hoeveel elementen de array `getallen` moet beschikken.
+
+In dit geval proberen we een array, met op voorhand ongekend aantal elementen, op te vullen met alle getallen vanaf `start` tot en met `eind`...
+
+[source,csharp,linenums]
+----
+Console.Write("Start getal?: ");
+int start = int.Parse(Console.ReadLine());
+
+Console.Write("Eind getal?: ");
+int eind = int.Parse(Console.ReadLine());
+
+int aantalGetallen = eind - start + 1;        // <1>
+
+if (aantalGetallen > 0) {
+	// aanmaken
+	int[] getallen = new int[aantalGetallen]; // <2>
+
+	// opvullen
+	int getal = start;
+	for (int index = 0; index < getallen.Length; index++) {
+		getallen[index] = getal;
+		getal++;
+	}
+
+	// afdrukken
+	foreach (int element in getallen) {
+		Console.Write($"{element} ");
+	}
+}
+----
+<1> Het aantal elementen wordt gebaseerd op de gepaste logica.
+<2> Er werd geen literal maar een variabele gebruikt om het aantal elementen te bepalen.
+
+Indien we het voorbeeld uitvoeren en de gebruiker de waardes __3__ en __8__ invoert krijgen we volgende output...
+
+[source,shell]
+----
+Start getal?: 3
+Eind getal?: 8
+3 4 5 6 7 8 
+----
+
+De array zal beschikken over __6__ slots, en elk element werd netjes opgevuld met het correcte getal.
+
+Het aantal elementen (`aantalGetallen`) werd berekent door naar het verschil te kijken tussen onze `eind` en `start` waarde.  Dat verschil moeten we uiteraard nog met één verhogen.
+****
+
+Het aantal elementen van een array kan dus tijdens uitvoering worden bepaald.
+
+== Zoeken in arrays
+
+Regelmatig valt het voor dat je wil nagaan of een bepaalde waarde zich al dan niet in een bepaalde array bevindt. 
+
+Indien de array ongesorteerd is, heb je niet veel ander opties dan element voor element vergelijken met je __zoekwaarde__.
+
+****
+[.underline]#Voorbeeld van een lineaire zoekmethode#
+
+Stel dat je in een verzameling `steden` wil nagaan of een bepaalde `opTeZoekenStad` aanwezig is...
+
+[source,csharp,linenums]
+----
+string[] steden = { "Brussel", "Antwerpen", "Hasselt", 
+					"Brugge", "Kortrijk", "Gent" };
+
+do {
+	Console.Write("Stad?: ");
+	string opTeZoekenStad = Console.ReadLine();
+
+	int index = 0;                               // <2>
+	bool gevonden = false;
+	while (!gevonden && index < steden.Length) {
+		if (steden[index].ToLower() == opTeZoekenStad.ToLower()) {
+			gevonden = true;
+		} else {
+			index++;                             // <1>
+		}
+	}
+
+	if (gevonden)
+		Console.WriteLine("De stad werd teruggevonden.");
+	else
+		Console.WriteLine("De stad werd niet gevonden.");
+
+	Console.WriteLine();
+} while (true);
+----
+<1> Telkens bekijken we het volgende element (op een `index` die __1__ hoger is).
+<2> Vertrekken doen we bij het eerste element (op `index` __0__).
+
+
+Bij invoer van de waardes __Gent__, __Hasselt__ en __Damme__ bekomen we bijvoorbeeld...
+
+[source,shell]
+----
+Stad?: Gent
+De stad werd teruggevonden.
+
+Stad?: Hasselt
+De stad werd teruggevonden.
+
+Stad?: Damme
+De stad werd niet gevonden.
+
+Stad?:
+----
+****
+
+Merk op dat we niet alleen stoppen met zoeken op het moment dat onze `index` te groot wordt (aan de hand van de voorwaarde `index < steden.Length`), maar ook indien de waarde reeds werd `gevonden`.
+
+Door een `bool` variabele als `gevonden` op `true` in te stellen, op het moment dat op de `index` positie onze __zoekwaarde werd gevonden__, kunnen we niet alleen de herhaling afbreken, maar ook achteraf dit resultaat opnieuw uitlezen.  Onze `if` maakt immers opnieuw gebruik van deze `gevonden` variabele.
+
+Deze zoekmethod wordt ook wel het *__lineair zoeken__* genoemd.  Deze aanpak is niet erg goed schaalbaar.
+
+[NOTE]
+====
+Het lineair zoeken is niet bijster krachtig, niet goed schaalbaar.  
+
+Bij een miljoen elementen, ga je in het slechtste geval een miljoen keer de waarde van dat element moeten vergelijken met je __zoekwaarde__.  Indien het aantal elementen verdubbeld, ga je in het slechtste geval ook dubbel zoveel waardes moeten vergelijken.
+
+Wens je bijgevolg regelmatig te zoeken in een ongesorteerde verzameling, dan valt het te overwegen of het niet beter is eerst de array te gaan sorteren.  In geordende verzamelingen kan je immers vlugger waardes terugvinden.
+
+Uiteraard wordt aan dat ordenen ook veel tijd verloren.  Maar soms, afhankelijk van het aantal keer dat je wil zoeken, kan dit toch opleveren.
+
+Later hebben we het over het sorteren van verzamelingen.
+====
+
+.Oneindige herhaling
+[NOTE]
+====
+Een __oneindige loop__ werd gecreëerd door in de `while` clausule van het `do while` statement te werken met `true` als voorwaarde.
+
+Deze `true` zorgt ervoor dat altijd voldaan zal zijn aan de voorwaarde die bepaald nogmaals de body van deze herhaling uit te voeren.
+
+In realiteit worden __oneindige herhalingen__ zelden gebruikt, maar voor onze voorbeelden en oefeningen komt het wel eens van pas.
+====
+
+=== Zoeken naar een positie
+
+Soms ben je ook geïnteresseerd in de positie (__index__) waarop een bepaalde __zoekwaarde__ wordt teruggevonden.
+
+Bijvoorbeeld omdat je die waarde wil aanpassen of verwijderen.  
+
+****
+[.underline]#Voorbeeld van het zoeken naar een positie#
+
+Ons voorgaand voorbeeld was daar eigenlijk reeds op voorzien.  Eens de __zoekwaarde__ werd teruggevonden werd `index` niet meer verhoogd.  
+
+`index` kan bijgevolg eenvoudigweg worden uitgelezen om de positie te bevragen...
+
+[source,csharp,linenums]
+----
+int index = 0; 
+bool gevonden = false;
+while (!gevonden && index < steden.Length) {
+	if (steden[index].ToLower() == opTeZoekenStad.ToLower()) {
+		gevonden = true;
+	} else {
+		index++;
+	}
+}
+
+if (gevonden)
+	Console.WriteLine($"De stad werd teruggevonden op index {index}."); // <1>
+...
+----
+<1> `index` levert ons de positie op
+****
+
+[discrete]
+==== Array.IndexOf
+
+Aan de hand van een voorgedefinieerde `Array.IndexOf()` kan je ook erg makkelijk de positie van een bepaalde waarde in een array terugvinden.
+
+Bij het aanroepen van deze functionaliteit geef je aan in welke array wordt gezocht, en wat de zoekwaarde is...
+
+****
+[.underline]#Voorbeeld van het zoeken naar een positie met Array.IndexOf#
+
+[source,csharp,linenums]
+----
+int index = Array.IndexOf(steden, opTeZoekenStad);
+bool gevonden = (index >= 0);
+
+if (gevonden)
+	Console.WriteLine($"De stad werd teruggevonden op index {index}.");
+...
+----
+****
+
+`Array.IndexOf()` levert ofwel...
+
+- de __index__ op van het element waarop de zoekwaarde werd gevonden
+ 
+Ofwel...
+
+- __-1__ indien de zoekwaarde niet werd gevonden
+
+Indien de `index` bijgevolg __groter is of gelijk aan 0__ is onze zoekwaarde `gevonden`.
+
+[discrete]
+==== Array.LastIndexOf
+
+`Array.IndexOf` zoekt naar het eerste voorkomen van de zoekwaarde.  `Array.LastIndexOf` zoekt naar het laatste voorkomen.
+
+****
+[.underline]#Voorbeeld van het zoeken met Array.IndexOf en LastIndexOf#
+
+Indien waardes verschillende keren voorkomen in een array ,leveren `Array.IndexOf` en `Array.LastIndexOf` een andere waarde op...
+
+[source,csharp,linenums]
+----
+string[] steden = { "Brussel", "Gent", "Antwerpen", "Gent" };
+
+Console.WriteLine(Array.IndexOf(steden, "Gent"));
+Console.WriteLine(Array.LastIndexOf(steden, "Gent"));
+----
+
+Geeft als uitvoer...
+
+[source,shell]
+----
+1
+3
+----
+****
+

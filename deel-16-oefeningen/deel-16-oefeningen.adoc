@@ -1,0 +1,594 @@
+= Programmeren Basis - Deel 16 - Oefeningen
+Yanic Inghelbrecht
+v2022.05.06.10.00
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+// geen auto section numbering voor oefeningen (handigere titels en toc)
+//:sectnums:  
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+
+
+
+== Documentatie
+
+
+
+=== Oefening D16listdocumentatie
+
+Zoek in de documentatie de onderstaande link:https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1[List<T>] methods op.
+
+Vervolledig de onderstaande tabel :
+
+* geef het return type
+* geef de types en namen van de parameters
+** zet een streepje `-` indien niet van toepassing
+* schrijf ook een woordje uitleg over de werking en de eventuele return value
+
+[%autowidth]
+|====
+|return type|method naam|parameter1|parameter2|uitleg
+
+|void|Add|T item|-|voegt `item` achteraan de lijst toe
+||Insert|||
+||Contains|||
+||IndexOf|T item|-|
+||IndexOf|T item|int index|
+||Remove|||
+||RemoveAt|||
+||Sort|-|-|
+|====
+
+
+
+=== Oefening D16linkedlistdocumentatie
+
+Zoek in de documentatie de onderstaande link:https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.linkedlist-1[LinkedList<T>] methods op.
+
+Vervolledig de onderstaande tabel :
+
+* geef het return type
+* geef de types en namen van de parameters
+** zet een streepje `-` indien niet van toepassing
+* schrijf ook een woordje uitleg over de werking en de eventuele return value
+
+Je zult in de documentatie soms het type `LinkedListNode<T>` tegenkomen. Dit stelt een schakel-object voor in de ketting van schakels. Wij zullen daar echter in deze cursus niks mee aanvangen.
+
+[%autowidth]
+|====
+|return type|method naam|parameter|uitleg
+
+|LinkedListNode<T>|AddFirst|T value|voegt `value` vooraan de lijst toe +
+(de return value is voor ons niet interessant)
+||AddLast||
+||Contains||
+||Remove|T value|
+|====
+
+
+
+=== Oefening D16hashsetdocumentatie
+
+Zoek in de documentatie de onderstaande `HashSet<T>` methods op.
+
+Vervolledig de onderstaande tabel :
+
+* geef het return type
+* geef de types en namen van de parameters
+** zet een streepje `-` indien niet van toepassing
+* schrijf ook een woordje uitleg over de werking en de eventuele return value
+
+Je zult in de documentatie het type `IEnumerable<T>` tegenkomen. Dit is een algemeen type dat eender welke collectieklasse kan voorstellen : `List<T>`, `LinkedList<T>` of `HashSet<T>`. Wat het verband is tussen `IEnumerable<T>` en deze klasse, zien we in een later deel over __interfaces__.
+
+[%autowidth]
+|====
+|return type|method naam|parameter|uitleg
+
+|bool|Add|T item|voegt `item` toe aan de set. De return value geeft aan of er daadwerkelijk iets werd toegevoegd (false indien reeds aanwezig)
+||Contains||
+||Remove||
+|void|ExceptWith|IEnumerable<T> other|verwijdert alle elementen van collectie `other` uit deze set
+||IntersectWith||
+||UnionWith||
+||Overlaps||
+|====
+
+
+== Lijsten
+
+
+=== Oefening D16namenalfabetisch
+// Y6.01
+
+Schrijf een programma dat de gebruiker om namen vraagt en deze vervolgens alfabetisch gesorteerd op de console toont.
+
+Het programma stopt met vragen zodra de gebruiker een lege tekst ingeeft (bv. 3 spaties invoert en op kbd:[Enter] drukt).
+
+Een voorbeeld uitvoering van dit programma :
+
+[source,shell]
+----
+Geef naam 1 : Jan
+Geef naam 2 : Piet
+Geef naam 3 : Joris
+Geef naam 4 : Corneel
+Geef naam 5 : 
+Corneel
+Jan
+Joris
+Piet
+----
+
+
+=== Oefening D16zoektermenachteraan
+// Y6.02
+
+We hernemen oplossing `D09zoekhistoriek` waarin een programma steeds de 5 recentste zoektermen bijhield.
+
+Herschrijf dit programma zodat de zoektermen in een collectieklasse worden bijgehouden i.p.v. een array en zorg dat het programma voor de gebruiker nog steeds op dezelfde manier werkt.
+
+Merk op dat de nieuwe zoekterm steeds achteraan de lijst erbij komt en het oudste element (vooraan de lijst) verdwijnt.
+
+Een voorbeeld uitvoering :
+
+[source,shell]
+----
+Charlie Sheen:Hot shots:Winning:Electrabel storing:Geen elektriciteit
+Nieuwe zoekterm : werking zekeringskast
+
+Hot shots:Winning:Electrabel storing:Geen elektriciteit:werking zekeringskast
+Nieuwe zoekterm : verbrande vingertoppen verzorgen
+
+Winning:Electrabel storing:Geen elektriciteit:werking zekeringskast:verbrande vingertoppen verzorgen
+Nieuwe zoekterm : elektricien regio gent
+
+Electrabel storing:Geen elektriciteit:werking zekeringskast:verbrande vingertoppen verzorgen:elektricien regio gent
+Nieuwe zoekterm : 
+----
+
+
+
+=== Oefening D16zoektermenvooraan
+// Y6.02
+
+Herschrijf de oplossing van de vorige oefening zodat de nieuwe zoekterm nu vooraan de lijst wordt toegevoegd en de oudste term achteraan verdwijnt.
+
+In vergelijking met de vorige oefening, zullen de zoektermen dus ook in de omgekeerde volgorde getoond worden.
+
+Een voorbeeld uitvoering :
+
+[source,shell]
+----
+Geen elektriciteit:Electrabel storing:Winning:Hot shots:Charlie Sheen
+Nieuwe zoekterm : werking zekeringskast
+
+werking zekeringskast:Geen elektriciteit:Electrabel storing:Winning:Hot shots
+Nieuwe zoekterm : verbrande vingertoppen verzorgen
+
+verbrande vingertoppen verzorgen:werking zekeringskast:Geen elektriciteit:Electrabel storing:Winning
+Nieuwe zoekterm : elektricien regio gent
+
+elektricien regio gent:verbrande vingertoppen verzorgen:werking zekeringskast:Geen elektriciteit:Electrabel storing
+Nieuwe zoekterm : 
+----
+
+
+
+=== Oefening D16vijfkleinstegetallen
+// Y6.04
+Schrijf een programma dat de gebruiker om 10 getallen vraagt en vervolgens de 5 kleinste ingevoerde getallen weergeeft.
+
+Dubbels zijn aanvaardbaar en worden gewoon meegeteld. Indien de gebruiker geen geldig getal invoert verschijnt er `ongeldige input`.
+
+[TIP]
+====
+Als je de lijst sorteert van klein naar groot is het makkelijk om de 5 kleinste getallen te vinden : dit zijn dan gewoon de eerste 5 getallen in de gesorteerde lijst!
+====
+
+Een mogelijke uitvoering :
+
+[source,shell]
+----
+Geef een getal : 3
+Geef een getal : 89
+Geef een getal : 23
+Geef een getal : 5
+Geef een getal : 12
+Geef een getal : hallo
+ongeldige input
+Geef een getal : -4
+Geef een getal : 0
+Geef een getal : 0
+Geef een getal : 3
+Geef een getal : 100
+De 5 kleinste zijn -4 0 0 3 3
+----
+
+Merk op dat de gebruiker dubbels invoerde en dat de output met de 5 kleinste getallen ook dubbels bevatten.
+
+
+
+== Sets
+
+
+
+=== Oefening D16uniekegetallentonen
+
+Schrijf een programma dat de gebruiker om 10 getallen vraagt (dubbels toegelaten) en vervolgens het aantal unieke getallen alsook de unieke getallen zelf toont.
+
+De volgorde waarin de unieke getallen getoond worden hoeft niet dezelfde te zijn als waarin de getallen werden ingevoerd.
+
+Indien de gebruiker geen geldig getal invoert verschijnt er `ongeldige input`.
+
+Een mogelijke uitvoering :
+
+[source,shell]
+----
+Geef een getal : 3
+Geef een getal : 89
+Geef een getal : 23
+Geef een getal : 5
+Geef een getal : 100
+Geef een getal : hallo
+ongeldige input
+Geef een getal : -4
+Geef een getal : 0
+Geef een getal :
+ongeldige input
+Geef een getal : 0
+Geef een getal : 3
+Geef een getal : 100
+7 unieke getallen : 3,89,23,5,100,-4,0
+----
+Merk op dat het programma bleef doorvragen totdat het 10 getallen van de gebruiker kreeg, ondanks de twee ongeldige antwoorden. De dubbels waren `0`, `3` en `100`. De unieke getallen staan in de volgorde waarin ze werden ingevoerd maar dat is eerder toeval, het programma deed daarvoor niks speciaals.
+
+
+
+=== Oefening D16uniekegetalleninvoeren
+
+Schrijf een programma dat de gebruiker om 10 unieke getallen vraagt en vervolgens deze getallen toont.
+
+De volgorde waarin de unieke getallen getoond worden hoeft niet dezelfde te zijn als waarin de getallen werden ingevoerd.
+
+Indien de gebruiker geen geldig getal invoert verschijnt er `ongeldige input`. Bij een getal dat eerder al eens werd ingevoerd toont het programma "da's een dubbel".
+
+Een mogelijke uitvoering :
+
+[source,shell]
+----
+Geef een getal : 3
+Geef een getal : 89
+Geef een getal : 23
+Geef een getal : 3
+da's een dubbel
+Geef een getal : 5
+Geef een getal : 100
+Geef een getal : hallo
+ongeldige input
+Geef een getal : -4
+Geef een getal : 0
+Geef een getal :
+ongeldige input
+Geef een getal : 7
+Geef een getal : 0
+da's een dubbel
+Geef een getal : 47
+Geef een getal : 100
+da's een dubbel
+Geef een getal : 18
+unieke getallen : 3,89,23,5,100,-4,0,7,47,18
+----
+Merk op dat het programma bleef doorvragen totdat het 10 unieke getallen van de gebruiker kreeg, ondanks de twee ongeldige antwoorden en drie dubbels. De unieke getallen staan in de volgorde waarin ze werden ingevoerd maar dat is eerder toeval, het programma deed daarvoor niks speciaals.
+
+
+
+=== Oefening D16tombola
+//  Y6.03
+
+Schrijf een programma dat 5 willekeurige winnende tombola nummer bepaalt, elk nummer ligt in [1000,9999] (grenzen inclusief dus). Zorg ervoor dat deze winnende nummers gegarandeerd uniek zijn!
+
+Vervolgens kan de gebruiker tombolanummers ingeven (eindigen met lege input) waarna het programma toont welke nummers van de gebruiker winnaars zijn. Tot slot toont het programma de overige winnende nummers. Indien de gebruiker geen geldig getal invoert verschijnt er `ongeldige input`.
+
+Een mogelijke uitvoering ziet er zo uit :
+
+[source,shell]
+----
+Geef een nummer : 2345
+Geef een nummer : 5678
+Geef een nummer : hallo
+ongeldige input
+Geef een nummer : 1234
+Geef een nummer : 7890
+Geef een nummer : 
+Uw winnende nummers zijn 2345 1234
+De andere winnende nummers waren 9078 3421 4562
+----
+
+Het is zeer vervelend om dit programma te testen, de kans dat je een aantal correcte nummers raadt is immers niet erg groot.
+
+Wat zou je kunnen doen om het voor jezelf makkelijker te maken om je programma te testen? 
+
+Je zou bv. de winnende nummers kunnen tonen bij het begin van het programma. Dan kun je er telkens een aantal uitpikken als "correcte gokken" bij het invoeren. Het blijft echter omslachtig omdat het telkens andere winnende nummers zullen zijn.
+
+Een beter idee is : vervang de willekeurige winnende nummers tijdelijk door een aantal vaste winnende nummers! Dan kun je bij de invoer altijd dezelfde "correcte gokken" ingeven om je programma te testen. Zet voorlopig de code die de willekeurige nummers bepaalt in commentaar.
+
+Je kunt zelfs de gokken van de gebruiker tijdelijk hardcoderen in je code i.p.v. ze daadwerkelijk aan de gebruiker te vragen. Dan werkt alles vanzelf en zie je meteen of het programma correct werkt. Zet voorlopig de loop die de nummers van de gebruiker inleest in commentaar.
+
+Als je tevreden bent over de werking, kun je de code voor gebruikersinvoer en willekeurige winnende nummers weer uit commentaar halen.
+
+
+
+== Mix
+
+
+
+=== Oefening D16uniekegetalleninvoerensorteren
+
+Herwerk oplossing `D16uniekegetalleninvoeren` zodat de unieke getallen in *AFLOPENDE* (!!) volgorde getoond worden, van groot naar klein dus.
+
+Een uitvoering met dezelfde input als in oefening D16uniekegetalleninvoeren :
+
+[source,shell]
+----
+Geef een getal : 3
+Geef een getal : 89
+Geef een getal : 23
+Geef een getal : 3
+da's een dubbel
+Geef een getal : 5
+Geef een getal : 100
+Geef een getal : hallo
+ongeldige input
+Geef een getal : -4
+Geef een getal : 0
+Geef een getal :
+ongeldige input
+Geef een getal : 7
+Geef een getal : 0
+da's een dubbel
+Geef een getal : 47
+Geef een getal : 100
+da's een dubbel
+Geef een getal : 18
+unieke getallen : 100,89,47,23,18,7,5,3,0,-4
+----
+
+Let op de volgorde van de gesorteerde unieke getallen : van groot naar klein.
+
+[TIP]
+====
+De klasse `List<T>` heeft een `Reverse()` method die de volgorde van de elementen omkeert.
+====
+
+=== Oefening D16socialmediafilter
+
+In deze oefening gaan we een simpele __social media__ filter bouwen die 'stoute woordjes' kan censureren.
+
+Gegeven is onderstaande `Main` method :
+
+[source,csharp,linenums]
+----
+static void Main() {
+	// Maak een lijst van woorden die misschien gecensureerd moeten worden
+	List<string> words = new List<string> { "oranje", "trump", "haar", "Trump", "bedrog", "verkiezingen", "winnaar" };
+
+	// Maak een set van 'stoute woordjes' die we willen censureren
+	HashSet<string> naughtyWords = new HashSet<string> { "Trump", "fraude", "verkiezingen" };
+
+	// Toon eerste eens alle woorden
+	Console.WriteLine(String.Join(",", words));
+
+	// Censureer waar nodig
+	List<string> gecensureerd = SocialMediaFilter(words, naughtyWords); // <1>
+
+	// Toon de woorden opnieuw, dit keer geschikt voor gevoelige zieltjes
+	Console.WriteLine(String.Join(",", gecensureerd));
+}
+----
+<1> Deze `SocialMediaFilter` method is niet gegeven, die moet je zelf schrijven.
+
+De output van dit programma is :
+
+[source,shell]
+----
+oranje,trump,haar,Trump,bedrog,verkiezingen,winnaar
+oranje,trump,haar,*****,bedrog,************,winnaar
+----
+
+Merk op dat het censureren hoofdlettergevoelig is, `trump` is veilig voor de ogen maar `Trump` niet.
+
+De opdracht van deze oefening is de `SocialMediaFilter` method te schrijven. Deze method heeft 2 parameters :
+
+. een lijst met woorden
+. een set met verboden woorden
+
+Je mag ervan uitgaan dat deze parameters nooit `null` zullen zijn (maar het kan wel gebeuren dat het een lege lijst en/of lege set is).
+
+Je kunt in de `Main` method zien hoe deze method gebruikt wordt en daaruit afleiden wat de parametertypes en het returntype moeten zijn.
+
+Deze `SocialMediaFilter` method maakt een NIEUWE lijst die gebaseerd is op de lijst met woorden en retourneert die lijst.
+
+* toegelaten woorden worden integraal overgenomen
+* verboden woorden vervangen worden door sterretjes
+** evenveel als de lengte van het verboden woord
+
+Het vergelijken van de woorden en de verboden woorden is hoofdlettergevoelig.
+
+****
+[.underline]#Voorbeeld#
+
+Als we de social media filter zouden toepassen op deze data 
+
+* woorden : rood, grasgroen, blauw, geel, zwart
+* verboden woorden : geel, grasgroen
+
+dan bekomen we een lijst met daarin de strings
+
+* rood, pass:[*********], blauw, pass:[****], zwart
+
+Merk op dat het aantal sterretjes overeenkomt met de lengte van het verboden woord.
+****
+
+Enkele vaststellingen :
+
+* de meegegeven lijst met woorden en de geretourneerde lijst zullen evenveel strings bevatten
+* de onderlinge volgorde van de woorden in beide lijsten is dezelfde
+* op elke positie zijn de strings in beide lijsten even lang
+** ofwel is het exact hetzelfde woord (en dus sowieso even lang)
+** ofwel is het een reeks sterretjes van dezelfde lengte
+
+
+
+
+=== Oefening D16aantaluniekewoorden
+// Y6.05
+
+Schrijf een programma dat de gebruiker om een tekst vraagt en vervolgens toont hoeveel unieke woorden erin voorkomen en deze woorden in alfabetische volgorde op het scherm plaatst (alles hoofdletterongevoelig!).
+
+Je mag ervan uitgaan dat woorden enkel door spaties, komma's, punten, uitroeptekens en vraagtekens gescheiden worden.
+
+Een voorbeeld uivoering :
+
+[source,shell]
+----
+Geef een tekst : Te HogE Bergen In Griekenland LEveren BOvendien Weinig SKI plezier
+aantal unieke woorden : 10
+alfabetisch : bergen bovendien griekenland hoge in leveren plezier ski te weinig
+----
+
+Merk op dat de output van de woorden in alfabetisch volgorde, volledig in kleine letters geschreven is.
+
+Om je programma makkelijk te kunnen testen gebruik je tijdelijk best een string literal, bv. `Te HogE Bergen In Griekenland LEveren BOvendien Weinig SKI plezier`.
+
+[TIP]
+====
+* als je de tekst al van in het begin naar kleine letters omzet, is het makkelijk om aan de "alles hoofdletterongevoelig!" vereiste te voldoen.
+* Je kunt een string splitsen in een array van woorden met de `Split` method uit link:../deel-09/deel-09.adoc[Deel-09].
+* Je kunt een collectie opvullen met de elementen van een array door dit array mee te geven aan de constructor op het moment dat je het collectie object aanmaakt.
+====
+
+
+
+== Met eigen klassen
+
+
+
+=== Oefening D16student
+// Y6.06
+Schrijf een programma met een klasse `Student` die 2 properties heeft : `Naam` en `Gemeente`, beiden `string`s. Voorzie ook een constructor waarmee beide properties ingesteld worden.
+
+Schrijf een method `PrintStudent` met één parameter die de gegevens van die student op de console zet, bv. __Jan uit Gent__.
+
+Maak een lijst met 7 voorgedefinieerde studenten, waarvan er 2 in Gent wonen, 3 in Brugge en 2 in Kortrijk. 
+
+Overloop vervolgens de lijst met een foreach loop en toon de gegevens van elke student op de console m.b.v. de `PrintStudent` method.
+
+Een mogelijk uitvoering (met hele simpele 1-letter namen, bij gebrek aan inspiratie) :
+
+[source,shell]
+----
+A uit Gent
+B uit Brugge
+C uit Brugge
+D uit Kortrijk
+E uit Gent
+F uit Kortrijk
+G uit Brugge
+----
+
+
+
+=== Oefening D16printstudentenvan
+
+Breid oplossing `D16student` uit met een method `PrintStudentenVan` die twee parameters heeft :
+
+. een lijst met `Student` objecten
+. een gemeente (een `string`)
+
+Deze method overloopt de lijst en toont enkel de info van studenten uit de opgegeven gemeente op de console. Gebruik hierbij de `PrintStudent` method.
+
+Het programma toont eerst de info van alle 7 studenten, zoals voorheen. 
+
+Daarna worden de inwoners van Brugge uit de lijst met 7 voorgedefinieerde studenten getoond m.b.v. `PrintStudentenVan`.
+
+Een mogelijk uitvoering (met hele simpele 1-letter namen, bij gebrek aan inspiratie) :
+
+[source,shell]
+----
+A uit Gent
+B uit Brugge
+C uit Brugge
+D uit Kortrijk
+E uit Gent
+F uit Kortrijk
+G uit Brugge
+
+De studenten uit Brugge zijn :
+B uit Brugge
+C uit Brugge
+G uit Brugge
+----
+
+=== Oefening D16verwijderstudentenvan
+// Y6.07
+
+Breid oplossing D16student uit met een method `VerwijderStudentenVan` die twee parameters heeft : 
+
+. een lijst met `Student` objecten
+. een gemeente (een `string`)
+
+Deze method verwijdert alle studenten die in de opgegeven gemeente wonen uit de lijst. 
+
+Het programma toont eerst de info van alle 7 studenten, zoals voorheen. 
+
+Daarna worden de inwoners van Brugge verwijderd uit de lijst met 7 voorgedefinieerde studenten m.b.v. `VerwijderStudentenVan`.
+
+Tot slot worden de resterende studenten uit de lijst nogmaals op de console getoond.
+
+Een mogelijk uitvoering (met hele simpele 1-letter namen, bij gebrek aan inspiratie) :
+
+[source,shell]
+----
+A uit Gent
+B uit Brugge
+C uit Brugge
+D uit Kortrijk
+E uit Gent
+F uit Kortrijk
+G uit Brugge
+
+De resterende studenten zijn :
+A uit Gent
+D uit Kortrijk
+E uit Gent
+F uit Kortrijk
+----
+
+[TIP]
+====
+Let op als je elementen uit een collectie verwijdert terwijl je die collectie overloopt! 
+
+Als je niet oplet kan het zijn dat je code er af en toe eentje overslaat of er kan een `InvalidOperationException` optreden. 
+
+In de uitleg van link:../deel-16/deel-16.adoc[Deel-16] worden twee manieren besproken hoe je dit correct kunt doen.
+====
+

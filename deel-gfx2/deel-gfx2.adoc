@@ -1,0 +1,37 @@
+= Programmeren Basis - Deel GFX2
+Yanic Inghelbrecht
+v2021.12.03.10.00
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+// geen auto section numbering voor oefeningen (handigere titels en toc)
+//:sectnums:  
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+:deel-gfx2-oefeningen: ../deel-gfx2-oefeningen/deel-gfx2-oefeningen.adoc
+:deel-gfx1: ../deel-gfx1/deel-gfx1.adoc
+:deel-18: ../deel-18/deel-18.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+ 
+== Uitleg
+
+Dit korte deel vormt een vervolg op link:{deel-gfx1}[deel gfx1] en dient als voorbereiding op __interfaces__ in link:{deel-18}[deel 18].
+
+Alle uitleg voor dit deel vind je in link:{deel-gfx2-oefeningen}[het oefeningen gedeelte].

@@ -1,0 +1,446 @@
+= Programmeren Basis - Deel 08 - Oplossingen
+Frederiek De Wolf
+v2022.03.08.12.08
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+// geen auto section numbering voor Oplossingen (handigere titels en toc)
+//:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+ 
+== Array-variabelen en initializers 
+ 
+=== Oplossing D08feestdagen
+// D0801
+// C25
+
+[source,csharp,linenums]
+----
+string[] feestdagen = new string[12];  // <1>
+
+feestdagen[0] = "Nieuwjaar";
+feestdagen[1] = "Pasen";
+feestdagen[2] = "Paasmaandag";
+feestdagen[3] = "Dag vd Arbeid";
+feestdagen[4] = "OLH Hemelvaart";
+feestdagen[5] = "Pinksteren";
+feestdagen[6] = "Pinkstermaandag";
+feestdagen[7] = "Nationale Feestdag";
+feestdagen[8] = "OLV Hemelvaart";
+feestdagen[9] = "Allerheiligen";
+feestdagen[10] = "Wapenstilstand";
+feestdagen[11] = "Kerstdag";
+
+Console.WriteLine(feestdagen.Length);        
+----
+<1> Hier werd de code aangevuld.
+
+=== Oplossing D08dagen
+// D0802
+// C30
+
+[source,csharp,linenums]
+----
+string[] dagen = new string[7] { "ma", "di", "wo", "do", "vr", "za", "zo" }; // <1>
+
+Console.Write($"({dagen.Length} elementen): ");
+for (int index = 0; index < dagen.Length; index++) {
+	Console.Write(dagen[index] + " ");
+}
+----
+<1> Hier werd de code aangepast.
+
+== Aanspreken van array-elementen
+
+=== Oplossing D08dagnummer
+// D0803
+// Y7.01
+
+[source,csharp,linenums]
+----
+Console.Write("Geef een dagnummer: ");
+string dagNummerAlsTekst = Console.ReadLine();
+int dagNummer = 0;
+bool gelukt = int.TryParse(dagNummerAlsTekst, out dagNummer);
+
+if (gelukt && dagNummer >= 1 && dagNummer <= 7) {
+	string[] dagNamen = { "maandag", "dinsdag", "woensdag", "donderdag", 
+	                      "vrijdag", "zaterdag", "zondag" };
+	int index = dagNummer - 1;
+	string dagNaam = dagNamen[index];
+	Console.WriteLine($"dag nummer {dagNummer} is {dagNaam}");
+}
+----
+
+=== Oplossing D08twister
+// D0804
+// Y7.10
+
+[source,csharp,linenums]
+----
+string[] kleuren = { "rood", "groen", "blauw", "geel" };
+string[] lichaamsdelen = { "linkerhand", "rechterhand", "linkervoet", "rechtervoet" };
+
+Random rnd = new Random();
+while (true) {
+	int randomIndex = rnd.Next(0, 4);
+	string kleur = kleuren[randomIndex];
+	
+	randomIndex = rnd.Next(0, 4);
+	string lichaamsdeel = lichaamsdelen[randomIndex];
+
+	Console.WriteLine($"{lichaamsdeel} op {kleur}");
+	System.Threading.Thread.Sleep(5000);
+}
+----
+
+== Itereren met for en foreach
+
+=== Oplossing D08gemeenten
+// D0805
+// C27
+
+[source,csharp,linenums]
+----
+string[] gemeenten = new string[8];
+
+gemeenten[0] = "Brussel";
+gemeenten[1] = "1000";
+gemeenten[2] = "Antwerpen";
+gemeenten[3] = "2000";
+gemeenten[4] = "Brugge";
+gemeenten[5] = "8000";
+gemeenten[6] = "Gent";
+gemeenten[7] = "9000";
+
+for (int index = 1; index < gemeenten.Length; index += 2) {
+	Console.WriteLine(gemeenten[index]);
+}
+----
+
+Soms denkt men wel eens aan een oplossing als...
+
+[source,csharp,linenums]
+----
+for (int index = 1; index < gemeenten.Length; index++) {
+    if (index % 2 == 1) {
+	    Console.WriteLine(gemeenten[index]);
+	}
+}
+----
+
+Hierbij neemt men een stap van 1 (`index++`) in plaats van 2 (`index += 2`), maar moet men bijgevolg een controle inbouwen om na te gaan of het wel om een __oneven index__ gaat.
+
+De eerste aanpak, zonder `if` is uiteraard eenvoudiger en beter.
+
+=== Oplossing D08dagentotaal
+// D0806
+// C28
+
+[source,csharp,linenums]
+----
+int[] dagen = new int[12];
+
+dagen[0] = 31;
+dagen[1] = 28;
+dagen[2] = 31;
+dagen[3] = 30;
+dagen[4] = 31;
+dagen[5] = 30;
+dagen[6] = 31;
+dagen[7] = 31;
+dagen[8] = 30;
+dagen[9] = 31;
+dagen[10] = 30;
+dagen[11] = 31;
+
+int totaal = 0;
+foreach (int aantal in dagen) {
+    totaal += aantal;
+}
+
+Console.WriteLine("Totaal: " + totaal);
+----
+
+=== Oplossing D08afdrukkenarray
+// D0807
+// Y7.02
+
+[source,csharp,linenums]
+----
+int[] a = { 5, 3, 1, -1, -3 };
+for (int i=0;i<a.Length;i++) {
+	int getal = a[i];
+	Console.Write(getal);
+	bool isLaatsteGetal = (i == a.Length - 1);
+	if (!isLaatsteGetal) {
+		Console.Write(", ");
+	}
+}
+----
+		
+Of zonder `isLaatsteGetal` variabele (maar dan wel commentaar nodig met uitleg!)...
+	
+[source,csharp,linenums]
+----
+int[] a = { 5, 3, 1, -1, -3 };
+for (int i=0;i<a.Length;i++) {
+	int getal = a[i];
+	Console.Write(getal);
+	if (i != a.Length - 1) {
+		// toon komma, behalve bij de laatste
+		Console.Write(", ");
+	}
+}
+----
+		
+Of een alternatieve oplossing die eerst de komma zet en dan pas het getal...
+	
+[source,csharp,linenums]
+----
+int[] a = { 5, 3, 1, -1, -3 };
+for (int i = 0; i < a.Length; i++) {
+	int getal = a[i];
+	bool isEersteGetal = (i == 0);
+	if (!isEersteGetal) {
+		Console.Write(", ");
+	}
+	Console.Write(getal);
+}
+----		
+		
+Of hetzelfde als het vorige alternatief maar zonder `isEersteGetal` variabele (commentaar is nu minder nodig)...
+	
+[source,csharp,linenums]
+----
+int[] a = { 5, 3, 1, -1, -3 };
+for (int i = 0; i < a.Length; i++) {
+	int getal = a[i];
+	if (i != 0) {
+		Console.Write(", ");
+	}
+	Console.Write(getal);
+}
+----		
+		
+Of een iets minder duidelijke (lees: moeilijkere) oplossing...
+	
+[source,csharp,linenums]
+----
+int[] a = { 5, 3, 1, -1, -3 };
+for (int i = 0; i < a.Length - 1; i++) {
+	int getal = a[i];
+	Console.Write(getal + ", ");
+}
+Console.Write(a[a.Length - 1]);	
+----
+
+=== Oplossing D08netto
+// D0808
+
+[source,csharp,linenums]
+----
+double[] kortingen = { 10, 50, 19.4 };
+double brutoBedrag = 1000;
+
+double nettoBedrag = brutoBedrag;
+foreach (double korting in kortingen) {
+	nettoBedrag = nettoBedrag - korting;
+}	
+
+Console.Write("Netto bedrag: " + nettoBedrag);
+----
+
+== Opvullen en samenstellen van arrays
+
+=== Oplossing D08aansprekingen
+// D0809
+// C33
+
+[source,csharp,linenums]
+----
+string[] aansprekingen = { "Jan", "Piet", "Pol" };
+
+for (int index = 0; index < aansprekingen.Length; index++) {
+	aansprekingen[index] = "Dag " + aansprekingen[index];
+}
+
+foreach (string aanspreking in aansprekingen) {
+	Console.WriteLine(aanspreking);
+}
+----
+
+=== Oplossing D08arrayopvullen
+// D0810
+// C29
+
+[source,csharp,linenums]
+----
+int[] getallen = new int[9];
+
+// opvullen
+for (int index = 0; index < getallen.Length; index++) {
+	getallen[index] = 101 + index;
+}
+
+// afdrukken
+for (int index = 0; index < getallen.Length; index++) {
+	Console.Write(getallen[index] + " ");
+}
+----
+
+=== Oplossing D08omgekeerdevolgorde
+// D0811
+// Y7.06
+
+Oplossing waarbij de namen in de gegeven volgorde in een array terechtkomen...
+
+[source,csharp,linenums]
+----
+string[] namen = new string[4];
+
+for (int i = 0; i < namen.Length; i++) {
+	Console.Write($"Geef naam {i+1} : ");
+	string naam = Console.ReadLine();
+	namen[i] = naam;
+}
+
+for (int i = namen.Length - 1; i >= 0; i--) {
+	Console.WriteLine(namen[i]);
+}
+----
+
+Of een oplossing waarbij de namen in omgekeerde volgorde in een array terechtkomen...
+
+[source,csharp,linenums]
+----
+string[] namen = new string[4];
+
+for (int i = 0; i < namen.Length; i++) {
+	Console.Write($"Geef naam {i+1} : ");
+	string naam = Console.ReadLine();
+	namen[namen.Length-1-i] = naam;
+}
+
+foreach (string naam in namen) { 
+	Console.WriteLine(naam);
+}
+----
+
+=== Oplossing D08omgekeerdevolgordehoeveel
+// D0812
+// Y7.07
+
+[source,csharp,linenums]
+----
+Console.Write("Hoeveel namen wil u ingeven : ");
+string aantalAlsTekst = Console.ReadLine();
+int aantal = int.Parse(aantalAlsTekst);
+
+string[] namen = new string[aantal];
+
+for (int i = 0; i < namen.Length; i++) {
+	Console.Write($"Geef naam {i + 1} : ");
+	string naam = Console.ReadLine();
+	namen[i] = naam;
+}
+
+for (int i = namen.Length - 1; i >= 0; i--) {
+	Console.WriteLine(namen[i]);
+}
+----
+
+		
+=== Oplossing D08volgordeomwisselen
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
+
+=== Oplossing D08fibonacci
+// D0813
+// C34
+
+[source,csharp,linenums]
+----
+int[] fibonacci = new int[10];
+
+fibonacci[0] = 1;
+fibonacci[1] = 1;
+
+// overige elementen gelijkstellen aan som van de vorige twee ...
+for (int index = 2; index < fibonacci.Length; index++) {
+	fibonacci[index] = fibonacci[index - 1] + fibonacci[index - 2];
+}
+
+foreach (int getal in fibonacci) {
+	Console.Write(getal + " ");
+}
+----
+
+== Zoeken in arrays
+
+
+=== Oplossing D08positieszoeken
+// D0814
+// Y7.03
+
+[source,csharp,linenums]
+----
+int[] a = { 5, 3, 1, -1, -3, 3, 9, -4 };
+
+Console.Write("Geef een getal : ");
+string zoekGetalAlsTekst = Console.ReadLine();
+int zoekGetal = int.Parse(zoekGetalAlsTekst);
+
+for(int i=0 ; i<a.Length ; i++) {
+    int getal = a[i];
+    if (getal == zoekGetal) {
+	    Console.Write(i+" ");
+    }
+}
+----
+
+=== Oplossing D08positieszoekenmooier
+// D0815
+// Y7.04
+
+[source,csharp,linenums]
+----
+int[] a = { 5, 3, 1, -1, -3, 3, 9, -4 };
+
+Console.Write("Geef een getal : ");
+string zoekGetalAlsTekst = Console.ReadLine();
+int zoekGetal = int.Parse(zoekGetalAlsTekst);
+
+string positiesTekst = "";
+for (int i = 0; i < a.Length; i++) {
+	int getal = a[i];
+	if (getal == zoekGetal) {
+		positiesTekst+=i + " ";
+	}
+}
+
+if (positiesTekst != "") {
+	Console.WriteLine($"waarde {zoekGetal} gevonden op positie(s) {positiesTekst}");
+} else {
+	Console.WriteLine("waarde niet gevonden");
+}
+----

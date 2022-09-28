@@ -1,0 +1,638 @@
+= Programmeren Basis - Deel 09 - Oplossingen
+Yanic Inghelbrecht
+v2022.03.08.12.08
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+// geen auto section numbering voor oefeningen (handigere titels en toc)
+//:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+
+
+== Vroegtijdig een loop beëindigen
+
+
+=== Oplossing D09zoekdier
+// Y8.02
+
+[source,csharp,linenums]
+----
+string[] boerderijDieren = { "kip", "koe", "paard", "geit", "schaap" };
+
+Console.Write("Geef een dier : ");
+string input = Console.ReadLine();
+
+bool gevonden=false;
+foreach(string dier in boerderijDieren) {
+	if (input.ToLower() == dier.ToLower()) { // <1>
+		gevonden = true;
+		break;
+	}
+}
+
+if (gevonden) {
+	Console.WriteLine("Dat is een boerderijdier");
+} else {
+	Console.WriteLine("Dat is geen boerderijdier");
+}
+----
+<1> we vergelijken hoofdletterongevoelig, dus we kunnen niet simpelweg met `Array.IndexOf()` zoeken.
+
+
+=== Oplossing D09herkansing
+
+[source,csharp,linenums]
+----
+int[] puntenlijst = { 13, 16, 13, 18, 8, 12, 15, 3, 4, 11, 17, 18 };
+
+bool herkansingNodig = false;
+foreach (int score in puntenlijst) {
+	if (score < 10) {
+		herkansingNodig = true;
+		break;
+	}
+}
+
+if (herkansingNodig) {
+	Console.WriteLine("Er is een herkansing nodig");
+} else {
+	Console.WriteLine("Er is geen herkansing nodig");
+}
+----
+ 
+
+== Parallelle arrays
+
+=== Oplossing D09buisvakken
+// Y7.05
+
+[source,csharp,linenums]
+----
+string[] vakken = { "Frans", "Engels", "Wiskunde", "Duits", "L.O." };
+int[] scores = { 34, 55, 20, 10, 80 };
+
+for (int i=0;i<scores.Length;i++) {
+	int score = scores[i];
+	if (score<50) {
+		Console.WriteLine(vakken[i]);
+	}
+}
+----
+		
+
+=== Oplossing D09toonscore
+// Y7.09
+
+[source,csharp,linenums]
+----
+string[] vakken = { "Frans", "Engels", "Wiskunde", "Duits", "L.O." };
+int[] scores = { 34, 55, 20, 10, 80 };
+
+Console.Write("Geef de naam van een vak : ");
+string input = Console.ReadLine
+
+int score = 0;
+bool gevonden = false;
+for (int i=0;i<vakken.Length;i++) {
+	string vak = vakken[i];
+	if (vak.ToLower() == input.ToLower()) {
+		score = scores[i];
+		gevonden = true;
+		break;
+	}
+}
+
+if (gevonden) {
+	Console.WriteLine($"De score voor dit vak is {score}/100");
+} else { 
+	Console.WriteLine("Geen score bekend");
+}
+----
+
+We kunnen de variabele `gevonden` vermijden door een speciale waarde (bv `-1`) voor `score` te gebruiken, als er niks gevonden werd. 
+
+Dit is niet noodzakelijk een betere oplossing.
+
+[source,csharp,linenums]
+----
+string[] vakken = { "Frans", "Engels", "Wiskunde", "Duits", "L.O." };
+int[] scores = { 34, 55, 20, 10, 80 };
+
+Console.Write("Geef de naam van een vak : ");
+string input = Console.ReadLine();
+
+int score = -1;
+for (int i=0;i<vakken.Length;i++) {
+	string vak = vakken[i];
+	if (vak.ToLower() == input.ToLower()) {
+		score = scores[i];
+		break;
+	}
+}
+
+if (score != -1) {
+	Console.WriteLine($"De score voor dit vak is {score}/100");
+} else { 
+	Console.WriteLine("Geen score bekend");
+}
+----
+
+
+=== Oplossing D09morse
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
+
+
+== Verdere oefeningen op arrays
+
+
+=== Oplossing D09dagnummernaarmaand
+
+[source,csharp,linenums]
+----
+int[] aantalDagen = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+string[] maandNamen = { "Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December" };
+
+Console.Write("Geef het dagnummer : ");
+string dagNummerAlsTekst = Console.ReadLine();
+int dagNummer = int.Parse(dagNummerAlsTekst);
+
+string maand = "onbepaald";
+int laatsteDagNummerDezeMaand = 0;
+for (int i = 0; i < aantalDagen.Length; i++) {
+	laatsteDagNummerDezeMaand += aantalDagen[i];
+	if (dagNummer <= laatsteDagNummerDezeMaand) {
+		maand = maandNamen[i];
+		break;
+	}
+}
+
+Console.WriteLine($"De maand is {maand}");
+----
+
+
+=== Oplossing D09maximumtemperatuur
+
+Een eerste poging zou er zo kunnen uitzien :
+
+[source,csharp,linenums]
+----
+const double sensorProbleem = -9999.0;
+
+double[] meetwaarden = { 13.4, 12.1, 10.8, 10.8, 10.3, 8.9, 7.9, 7.8, 7.4, 7.2, 6.4, 9.7, 13.7, 17.2, 19.6, -9999.0, -9999.0, 22.4, 22.7, 22.8, 22.3, 18.4 };
+
+double min = meetwaarden[0];
+double max = meetwaarden[0];
+foreach (double meetwaarde in meetwaarden) {
+	if (meetwaarde != sensorProbleem) {    // <2>
+		min = Math.Min(min, meetwaarde);
+		max = Math.Max(max, meetwaarde);
+	}
+}
+Console.WriteLine($"minimum is {min} en maximum is {max}");
+----		
+<1> strikt genomen horen we doubles niet te vergelijken met == of != maar omdat het hier allemaal literals zijn (en dus allen dezelfde afrondingsfout hebben) is het dit keer ok.
+
+Deze oplossing heeft een aantal problemen :
+
+- we bekijken de eerste meetwaarde meermaals 
+- we gaan ervan uit dat er minstens 1 waarde is in het array (zie initialisatie van de `min` en `max` waarden
+- we gaan ervan uit dat de eerste waarde geen sensorprobleem is
+
+Als we daar allemaal rekening mee willen houden wordt de oplossing iets wat ingewikkelder :
+
+[source,csharp,linenums]
+----
+const double sensorProbleem = -9999.0;
+
+double[] meetwaarden = { 13.4, 12.1, 10.8, 10.8, 10.3, 8.9, 7.9, 7.8, 7.4, 7.2, 6.4, 9.7, 13.7, 17.2, 19.6, -9999.0, -9999.0, 22.4, 22.7, 22.8, 22.3, 18.4 };
+
+// is er minstens 1 zinvolle meetwaarde en op welke positie staat die?
+int eersteZinvollePositie = -1;
+for(int i=0;i<meetwaarden.Length;i++) {
+	double meetwaarde = meetwaarden[i];
+	if (meetwaarde != sensorProbleem) {
+		eersteZinvollePositie = i;
+		break;
+	}
+}
+
+// indien eersteZinvollePositie nog steeds -1 is, hebben we niks zinvols gevonden
+
+if (eersteZinvollePositie != -1) {
+
+	double min = meetwaarden[eersteZinvollePositie];
+	double max = meetwaarden[eersteZinvollePositie];
+	for (int i = eersteZinvollePositie + 1; i < meetwaarden.Length; i++) { // <1>
+		double meetwaarde = meetwaarden[i];
+		if (meetwaarde != sensorProbleem) {
+			min = Math.Min(min, meetwaarde);
+			max = Math.Max(max, meetwaarde);
+		}
+	}
+	Console.WriteLine($"minimum is {min} en maximum is {max}");
+
+} else {
+	Console.WriteLine("Geen zinvolle meetwaarden gevonden");
+}
+----
+<1> we moeten pas beginnen zoeken vanaf positie `eersteZinvollePositie+1`.
+
+We kunnen de oplossing aanzienlijk vereenvoudigen als we 2 speciale waarden kiezen die onmogelijke meetwaarden zijn voor `min` en `max`.
+
+Bijvoorbeeld, `1000` voor `min` en `-1000` voor `max`. We gaan er dan van uit dat de temperatuur nooit hoger is dan `1000` en nooit lager is dan `-1000`.
+
+Normaliter zou je hiervoor wellicht `double.MaxValue` en `double.MinValue` kiezen, dit zijn de grootste en kleinst mogelijke waarden voor een `double`.
+
+[source,csharp,linenums]
+----
+const double sensorProbleem = -9999.0;
+const double onmogelijkHogeMinWaarde = 1000;
+const double onmogelijkLageMaxWaarde = -1000;
+
+double[] meetwaarden = { 13.4, 12.1, 10.8, 10.8, 10.3, 8.9, 7.9, 7.8, 7.4, 7.2, 6.4, 9.7, 13.7, 17.2, 19.6, -9999.0, -9999.0, 22.4, 22.7, 22.8, 22.3, 18.4 };
+
+bool zinvolleWaardeGevonden = false;          // <1>
+double min = onmogelijkHogeMinWaarde;
+double max = onmogelijkLageMaxWaarde;
+
+foreach (double meetwaarde in meetwaarden) {
+	if (meetwaarde != sensorProbleem) {
+		zinvolleWaardeGevonden = true;        // <1>
+		min = Math.Min(min, meetwaarde);
+		max = Math.Max(max, meetwaarde);
+	}
+}
+
+if (zinvolleWaardeGevonden) {                 // <1>
+	Console.WriteLine($"minimum is {min} en maximum is {max}");
+} else {
+	Console.WriteLine("Geen zinvolle meetwaarden gevonden");
+}
+----
+<1> strikt genomen is `zinvolleWaardeGevonden` overbodig : als `min` niet meer z'n initiële waarde `onmogelijkHogeMinWaarde` heeft, hebben we blijkbaar toch minstens 1 zinvolle meetwaarde gevonden. Een gelijkaardige redenering kun je ook maken voor `max` natuurlijk.
+
+
+=== Oplossing D09speelkaarten
+
+
+[source,csharp,linenums]
+----
+string[] kleuren = { "harten", "klaver", "schoppen", "ruiten" };
+string[] waarden = { "twee", "drie", "vier", "vijf", "zes", "zeven", "acht", "negen", "tien", "landbouwer", "dame", "koning", "aas" };
+
+string[] kaarten = new string[kleuren.Length * waarden.Length];
+
+// vul 'kaarten' array met alle combinaties
+int i = 0;
+foreach(string kleur in kleuren) {
+	foreach (string waarde in waarden) {
+		kaarten[i] = kleur + " " + waarde;
+		i++;
+	}
+}
+
+// toon alle kaarten
+foreach(string kaart in kaarten) {
+	Console.WriteLine(kaart);
+}
+----
+
+Let erop dat hierboven geen __magic value__ (of `const int`) `52` voorkomt, we hebben het totaal aantal kaarten gewoon berekend.
+
+Mocht je een loop verwachten die 52 keer herhaald wordt i.p.v. de 2 geneste loops hierboven, kijk dan eens naar de oplossing hieronder.
+
+Voor de output werd ook eens iets anders gedaan dan een loop, __gewoon omdat het kan__ ;)
+
+[source,csharp,linenums]
+----
+string[] kleuren = { "harten", "klaver", "schoppen", "ruiten" };
+string[] waarden = { "twee", "drie", "vier", "vijf", "zes", "zeven", "acht", "negen", "tien", "landbouwer", "dame", "koning", "aas" };
+
+string[] kaarten = new string[kleuren.Length * waarden.Length];
+
+for (int i=0;i<kaarten.Length;i++) {                            // <1>
+	int kleurIndex = i / waarden.Length;  // gehele deling
+	string kleur = kleuren[kleurIndex];
+
+	int waardeIndex = i % waarden.Length; // modulo
+	string waarde = waarden[waardeIndex];
+
+	kaarten[i] = kleur + " " + waarde;
+}
+
+Console.WriteLine(String.Join("\n", kaarten));                 // <2>
+----
+<1> slechts 1 loop ipv. 2 geneste loops
+<2> een creatieve manier om alle kaarten op het scherm te krijgen m.b.v. `String.Join()`.
+
+Deze tweede oplossing is beslist niet beter dan de eerste, ze is veel moeilijker te begrijpen.
+
+
+=== Oplossing D09durstenfeld
+
+Bij de __Durstenfeld shuffle__ beginnen we op de laatste positie en gaan per iteratie eentje dichter naar de eerste positie. Die eerste positie (index `0` dus) zelf gebruiken we echter niet, we stoppen eentje eerder.
+
+We houden in het programma de huidige positie bij in variabele `huidigePositie`, dit is tegelijk ook de teller van onze for loop :
+
+- de teller telt af
+- beginwaarde is `kaarten.Length-1` (laatste positie)
+- grensvoorwaarde is `>= 1` (we stoppen bij index `1` dus net voor de eerste positie)
+
+In elke iteratie kiezen we een random positie (van `0` t.e.m. `huidigePositie`) en verwisselen dan de waarde op die posities.
+
+[source,csharp,linenums]
+----
+// Durstenfeld shuffle
+Random rnd = new Random();
+for (int huidigePositie = kaarten.Length - 1; huidigePositie >= 1; huidigePositie--) {
+	int randomPositie = rnd.Next(huidigePositie + 1); // <1>
+	// verwissel de kaarten op 'huidigePositie' en 'randomPositie'
+	string temp = kaarten[huidigePositie];
+	kaarten[huidigePositie] = kaarten[randomPositie];
+	kaarten[randomPositie] = temp;
+	// Als je de verwisselingen wil checken, haal onderstaande uit commentaar
+	// Console.WriteLine($"wissel posities {huidigePositie} en {randomPositie}");	
+}
+----
+<1> we willen een random positie van `0` t.e.m. `huidigePositie`
+
+Denk eraan dat `rnd.Next(10)` enkel getallen geeft van `0` t.e.m. `9` (zie een eerder deel). We schrijven dus op regel <1> `rnd.Next(huidigePositie + 1)` zodat de waarde `huidigePositie` er ook bij zit.
+
+Het volledige programma is dan :
+
+[source,csharp,linenums]
+----
+string[] kleuren = { "harten", "klaver", "schoppen", "ruiten" };
+string[] waarden = { "twee", "drie", "vier", "vijf", "zes", "zeven", "acht", "negen", "tien", "landbouwer", "dame", "koning", "aas" };
+
+string[] kaarten = new string[kleuren.Length * waarden.Length];
+
+// vul 'kaarten' array met alle combinaties
+int i = 0;
+foreach (string kleur in kleuren) {
+	foreach (string waarde in waarden) {
+		kaarten[i] = kleur + " " + waarde;
+		i++;
+	}
+}
+
+// Durstenfeld shuffle
+Random rnd = new Random();
+for (int huidigePositie = kaarten.Length - 1; huidigePositie >= 1; huidigePositie--) {
+	int randomPositie = rnd.Next(huidigePositie + 1); 
+	// verwissel de kaarten op 'huidigePositie' en 'randomPositie'
+	string temp = kaarten[huidigePositie];
+	kaarten[huidigePositie] = kaarten[randomPositie];
+	kaarten[randomPositie] = temp;
+	// Als je de verwisselingen wil checken, haal onderstaande uit commentaar
+	// Console.WriteLine($"wissel posities {huidigePositie} en {randomPositie}");
+}
+
+// toon alle kaarten
+foreach (string kaart in kaarten) {
+	Console.WriteLine(kaart);
+}
+----
+
+
+=== Oplossing D09getalfrequentie
+// Y8.05
+
+We gebruiken in deze oplossing een array `aantalKeren` dat op positie `i` bijhoudt hoe vaak we getal `i` tegenkwamen. Indien `aantalKeren[3]` de waarde `7` bevat, betekent dit dat de gebruiker `7` keer het getal `3` invoerde.
+
+[source,csharp,linenums]
+----
+int[] aantalKeren = new int[11];
+string input;
+
+do {
+	Console.Write("Geef een getal in [0,10] : ");
+	input = Console.ReadLine();
+	if (input.ToLower() != "stop") {
+		int getal = int.Parse(input);
+		// onthou in array dat getal nog een keer voorkwam
+		aantalKeren[getal]++;
+	}
+} while (input.ToLower() != "stop");
+
+// toon  output
+for(int i=0;i<aantalKeren.Length;i++) {
+	int getal = i;
+	int aantalKeerGetal = aantalKeren[getal];
+	if (aantalKeerGetal>0) {
+		// getal kwam minstens 1 keer voor
+		Console.WriteLine($"{getal} kwam {aantalKeerGetal} keer voor");
+	}
+}
+----
+
+
+=== Oplossing D09zoekhistoriek
+// Y8.01 en C36
+
+[source,csharp,linenums]
+----
+string[] zoekhistoriek = { "Charlie Sheen", "Hot shots", "Winning", "Electrabel storing", "Geen elektriciteit" };
+
+do {
+	Console.WriteLine(String.Join(":", zoekhistoriek));
+
+	Console.Write("Nieuwe zoekterm: ");
+	string input = Console.ReadLine();
+
+	// We schuiven de zoektermen in de historiek naar voren, de eerste 
+	// gaat dus verloren (Charlie Sheen is sowieso al een lost cause)
+
+	// Zonder loop zouden we dit schrijven :
+	// zoekhistoriek[0] = zoekhistoriek[1];
+	// zoekhistoriek[1] = zoekhistoriek[2];
+	// zoekhistoriek[2] = zoekhistoriek[3];
+	// zoekhistoriek[3] = zoekhistoriek[4];
+	// zoekhistoriek[4]= input;
+
+	// Maar we willen natuurlijk een oplossing die ook werkt als de lengte van de 
+	// zoekhistoriek niet noodzakelijk 5 is, dus gebruiken we een loop
+	for (int i = 0; i < zoekhistoriek.Length - 1; i++) {
+		zoekhistoriek[i] = zoekhistoriek[i + 1]; // <1>
+	}
+	// nieuwe zoekterm op het einde toevoegen
+	zoekhistoriek[zoekhistoriek.Length - 1] = input;
+
+	Console.WriteLine();
+} while (true);
+----
+<1> het doorschuiven gebeurt door deze loop, we kopieren van positie `i+1` naar positie `i`
+
+**Een interessante uitbreiding** zou zijn dat het programma ook correct werkt als de historiek initiëel nog niet helemaal opgevuld is, bijvoorbeeld :
+
+[source,csharp,linenums]
+----
+string[] zoekhistoriek = new string[5]{ "Charlie Sheen", "Hot shots", "Winning", null, null};
+----
+
+In dit geval moet er in de loop eerst gezocht worden naar de eerste vrije positie (i.e. de eerste null die je tegenkomt) om daar de zoekterm in te stoppen. Pas als het array helemaal vol zit moet er effectief doorgeschoven worden.
+
+**Een tweede interessante uitbreiding** zou zijn om dubbels te vermijden. Telkens een zoekterm wordt ingegeven die al in de historiek zit, komt deze op de laatste positie in de historiek terecht en verschuiven de andere termen om het gat te vullen.
+
+Bijvoorbeeld als de zoekterm `d` nog eens wordt ingegeven, verandert de historiek `a:b:c:d:e:f` naar `a:b:c:e:f:d`.
+
+
+== Strings
+
+
+=== Oplossing D09geenscheldwoorden
+// Y1.09
+
+[source,csharp,linenums]
+----
+// definiëer de 10 ergste scheldwoorden die er zijn
+string[] scheldwoorden = { "een", "twee", "drie" }; // gecensureerd op aanraden van mijn moeder
+
+Console.Write("Geef een tekst : ");
+string tekst = Console.ReadLine();
+string tekstKlein = tekst.ToLower();
+
+bool isOk = true;
+foreach (string scheldwoord in scheldwoorden) {
+	if (tekstKlein.Contains(scheldwoord)) {
+	    isOk = false;
+		break;
+	}
+}
+
+if (isOk) {
+	Console.WriteLine("Tekst is aanvaardbaar");
+} else {
+	Console.WriteLine("Tekst is niet aanvaardbaar");
+}
+----
+
+=== Oplossing D09censuur
+
+[source,csharp,linenums]
+----
+// definiëer de 10 ergste scheldwoorden die er zijn
+string[] scheldwoorden = { "een", "twee", "drie" }; // gecensureerd na, euh, "juridisch advies"
+
+Console.Write("Geef een tekst : ");
+string tekst = Console.ReadLine();
+string tekstKlein = tekst.ToLower();
+
+foreach (string scheldwoord in scheldwoorden) {
+	// let op, we gaan ervan uit dat de scheldwoorden in lowercase staan
+	int index = tekstKlein.IndexOf(scheldwoord);	// <1>
+	while (index != -1) {
+		// scheldwoord gevonden!
+		
+		int lengte = scheldwoord.Length;
+		// verwijder het scheldwoord uit de originele tekst
+		tekst = tekst.Remove(index, lengte);        // <2>
+		// voeg de sterretjes in op de plaats van het verwijderde scheldwoord
+		string sterretjes = new string('*', lengte);
+		tekst = tekst.Insert(index, sterretjes);    // <2>
+
+		// we zoeken verder net na het scheldwoord
+		index = tekstKlein.IndexOf(scheldwoord, index + lengte); 
+	}
+
+}
+
+// Toon de gecensureerde versie
+Console.WriteLine(tekst);
+----
+<1> we zoeken in de kleine letter versie van de tekst
+<2> maar we censureren in de originele versie, zodat hoofdletters en kleine letters behouden blijven in de rest van de tekst.
+
+De while loop is nodig omdat een scheldwoord meermaals in de tekst kan voorkomen, en we willen het natuurlijk overal censureren.
+
+Je zou misschien een oplossing verwachten op basis van `.Replace()`, maar dat werkt niet : je weet immers niet met welke combinaties van hoofdletters en kleine letters het scheldwoord in de tekst voorkomt.
+
+**Een interessante uitbreiding** is de eerste en laatste letter van het scheldwoord niet te vervangen door een sterretje, bv. `Druiloor` wordt `++++D******r+++`. Let erop dat ook hier hoodletter / kleine letters bewaard moeten blijven.
+
+=== Oplossing D09langstewoord
+// Y1.12
+
+We splitsen de tekst in stukjes met `.Split()` en inspecteren dan stukjes in het bekomen array.
+
+[source,csharp,linenums]
+----
+Console.Write("Geef een tekst : ");
+string tekst = Console.ReadLine();
+char[] separators = { ' ', ',', '.', '!', '?' };
+
+string[] woorden = tekst.Split(separators); // <1>
+
+int aantalWoorden = 0;
+string langsteWoord = "";
+foreach (string woord in woorden) {
+	// negeer lege strings
+	if (woord != "") { // <2>
+		aantalWoorden++;
+		if (woord.Length > langsteWoord.Length) {
+			// langer woord gevonden
+			langsteWoord = woord;
+		}
+	}
+}
+
+Console.WriteLine("aantal woorden is " + aantalWoorden);
+Console.WriteLine("langste is " + langsteWoord);
+----
+<1> de tekst wordt in een array van stukjes gesplitst
+<2> check op lege strings die ontstaan als er meerdere leestekens na elkaar voorkomen
+
+Indien we `StringSplitOptions.RemoveEmptyEntries` zouden gebruiken, moet er geen check gebeuren op lege strings.
+
+=== Oplossing D09dierenwissen
+// Y8.08
+
+We moeten hoofdlettergevoelig zoeken, dus we kunnen `Array.IndexOf()` gebruiken.
+
+[source,csharp,linenums]
+----
+string[] boerderijDieren = { "kip", "koe", "paard", "geit", "schaap" };
+
+do {
+	// toon alle dieren
+	foreach (string dier in boerderijDieren) {
+		if (dier == null) {
+			// toon GEWIST als we een null tegenkomen
+			Console.Write("GEWIST ");
+		} else {
+			Console.Write(dier + " ");
+		}
+	}
+	Console.WriteLine();
+
+	// vraag om een dier en bepaal de positie
+	Console.Write("Welk dier wil je verwijderen : ");
+	string tewissenDier = Console.ReadLine();
+	int index = Array.IndexOf(boerderijDieren, tewissenDier);
+
+	if (index != -1) {
+		// wis dier
+		boerderijDieren[index] = null;
+	}
+
+} while (true);
+----

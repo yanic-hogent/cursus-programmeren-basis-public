@@ -1,0 +1,31 @@
+= Programmeren Basis - Deel 16
+Yanic Inghelbrecht
+v2021.11.22.11.59
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+ 
+== Collectieklassen
+
+link:attachments/deel-16.pdf[klik hier voor de pdf-versie,window="_blank"]

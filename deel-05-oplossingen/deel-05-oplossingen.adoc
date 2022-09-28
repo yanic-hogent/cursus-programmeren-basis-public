@@ -1,0 +1,473 @@
+= Programmeren Basis - Deel 05 - Oplossingen
+Frederiek De Wolf
+v2022.02.23.15.06
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+// geen auto section numbering voor Oplossingen (handigere titels en toc)
+//:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+ 
+== Oplossing D05twintigtotenmettien
+
+[source,csharp,linenums]
+----
+int getal = 20;
+do {
+	Console.WriteLine(getal);
+	getal = getal - 2;
+} while (getal >= 10);
+----
+ 
+== Oplossing D05tafelsvan7
+
+[source,csharp,linenums]
+----
+int basisGetal = 7;
+int factor = 1;
+
+do {
+	int product = basisGetal * factor;
+	Console.WriteLine($"{factor} x {basisGetal} = {product}");
+	factor = factor + 1;
+} while (factor <= 10);
+----
+ 
+== Oplossing D05som
+
+[source,csharp,linenums]
+----
+int som = 0;
+int getal = 0;
+do {
+	Console.Write("Geef een getal (-1 om te stoppen) : ");
+	string getalAlsTekst = Console.ReadLine();
+	getal = int.Parse(getalAlsTekst);
+	som += getal;
+} while (getal != -1);
+
+// compenseer voor de afsluitende -1 die werd meegeteld
+som -= getal; 
+
+Console.WriteLine($"De som is {som}");
+----
+
+== Oplossing D05gemiddelde
+
+[source,csharp,linenums]
+----
+int som = 0;
+int aantal = 0;
+int getal = 0;
+do {
+	Console.Write("Geef een getal (-1 om te stoppen) : ");
+	string getalAlsTekst = Console.ReadLine();
+	getal = int.Parse(getalAlsTekst);
+	som += getal;
+	aantal++;
+} while (getal != -1);
+
+// compenseer voor de afsluitende -1 die werd meegeteld
+som -= getal;
+aantal--;
+
+if (aantal > 0) {
+	double gemiddelde = Convert.ToDouble(som) / aantal;
+	Console.WriteLine($"Het gemiddelde is {gemiddelde}");
+} else {
+	Console.WriteLine("Er werden geen bruikbare getallen ingegeven");
+}
+----
+
+Let erop dat we geen gemiddelde kunnen berekenen voor 0 getallen (deling door 0!)
+	
+== Oplossing D05grootstegetal
+
+[source,csharp,linenums]
+----
+int grootste = 0;
+int teller = 0;
+int getal = 0;
+do {
+	Console.Write("Geef een getal (-1 om te stoppen) : ");
+	string getalAlsTekst = Console.ReadLine();
+	getal = int.Parse(getalAlsTekst);
+
+	if (getal != -1) {
+		teller++;
+		if (teller == 1 || getal > grootste) {
+			// nieuw maximum gevonden
+			grootste = getal;
+		}
+	}
+} while (getal != -1);
+
+if (teller != 0) {
+	Console.WriteLine($"Het grootste getal was {grootste}");
+} else {
+	Console.WriteLine("Er werden geen bruikbare getallen ingegeven");
+}
+----
+		
+__-1__ zal nooit een geldige `grootste` getal zijn.
+Als we `grootste` initieel instellen op __-1__ kunnen we de eerste iteratie detecteren, en zo kunnen we de variabele `teller` vermijden...
+	
+[source,csharp,linenums]
+----
+int grootste = -1;
+int getal = 0;
+do {
+	Console.Write("Geef een getal (-1 om te stoppen) : ");
+	string getalAlsTekst = Console.ReadLine();
+	getal = int.Parse(getalAlsTekst);
+
+	if (getal != -1) {
+		// enkel in de eerste herhaling is grootste == -1
+		if (grootste == -1 || getal > grootste) {
+			// nieuw maximum gevonden
+			grootste = getal;
+		}
+	}
+} while (getal != -1);
+
+if (grootste != -1) {
+	Console.WriteLine($"Het grootste getal was {grootste}");
+} else {
+	Console.WriteLine("Er werden geen bruikbare getallen ingegeven");
+}		
+----
+
+[WARNING]
+====
+Deze oplossing is misschien wel TE clever, we besparen een variabele maar maken de oplossing minder duidelijk.  
+
+Don't be too clever ;)
+====
+
+== Oplossing D05grootstegetalenaantal
+
+[source,csharp,linenums]
+----
+int grootste = 0;
+int aantalKeerGrootste = 0;
+int teller = 0;
+int getal = 0;
+do {
+	Console.Write("Geef een getal (-1 om te stoppen) : ");
+	string getalAlsTekst = Console.ReadLine();
+	getal = int.Parse(getalAlsTekst);
+
+	if (getal != -1) {
+		teller++;
+		if (teller == 1 || getal > grootste) {
+			// nieuw maximum gevonden
+			grootste = getal;
+			aantalKeerGrootste = 1;
+		} else if (getal == grootste) {
+			aantalKeerGrootste++;
+		}
+	}
+} while (getal != -1);
+
+if (teller != 0) {
+	Console.WriteLine($"Het grootste getal was {grootste} en kwam {aantalKeerGrootste} keer voor");
+} else {
+	Console.WriteLine("Er werden geen bruikbare getallen ingegeven");
+}
+----
+
+== Oplossing D05aantal
+
+We moeten steeds het ingelezen getal bijhouden UIT DE VORIGE HERHALING, in variabele `vorigGetal`, en vergelijken met het nieuw ingelezen getal.
+
+De variabele `vorigGetal` krijgt een initiele waarde, __0__ in deze oplossing.
+
+Indien de gebruiker 0 als eerste getal intypt mogen we niet stoppen!  Het is belangrijk dat we altijd minstens 2 getallen vragen.
+	
+[source,csharp,linenums]
+----
+int teller = 0;
+int vorigGetal = 0;
+bool verderDoen = true;
+do {
+	Console.Write("Geef een getal : ");
+	string getalAlsTekst = Console.ReadLine();
+	int getal = int.Parse(getalAlsTekst);
+	teller++;
+	if (teller >= 2 && getal == vorigGetal) {
+		verderDoen = false;
+	} else {
+		vorigGetal = getal;
+	}
+} while (verderDoen);
+
+teller -= 2;
+Console.WriteLine($"Aantal getallen ingevoerd: {teller}");
+----
+
+Of het kan ook zo...
+
+[source,csharp,linenums]
+----
+int teller = 0;
+int vorigGetal = 0;
+int getal = 0;
+do {
+	vorigGetal = getal; // ESSENTIEEL DAT DIT HIER STAAT
+	Console.Write("Geef een getal : ");
+	string getalAlsTekst = Console.ReadLine();
+	getal = int.Parse(getalAlsTekst);
+	teller++;
+} while (teller < 2 || getal != vorigGetal);
+
+teller -= 2;
+Console.WriteLine($"Aantal getallen ingevoerd: {teller}");
+----	
+
+Let erop dat `vorigGetal = getal` nu aan het begin van de herhaling staat!
+Dit is essentieel, anders kunnen we immers geen `getal != vorigGetal` in de herhalingsvoorwaarde vermelden.
+ 
+== Oplossing D05rechthoek
+
+[source,csharp,linenums]
+----
+Console.Write("Hoogte?: ");
+int hoogte = int.Parse(Console.ReadLine());
+
+Console.Write("Breedte?: ");
+int breedte = int.Parse(Console.ReadLine());
+
+int hoogteTeller = 0;
+do {
+	int breedteTeller = 0;
+	do {
+		Console.Write("*");
+		breedteTeller = breedteTeller + 1;
+	} while (breedteTeller < breedte);
+	Console.WriteLine();
+	hoogteTeller = hoogteTeller + 1;
+} while (hoogteTeller < hoogte);
+----
+ 
+== Oplossing D05vierkant
+
+[source,csharp,linenums]
+----
+Console.Write("Zijde?: ");
+int zijde = int.Parse(Console.ReadLine());
+
+int hoogteTeller = 0;
+do {
+	int breedteTeller = 0;
+	do {
+		Console.Write("*");
+		breedteTeller = breedteTeller + 1;
+	} while (breedteTeller < zijde);
+	Console.WriteLine();
+
+	hoogteTeller = hoogteTeller + 1;
+} while (hoogteTeller < zijde);
+----
+ 
+== Oplossing D05driehoek
+
+[source,csharp,linenums]
+----
+Console.Write("Rechthoekzijde?: ");
+int zijde = int.Parse(Console.ReadLine());
+int breedteZijde = zijde;
+
+int hoogteTeller = 0;
+do {
+	int breedteTeller = 0;
+	do {
+		Console.Write("*");
+		breedteTeller = breedteTeller + 1;
+	} while (breedteTeller < breedteZijde);
+	Console.WriteLine();
+
+	hoogteTeller = hoogteTeller + 1;
+	breedteZijde = breedteZijde - 1;
+} while (hoogteTeller < zijde);
+----
+ 
+== Oplossing D05double
+
+[source,csharp,linenums]
+----
+Console.Write("Voer een (double) getal in?: ");
+double getal;
+
+bool getalIngevoerd = double.TryParse(Console.ReadLine(), out getal);
+while (getalIngevoerd) {
+	Console.WriteLine("Dank je voor het (double) getal.");
+	Console.Write("Gelieve nog een (double) getal in te voeren?: ");
+	getalIngevoerd = double.TryParse(Console.ReadLine(), out getal);
+}
+
+//Zonder bool variabele kan het natuurlijk ook:
+//while (double.TryParse(Console.ReadLine(), out getal)) {
+//    Console.WriteLine("Dank je voor het (double) getal.");
+//    Console.Write("Gelieve nog een (double) getal in te voeren?: ");
+//}
+
+Console.WriteLine("Einde (wegens geen double getal).");
+----
+ 
+== Oplossing D05reeks
+
+[source,csharp,linenums]
+----
+Console.Write("Getal 1?: ");
+int getal1;
+bool invoerOk;
+do {
+    string getalAlsTekst = Console.ReadLine();
+    invoerOk = int.TryParse(getalAlsTekst, out getal1);
+    if (!invoerOk) {
+        Console.Write("Gelieve een geheel getal in te voeren, getal 1?: ");
+    }
+} while (!invoerOk);
+
+Console.Write("Getal 2?: ");
+int getal2;
+do {
+    string getalAlsTekst = Console.ReadLine();
+    invoerOk = int.TryParse(getalAlsTekst, out getal2);
+    if (!invoerOk) {
+        Console.Write("Gelieve een geheel getal in te voeren, getal 2?: ");
+    }
+} while (!invoerOk);
+
+Console.Write("Reeks van klein naar groot: ");
+
+int kleinste;
+int grootste;
+if (getal1 <= getal2) {
+	kleinste = getal1;
+	grootste = getal2;
+} else {
+	kleinste = getal2;
+	grootste = getal1;
+}
+
+int getalInReeks = kleinste;
+while (getalInReeks <= grootste) {
+	Console.Write($"{getalInReeks} ");
+	getalInReeks = getalInReeks + 1;
+}
+----
+ 
+== Oplossing D05playlist
+
+[source,csharp,linenums]
+----
+Console.Write("Aantal liedjes in de playlist?: ");
+string aantalLiedjesAlsTekst = Console.ReadLine();
+
+int aantalLiedjes;
+bool invoerOk = int.TryParse(aantalLiedjesAlsTekst, out aantalLiedjes);
+
+if (invoerOk && aantalLiedjes >= 1) {
+	int faculteit;
+
+	faculteit = 1;
+	int factor = 2;
+	while (factor <= aantalLiedjes) {
+		faculteit = faculteit * factor;
+		factor = factor + 1;
+	}
+
+	string meervoud = "";
+	if (faculteit > 1) {
+		meervoud = "s";
+	}
+	Console.Write($"{aantalLiedjes} liedje{meervoud} kan je in {faculteit} verschillende volgorde{meervoud} in een playlist plaatsen.");
+}
+----
+ 
+== Oplossing D05wildebertram
+
+[source,csharp,linenums]
+----
+int maanden;
+Console.Write("Aantal maanden groei?: ");
+bool invoerOk = int.TryParse(Console.ReadLine(), out maanden);
+
+if (invoerOk && maanden >= 1) {
+	int fibo1 = 0;
+	int fibo2 = 1;
+	int fibo3;
+
+	int maandTeller = 1;
+	do {
+		fibo3 = fibo1 + fibo2;
+
+		fibo1 = fibo2;
+		fibo2 = fibo3;
+
+		maandTeller = maandTeller + 1;
+	} while (maandTeller < maanden);
+
+	Console.Write($"Aantal knooppunten: {fibo3}");
+}
+----
+ 
+== Oplossing D05somvanafstop
+
+[source,csharp,linenums]
+----
+string getalOfStop;
+bool invoerOk;
+int som = 0;
+do {
+    getalOfStop = Console.ReadLine();
+    invoerOk = int.TryParse(getalOfStop, out int getal);
+    if (invoerOk) {
+        som += getal;
+        Console.WriteLine("+");
+    } else if (getalOfStop.ToUpper().Trim() != "STOP") {
+        Console.WriteLine("Gelieve een geheel getal in te voeren (of STOP om te stoppen).");
+    }
+} while (getalOfStop.ToUpper().Trim() != "STOP");
+
+Console.Write($"=\n{som}");
+----
+ 
+== Oplossing D05somofverschil
+
+[source,csharp,linenums]
+----
+int resultaat = int.Parse(Console.ReadLine());
+string symbool = Console.ReadLine();
+
+while (symbool != "=") {
+	int getal = int.Parse(Console.ReadLine());
+	if (symbool == "+") {
+		resultaat = resultaat + getal;
+	} else if (symbool == "-") {
+		resultaat = resultaat - getal;
+	}
+	symbool = Console.ReadLine();
+}
+Console.Write(resultaat);
+----

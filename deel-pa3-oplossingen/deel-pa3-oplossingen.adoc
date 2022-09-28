@@ -1,0 +1,568 @@
+= Programmeren Basis - Deel PA3 - Oplossingen
+Yanic Inghelbrecht
+v2021.11.12.14.00
+:toc: preamble
+:toclevels: 4
+// geen auto section numbering voor oefeningen (handigere titels en toc)
+//:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+ 
+== Oplossing DPA3.metfileio
+
+De gevraagde methods werden toegevoegd en in de `Main` method werden deze methods opgeroepen op de juiste plaats.
+
+Let ook eens op de code die `Jan` en `Mieke` in de arrays stopt indien er niets uit het bestand werd toegevoegd.
+
+=== Een oplossing met convenience method
+
+Bij `LaadPersonen` gebruiken we de method `File.ReadAllLines(.)` en bij `BewaarPersonen` gebruiken we `File.WriteAllLines(...)`.
+
+Deze **convenience methods** werken op basis van `string[]` voor de inhoud van het tekstbestand. 
+
+. ze openen het bestand
+. ze lezen uit of schrijven naar het `string[]` (dus dat hoef je niet zelf te doen, __convenient__!)
+. ze sluiten daarna het bestand (dus dat hoef je niet zelf te doen, __convenient__!)
+
+De oplossing met __convenience methods__ ziet er zo uit :
+
+.Program.cs :
+[source,csharp,linenums]
+----
+public class Program {
+
+	static int LaadPersonen(string[] voornamen, string[] familienamen, bool[] isVrouwen, string[] postcodes, string[] gemeenten, int[] aantalKinderen) {
+		string padNaarMyDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+		string padNaarFile = Path.Combine(padNaarMyDocuments, "personen.csv");
+		const string scheidingstekens = "\t";
+
+		int aantalPersonen = 0;
+		try {
+			string[] regels = File.ReadAllLines(padNaarFile);
+			for (int i=0;i<regels.Length;i++) { 
+				// (geen foreach loop omdat we de teller nodig hebben bij foutmeldingen)
+				string regel = regels[i];
+				string[] velden = regel.Split(scheidingstekens);
+				if (velden.Length == 6) {
+					// We doen eerst de makkelijke velden
+					voornamen[aantalPersonen] = velden[0];
+					familienamen[aantalPersonen] = velden[1];
+					postcodes[aantalPersonen] = velden[3];
+					gemeenten[aantalPersonen] = velden[4];
+
+					bool isRegelGeldigTotNuToe = true;
+
+					bool isVrouw;
+					bool isGeldig = bool.TryParse(velden[2], out isVrouw);
+					if (isGeldig) {
+						isVrouwen[aantalPersonen] = isVrouw;
+					} else {
+						// Probleem, er staat een ongeldige waarde in het bestand
+						// We melden dit en slaan deze regel over
+						ToonFoutmelding($"regel {i} bevat ongeldige waarde voor 'is vrouw'");
+						isRegelGeldigTotNuToe = false;
+					}
+
+					int aantal;
+					isGeldig = int.TryParse(velden[5], out aantal);
+					if (isGeldig) {
+						aantalKinderen[aantalPersonen] = aantal;
+					} else {
+						// Probleem, er staat een ongeldige waarde in het bestand
+						// We melden dit en slaan deze regel over
+						ToonFoutmelding($"regel {i} bevat ongeldige waarde voor 'aantal kinderen'");
+						isRegelGeldigTotNuToe = false;
+					}
+
+					// Merk op dat een persoon pas definitief ingeladen is als aantalPersonen verhoogd wordt.
+					//
+					// Indien we al wat waarden in de arrays stopten maar aantalPersonen NIET verhoogden
+					// (bv. wegens een probleem met de waarde voor 'aantalKinderen'), dan staat er
+					// wel al wat data in de arrays maar op een locatie die we toch niet gebruiken
+					// dus we moeten deze data niet perse weer verwijderen uit de arrays (handig!).
+					if (isRegelGeldigTotNuToe) {
+						aantalPersonen++;
+					}
+				} else {
+					// Probleem, er staan niet genoeg velden op deze regel
+					// We melden dit en slaan deze regel over
+					ToonFoutmelding($"regel {i} bevat niet genoeg waarden");
+				}
+			}
+		} catch (Exception e) {
+			// Probleem, er is iets foutgelopen bij het inlezen
+			// we melden de fout en slaan het inlezen helemaal over
+			ToonFoutmelding(e.Message);
+			// zie opmerking enkele regels hoger, indien we aantalPersonen teurg op 0 zetten is het also
+			// er niks werd ingelezen (ook al staat er misschien al wat data hier en daar in de arrays).
+			aantalPersonen = 0;
+		}
+		return aantalPersonen;
+	}
+
+    static void BewaarPersonen(int aantalPersonen, string[] voornamen, string[] familienamen, bool[] isVrouwen, string[] postcodes, string[] gemeenten, int[] aantalKinderen) {
+        // using system.io nodig!
+        string padNaarMyDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        string padNaarFile = Path.Combine(padNaarMyDocuments, "personen.csv");
+        const string scheidingstekens = "\t";
+
+        try {
+            string[] regels = new string[aantalPersonen];
+            for (int i = 0; i < aantalPersonen; i++) {
+                string regel = "";
+                regel += voornamen[i];
+                regel += scheidingstekens;
+                regel += familienamen[i];
+                regel += scheidingstekens;
+                regel += isVrouwen[i]; // boolean wordt automatisch omgezet naar een string
+                regel += scheidingstekens;
+                regel += postcodes[i];
+                regel += scheidingstekens;
+                regel += gemeenten[i];
+                regel += scheidingstekens;
+                regel += aantalKinderen[i]; // int wordt automatisch omgezet naar een string
+
+                regels[i] = regel;
+            }
+            File.WriteAllLines(padNaarFile, regels);
+        } catch (Exception e) {
+            // Probleem, er is iets foutgelopen bij het bewaren
+            // we melden de fout en slaan het inlezen helemaal over
+            ToonFoutmelding(e.Message);
+        }
+    }
+
+
+	static void ToonTitel(string titel) {
+		Console.WriteLine(titel);
+
+		string lijntje = new string('-', titel.Length);
+		Console.WriteLine(lijntje);
+	}
+
+	static string VraagStringAntwoord(string vraag) {
+		string result;
+		Console.Write($"{vraag} : ");
+		result = Console.ReadLine().Trim();
+		return result;
+	}
+
+	static string VraagNietLeegStringAntwoord(string vraag) {
+		string result;
+		do {
+			result = VraagStringAntwoord(vraag);
+		} while (result.Length == 0);
+		return result;
+	}
+
+
+	static string VraagKeuzeMetCase(string vraag, string[] keuzes, bool isCaseInsensitive) {
+		string result;
+		string[] keuzesOmTeChecken;
+
+		if (isCaseInsensitive) {
+			keuzesOmTeChecken = new string[keuzes.Length];
+			for (int i = 0; i < keuzes.Length; i++) {
+				keuzesOmTeChecken[i] = keuzes[i].ToLower();
+			}
+		} else {
+			keuzesOmTeChecken = keuzes;
+		}
+
+		int index;
+		do {
+			string keuzesTekst = string.Join('/', keuzes);
+			Console.Write($"{vraag} ({keuzesTekst}) : ");
+
+			string antwoord = Console.ReadLine().Trim();
+			if (isCaseInsensitive) {
+				antwoord = antwoord.ToLower();
+			}
+
+			index = Array.IndexOf(keuzesOmTeChecken, antwoord);
+		} while (index == -1);
+		result = keuzes[index];
+
+		return result;
+	}
+
+	static string VraagKeuze(string vraag, string[] keuzes) {
+		string result = VraagKeuzeMetCase(vraag, keuzes, true);
+		return result;
+	}
+
+	static int VraagIntAntwoord(string vraag, int min, int max) {
+		int result;
+		bool isCorrectAntwoord;
+		do {
+			Console.Write($"{vraag} : ");
+			string getalAlsTekst = Console.ReadLine().Trim();
+			if (getalAlsTekst.Length > 0) {
+				// gebruiker heeft iets ingetypt, is het een getal in [min, max]?
+				bool isGeldig = int.TryParse(getalAlsTekst, out result);
+				isCorrectAntwoord = isGeldig && (result >= min && result <= max);
+			} else {
+				// gebruiker heeft een lege string ingevoerd
+				isCorrectAntwoord = true;
+				result = int.MinValue; // we gebruiken deze waarde om aan te geven dat er niks werd ingevoerd
+			}
+		} while (!isCorrectAntwoord);
+
+		return result;
+	}
+
+	static int VraagNietLeegIntAntwoord(string vraag, int min, int max) {
+		int result;
+		do {
+			result = VraagIntAntwoord(vraag, min, max);
+		} while (result == int.MinValue);
+
+		return result;
+	}
+
+	static void ToonPersoonDetails(int index, string[] voornamen, string[] familienamen, bool[] isVrouwen, string[] postcodes, string[] gemeenten, int[] aantalKinderen) {
+		Console.WriteLine("voornaam    : " + voornamen[index]);
+		Console.WriteLine("familienaam : " + familienamen[index]);
+		Console.WriteLine("geslacht    : " + (isVrouwen[index] ? "vrouw" : "man"));
+		Console.WriteLine("postcode    : " + postcodes[index]);
+		Console.WriteLine("gemeente    : " + gemeenten[index]);
+		Console.WriteLine("kinderen    : " + aantalKinderen[index]);
+	}
+
+	static void ToonFoutmelding(string bericht) {
+		Console.WriteLine($"FOUT : {bericht}");
+		Console.WriteLine("Druk op <Enter> om verder te gaan");
+		Console.ReadLine();
+	}
+	
+	public static void Main(string[] args) {
+		string[] geslachtKeuzes = { "m", "v" };
+		string[] geslachtLeegKeuzes = { "m", "v", "" };
+		string[] jaNeeKeuzes = { "j", "n" };
+
+		const int maxPersonen = 20;
+
+		const int keuzeVoegToe = 1;
+		const int keuzeVerwijder = 2;
+		const int keuzeBewerk = 3;
+		const int keuzeToon = 4;
+		const int keuzeStop = 5;
+
+		string[] voornamen = new string[maxPersonen];
+		string[] familienamen = new string[maxPersonen];
+		bool[] isVrouwen = new bool[maxPersonen];
+		string[] postcodes = new string[maxPersonen];
+		string[] gemeenten = new string[maxPersonen];
+		int[] aantalKinderen = new int[maxPersonen];
+		int aantalPersonen = 0;
+
+		// <1>
+		aantalPersonen = LaadPersonen(voornamen, familienamen, isVrouwen, postcodes, gemeenten, aantalKinderen);
+
+		if (aantalPersonen == 0) {
+			voornamen[aantalPersonen] = "Jan";
+			familienamen[aantalPersonen] = "Janssens";
+			isVrouwen[aantalPersonen] = false;
+			postcodes[aantalPersonen] = "8501";
+			gemeenten[aantalPersonen] = "Heule";
+			aantalKinderen[aantalPersonen] = 2;
+			aantalPersonen++;
+
+			voornamen[aantalPersonen] = "Mieke";
+			familienamen[aantalPersonen] = "Mickelsen";
+			isVrouwen[aantalPersonen] = true;
+			postcodes[aantalPersonen] = "9000";
+			gemeenten[aantalPersonen] = "Gent";
+			aantalKinderen[aantalPersonen] = 0;
+			aantalPersonen++;
+		}
+
+		int keuze = 0;
+		do {
+			Console.Clear();
+			ToonTitel("Gekende personen");
+			for (int i = 0; i < aantalPersonen; i++) {
+				Console.WriteLine($"{i,2} {voornamen[i]} {familienamen[i]}, {gemeenten[i]}");
+			}
+
+			Console.WriteLine();
+			ToonTitel("Hoofdmenu");
+			Console.WriteLine("1) een persoon toevoegen");
+			Console.WriteLine("2) een persoon verwijderen");
+			Console.WriteLine("3) een persoon aanpassen");
+			Console.WriteLine("4) alle details van een persoon zien");
+			Console.WriteLine("5) stoppen");
+			Console.WriteLine();
+
+			keuze = VraagNietLeegIntAntwoord("Wat wil u doen", keuzeVoegToe, keuzeStop);
+			Console.WriteLine();
+
+			if (keuze == keuzeVoegToe) {
+				ToonTitel("Persoon toevoegen");
+
+				string antwoord;
+
+				antwoord = VraagNietLeegStringAntwoord("Voornaam");
+				voornamen[aantalPersonen] = antwoord;
+
+				antwoord = VraagNietLeegStringAntwoord("Familienaam");
+				familienamen[aantalPersonen] = antwoord;
+
+				antwoord = VraagKeuze("Geslacht", geslachtKeuzes);
+				isVrouwen[aantalPersonen] = (antwoord == "v");
+
+				antwoord = VraagNietLeegStringAntwoord("Postcode");
+				postcodes[aantalPersonen] = antwoord;
+
+				antwoord = VraagNietLeegStringAntwoord("Gemeente");
+				gemeenten[aantalPersonen] = antwoord;
+
+				int aantal = VraagNietLeegIntAntwoord("Aantal kinderen", 0, int.MaxValue);
+				aantalKinderen[aantalPersonen] = aantal;
+
+				Console.WriteLine();
+				ToonTitel("Ingevoerde gegevens");
+				Console.WriteLine("voornaam    : " + voornamen[aantalPersonen]);
+				Console.WriteLine("familienaam : " + familienamen[aantalPersonen]);
+				Console.WriteLine("geslacht    : " + (isVrouwen[aantalPersonen] ? "vrouw" : "man"));
+				Console.WriteLine("postcode    : " + postcodes[aantalPersonen]);
+				Console.WriteLine("gemeente    : " + gemeenten[aantalPersonen]);
+				Console.WriteLine("kinderen    : " + aantalKinderen[aantalPersonen]);
+
+				antwoord = VraagKeuze("Wil u deze gegevens bewaren", jaNeeKeuzes);
+				if (antwoord == "j") {
+					aantalPersonen++;
+				}
+
+			} else if (keuze == keuzeVerwijder) {
+				ToonTitel("Persoon verwijderen");
+
+				int index = VraagNietLeegIntAntwoord("Welke persoon wil u verwijderen", 0, aantalPersonen - 1);
+
+				ToonPersoonDetails(index, voornamen, familienamen, isVrouwen, postcodes, gemeenten, aantalKinderen);
+
+				string antwoord = VraagKeuze("Wil u de gegevens van deze persoon daadwerkelijk verwijderen", jaNeeKeuzes);
+				if (antwoord == "j") {
+					// verwijder de persoon op positie 'index'
+					for (int i = index; i < aantalPersonen - 1; i++) {
+						voornamen[i] = voornamen[i + 1];
+						familienamen[i] = familienamen[i + 1];
+						isVrouwen[i] = isVrouwen[i + 1];
+						postcodes[i] = postcodes[i + 1];
+						gemeenten[i] = gemeenten[i + 1];
+						aantalKinderen[i] = aantalKinderen[i + 1];
+					}
+					aantalPersonen--;
+				}
+			} else if (keuze == keuzeBewerk) {
+				ToonTitel("Persoon bewerken");
+
+				int index = VraagNietLeegIntAntwoord("Welke persoon wil u bewerken", 0, aantalPersonen - 1);
+				Console.WriteLine("Indien u een gegeven ongewijzigd wil laten, druk dan gewoon op enter.");
+
+				string voornaam = VraagStringAntwoord("Voornaam");
+
+				string familienaam = VraagStringAntwoord("Familienaam");
+
+				string geslacht = VraagKeuze("Geslacht", geslachtLeegKeuzes);
+
+				string postcode = VraagStringAntwoord("Postcode");
+
+				string gemeente = VraagStringAntwoord("Gemeente");
+
+				int aantal = VraagIntAntwoord("Aantal kinderen", 0, int.MaxValue);
+
+				Console.WriteLine();
+				ToonTitel("Gewijzigde gegevens");
+				if (voornaam != "") {
+					Console.WriteLine("voornaam    : " + voornaam);
+				}
+				if (familienaam != "") {
+					Console.WriteLine("familienaam : " + familienaam);
+				}
+				if (geslacht != "") {
+					Console.WriteLine("geslacht    : " + (geslacht == "v" ? "vrouw" : "man"));
+				}
+				if (postcode != "") {
+					Console.WriteLine("postcode    : " + postcode);
+				}
+				if (gemeente != "") {
+					Console.WriteLine("gemeente    : " + gemeente);
+				}
+				if (aantal != int.MinValue) {
+					Console.WriteLine("kinderen    : " + aantal);
+				}
+
+				string antwoord = VraagKeuze("Wil u deze wijziging(en) bewaren", jaNeeKeuzes);
+				if (antwoord == "j") {
+					if (voornaam != "") {
+						voornamen[index] = voornaam;
+					}
+					if (familienaam != "") {
+						familienamen[index] = familienaam;
+					}
+					if (geslacht != "") {
+						isVrouwen[index] = (geslacht == "v");
+					}
+					if (postcode != "") {
+						postcodes[index] = postcode;
+					}
+					if (gemeente != "") {
+						gemeenten[index] = gemeente;
+					}
+					if (aantal != int.MinValue) {
+						aantalKinderen[index] = aantal;
+					}
+				}
+			} else if (keuze == keuzeToon) {
+				int index = VraagNietLeegIntAntwoord("Van welke persoon wil u de details zien", 0, aantalPersonen - 1);
+
+				ToonPersoonDetails(index, voornamen, familienamen, isVrouwen, postcodes, gemeenten, aantalKinderen);
+
+				Console.WriteLine();
+				Console.WriteLine("Druk op enter om terug te keren naar het hoofdmenu");
+				Console.ReadLine();
+			}
+
+		} while (keuze != keuzeStop);
+
+		// <2>
+		BewaarPersonen(aantalPersonen, voornamen, familienamen, isVrouwen, postcodes, gemeenten, aantalKinderen);
+	}
+}
+----
+<1> de oproep van `LaadPersonen` bij het begin van het programma. Let ook eens op het stukje code eronder i.v.m. `Jan` en `Mieke`
+<2> de oproep van `BewaarPersonen` bij het beëindigen van het programma
+
+
+=== Een oplossing met streams
+
+We zouden de oplossing ook kunnen schrijven m.b.v. `using` en _streams_ : `StreamReader` om te lezen en `StreamWriter` om te schrijven.
+
+De beide methods met file I/O worden dan :
+
+[source,csharp,linenums]
+----
+static int LaadPersonen(string[] voornamen, string[] familienamen, bool[] isVrouwen, string[] postcodes, string[] gemeenten, int[] aantalKinderen) {
+        string padNaarMyDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        string padNaarFile = Path.Combine(padNaarMyDocuments, "personen.csv");
+        const string scheidingstekens = "\t";
+
+        int aantalPersonen = 0;
+        try {
+            using (StreamReader sr = new StreamReader(padNaarFile)) { // <1>
+                int i = 0; // we moeten de regels tellen voor de evt. foutmeldingen
+                while (!sr.EndOfStream) {                             // <1>
+                    i++;
+                    string regel = sr.ReadLine();                     // <1>
+                    string[] velden = regel.Split(scheidingstekens);
+                    if (velden.Length == 6) {
+                        // We doen eerst de makkelijke velden
+                        voornamen[aantalPersonen] = velden[0];
+                        familienamen[aantalPersonen] = velden[1];
+                        postcodes[aantalPersonen] = velden[3];
+                        gemeenten[aantalPersonen] = velden[4];
+
+                        bool isRegelGeldigTotNuToe = true;
+
+                        bool isVrouw;
+                        bool isGeldig = bool.TryParse(velden[2], out isVrouw);
+                        if (isGeldig) {
+                            isVrouwen[aantalPersonen] = isVrouw;
+                        } else {
+                            // Probleem, er staat een ongeldige waarde in het bestand
+                            // We melden dit en slaan deze regel over
+                            ToonFoutmelding($"regel {i} bevat ongeldige waarde voor 'is vrouw'");
+                            isRegelGeldigTotNuToe = false;
+                        }
+
+                        int aantal;
+                        isGeldig = int.TryParse(velden[5], out aantal);
+                        if (isGeldig) {
+                            aantalKinderen[aantalPersonen] = aantal;
+                        } else {
+                            // Probleem, er staat een ongeldige waarde in het bestand
+                            // We melden dit en slaan deze regel over
+                            ToonFoutmelding($"regel {i} bevat ongeldige waarde voor 'aantal kinderen'");
+                            isRegelGeldigTotNuToe = false;
+                        }
+
+                        // Merk op dat een persoon pas definitief ingeladen is als aantalPersonen verhoogd wordt.
+                        //
+                        // Indien we al wat waarden in de arrays stopten maar aantalPersonen NIET verhoogden
+                        // (bv. wegens een probleem met de waarde voor 'aantalKinderen'), dan staat er
+                        // wel al wat data in de arrays maar op een locatie die we toch niet gebruiken
+                        // dus we moeten deze data niet perse weer verwijderen uit de arrays (handig!).
+                        if (isRegelGeldigTotNuToe) {
+                            aantalPersonen++;
+                        }
+                    } else {
+                        // Probleem, er staan niet genoeg velden op deze regel
+                        // We melden dit en slaan deze regel over
+                        ToonFoutmelding($"regel {i} bevat niet genoeg waarden");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // Probleem, er is iets foutgelopen bij het inlezen
+            // we melden de fout en slaan het inlezen helemaal over
+            ToonFoutmelding(e.Message);
+            // zie opmerking enkele regels hoger, indien we aantalPersonen teurg op 0 zetten is het also
+            // er niks werd ingelezen (ook al staat er misschien al wat data hier en daar in de arrays).
+            aantalPersonen = 0;
+        }
+        return aantalPersonen;
+    }
+
+    static void BewaarPersonen(int aantalPersonen, string[] voornamen, string[] familienamen, bool[] isVrouwen, string[] postcodes, string[] gemeenten, int[] aantalKinderen) {
+        // using system.io nodig!
+        string padNaarMyDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        string padNaarFile = Path.Combine(padNaarMyDocuments, "personen.csv");
+        const string scheidingstekens = "\t";
+
+        try {
+            using (StreamWriter sw = new StreamWriter(padNaarFile)) { // <2>
+                for (int i = 0; i < aantalPersonen; i++) {
+                    string regel = "";
+                    regel += voornamen[i];
+                    regel += scheidingstekens;
+                    regel += familienamen[i];
+                    regel += scheidingstekens;
+                    regel += isVrouwen[i]; // boolean wordt automatisch omgezet naar een string
+                    regel += scheidingstekens;
+                    regel += postcodes[i];
+                    regel += scheidingstekens;
+                    regel += gemeenten[i];
+                    regel += scheidingstekens;
+                    regel += aantalKinderen[i]; // int wordt automatisch omgezet naar een string
+
+                    sw.WriteLine(regel);                              // <2>    
+                }
+            }
+        } catch (Exception e) {
+            // Probleem, er is iets foutgelopen bij het bewaren
+            // we melden de fout en slaan het inlezen helemaal over
+            ToonFoutmelding(e.Message);
+        }
+    }
+----
+<1> de interessante wijzigingen in `LaadPersonen`
+<2> de interessante wijzigingen in `BewaarPersonen`

@@ -1,0 +1,841 @@
+﻿= Programmeren Basis - Deel 14
+Frederiek De Wolf
+v2021.11.23.14.09
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+
+== Objecten
+
+Vaak werken we in de code met *objecten*.  __Objecten__ bundelen zaken die conceptueel samen horen, bijvoorbeeld:
+
+- [.underline]#informatie# die bij een __persoon__ hoort, bijvoorbeeld zijn __naam__, __adres__ of __geboortedatum__
+- [.underline]#functionaliteit# die __met__ of __op__ dat __persoon object__ van toepassing is, bijvoorbeeld __adres wijzigen__, __leeftijd berekenen__, __initialen bepalen__, ...
+
+Objecten zijn *steeds van een bepaald (data)type*, en worden ook wel eens een *instantie van dat type* genoemd.  
+Een object zou bijvoorbeeld een instantie kunnen zijn van een type als `Persoon`, `Random` of `string`.
+
+Een datatype als `Persoon` zou je zelf moeten definiëren, daar hebben we het straks over.
+Tot dus ver hebben we vooral gewerkt met instanties van voorgedefinieerde datatypes.
+
+****
+[.underline]#Voorbeeld van objecten van voorgedefinieerde datatypes#
+
+Objecten `naam`, `familienaam` of `randomGenerator` houden informatie bij over twee __teksten__ (van type `string`), of een __getal generator__ (van type `Random`).
+
+[source,csharp,linenums]
+----
+string naam = "Jan";
+string familienaam = "Janssens"
+Console.WriteLine($"Naam (in hoofdletters): {naam.ToUpper()}");
+
+Random randomGenerator = new Random();
+Console.WriteLine($"Willekeurig getal: {randomGenerator.Next(1, 11)}");
+----
+
+Niet alleen houden ze informatie over deze __tekst__ of __getal generator__ bij, ze staan ook nog eens toe daarmee of daarop handelingen toe te passen.
+
+Zo kan je [.underline]#van deze __tekst__# `naam` met de `ToUpper` method een __hoofdletter-representatie__ opvragen.
+
+Zal de `Next` method het __volgende willekeurige getal__ [.underline]#van deze __generator__# `randomGenerator` opleveren.
+
+[source,shell]
+----
+Naam (in hoofdletters): JAN
+Willekeurig getal: 6
+----
+
+.Dot notatie
+[NOTE]
+====
+Voor de dot staat de naam van het object waarmee wordt gewerkt, waarvan bijvoorbeeld informatie wordt opgeleverd.
+
+`naam.ToUpper()` zal van de tekst in variabele `naam`, en bijvoorbeeld niet van de tekst `familienaam`, een hoofdletter-reprenstatie opleveren.
+====
+****
+
+Straks willen we ook met objecten van onze eigen datatypes gaan werken.  Bijvoorbeeld objecten van type `Persoon`. 
+
+****
+[.underline]#Voorbeeld van objecten van zelfgedefinieerde datatypes#
+
+Ook deze objecten moeten informatie bijhouden, bijvoorbeeld de __naam__ of __geboortedatum__ van de __persoon__ die met dat object wordt voorgesteld.
+
+Op die `Persoon` objecten willen we echter graag ook bepaalde handelen uitvoeren...
+
+We zijn geïnteresseerd in het `Persoon` object met de hoogste `Leeftijd`.  Van die `Persoon` willen we graag de __naam__ opvragen.  Een method als `GetNaam` zou ons die naam moeten opleveren.
+
+De `Persoon` objecten zouden elk een __naam__ en __geboortedatum__ moeten krijgen, bijvoorbeeld via methods als `SetNaam` en `SetGeboortedatum`.
+
+[source,csharp,linenums]
+----
+class Program {
+    static void Main() {
+        DateTime geboorteDatum1 = new DateTime(1970, 1, 1);
+        DateTime geboorteDatum2 = new DateTime(2002, 3, 4);
+
+        Persoon vader = new Persoon();
+        vader.SetNaam("Victor");                 // <1>
+        vader.SetGeboortedatum(geboorteDatum1);  // <1>
+
+        Persoon zoon = new Persoon(); 
+        zoon.SetNaam("Piet");
+        zoon.SetGeboortedatum(geboorteDatum2);
+
+        Persoon[] familie = new Persoon[2]; 
+        familie[0] = vader;
+        familie[1] = zoon;
+
+        Persoon oudste = Oudste(familie);
+        Console.WriteLine($"De oudste persoon is: {oudste.GetNaam()}");  // <2>
+    }
+
+    static Persoon Oudste(Persoon[] personen) {
+        Persoon oudste = null;  
+
+        if (personen.Length > 0) {
+		    // We veronderstellen dat de eerste persoon de oudste is...
+            oudste = personen[0];
+
+			// En bekijken vanaf het tweede element of er sprake is van nog een oudere...
+            for (int i = 1; i < personen.Length; i++) {
+
+			    // Vervang indien zo de tot-nu-toe-oudste door de persoon in kwestie...
+                if (personen[i].Leeftijd() > oudste.Leeftijd()) {  // <3> 
+                    oudste = personen[i];
+                }
+            }
+        }
+        return oudste;
+    }
+}
+----
+<1> Instellen van de __naam__ (`SetNaam`) of __geboortedatum__ (`SetGeboortedatum`).
+<2> Opvragen van de __naam__ via `GetNaam`.
+<3> Opvragen van de __leeftijd__ via `Leeftijd`.
+****
+
+Zo meteen bespreken we hoe we dergelijk eigen datatype als `Persoon` kunnen creëren.
+
+Samengevat...
+
+*Een object bevindt zich in een bepaalde toestand*.  Deze __toestand__ wordt bepaald door de informatie die door dat object wordt bijgehouden.  Bijvoorbeeld de __tekst__ in een `string` object, of de __naam__ en de __geboortedatum__ in een `Persoon` object.
+
+Daarnaast *vertoont een object gedrag*.  Meer specifiek kan een object __vragen beantwoorden__ of __opdrachten uitvoeren__.  Bijvoorbeeld kan een `string` object antwoorden op de vraag wat zijn __hoofdletter-representatie__ is, of kan een `Persoon` object zijn __leeftijd__ opleveren.
+
+== Klasse, datavelden en methods
+
+*Een (data)type kan worden gedefinieerd aan de hand van een klasse.*
+
+Een __klasse__ (Engels: __class__) is een voorschrift van wat voor informatie alle objecten van die klasse kunnen __bijhouden__, en welke functionaliteiten ze kunnen __uitvoeren__. 
+
+- Aan de hand van *datavelden* (__variabelen op klasseniveau__) wordt het mogelijk gemaakt informatie bij te houden. 
+
+- *Methods* (__commando's__ of __queries__) worden gebruikt om functionaliteit te voorzien.
+ 
+****
+[.underline]#Voorbeeld van een eigen klasse#
+
+Elk object van het type `Persoon` zal zijn eigen __naam__ en __geboortedatum__ kennen. 
+
+Van elk `Persoon` object kan je de __naam__ en __geboortedatum__ instellen en opvragen.
+
+Daarnaast is het ook mogelijk van elk __Persoon__ object de `Leeftijd` na te gaan.
+
+[source,csharp,linenums]
+----
+class Persoon {
+	private string _naam;  // <1>
+	public string GetNaam() {
+		return _naam;
+	}
+	public void SetNaam(string naam) {
+		_naam = naam;
+	}
+
+	private DateTime _geboortedatum;  // <2>
+	public DateTime GetGeboortedatum() {
+		return _geboortedatum;
+	}
+	public void SetGeboortedatum(DateTime geboortedatum) {
+		_geboortedatum = geboortedatum;
+	}
+
+	public int Leeftijd() {
+		int leeftijd = 0;
+		DateTime dt = GetGeboortedatum().Date.AddYears(1);
+		while (dt <= DateTime.Today) {
+			leeftijd++;
+			dt = dt.AddYears(1);
+		} 
+		return leeftijd;
+	}
+}
+----
+
+<1> <2> We hebben twee *datavelden* (soms ook gewoon __velden__ genoemd) voor het bijhouden van de toestand van onze verschillende `Persoon` instanties:
+
+- `_naam` van type `string` voor het bijhouden van de naam
+- `_geboortedatum` van type `DateTime` voor het bijhouden van de geboortedatum
+
+Merk op dat dit variabelen zijn die niet in een method, maar *rechtstreeks in een klasse worden gedeclareerd*.
+
+Typisch ga je het sleutelwoord `private` terugvinden op die declaratieregel.  Zo meteen iets meer over die `private`.
+
+.Underscore voor datavelden
+[NOTE]
+====
+Doorgaans worden de namen van datavelden met een underscore gestart.  Het voordeel is dat je zo meteen ook ziet (aan het al dan niet starten met een underscore) of het over een dataveld of een gewone lokale variabele.
+====
+
+We beschikken ook vijf methods.
+
+Twee daarvan zijn *commando's* (`void` methods) die de toestand van een `Persoon` object kunnen manipuleren:
+
+- `SetNaam` voor het instellen van de naam
+- `SetGeboortedatum` voor het instellen van de geboortedatum
+
+En we hebben ook drie *queries* die de toestand, of een afgeleide toestand, kunnen opleveren:
+
+- `GetNaam` voor het opvragen van de naam
+- `GetGeboortedatum` voor het opvragen van de geboortedatum
+- `Leeftijd` voor het opvragen van de leeftijd
+****
+
+[discrete]
+=== Get of Set prefix
+
+De __Get__ en __Set__ prefixen worden gebruikt om te benadrukken dat het gaat om het opvragen (__getten__) of instellen (__setten__) van een bepaalde __eigenschap__.
+De __naam__ en de __geboortedatum__ kan je als een __'eigenschap'__ van een __persoon__ bekijken.
+
+Vooral indien je zowel voorziet in de mogelijkheid eigenschappen __op te vragen__ als __in te stellen__, zijn deze prefixen zinvol.  Ze benadrukken extra dat het gaat om het __getten__ of __setten__ van een waarde.
+
+.Bij properties laten we die vallen.
+[NOTE]
+====
+Verderop (in een volgend deel van het cursusmateriaal) werken we voor elke eigenschap met een zogenaamde __property__.  
+
+Eén property (met één naam) kan de mogelijkheid bieden de eigenschap zowel __in te stellen__ als __op te vragen__.  
+Vanaf dan laten we de __Get__ of __Set__ prefixen meestal vallen.
+====
+
+Zolang we nog niet aan de slag gaan met properties, maken we vrij vaak gebruik van deze prefixen.  Maar het hoeft enkel indien het zinvol is te benadrukken dat het gaat om __getten__ of __setten__.
+
+Omdat in dit voorbeeld de __leeftijd__ enkel opvraagbaar is, biedt een __Get__ prefix hier weinig meerwaarde.
+
+[discrete]
+=== Namen van klassen starten met een hoofdletter
+
+Net als de namen van methods gaan we telkens de namen van klassen starten met een hoofdletter.  __Upper CamelCasing__ (zoals men dat wel eens noemt) is hier van toepassing.
+
+=== Gedrag en toestand
+
+We zouden de verschillende onderdelen (__members__) van een klasse in volgend overzicht kunnen plaatsen...
+
+image::klasse members.png[Klasse members]
+
+In dit overzicht staat het begrip __toestand__ centraal.  Zoals reeds aangegeven wordt de *toestand* bepaald door de informatie die door dat object wordt bijgehouden.
+
+Vraag je je af welke datavelden in een klasse moeten worden voorzien?  Of dus welke toestand objecten van dit type kunnen aannemen?
+
+Stel jezelf dan de vraag in wat twee verschillende instanties van dit type kunnen verschillen?
+
+****
+Elke `Persoon` kan een eigen __naam__ hebben, en een eigen __geboortedatum__.  
+
+Die dus anders is dan de __naam__ of __geboortedatum__ van een ander `Persoon` object.
+****
+
+Of nog beter, denk na over wat elk object moet __weten__ (__bijhouden__) om elke vraag (__query__) te kunnen antwoorden.  
+
+****
+Om te antwoorden op de vragen:
+
+- wat is de naam van deze persoon (`GetNaam`)
+- wat is zijn geboortedatum  (`GetGeboortedatum`)
+- wat is zijn leeftijd (`Leeftijd`)
+
+Moet elke object minstens beschikken over de kennis 
+
+- wat de naam is => `string _naam`, want daarmee kan het gedrag van `GetNaam` vervuld worden
+- wat de geboortedatum is => `string _geboortedatum`, want daarmee kan `GetGeboortedatum` en `Leeftijd` vervuld worden
+****
+
+Op basis van het gewenste gedrag beslis je welke __toestand__ objecten van een bepaalde klasse kunnen aannemen.
+
+Of anders uitgedrukt: je voorziet voldoende datavelden om te kunnen voldoen aan het gedrag die de methods moeten implementeren.
+
+=== Terminologie
+
+Het woord __'klasse'__ of __'class'__ heeft verschillende betekenissen.  Hier in deze context bedoelen we zoiets als __'classificatie'__ (of noem het __soort__ of __categorie__).  __Objecten__ met dezelfde eigenschappen, horen tot dezelfde __categorie__.
+
+Het woord __'object'__ heeft ook veel betekenissen.  Wij bedoelen in deze context __'exemplaar'__.  Een instantie (één object) van type `string` stelt één tekst voor.  Een ander object van type `string` (een andere instantie dus), stelt een ander __exemplaar__ van deze __klasse__ voor, een andere tekst dus.
+
+Laat je niet teveel in de war brengen, simpel gesteld...
+
+- __klasse = class = (data)type = categorie__
+- __object = instantie = exemplaar__
+
+=== Private en public
+
+Members van een klasse (onderdelen als datavelden of methods) hebben een bepaalde __visibility__ (Nederlands: zichtbaarheid).  
+
+Deze visibility bepaalt waar deze members kunnen gebruiken:
+
+- `public` zaken kunnen elders in ons programma aanspreken, ook buiten de klasse waarin ze zijn gedefinieerd.
++
+De `public` methods van klasse `Persoon` kunnen bijvoorbeeld in een `Main` method van een `Program` klasse worden benaderd.
+
+- `private` zaken kunnen enkel in de klasse zelf gebruikt worden.
++
+De datavelden van een `Persoon` object kunnen we enkel in de klasse `Persoon` zelf gebruiken.  Het is __niet__ mogelijk om deze bijvoorbeeld in een method van een andere klasse aan te spreken.
+
+Vergelijk het een beetje met de scope van een variabele.  Deze beperkte ook de plaatsen in de code waar we die variabelen konden gebruiken.
+
+.Datavelden zijn private.
+[NOTE]
+====
+Datavelden worden doorgaans niet beschikbaar gesteld buiten de klassen waarin ze zijn gedefinieerd.  Visibility `private` gaat dit verhinderen.
+====
+
+=== Een nieuwe klasse toevoegen in Visual Studio
+
+Elke klasse wordt doorgaans in een apart broncode document geplaatst.  
+
+****
+[.underline]#Toevoegen van een broncode document aan je Visual Studio project#
+
+Indien je in je project naast een `Program` klasse ook een `Persoon` klasse wil toevoegen kies je in de Visual Studio menu voor menu:Project[Add Class ...]...
+
+image::Project - Add Class.png[Project > Add Class..]
+
+In het resulterende __'Add New Item'__ venster selecteer je de __Class__ template.
+
+image::Add New Item - Class.png[Add New Item dialog - Class template]
+
+Als broncode bestandnaam kan je kiezen voor iets als __Persoon.cs__.  Klik op de btn:[Add] knop.  
+
+.Klassenaam als bestandsnaam
+[NOTE]
+====
+Het is altijd een goed idee om je broncode document dezelfde naam te geven als de klasse die erin is gedefinieerd.
+
+Zo kan je bijvoorbeeld makkelijk in een toolvenster als de __Solution Explorer__ je definitie terugvinden.
+====
+
+Op basis van de uitgekozen bestandsnaam zal een klasse met -in dit geval- de naam `Persoon` worden toegevoegd.
+
+image::Program en Persoon klasse.png[Beide klassen samen.]
+
+In je project zitten nu alvast twee broncode documenten.
+
+Vervang de meegegeven `class Persoon` door onze eigen versie die we daarstraks hadden uitgeschreven.
+****
+
+== Objecten aanmaken met new
+
+Objecten van onze eigen (of voorgedefinieerde) klassen kunnen we aanmaken met `new`.
+
+Het sleutelwoord `new` laat je volgen door de naam van het datatype (de klasse) die je wil __instantiëren__.  Na de naam van het datatype staan ronde haakjes, bijvoorbeeld `new Persoon()` of `new Random()`.
+
+Dergelijke __object initializer__ maakt __het object/de instantie__ aan (reserveert hiervoor geheugen), en levert de verwijzing (de referentie) naar dit object op.  Typisch ga je meteen de opgeleverde verwijzing toekennen aan een variabele van corresponderend datatype, bijvoorbeeld...
+
+[source,csharp,linenums]
+----
+Persoon p = new Persoon();
+Random r = new Random();
+----
+
+Door de verwijzing in een variabele op te slaan kun je het object via die variabele gebruiken, bijvoorbeeld...
+
+[source,csharp,linenums]
+----
+p.SetNaam("Jan");
+Console.WriteLine(r.Next());
+----
+
+[NOTE]
+====
+Van één klasse kan je oneindig veel objecten maken.  De klasse is als het ware de __moule__, de objecten zijn dan de __afgietsels__.
+
+[source,csharp,linenums]
+----
+Persoon p1 = new Persoon();
+Persoon p2 = new Persoon();
+Persoon p3 = new Persoon();
+...
+----
+====
+
+=== Reference type en null
+
+Net als het `string` datatype, of __array datatypes__, zijn ook klasse datatypes *reference types*.
+
+Dat maakt dat er een verschil is tussen de instantie enerzijds, en de __opslagplaats__ (variabele of array-slot bijvoorbeeld) anderzijds.  
+
+Indien de referentie aan de opslagplaats is toegekend, verwijst hij naar het object.  Bijvoorbeeld weergegeven met de pijltjes in onderstaande sectie over objectdiagrammen.  
+
+Is er niets toegekend aan deze opslagplaats dan bevat hij `null`.  Indien bijvoorbeeld een variabele als `p` louter wordt gedeclareerd, maar nooit een waarde krijgt toegekend (`Persoon p;`) dan bevat hij `null`. 
+
+image::object diagram - p null.png[Object diagram - p beval null]
+
+Je kan `null` ook expliciet aan een variabele toekennen, bijvoorbeeld `Persoon p = null`, maar dat gebeurt niet zo vaak.  Zoals we straks zien, ga je dat soms wel doen om een __"Use of unassigned local variable"__ compilefout te vermijden.
+
+=== Source code en run-time constructie
+
+Het is belangrijk dat je je realiseert dat een klasse en een object op twee verschillende momenten relevant zijn.
+
+Een klasse is een __source code constructie__, en is met andere woorden enkel relevant voor de compiler, of dus VOOR de uitvoering begint.  
+
+Een object is dan een __run-time constructie__, en is enkel relevant NADAT de uitvoering begint.
+
+== Instance methods oproepen
+
+Bij elk `Persoon` object kunnen we diens methods oproepen, bijvoorbeeld de `Set`- en `GetNaam` methods...
+
+****
+[.underline]#Voorbeeld aanroepen van instance methods#
+
+Van de klasse `Persoon` zouden we twee objecten kunnen maken.  Eén om daarmee __Jan__ voor te stellen, geboren op __1 januari 2000__.  En één om een persoon voor te stellen met de naam __Piet__, geboren op __4 maart 2002__.
+
+[source,csharp,linenums]
+----
+DateTime geboorteDatum1 = new DateTime(2000, 1, 1);
+DateTime geboorteDatum2 = new DateTime(2002, 3, 4);
+
+Persoon p1 = new Persoon();
+p1.SetNaam("Jan");
+p1.SetGeboortedatum(geboorteDatum1);
+
+Persoon p2 = new Persoon();
+p2.SetNaam("Piet");
+p2.SetGeboortedatum(geboorteDatum2);
+
+if (p1.Leeftijd() > p2.Leeftijd()) {
+	Console.Write($"{p1.GetNaam()} is ouder dan {p2.GetNaam()}.");  // <1>
+}
+----
+<1> Jan is ouder dan Piet.
+
+De variabelen `p1` en `p2` bevatten elke een verwijzing (een referentie) naar een instantie van type `Persoon`. 
+
+Merk op dat de `SetNaam` en `GetNaam` methods van precies dat `Persoon` object worden aangeroepen waar de variabele `p1` of `p2` naar verwijst!
+****
+
+Bij de method oproep staat links naast de methodnaam een expressie (met een punt ertussen).  Die expressie duidt het object aan wiens method we oproepen.
+
+Zo is het van `p1` dat de naam op __"Jan"__ wordt ingesteld (`p1.SetNaam("Jan")`).  
+Vragen we vervolgens de naam van `p1` op (`p1.GetNaam()`) dan levert ons dat __"Jan"__, en bijvoorbeeld niet __"Piet"__ (de naam van `p2`).
+
+=== Objectdiagrammen
+
+We zouden de toestand van onze twee objecten ook met volgend __objectdiagram__ kunnen modelleren...
+
+image::object diagram - Jan en Piet.png[Object diagram - voor twee instanties van type Persoon]
+
+Het objectdiagram benadrukt nogmaals dat elk object van type `Persoon` hier zijn eigen __naam__ en __geboortedatum__ kan hebben.
+
+In een objectdiagram stelt een vierkant een object voor.  Dit is een object van het type waarvan de naam in het bovenste compartiment na de dubbelpunt is weergegeven.  Dit datatype wordt typisch onderlijnd, bijvoorbeeld [.underline]#:Persoon#.
+
+We krijgen ook de waardes van de datavelden te zien.
+
+De naam van de variabele die de verwijzing naar een object bevat, kun je ook links van de dubbele punt zetten bovenin het object rechthoekje.  In de cursus opteren we er liever voor om een pijl te laten vertrekken vanuit een apart vierkantje dat de variabele voorstelt.  Door die pijl valt het beter op dat de variabele een verwijzing bevat.  De naam van de variabele schrijven we dan bovenaan het vierkantje (`p1` en `p2` hierboven)
+
+Verderop komen de pijltjes goed van pas, zeker als we meerdere variabelen naar hetzelfde object laten wijzen!
+
+=== Instance methods versus class methods
+
+==== Object gerelateerde method
+
+Een method waar geen `static` voor staat noemen we een __instance method__ of __object (related) method__.  We hebben er ondertussen zelf gecreëerd, bijvoorbeeld `Set`- en `GetNaam` uit de `Persoon` klasse.  
+
+Deze methods worden altijd __op__ een object aangeroepen.  Voor de dot staat de naam van het object waarmee wordt gewerkt.  
+Bijvoorbeeld `p2.SetNaam("Piet")`, de __object expressie__ `p2` maakt hier duidelijk dat de __naam__ van die __persoon__ wordt ingesteld.
+
+Ook van voorgedefinieerde __instance methods__ hebben we voorheen reeds gebruik gemaakt.
+
+****
+[.underline]#Voorbeeld van instance methods#
+
+[source,csharp,linenums]
+----
+class Program {
+	static void Main() {
+		string s = "Hello World!";
+		Factuur f = new Factuur();
+			
+		f.SetVervaldatum(dt);                           // <1>
+
+		Console.WriteLine(s.ToUpper());                 // <1>
+		Console.WriteLine(f.GetVervaldatum());          // <1>
+	}
+}
+
+class Factuur {
+	private DateTime _vervaldatum;
+	public void SetVervaldatum(DateTime vervaldatum) {  // <2>  
+		_vervaldatum = vervaldatum;
+	}
+	public DateTime GetVervaldatum() {                  // <2>
+		return _vervaldatum;
+	}
+}
+----
+<1> We roepen instance methods `SetVervaldatum`, `ToUpper` of `GetVervaldatum` aan *op objecten* van type `Factuur` en `string`.
+<2> Merk op dat er geen `static` sleutelwoorden in de hoofding van de methods `SetVervaldatum` en `GetVervaldatum` wordt vermeld.
+
+Probeer maar eens uit wat er gebeurt wanneer je een `static` sleutelwoord zou toevoegen in de definitie van bijvoorbeeld de `GetVervaldatum` method.  De compiler levert ons de foutmelding __"Member 'Factuur.GetVervaldatum()' cannot be accessed with an instance reference; qualify it with a type name instead"__.
+****
+
+Ook in de implementatie van de `GetVervaldatum` method zelf zou een compilefout optreden: __"An object reference is required for the non-static field ... _vervaldatum "__.  
+
+Het dataveld `_vervaldatum` is inderdaad __non-static__, of noem het __instance related__.  Het is gekoppeld aan het object in uitvoering.
+
+.Weinig parameters in instance methods.
+[NOTE]
+====
+Merk op dat bij instance methods typisch weinig parameters word gebruikt.  
+
+Op basis van het object waarop de member wordt aangeroepen is immers reeds duidelijk wat de informatie is waarmee wordt gewerkt.  
+
+Het volstaat bijvoorbeeld voor de __dot__ naar `s` te verwijzen als je van deze `string` de __hoofdletter representatie__ wenst op te vragen (`s.ToUpper()`).  Tussen haakjes moet je bij het aanroepen van `ToUpper` dan ook geen parameterwaardes voorzien.
+====
+
+==== Klasse gerelateerde method
+
+Er zijn ook methods die niet bij objecten horen, namelijk de *class methods*.  Deze methods worden ook wel __klasse (gerelateerde) methods__ genoemd, in tegenstelling dus tot de __object (gerelateerde) methods__.
+
+Deze class methods kan je herkennen aan het `static` sleutelwoord in de hoofding van deze method.  De `Main` method bijvoorbeeld is een class method, en dus geen instance method.
+
+Voorheen hebben we reeds intensief deze __class methods__ ingezet.  Nogmaals: daar was geen object nodig om deze method op aan te roepen.  
+
+****
+[.underline]#Voorbeeld van static methods#
+
+[source,csharp,linenums]
+----
+static void Main() {
+	Console.WriteLine(Math.Sqrt(25));      // <1>
+	Console.WriteLine(char.ToLower('A'));  // <1>
+
+    PrintHelloWorld();                     // <1>
+}
+
+static void PrintHelloWorld() {  // <2>
+    Console.WriteLine("Hello World!");
+}
+----
+<1> We roepen methods `WriteLine`, `Sqrt`, `ToLower` of `PrintHelloWorld` aan zonder dat deze op een object van toepassing is.
+<2> Merk op dat het `static` sleutelwoord in de hoofding van deze method is vermeld.
+
+Probeer maar eens uit wat er gebeurt wanneer je het `static` sleutelwoord zou verwijderen in de definitie van de `PrintHelloWorld` method.  De compiler levert ons de foutmelding __"An object reference is required for the non-static method 'PrintHelloWorld()' ..."__.  
+Indien de method __non-static__ zou zijn, of met andere woorden een __instance method__, dan zou inderdaad een verwijzing naar een object (__object reference__) noodzakelijk zijn.
+
+In het geval van de `WriteLine`, `Sqrt` en `ToLower` methods, zetten we voor de dot de naam van de klasse waarin deze method is gedefinieerd.  Voor het oproepen van `PrintHelloWorld` is dat niet noodzakelijk, daar roepen we deze method op vanuit dezelfde klasse als waarin ze is gedefinieerd.
+****
+
+.Meer parameters in static methods.
+[NOTE]
+====
+Merk op dat bij `static` methods typisch meer parameters worden ingezet.  Dit om duidelijk te maken wat de waardes zijn waarmee wordt gewerkt.  
+
+We geven bij het aanroepen van `Console.WriteLine`, `Math.Sqrt` of `char.ToLower` telkens een parameterwaarde mee.  
+Respectievelijk de __waarde die op de console wordt gedrukt__, de __waarde waarvan de vierkantswortel wordt opgeleverd__, of __het karakter waarvan de kleine letter variant wordt opgeleverd__.
+====
+
+=== this
+
+Voorheen hebben we benadrukt dat elke __instance methods__ van toepassing is op een bepaald object.  Sterker nog bij het aanroepen van die instance method hebben we voor de __dot__ telkens verwezen naar het object in kwestie.  
+Merk in volgend voorbeeld op dat we dat ook kunnen doen...
+
+- Bij het aanspreken van een dataveld.
+- Indien we die method aanroepen in de klasse zelf.
+
+Daar kunnen we bij wijze van de `this` __object expressie__ verduidelijken op welk object die member van toepassing is.  *`this` zal als __object expressie__ steeds wijzen naar het object in uitvoering.*
+
+****
+[.underline]#Voorbeeld van het gebruik van this#
+
+Van `Persoon` objecten kan je hier niet alleen de __naam__ instellen en opvragen, maar ook de __initialen__ bevragen.
+
+Zowel bij het aanspreken van het `_naam` veld, als de `GetNaam()` method, wordt verduidelijkt dat het gaat om het object in uitvoering (`this`).
+
+[source,csharp,linenums]
+----
+class Program {
+	static void Main() {
+		DateTime geboorteDatum1 = new DateTime(2000, 1, 1);
+		DateTime geboorteDatum2 = new DateTime(2002, 3, 4);
+
+		Persoon p1 = new Persoon();
+		p1.SetNaam("Jean-Jacques Peters");
+		Console.WriteLine(p1.Initialen());  // JJP <1>
+
+		Persoon p2 = new Persoon();
+		p2.SetNaam("Rita Sanders");
+		Console.WriteLine(p2.Initialen());  // RS <2>
+	}
+}
+
+class Persoon {
+	private string _naam;
+	public string GetNaam() {
+		return this._naam;  // <3>
+	}
+	public void SetNaam(string naam) {
+		this._naam = naam;  // <3>
+	}
+
+	public string Initialen() {
+		string initialen = "";
+		char[] splitsKarakters = { ' ', '-' };
+		string[] naamDelen = this.GetNaam().Split(splitsKarakters);  // <4>
+		foreach (string naamDeel in naamDelen) {
+			initialen += naamDeel.Substring(0, 1);
+		}
+		return initialen;
+	}
+}
+----
+<1> Bij de eerste call naar `Initialen` is `p1` het object in uitvoering.
+<2> Bij de tweede call naar `Initialen` is `p2` het object in uitvoering.
+<3> Voor het aanspreken van het dataveld `_naam` wordt benadrukt dat het gaat om dat object (in uitvoering).
+<4> Ook bij het aanroepen van `GetNaam` wordt dat expliciet aangegeven.
+****
+
+Het voorbeeld zou net zo goed werken zonder `this`.  
+
+Het gebruik ervan kan echter geen kwaad.  Je benadrukt ermee dat je gebruik maakt van een member (dataveld of method) van de klasse zelf.
+
+==== Underscore voor datavelden
+
+Het gebruik van `this` is niet verplicht, al zeker niet indien er geen verwarring mogelijk is!
+Had het dataveld echter `naam` genoemd, zonder __undersocre__, dan kan je je allicht inbeelden dat er bepaalde onduidelijkheid is.
+
+[source,csharp,linenums]
+----
+class Persoon {
+	private string naam;  // <1>
+	public void SetNaam(string naam) {
+		naam = naam;  // Niet zinvol! <2>
+	}
+	...
+}
+----
+<1> Merk op dat dit dataveld exact hetzelfde noemt als de parameter van de `SetNaam` method.
+<2> De `naam` variabele links van de toekenningsoperator `=` wijst, net als `naam` rechts van die operator, naar de parameter, en niet naar het dataveld.
+
+Dergelijk implementatie (`naam = naam;`) zou bijgevolg geen zinvol resultaat opleveren.  Wat we dan weer kunnen oplossen door `this.` voor de target te vermelden...
+
+[source,csharp,linenums]
+----
+class Persoon {
+	private string naam;
+	public void SetNaam(string naam) {
+		this.naam = naam;  // <1>
+	}
+	...
+}
+----
+<1> `this.naam` moet wel naar een member verwijzen van het object in uitvoering, hier dus het `naam` dataveld.
+
+Hoewel het werken met `this` extra duidelijkheid kan verschaffen is het gebruik ervan bijna nooit noodzakelijk.  Zeker niet wanneer je elke veldnaam met een __underscore__ laat starten...
+
+[source,csharp,linenums]
+----
+class Persoon {
+	private string _naam;  // <1>
+	public void SetNaam(string naam) {
+		_naam = naam;  // <2>
+	}
+	...
+}
+----
+<1> Merk op dat de naam van het dataveld nu opnieuw start met een underscore.
+<2> `_naam` wijst naar het dataveld.
+
+Je zou van `_naam` `this._naam` kunnen maken, maar echt noodzakelijk lijkt het niet.  De code is zo best duidelijk.
+
+== NullReferenceException
+
+Wat gebeurt er indien we een instance method aanroepen zonder dat er sprake is van object?  Een situatie die wel eens voorvalt wanneer we __"vergeten"__ een object aan te maken.
+
+[source,csharp,linenums]
+----
+Persoon p;
+
+p = null;
+//p = new Persoon();  <1>
+
+p.SetNaam("Jan");
+----
+<1> Deze regel, die de instantie aanmaakt, en de variabele opvult, __vergaten__ we op te nemen.
+
+Dan *treedt een NullReferenceException op*, met de bijkomende boodschap __"Object reference not set to an instance of an object."__.
+
+Deze error betekent dat er geprobeerd werd een instance method op te roepen zonder object.  Dat wil zeggen dat de method werd aangeroepen op een __object expressie__ die tijdens de uitvoering `null` blijkt te zijn.
+
+.Use of unassigned local variable.
+[NOTE]
+====
+Indien in voorgaande code `p` een lokale variabele zou zijn, en we de `p = null;` regel verwijderen, krijgen we de foutmelding: __"Use of unassigned local variable."__
+
+image::Use of unassigned local variable.png[Use of unassigned local variable.]
+
+Het voordeel is dat we hiermee worden gewaarschuwd voor de mogelijke `NullReferenceException`.
+
+Deze waarschuwing komt er enkel bij gewone __lokale variabelen__.  Zoals we verderop gaan zien, zou het bijvoorbeeld ook kunnen dat je vergat een __dataveld__, of __array-slot__ op te vullen.  In dat geval krijg je die foutmelding niet te zien.
+
+Om het optreden van die exception nu reeds te kunnen illustreren, kunnen we de __unassigned local variable__ foutmelding omzeilen met de `p = null;` regel.  
+====
+
+Je zult de `NullReferenceException` nog __heeeeeeeeeel vaak__ tegenkomen in de komende jaren, jullie worden vast goeie vrienden ;)
+
+Maar geen paniek dus, het wijst er je gewoon op dat je ergens in de code een object vergeet aan te maken, of op te halen.
+
+== Volwaardig datatype
+
+Elke klasse introduceert een __nieuw (volwaardig) datatype__ in ons programma.  
+
+Een klasse datatype kan gebruikt worden als type *voor lokale variabelen, datavelden, array-elementen, parameters, return values, enzovoort...*.  
+
+Alles wat we tot dus ver met voorgedefinieerde datatypes hebben ondernomen, kan met andere woorden ook met onze eigen klasse datatypes.
+
+****
+[.underline]#Voorbeeld van de flexibele inzet van je (klasse) datatype#
+
+In dit voorbeeld wordt het type `Persoon` inzet voor __lokale variabelen__, als __array-element type__ en als __return type__.
+
+Method `Oudste` levert de __oudste persoon__ op (return type `Persoon`) van een reeks van `Persoon` objecten (parameter van type `Persoon[]`).
+
+[source,csharp,linenums]
+----
+class Program {
+    static void Main() {
+        DateTime geboorteDatum1 = new DateTime(1970, 1, 1);
+        DateTime geboorteDatum2 = new DateTime(2002, 3, 4);
+
+        Persoon vader = new Persoon();  // <1>     
+        vader.SetNaam("Victor");
+        vader.SetGeboortedatum(geboorteDatum1);
+
+        Persoon zoon = new Persoon();  // <1>
+        zoon.SetNaam("Piet");
+        zoon.SetGeboortedatum(geboorteDatum2);
+
+        Persoon[] familie = new Persoon[2];  // <2>
+        familie[0] = vader;
+        familie[1] = zoon;
+
+        Persoon oudsteFamilielid = Oudste(familie);
+        Console.WriteLine($"De oudste persoon is: {oudsteFamilielid.GetNaam()}");
+    }
+
+    static Persoon Oudste(Persoon[] personen) {  // <3> <4>
+        Persoon oudste = null;  // <1>
+
+        if (personen.Length > 0) {
+		    // We veronderstellen dat de eerste persoon de oudste is...
+            oudste = personen[0];
+
+			// En bekijken vanaf het tweede element of er sprake is van nog een oudere...
+            for (int i = 1; i < personen.Length; i++) {
+
+			    // Vervang indien zo de tot-nu-toe-oudste door de persoon in kwestie...
+                if (personen[i].Leeftijd() > oudste.Leeftijd()) {
+                    oudste = personen[i];
+                }
+            }
+        }
+        return oudste;  // <4>
+    }
+}
+----
+<1> Lokale variabelen `vader`, `zoon` en `oudste` zijn van type `Persoon`.
+<2> Array variabele `familie` is van type `Persoon[]` (lees: __Persoon array__).
+<3> Array variabele `personen`, de parameter van method `Oudste`, is zijn van type `Persoon[]` (lees: __Persoon array__).
+<4> Method `Oudste` levert een waarde van type `Persoon` op.  Merk op dat in de hoofding van deze method `Persoon` dan ook als return type is opgegeven.
+
+De uitvoer van dit voorbeeld zal zijn...
+
+[source,shell]
+----
+De oudste persoon is: Victor
+----
+****
+
+=== Nog eens met een objectdiagram
+
+Heb je het moeilijk de werking van bovenstaande code te doorgronden?  Teken dan een objectdiagram dat de situatie toont op het moment dat de `return oudste` opdracht wordt uitgvoerd.
+
+Het objectdiagram zou er zo kunnen uitzien...
+
+image::VaderZoonFamilieOudste.png[Objectdiagram]
+
+Merk op dat we tijdens uitvoer soms beschikken over meerdere verwijzingen naar hetzelfde object.  (Met de pijltjes valt dit nu inderdaad op.)
+Dat kan zolang er sprake is van reference types, of dus klasse datatypes.  Bijvoorbeeld onze eigen type `Persoon` of __array datatypes__.
+
+Zowel de lokale variabelen `vader` als `oudste`, net als het __eerste array-element__ wijst naar dat ene object dat __Victor__ voorstelt.  
+
+De rol van de verwijzing is wat de naam van de variabele uitdrukt.  Voor de `Main` method fungeert dat object onder de rol `vader`, of is het een deel van de `familie`.  
+
+image::VaderZoonFamilieOudste - Main.png[Objectdiagram - Main]
+
+Binnen de `Oudste` method, is het één van de `personen` die wordt bekeken, en wordt het uiteindelijk als `oudste` __persoon__ aanzien...
+
+image::VaderZoonFamilieOudste - Oudste.png[Objectdiagram - Oudste]
+	
+=== Terug naar de NullReferenceException
+
+Test eens uit wat je in voorgaand voorbeeld bekomt indien je op regel <2> de `new Persoon[2]` vervangt door `new Persoon[3]`...
+
+[source,csharp,linenums]
+----
+...
+Persoon[] familie = new Persoon[3];  // <1>
+familie[0] = vader;
+familie[1] = zoon;                   // <2>
+...
+----
+<1> In plaats van __2__ slots, voorzien we er nu __3__.
+<2> Toch worden er maar __2__ opgevuld.
+
+Voer je de code uit dan treedt een `NullReferenceException` exception op.  Kan je volgen waarom?
+
+We voorzien met die __3__ een element teveel in onze `familie` array.  Het laatste slot wordt nooit opgevuld, en bevat bijgevolg `null`, de defaultwaarde van elke __reference type__.  Een call als `personen[i].Leeftijd()` wordt zo problematisch.  Expressie `personen[i]` evalueert immers naar `null` indien `i` gelijk is aan __2__.
+
+image::VaderZoonFamilieOudste - Main - 3 slots.png[Objectdiagram - Deze keer met 3 slots in de array.]
+
+Indien je in de `Oudste` method rekening wil met de mogelijkheid dat van de array niet alle elementen zinvol zijn opgevuld, kan je een extra controle als `if (personen[i] != null) { ... }` inbouwen.  Zet dan uiteraard de code die de exceptie kan opleveren als body van het `if` statement.
+
+
+[source,csharp,linenums]
+----
+if (personen[i] != null) {
+	// Vervang indien zo de tot-nu-toe-oudste door de persoon in kwestie...
+    if (personen[i].Leeftijd() > oudste.Leeftijd()) {
+        oudste = personen[i];
+    }
+}
+----

@@ -1,0 +1,820 @@
+= Programmeren Basis - Deel 16 - Oplossingen
+Yanic Inghelbrecht
+v2022.05.06.10.00
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+// geen auto section numbering voor oefeningen (handigere titels en toc)
+//:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+
+
+
+== Documentatie
+
+
+
+=== Oplossing D16listdocumentatie
+
+[%autowidth]
+|====
+|return type|method naam|parameter1|parameter2|uitleg
+
+|void|Add|T item|-|voegt `item` achteraan de lijst toe
+|void|Insert|int index|T item|voegt `item` toe op positie `index`
+|bool|Contains|T item|-|zoek `item` in de lijst +
+return value is `true` indien gevonden, anders `false`
+|int|IndexOf|T item|-|zoekt vanaf begin van de lijst naar `item` +
+geeft de positie waarop `item` gevonden werd of `-1` indien niet gevonden
+|int|IndexOf|T item|int index|idem maar begint de zoektocht op positie `index`
+|bool|Remove|T item|-|verwijdert `item` uit de lijst (enkel eerste voorkomen!) +
+return value `true` geeft aan dat er iets verwijderd werd, `false` betekent dat er niets te verwijderen viel.
+|void|RemoveAt|int index|-|verwijdert het element op positie `index`
+|void|Sort|-|- a|Sorteert de elementen volgens hun **"natuurlijke" volgorde** :
+
+* int/double/decimal : van klein naar groot
+* string : alfabetisch
+* DateTime : chronologisch
+|====
+
+
+
+=== Oplossing D16linkedlistdocumentatie
+
+[%autowidth]
+|====
+|return type|method naam|parameter|uitleg
+
+|LinkedListNode<T>|AddFirst|T value|voegt `value` vooraan de lijst toe +
+(de return value is voor ons niet interessant)
+|LinkedListNode<T>|AddLast|T value|voegt `value` achteraan de lijst toe +
+(de return value is voor ons niet interessant)
+|bool|Contains|T value|zoek `item` in de lijst +
+return value is `true` indien gevonden, anders `false`
+|bool|Remove|T value|verwijdert `item` uit de lijst (enkel eerste voorkomen!) +
+return value `true` geeft aan dat er iets verwijderd werd, `false` betekent dat er niets te verwijderen viel.
+|====
+ 
+Merk op dat er geen `Add` method bestaat voor `LinkedList`!
+
+Het gevolg daarvan is dat het opvullen van een `LinkedList` omslachtiger is dan bij een `List` :
+
+[source,csharp,linenums]
+----
+      List<int> getallen1 = new       List<int> { 1, 2, 3 };
+LinkedList<int> getallen2 = new LinkedList<int> { 1, 2, 3 }; // DIT IS HELAAS NIET TOEGELATEN !!!
+----
+
+Je zult een `LinkedList` handmatig moeten opvullen, bijvoorbeeld via `AddLast` method oproepen :
+
+[source,csharp,linenums]
+----
+LinkedList<int> getallen = new LinkedList<int>();
+getallen.AddLast(1);
+getallen.AddLast(2);
+getallen.AddLast(3);
+----
+
+Je kunt het korter noteren door een array te introduceren, maar dat is minder efficiënt :
+
+[source,csharp,linenums]
+----
+                                                // <1>
+LinkedList<int> getallen = new LinkedList<int>( new int[] {1, 2, 3} );
+----
+<1> Hier wordt eerst een `int` array gemaakt met drie getallen
+
+De `LinkedList` kopieert gewoon de getallen over uit het array. Dit array wordt dus slechts 1x gebruikt bij het opvullen, daarna heeft het array geen nut meer. Het is dus eigenlijk een beetje (geheugen en CPU-tijd) verspilling, maar de code is er wel iets eenvoudiger door geworden.
+
+
+=== Oplossing D16hashsetdocumentatie
+
+[%autowidth]
+|====
+|return type|method naam|parameter|uitleg
+
+|bool|Add|T item|voegt `item` toe aan de set. De return value geeft aan of er daadwerkelijk iets werd toegevoegd (false indien reeds aanwezig)
+|bool|Contains|T item|zoek `item` in de lijst +
+return value is `true` indien gevonden, anders `false`
+|bool|Remove|T item|verwijdert `item` uit de set +
+return value `true` geeft aan dat er iets verwijderd werd, `false` betekent dat er niets te verwijderen viel.
+|void|ExceptWith|IEnumerable<T> other|verwijdert alle elementen van collectie `other` uit deze set, +
+vergelijkbaar met link:https://nl.wikipedia.org/wiki/Verschil_(verzamelingenleer)[het verschil uit de verzamelingenleer]
+|void|IntersectWith|IEnumerable<T> other|verwijdert alle elementen uit deze set die _niet_ in `other` voorkomen +
+vergelijkbaar met link:https://nl.wikipedia.org/wiki/Doorsnede_(verzamelingenleer)[de doorsnede uit de verzamelingenleer]
+|void|UnionWith|IEnumerable<T> other|voegt alle elementen van `other` toe aan deze set (zonder dubbels natuurlijk) +
+vergelijkbaar met link:https://nl.wikipedia.org/wiki/Vereniging_(verzamelingenleer)[de unie of vereniging uit de verzamelingenleer]
+|bool|Overlaps|IEnumerable<T> other|Bepaalt of deze set en `other` minstens één element gemeenschappelijk hebben. De return value `true` betekent dat er zo'n element gevonden werd (d.w.z. hun doorsnede is niet leeg).
+|====
+
+Merk op dat `ExceptWith`, `IntersectWith` en `UnionWith` de oorspronkelijke verzameling wijzigen!
+
+Als je dus bv. `IntersectWith` wil gebruiken om de doorsnede te kennen zonder de oorspronkelijke verzameling te veranderen, zul je op een kopie moeten werken.
+
+
+
+
+== Lijsten
+
+[IMPORTANT]
+====
+In de oplossingen wordt verondersteld dat er `using System.Collections.Generic;` bovenaan het broncode bestand staat!
+====
+
+
+
+=== Oplossing D16namenalfabetisch
+// Y6.01
+
+[source,csharp,linenums]
+----
+List<string> namen = new List<string>();     // <1>
+string input;
+do {
+	int nummer = namen.Count+1;
+	Console.Write($"Geef naam {nummer} : ");
+	input = Console.ReadLine().Trim();
+	if (input != "") {
+		namen.Add(input);                    // <2>
+	}
+} while (input != "");
+
+namen.Sort();                                // <3>
+
+foreach(string naam in namen) {
+	Console.WriteLine(naam);
+}
+----
+<1> we maken een nieuwe lege lijst voor `string` elementen
+<2> we voegen een string toe aan het einde van de lijst
+<3> we sorteren de lijst volgens de natuurlijke volgorde van de elementen, voor strings is dit oplopend alfabetisch
+
+
+
+=== Oplossing D16zoektermenachteraan
+// Y6.02
+[source,csharp,linenums]
+----
+const int maxAantal = 5;
+
+List<string> zoektermen = new List<string> { "Charlie Sheen", "Hot shots", "Winning", "Electrabel storing", "Geen elektriciteit" };
+
+while (true) {
+	string zoektermenTekst = String.Join(":", zoektermen);
+	Console.WriteLine( zoektermenTekst );
+
+	Console.Write("Nieuwe zoekterm: ");
+	string input = Console.ReadLine();
+
+	zoektermen.Add(input);              // <1>
+	if (zoektermen.Count > maxAantal) {
+		zoektermen.RemoveAt(0);         // <2>
+	}
+}
+----
+<1> we voegen de nieuwe zoekterm achteraan de lijst toe
+<2> we verwijderen het eerste element zodat de lijst niet langer is dan `maxAantal`
+
+Vermits deze code enkel elementen toevoegt/verwijdert achteraan/vooraan in de lijst en geen elementen middenin opvraagt, zouden we een `LinkedList` kunnen overwegen. De code zou er dan zo uitzien :
+
+[source,csharp,linenums]
+----
+const int maxAantal = 5;
+
+// <1>
+LinkedList<string> zoektermen = new LinkedList<string>();
+zoektermen.AddLast("Charlie Sheen");
+zoektermen.AddLast("Hot shots");
+zoektermen.AddLast("Winning");
+zoektermen.AddLast("Electrabel storing");
+zoektermen.AddLast("Geen elektriciteit");
+
+while (true) {
+	string zoektermenTekst = String.Join(":", zoektermen);
+	Console.WriteLine(zoektermenTekst);
+
+	Console.Write("Nieuwe zoekterm: ");
+	string input = Console.ReadLine();
+
+	zoektermen.AddLast(input);    // <2>
+	if (zoektermen.Count > maxAantal) {
+		zoektermen.RemoveFirst(); // <3>
+	}
+}
+----
+<1> Hier gebruiken we een `LinkdList` als datatype. Let erop dat het opvullen van de lijst nu niet meer zo eenvoudig is!
+<2> Achteraan toevoegen
+<3> Vooraan verwijderen
+
+Vermits het hier maar over een klein aantal elementen gaat, hoeven we ons geen zorgen te maken over de efficiëntie en is het verschil tussen `List` en `LinkedList` verwaarloosbaar.
+
+=== Oplossing D16zoektermenvooraan
+// Y6.02
+
+In vergelijking met de vorige oplossing, komen de initiële zoektermen in de omgekeerde volgorde in de lijst terecht.
+
+[source,csharp,linenums]
+----
+const int maxAantal = 5;
+
+List<string> zoektermen = new List<string> { "Geen elektriciteit", "Electrabel storing", "Winning", "Hot shots", "Charlie Sheen" };
+
+while (true) {
+	string zoektermenTekst = String.Join(":", zoektermen);
+	Console.WriteLine( zoektermenTekst );
+
+	Console.Write("Nieuwe zoekterm: ");
+	string input = Console.ReadLine();
+
+	zoektermen.Insert(0, input);          // <1>
+	if (zoektermen.Count > maxAantal) {
+		zoektermen.RemoveAt(maxAantal);   // <2>
+	}
+}
+----
+<1> we lassen de nieuwe zoekterm in vooraan de lijst
+<2> we verwijderen het laatste element zodat de lijst niet langer is dan `maxAantal`
+
+Net als bij de vorige oefening, zouden we hier ook voor een `LinkedList` kunnen kiezen. De code ziet er dan zo uit :
+
+[source,csharp,linenums]
+----
+const int maxAantal = 5;
+
+// <1>
+LinkedList<string> zoektermen = new LinkedList<string>();
+zoektermen.AddLast("Geen elektriciteit");
+zoektermen.AddLast("Electrabel storing");
+zoektermen.AddLast("Winning");
+zoektermen.AddLast("Hot shots");
+zoektermen.AddLast("Charlie Sheen");
+
+while (true) {
+	string zoektermenTekst = String.Join(":", zoektermen);
+	Console.WriteLine(zoektermenTekst);
+
+	Console.Write("Nieuwe zoekterm: ");
+	string input = Console.ReadLine();
+
+	zoektermen.AddFirst(input);  // <2>
+	if (zoektermen.Count > maxAantal) {
+		zoektermen.RemoveLast(); // <3>
+	}
+}
+----
+<1> We gebruiken een `LinkedList`, let op de omslachtige manier waarop de lijst wordt opgevuld
+<2> Vooraan toevoegen
+<3> Achteraan verwijderen
+
+Het aantal elementen in de lijst is klein, het maakt dus niet veel verschil uit of je een `List` dan wel een `LinkedList` kiest.
+
+
+=== Oplossing D16vijfkleinstegetallen
+// Y6.04
+
+[source,csharp,linenums]
+----
+const int aantalGetallen = 10;
+const int aantalKleinste = 5;
+
+List<int> getallen = new List<int>();
+while (getallen.Count < aantalGetallen) {
+	Console.Write("Geef een getal : ");
+	string input = Console.ReadLine();
+	int getal;
+	bool inputGeldig = int.TryParse(input, out getal);
+	if (inputGeldig) {
+		getallen.Add(getal); // <1>
+	} else {
+		Console.WriteLine("ongeldige input");
+	}
+}
+
+// sorteer de getallen
+getallen.Sort(); // <2>
+
+// toon het juiste aantal kleinste getallen (deze staan vooraan in de gesorteerde lijst)
+Console.Write($"De {aantalKleinste} kleinste zijn ");
+for (int i = 0; i < aantalKleinste; i++) {
+	Console.Write(getallen[i] + " ");
+}
+----
+<1> voeg `getal` toe aan de lijst
+<2> sorteer de `getallen` lijst volgens de natuurlijke volgorde van de elementen (in dit geval zijn het `int` waarden, dus van klein naar groot)
+
+
+
+== Sets
+
+[IMPORTANT]
+====
+In de oplossingen wordt verondersteld dat er `using System.Collections.Generic;` bovenaan het broncode bestand staat!
+====
+
+
+
+=== Oplossing D16uniekegetallentonen
+
+Door de getallen in een `HashSet` te bewaren kunnen we makkelijk dubbels vermijden.
+
+[source,csharp,linenums]
+----
+const int aantalGetallen = 10;
+
+HashSet<int> uniekeGetallen = new HashSet<int>();
+int aantal = 0;
+while (aantal != aantalGetallen) { // <1>
+	Console.Write("Geef een getal : ");
+	string input = Console.ReadLine();
+	int getal;
+	bool inputGeldig = int.TryParse(input, out getal);
+	if (inputGeldig) {
+		uniekeGetallen.Add(getal); // <2>
+		aantal++;
+	} else {
+		Console.WriteLine("ongeldige input");
+	}
+}
+
+string uniekeGetallenTekst = String.Join(",", uniekeGetallen); // <3>
+Console.WriteLine($"{uniekeGetallen.Count} unieke getallen : {uniekeGetallenTekst}");
+----
+<1> Een eenvoudige for-loop met 10 herhalingen voldoet niet, de gebruiker kan immers ongeldige waarden invoeren.
+<2> Door de getallen in een `HashSet` te bewaren worden de dubbels al meteen geëlimineerd.
+<3> Let op : de volgorde van de elementen die `String.Join` produceert, ligt niet vast bij een `HashSet`.
+
+
+
+=== Oplossing D16uniekegetalleninvoeren
+
+Door de getallen in een `HashSet` te bewaren kunnen we makkelijk dubbels vermijden. Zodra die set 10 getallen bevat, weten we dat we 10 unieke getallen hebben.
+
+[source,csharp,linenums]
+----
+const int aantalGetallen = 10;
+
+HashSet<int> uniekeGetallen = new HashSet<int>();
+while (uniekeGetallen.Count < aantalGetallen) { // <1>
+	Console.Write("Geef een getal : ");
+	string input = Console.ReadLine();
+	int getal;
+	bool inputGeldig = int.TryParse(input, out getal);
+	if (inputGeldig) {
+		bool isToegevoegd = uniekeGetallen.Add(getal); // <2>
+		if (!isToegevoegd) {
+			Console.WriteLine("da's een dubbel");
+		}
+	} else {
+		Console.WriteLine("ongeldige input");
+	}
+}
+
+string uniekeGetallenTekst = String.Join(",", uniekeGetallen); // <3>
+Console.WriteLine($"unieke getallen : {uniekeGetallenTekst}");
+----
+<1> We gaan door totdat de set 10 getallen bevat, i.e. totdat we 10 unieke getallen hebben
+<2> De return value van de `Add` method bij een `HashSet` geeft aan of er daadwerkelijk iets werd toegevoegd. Een dubbel wordt nooit toegevoegd, dus op basis van een `false` return value kunnen we een dubbel detecteren.
+<3> Let op : de volgorde van de elementen die `String.Join` produceert, ligt niet vast bij een `HashSet`.
+
+
+
+=== Oplossing D16tombola
+// Y6.03
+
+We voorzien twee hulpmethods om de code in de `Main` method overzichtelijk te houden :
+
+* `MaakUniekeWinnendeNummers` die een verzameling (willekeurige) winnende tombola nummers retourneert
+* `VraagTombolaNummers` die de gebruiker om zijn/haar nummers vraagt
+
+Deze oplossing gebruikt `HashSet<int>` verzamelingen, dit heeft twee grote voordelen
+
+* we vermijden dubbels zonder er code voor te moeten schrijven
+* we kunnen handige verzamelingsbewerkingen als `ExceptWith()` en `IntersectWith()` gebruiken
+
+Als je een oplossing op basis van `List<int>` of `LinkedList<int>` maakt, zul je zelf code moeten schrijven om dubbels te vermijden bij het genereren van de willekeurige nummers. Bovendien moet je ook code voorzien om de overeenkomsten en de verschillen in de lijsten te achterhalen.
+
+[source,csharp,linenums]
+----
+
+static HashSet<int> VraagTombolaNummers() {
+	HashSet<int> result = new HashSet<int>();
+	
+	string input;
+	do {
+		Console.Write("Geef een nummer : ");
+		input = Console.ReadLine().Trim();
+		if (input != "") {
+			int nummer;
+			bool isGetal = int.TryParse(input, out nummer);
+			if (isGetal && nummer>=1000 && nummer <=9999) {
+				result.Add(nummer);
+			} else {
+				Console.WriteLine("ongeldige input");
+			}
+		}
+	} while (input != "");
+	
+	return result;
+}
+
+static HashSet<int> MaakUniekeTombolaNummers(int aantal) {
+	HashSet<int> result = new HashSet<int>();
+	Random rnd = new Random();
+
+	while (result.Count < aantal) { // <1>
+		int nummer = rnd.Next(1000, 10000);
+		result.Add(nummer);
+	}
+
+	return result;
+}
+
+static void Main(string[] args) {
+	// Stap 1 : lees de getallen van de gebruiker
+	
+	HashSet<int> nummersGebruiker = VraagTombolaNummers();       // <2>
+
+	// Stap 2 : maak de winnende nummers
+	
+	HashSet<int> winnendeNummers = MaakUniekeTombolaNummers(5);  // <3>
+
+	// Stap 3 : bepaal de winnende nummers die de gebruiker had
+	
+	nummersGebruiker.IntersectWith(winnendeNummers);             // <4>
+	// merk op : nummersGebruiker bevat nu enkel nog de winnende nummers vd gebruiker
+	Console.WriteLine("Uw winnende nummers zijn " + String.Join(", ", nummersGebruiker) );
+
+	// Stap 4 : bepaal de winnende nummers die de gebruiker NIET had
+	
+	winnendeNummers.ExceptWith(nummersGebruiker);                // <5>
+	// merk op : winnendeNummers bevat nu enkel nog de 'andere' winnende nummers
+	Console.WriteLine("De andere winnende nummers waren " + String.Join(", ", winnendeNummers));
+}
+----
+<1> merk op hoe we hier heel makkelijk dubbels vermijden : we voegen gewoon toe tot de set genoeg nummers bevat. De set zorgt er zelf voor dat er geen dubbels in komen.
+
+
+Om makkelijker te testen kun je tijdelijk de volgende wijzigingen aanbrengen :
+
+* zet regel <1> in commentaar en gebruik vaste nummers i.p.v. de gebruiker te vragen
+** bv. `HashSet<int> nummersGebruiker = new HashSet<int> {1000, 2000, 3000, 4000, 5000, 6000};`.
+* zet regel <2> in commentaar en gebruik vaste winnende nummers i.p.v. willekeurige nummers te genereren
+** bv. `HashSet<int> winnendeNummers = new HashSet<int> {2000, 4000, 6000, 8000, 9999};`
+
+Om te snappen wat regels <3> en <4> doen kun je er best de voorbeeldgetallen bij nemen :
+
+* regel <3> : de doorsnede van {1000, 2000, 3000, 4000, 5000, 6000} en {2000, 4000, 6000, 8000, 9999} is {2000, 4000, 6000}
+* regel <4> : de verzameling {2000, 4000, 6000, 8000, 9999} zonder {2000, 4000, 6000} is {8000, 9999}
+
+[IMPORTANT]
+====
+Merk op dat de `IntersectWith` en `ExceptWith` method de oorspronkelijke verzameling wijzigen!
+====
+
+
+
+== Mix
+
+[IMPORTANT]
+====
+In de oplossingen wordt verondersteld dat er `using System.Collections.Generic;` bovenaan het broncode bestand staat!
+====
+
+
+
+=== Oplossing D16uniekegetalleninvoerensorteren
+
+Het ganse eerste stuk van deze oplossing is overgenomen uit oplossing D16uniekegetalleninvoeren.
+
+Eenmaal we een `HashSet` met unieke getallen hebben, volgen we deze stappen :
+
+. stop de unieke getallen in een lijst, zodat we die kunnen sorteren
+. sorteer de lijst met de `Sort()` method
+** de getallen staan nu in oplopende volgorde, van klein naar groot
+. keer de volgorde van de elementen in de lijst om met de `Reverse()` method
+** de getallen staan nu in aflopende volgorde, van **groot naar klein**
+
+[source,csharp,linenums]
+----
+const int aantalGetallen = 10;
+
+HashSet<int> uniekeGetallen = new HashSet<int>();
+while (uniekeGetallen.Count < aantalGetallen) {
+	Console.Write("Geef een getal : ");
+	string input = Console.ReadLine();
+	int getal;
+	bool inputGeldig = int.TryParse(input, out getal);
+	if (inputGeldig) {
+		bool isToegevoegd = uniekeGetallen.Add(getal);
+		if (!isToegevoegd) {
+			Console.WriteLine("da's een dubbel");
+		}
+	} else {
+		Console.WriteLine("ongeldige input");
+	}
+}
+
+<1>
+List<int> gesorteerdeUniekeGetallen = new List<int>(uniekeGetallen); // stap 1
+gesorteerdeUniekeGetallen.Sort();                                    // stap 2
+gesorteerdeUniekeGetallen.Reverse();                                 // stap 3
+
+string uniekeGetallenTekst = String.Join(",", gesorteerdeUniekeGetallen);
+Console.WriteLine($"unieke getallen : {uniekeGetallenTekst}");
+----
+<1> Vanaf hier verschilt het programma van oplossing D16uniekegetalleninvoeren en volgen we de drie stappen.
+
+
+=== Oplossing D16socialmediafilter
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
+
+
+=== Oplossing D16aantaluniekewoorden
+// Y6.05
+
+**Als het niet lukt om deze oefening op te lossen**, je programma zou dit stappenplan kunnen volgen :
+
+. bouw een array met woorden, door de string te splitsen met de .Split() method
+. bepaal de unieke woorden, door een HashSet te vullen met de inhoud van het array met woorden
+. stop de unieke woorden uit de HashSet in een lijst en sorteer deze (alfabetisch)
+. toon het aantal unieke woorden (i.e. het aantal elementen in de HashSet)
+. toon de gesorteerde woorden
+
+Probeer op basis van dit stappenplan nog eens de oefening te maken alvorens naar onderstaande code te kijken.
+
+[source,csharp,linenums]
+----
+Console.Write("Geef een tekst : ");
+string input = Console.ReadLine(); // <1>
+
+// Stap 1 : bouw een array met woorden
+char[] separators = { ' ', ',', '.', '!', '?'};
+string[] woordenAlsArray = input.ToLower().Split(separators);
+
+// Stap 2 : bepaal de unieke woorden
+HashSet<string> uniekeWoorden = new HashSet<string>(woordenAlsArray);
+
+// Stap 3 : stop de unieke woorden in een lijst en sorteer deze (alfabetisch)
+List<string> gesorteerdeUniekeWoorden = new List<string>(uniekeWoorden);
+gesorteerdeUniekeWoorden.Sort();
+
+// Stap 4 : toon het aantal unieke woorden
+int aantalUniekeWoorden = uniekeWoorden.Count;
+Console.WriteLine($"aantal unieke woorden : {aantalUniekeWoorden}");
+
+// Stap 5 : toon de gesorteerde woorden
+string alfabetischUniekeWoordenTekst = String.Join(" ", gesorteerdeUniekeWoorden);
+Console.Write($"alfabetisch : {alfabetischUniekeWoordenTekst}");
+----
+<1> om makkelijker te kunnen testen, zet je deze regel in commentaar met eronder bv. `string input = "Te HogE Bergen In Griekenland LEveren BOvendien Weinig SKI plezier";`
+
+
+
+== Met eigen klassen
+
+[IMPORTANT]
+====
+Alle klassen in deze oplossingen staan in dezelfde namespace `D16`.
+====
+
+
+
+=== Oplossing D16student
+// Y6.06
+Een eenvoudige klasse met 2 properties en een constructor om die properties in te stellen.
+
+.Student.cs
+[source,csharp,linenums]
+----
+namespace D16.D16student {
+
+	public class Student {
+
+		public string Naam { get; set; }
+		public string Gemeente { get; set; }
+
+		public Student(string naam, string gemeente) {
+			this.Naam = naam;
+			this.Gemeente = gemeente;
+		}
+
+	}
+
+}
+----
+
+De klasse `Program` met de `Main` method.
+
+.Program.cs
+[source,csharp,linenums]
+----
+using System;
+using System.Collections.Generic;
+
+namespace D16.D16student {
+
+	public class Program {
+
+		static void PrintStudent(Student student) { // <1>
+			Console.WriteLine($"{student.Naam} uit {student.Gemeente}");
+		}
+		
+		static void Main(string[] args) {
+			List<Student> studenten = new List<Student>();
+			studenten.Add(new Student("A", "Gent"));
+			studenten.Add(new Student("B", "Brugge"));
+			studenten.Add(new Student("C", "Brugge"));
+			studenten.Add(new Student("D", "Kortrijk"));
+			studenten.Add(new Student("E", "Gent"));
+			studenten.Add(new Student("F", "Kortrijk"));
+			studenten.Add(new Student("G", "Brugge"));
+
+			foreach(Student s in studenten) {
+				PrintStudent(s);
+			}
+		}
+
+	}
+
+}
+----	
+<1> Merk op dat deze `PrintStudent` method `static` is, het is immers geen __instance method__ die we op `Program` objecten willen toepassen.
+
+
+
+=== Oplossing D16printstudentenvan
+
+Bestand `Student.cs` kunnen we herbruiken uit de oplossing van D16student.
+
+.Program.cs
+[source,csharp,linenums]
+----
+using System;
+using System.Collections.Generic;
+
+using D16.D16student;  // <1>
+
+namespace D16.D16printstudentenvan {
+
+	public class Program {
+
+		static void PrintStudent(Student student) {
+			Console.WriteLine($"{student.Naam} uit {student.Gemeente}");
+		}
+
+		static void PrintStudentenVan(List<Student> studenten, string gemeente) { // <2>
+			foreach(Student s in studenten) {
+				if (s.Gemeente == gemeente) { // <3>
+					PrintStudent(s);
+				}
+			}
+		}
+		
+		static void Main(string[] args) {
+			List<Student> studenten = new List<Student>();
+			studenten.Add(new Student("A", "Gent"));
+			studenten.Add(new Student("B", "Brugge"));
+			studenten.Add(new Student("C", "Brugge"));
+			studenten.Add(new Student("D", "Kortrijk"));
+			studenten.Add(new Student("E", "Gent"));
+			studenten.Add(new Student("F", "Kortrijk"));
+			studenten.Add(new Student("G", "Brugge"));
+
+			foreach(Student s in studenten) {
+				PrintStudent(s);
+			}
+
+            Console.WriteLine();
+            Console.WriteLine("De studenten uit Brugge zijn :");
+			PrintStudentenVan(studenten, "Brugge"); // <4>
+		}
+
+	}
+
+}
+----
+<1> Nodig om zomaar te kunnen spreken over `Student`, zonder deze `using` hadden we het gehad over `D16D16student.Student`.
+<2> Een `static` method met een `List<Student> parameter en een string parameter
+<3> Hier checken we de waarde van de `Gemeente` property van het `Student` object waar variabele `s` naar wijst.
+<4> De oproep van method `PrintStudentenVan`.
+
+
+
+=== Oplossing D16verwijderstudentenvan
+// Y6.07
+
+Bestand `Student.cs` kunnen we herbruiken uit de oplossing van D16student.
+
+Om de elementen te verwijderen uit de lijst gebruiken we de eerste manier uit de cursus.
+
+.Program.cs
+[source,csharp,linenums]
+----
+using System;
+using System.Collections.Generic;
+
+using D16.D16student;  
+
+namespace D16.D16verwijderstudentenvan {
+
+	public class Program {
+
+		public static void PrintStudent(Student student) {
+			Console.WriteLine($"{student.Naam} uit {student.Gemeente}");
+		}
+
+		public static void VerwijderStudentenVan(List<Student> studenten, string gemeente) { // <1>
+			// We gebruiken de eerste manier uit de cursus
+			// .. overloop de lijst van achter naar voor en verwijder het huidige element
+			for (int i=studenten.Count-1;i>=0;i--) {
+				Student s = studenten[i];
+				if (s.Gemeente == gemeente) {
+					studenten.RemoveAt(i); // <2>
+				}
+			}
+		}
+
+		static void Main(string[] args) {
+			List<Student> studenten = new List<Student>();
+			studenten.Add(new Student("A", "Gent"));
+			studenten.Add(new Student("B", "Brugge"));
+			studenten.Add(new Student("C", "Brugge"));
+			studenten.Add(new Student("D", "Kortrijk"));
+			studenten.Add(new Student("E", "Gent"));
+			studenten.Add(new Student("F", "Kortrijk"));
+			studenten.Add(new Student("G", "Brugge"));
+
+			foreach(Student s in studenten) {
+				PrintStudent(s);
+			}
+
+			VerwijderStudentenVan(studenten, "Brugge"); // <3>
+
+			Console.WriteLine();
+			foreach (Student s in studenten) {
+				PrintStudent(s);
+			}
+		}
+
+	}
+
+}
+----
+<1> Een `static` method met een `List<Student>` parameter en een string parameter.
+<2> Bij de eerste manier verwijderen we elementen terwijl we de lijst overlopen.
+<3> De oproep van method `VerwijderStudentenVan`.
+
+[IMPORTANT]
+====
+Merk op dat we bij de eerste manier dezelfde lijst overlopen als waar we uit verwijderen, dus we moeten opletten dat we geen elementen overslaan (vandaar dat we de lijst van achter naar voor overlopen).
+====
+
+Als we de tweede manier uit de cursus zouden gebruiken om de elementen te verwijderen, dan zou `VerwijderStudentenVan` er zo uitzien :
+
+[source,csharp,linenums]
+----
+public static void VerwijderStudentenVan(List<Student> studenten, string gemeente) {
+	// We gebruiken de tweede manier
+	
+	// .. verzamel eerst de te verwijderen elementen in een aparte lijst
+	List<Student> teVerwijderen = new List<Student>(); // <1>
+	foreach (Student s in studenten) {
+		if (s.Gemeente == gemeente) {
+			teVerwijderen.Add(s); // <2>
+		}
+	}
+	
+	// .. verwijder achteraf de elementen
+	foreach (Student s in teVerwijderen) {
+		studenten.Remove(s); // <3>
+	}
+}
+----
+<1> De lijst `teVerwijderen` waarin we de te verwijderen elementen zullen bijhouden
+<2> We hebben een element gevonden dat we achteraf zullen verwijderen
+<3> We overlopen de elementen uit `teVerwijderen` en verwijderen ze uit `studenten`
+
+[IMPORTANT]
+====
+Merk op dat we bij deze tweede manier de ene lijst overlopen, maar uit de andere lijst verwijderen!
+====

@@ -1,0 +1,356 @@
+﻿= Programmeren Basis - Deel 14 - Oefeningen
+Frederiek De Wolf
+v2022.05.06.10.00
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+// geen auto section numbering voor oefeningen (handigere titels en toc)
+//:sectnums:  
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+
+//Oefening Y3.02 -> valt weg, we hebben in de theorie al een Leeftijd
+//Oefening Y3.03 -> is identiek aan C04 die onderstaand is opgenomen
+//Oefening Y3.06 -> niet opgenomen, gaat over documentatie, zou kunnen komen in deel 12
+//Oefening Y4.03 - 4.06 -> niet opgenomen, vereist constructor of containment, kan in deel 15
+
+== Oefening D14persoon
+
+//Oefening Y3.01
+
+Breid de klasse `Persoon` uit zodat we ook de __woonplaats__ (tekst) van een __persoon__ kunnen bijhouden, aanpassen en opvragen.
+
+Schrijf een `Main` (niet in de `Persoon` klasse!) die eerst twee `Persoon` objecten maakt, en opvult.  
+
+Vraag al hun gegevens nu op en zet deze op de console. 
+
+Pas vervolgens van één van de objecten alle gegevens aan, en zet opnieuw alle gegevens van alle personen op de console.
+
+.Persoon.cs
+[source, csharp, linenums]
+----
+class Persoon {
+	private string _naam;
+	public string GetNaam() {
+		return _naam;
+	}
+	public void SetNaam(string naam) {
+		_naam = naam;
+	}
+
+	private DateTime _geboortedatum;
+	public DateTime GetGeboortedatum() {
+		return _geboortedatum;
+	}
+	public void SetGeboortedatum(DateTime geboortedatum) {
+		_geboortedatum = geboortedatum;
+	}
+
+	public int Leeftijd() {
+		int leeftijd = 0;
+		DateTime dt = GetGeboortedatum().Date.AddYears(1);
+		while (dt <= DateTime.Today) {
+			leeftijd++;
+			dt = dt.AddYears(1);
+		}
+		return leeftijd;
+	}
+
+	... <1>
+}
+----
+<1> Hier uitbreiden.
+
+== Oefening D14rechthoek
+
+//C04
+
+Maak zelf een klasse waarvan de objecten een eenvoudige voorstelling zijn van een __rechthoek__.
+
+Van of met een __rechthoek__ willen we:
+
+- de __hoogte__ kunnen instellen en opvragen
+- de __breedte__ kunnen instellen en opvragen
+- de __oppervlakte__ kunnen opvragen
+
+Zorg ervoor dat de meegegeven testcode volgend programmaverloop kent...
+
+[source, shell]
+----
+Rechthoek met hoogte 4,1, breedte 8 en oppervlakte 32,8.
+Rechthoek met hoogte 5, breedte 10,2 en oppervlakte 51.
+----
+
+Meegegeven testcode...
+
+.Program.cs
+[source, csharp, linenums]
+----
+class Program {
+    static void Main() {
+        Rechthoek rechthoek1 = new Rechthoek();
+        rechthoek1.SetHoogte(4.1);
+        rechthoek1.SetBreedte(8);
+        
+        Rechthoek rechthoek2 = new Rechthoek();
+        rechthoek2.SetHoogte(5);
+        rechthoek2.SetBreedte(10.2);
+        
+        PrintRechthoek(rechthoek1);
+        PrintRechthoek(rechthoek2);
+    }
+    static void PrintRechthoek(Rechthoek r) {
+        Console.WriteLine($"Rechthoek met hoogte {r.GetHoogte()}, breedte {r.GetBreedte()} en oppervlakte {r.Oppervlakte()}.");
+    }
+}
+----
+
+== Oefening D14cirkel
+
+//Oefening Y3.04
+
+Schrijf een klasse `Cirkel` zodat we `Cirkel` objecten een __straal__ kunnen geven en deze ook opvragen.
+
+Bovendien moet een `Cirkel` ons kunnen vertellen wat zijn __oppervlakte__ en __omtrek__ is. 
+
+Schrijf een `Main` method (niet in de `Cirkel` klasse!) die een __cirkel__ aanmaakt met __straal 3.45__ en diens informatie op de console zet.
+
+== Oefening D14artikel
+
+//C05
+
+Creëer een klasse waarvan de objecten een eenvoudige voorstelling zijn van een __artikel__.
+
+Van of met een __artikel__ willen we:
+
+- de __prijs exclusief BTW__ kunnen instellen en opvragen
+- de __BTW__ kunnen instellen, als de waarde niet wordt ingesteld is 21% van toepassing
+- de __BTW__ kunnen opvragen
+- de __prijs inclusief BTW__ kunnen opvragen
+
+Maak ook zelf de nodige testcode aan om voorvermelde verantwoordelijkheden uit te testen.
+
+== Oefening D14counter
+
+//Oefening Y4.01
+
+Schrijf een `Counter` klasse die een __teller__ voorstelt. 
+
+Elke __counter__ heeft een __initial value__ en een __step value__.  
+
+Voorzie een `Advance` method die de __teller__ bij elke oproep met de __step value__ verhoogt. 
+Je kunt de waarde van zo'n __teller__ instellen met `SetValue` of opvragen met de `GetValue` method. 
+
+De __step value__ is by default __1__, kan je opvragen met `GetStep`, en instellen met `SetStep`.
+
+Test je `Counter` klasse met een `Main` method met volgende inhoud...
+
+[source, csharp, linenums]
+----
+Counter c1 = new Counter();
+
+Counter c2 = new Counter();
+c2.SetValue(100);
+
+Counter c3 = new Counter();
+c3.SetValue(1000);
+c3.SetStep(10);
+
+for (int i = 0; i < 10; i++) {
+	c1.Advance();
+	c2.Advance();
+	c3.Advance();
+}
+
+Console.WriteLine(c1.GetValue());  // toont 10
+Console.WriteLine(c2.GetValue());  // toont 110
+Console.WriteLine(c3.GetValue());  // toont 1100
+----
+
+== Oefening D14selecteerwinnaar
+
+//Y4.02
+
+Gebruik je laatste `Persoon` klasse en schrijf een `Main` method die objecten aanmaakt voor __vijf__ van je __vrienden__ en deze in een array bijhoudt.  Geef al je vrienden op zijn minst een __naam__.
+
+In dezelfde class als je `Main` method, stop je onderstaande method `SelecteerWinnaar` en vult deze verder aan:
+	`static Persoon SelecteerWinnaar(Persoon[] personen) { ... }`
+
+Deze method selecteert een willekeurige persoon uit de array en retourneert deze. 
+
+Gebruik `SelecteerWinnaar` in je `Main` method om één van je __vrienden__ tot __winnaar__ te kronen en zet diens naam op de console.
+
+== Oefening D14afstandtussenpunten
+
+//Oefening Y4.07
+
+Schrijf een klasse `Punt` met een __x__ en een __y coordinaat__, beiden van type `double`.   Voorzie geschikte datavelden alsook `Get` en `Set` methods.
+
+Voeg een class method `GetAfstandTussen` toe aan deze klasse met twee `Punt` parameters. 
+Deze method produceert de afstand tussen de 2 meegegeven punten.
+
+Zie eventueel: https://nl.wikipedia.org/wiki/Afstand#Afstand_tussen_twee_punten
+
+Voorzie een `Main` method die de afstand berekent tussen de __punten (4,6)__ en __(7,2)__ en op de console zet. (Deze afstand is trouwens gelijk aan __5__.)
+
+== Oefening D14uitlening
+
+//C06
+
+Maak het mogelijk verschillende instanties te maken van een datatype als `Uitlening`.
+
+Over welke members dit datatype moet beschikken zal je moeten afleiden uit de meegegeven clientcode.
+Uit het meegegeven programma-verloop kan je anderzijds het gedrag afleiden.
+
+.Program.cs
+[source, csharp, linenums]
+----
+using System;
+
+namespace D14.D14uitlening {
+
+    class Program {
+        static void Main() {
+	        Uitlening[] uitleningen = new Uitlening[10];
+		    int aantal = 0;
+            do {
+                PrintUitleningen(uitleningen, aantal);
+
+                Console.Write("Nieuwe ontlening op?: ");
+                DateTime d = DateTime.Parse(Console.ReadLine());
+                Console.Write("Omschrijving?: ");
+                string o = Console.ReadLine();
+
+                aantal = Toevoegen(uitleningen, aantal, o, d);
+
+                Console.WriteLine();
+            } while (true);
+        }
+
+        static void PrintUitleningen(Uitlening[] uitleningen, int aantal) {
+            for (int index = 0; index < aantal; index++) {
+                Uitlening u = uitleningen[index];
+                Console.WriteLine($"- {u.GetOmschrijving()}: ontleent op {u.GetOntleendatum().ToString("dd/MM/yyyy")} binnen ten laatste op {u.UitersteInleverdatum().ToString("dd/MM/yyyy")}.");
+            }
+            Console.WriteLine();
+        }
+
+        static int Toevoegen(Uitlening[] uitleningen, int aantal, string omschrijving, DateTime ontleendatum) {
+            Uitlening nieuweUitlening = new Uitlening();
+            nieuweUitlening.SetOmschrijving(omschrijving);
+            nieuweUitlening.SetOntleendatum(ontleendatum);
+            aantal++;
+
+            uitleningen[aantal - 1] = nieuweUitlening;
+
+		    return aantal;
+        }
+    }
+
+}
+----
+<1> Een `Array.Resize` method kan gebruikt worden om de oorspronkelijk array-instantie waar de array-variabele naartoe verwijst te vervangen door een nieuwe array-instantie (met aangepaste lengte).
+
+We krijgen bij invoer van __15/12/2017___, __Uitlening Moby Dick__, __21/12/2017___, __Uitlening Ivanhoe__, __22/12/2017___ en __Uitlening Nana__ volgend resultaat...
+
+[source, shell]
+----
+Nieuwe ontlening op?: 15/12/2017
+Omschrijving?: Uitlening Moby Dick
+
+- Uitlening Moby Dick: ontleent op 15/12/2017 binnen ten laatste op 29/12/2017.
+
+Nieuwe ontlening op?: 21/12/2017
+Omschrijving?: Uitlening Ivanhoe
+
+- Uitlening Moby Dick: ontleent op 15/12/2017 binnen ten laatste op 29/12/2017.
+- Uitlening Ivanhoe: ontleent op 21/12/2017 binnen ten laatste op 04/01/2018.
+
+Nieuwe ontlening op?: 22/12/2017
+Omschrijving?: Uitlening Nana
+
+- Uitlening Moby Dick: ontleent op 15/12/2017 binnen ten laatste op 29/12/2017.
+- Uitlening Ivanhoe: ontleent op 21/12/2017 binnen ten laatste op 04/01/2018.
+- Uitlening Nana: ontleent op 22/12/2017 binnen ten laatste op 05/01/2018.
+
+Nieuwe ontlening op?: 
+----
+
+== Oefening D14bankrekening
+
+//C07
+
+Vertrek van de meegegeven code.... 
+
+Maak het met één __commando__ `SchrijfOver`, dat je op een `Bankrekening` object aanroept (de __bronrekening__), mogelijk een bepaald __bedrag__ naar een __andere bankrekening__ (de __doelrekening__) over te schrijven.
+
+Meegegeven code...
+
+.Program.cs
+[source, csharp, linenums]
+----
+using System;
+
+namespace D14.D14bankrekening {
+
+    class Program {
+        static void Main() {
+            Bankrekening b1 = new Bankrekening();
+            Bankrekening b2 = new Bankrekening();
+
+            decimal bedrag = 100m;
+
+            ...SchrijfOver...  // <1>
+
+            Console.WriteLine(b1.Saldo() == -100m); // zou true moeten geven
+            Console.WriteLine(b2.Saldo() == 100m);  // zou true moeten geven
+        }
+    }
+
+}
+----
+<1> Met één commando maak je het mogelijk `bedrag` van `b1` naar `b2` over te schrijven:
+
+.Bankrekening.cs
+[source, shell]
+----
+namespace D14.D14bankrekening {
+
+    class Bankrekening {
+        private decimal _saldo;
+        public void Stort(decimal bedrag) {
+            _saldo = _saldo + bedrag;
+        }
+        public void HaalAf(decimal bedrag) {
+            _saldo = _saldo - bedrag;
+        }
+        public decimal Saldo() {
+            return _saldo;
+        }
+
+        ... <1>
+    }
+
+}
+----
+<1> Voeg hier je `SchrijfOver` method toe.
+
+Het __overschrijven__ van bedrag __a__ van rekening __x__ naar __y__ mag je implementeren als het afhalen van bedrag __a__ van __x__ en het storten van bedrag __a__ op __y__.

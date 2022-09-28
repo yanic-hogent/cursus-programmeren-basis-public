@@ -1,0 +1,1447 @@
+﻿= Programmeren Basis - Deel 10
+Frederiek De Wolf
+v2022.05.06.10.00
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+
+== Kleuren in de console aanpassen
+
+Je kan in het __console scherm__ verschillende *voorgrond* en *achtergrond kleuren* gebruiken.
+
+Door aan de `Console.BackgroundColor` en `Console.ForegroundColor` properties een kleur toe te kennen pas je deze instelling aan.
+
+****
+[.underline]#Voorbeeld met console kleuren#
+
+Het achtergrond kleur wordt eerst op __groen__ ingesteld, de voorgrond daarna op __rood__.
+
+[source,csharp,linenums]
+----
+Console.WriteLine("Hier zijn nog geen kleuren aangepast.");
+
+Console.BackgroundColor = ConsoleColor.Green;
+Console.WriteLine("De achtergrond is nu ingesteld op GROEN!");
+
+Console.ForegroundColor = ConsoleColor.Red;
+Console.WriteLine("De kleur op de voorgrond is aangepast in ROOD.");
+
+Console.ResetColor();
+Console.WriteLine("Nu werden de kleuren hersteld.");
+----
+
+Het console scherm zou er zo kunnen uitzien...
+
+image:Console kleuren.png[Werken met aangepaste voorgrond en achtergrond kleuren.]
+****
+
+Zoals je merkt kan je voor het herstellen van de oorspronkelijke kleuren kan je altijd gebruikmaken van  `Console.ResetColor()`.
+
+De naam van de kleur laat je voorafgaan door `ConsoleColor.`  
+
+Een overzicht van de kleuren vind je hier...
+
+image:Console kleuren - Overzicht.png[Console kleuren - Overzicht]
+
+== Methods
+
+=== Meermaals uitschrijven van dezelfde logica vermijden
+
+Het valt soms voor dat een bepaald code fragment op verschillende plaatsen in je algoritme opduikt.
+Het __meermaals uitschrijven van dezelfde logica__ is echter nooit een goed idee.  Het maakt de code immers *minder leesbaar* en *moeilijker te onderhouden*. 
+
+Wens je aan dergelijke herhaalde logica iets aan te passen, dan moet dit op verschillende plaatsen gebeuren.  Dit is niet alleen een vervelend werk, het is ook foutgevoelig.  Daarom proberen we steeds *__DRY__* te werken (__Don't Repeat Yourself__), en dus *zo weinig mogelijk dezelfde code te gaan uitschrijven*.
+
+==== Aan de hand van iteratiestructuren
+
+Aan de hand van __iteratiestructuren __hebben we reeds herhalingen van logica vermeden. 
+
+****
+Indien een bepaald codefragment (bijvoorbeeld met __instructies B__, __C__ en __D__)  verschillende keren (na elkaar) wordt gebruikt, kan je aan de hand van  `do while`, `while`, `for` of `foreach` statements dit meermaals uitschrijven vermijden...
+
+[%autowidth]
+|====
+|Zonder herhaling | Met herhaling
+
+| image:Herhaling van logica vermijden - Zonder herhaling.png[Zonder herhaling.] | image:Herhaling van logica vermijden - Met herhaling.png[Met herhaling.]
+|====
+****
+
+==== Aan de hand van extra methods
+
+Indien de herhalingen niet opeenvolgend zijn, is een oplossing met  __iteratiestructuren__ niet steeds meer voor handen.  Wel kunnen we het meermaals uitschrijven van dezelfde code vermijden door dergelijke logica in een aparte __method__ te gaan definiëren.  
+
+.Wat is een method?
+[NOTE]
+====
+Een __method__ wordt één keer gedefinieerd, en verzamelt instructies.  Men spreekt ook wel over de __method definitie__.
+
+De method kan meermaals worden aangeroepen (bij wijze van een __method call__).  Dit telkens wanneer de logica die ze vervat moet worden uitgevoerd...
+====
+
+We splitsen code af in een aparte method omdat we deze op verschillende plaatsen willen gebruiken, en *geen __copy/paste__* willen doen.
+Copy/paste is altijd problematisch, als het stuk code ooit moet wijzigen, moeten we het op verschillende plaatsen aanpassen.  Het terugvinden van die plaatsen waar code nogmaals is herschreven is trouwens niet eenvoudig.  
+
+****
+Indien een bepaald code fragment (bijvoorbeeld met __instructies I__ en __J__)  op verschillende plaatsen wordt gebruikt, kan je aan deze verschuiven naar een `ExtraMethod`.  Deze extra method kan vervolgens worden aangeroepen...
+
+[%autowidth]
+|====
+|Zonder extra method | Met extra method
+
+| image:Herhaling van logica vermijden - Zonder methods.png[Zonder extra method.] | image:Herhaling van logica vermijden - Met methods.png[Met extra method.]
+|====
+
+Het code fragment wordt niet meer meermaals uitgeschreven, enkel de aanroep naar de extra method wordt nog herhaald.  
+****
+
+Indien een method wordt aangeroepen (met een zogenaamde __method call__) wordt de code van deze method uitgevoerd.  Na afloop wordt teruggekeerd naar de plaats van aanroep, en wordt de code die volgt op de method call vervat.
+
+.Console applicaties starten bij de `Main` method.
+[NOTE]
+====
+Tot dus ver hebben we alles uitgeschreven aan de hand van één method.  Meer specifiek de __hoofdmethod__, waar ons programma start.  
+
+Deze hoofdmethod krijgt altijd de naam `Main`.  Een __console applicatie__ start steeds bij deze __hoofdmethod__. 
+====
+
+=== Code structureren
+			
+Code afsplitsen in aparte methods heeft ook als voordeel dat we er zo *een naam op kunnen plakken*.  
+
+Door code weg te schuiven (naar de method definitie) en te vervangen door een eenvoudige method call, kunnen 
+we ons beter concentreren op een bepaald abstractieniveau.  We worden niet meer verstrooid door allerhande technische details.  
+
+Het maakt de code (waar we de methods aanroepen) eenvoudiger en leesbaarder.  
+
+****
+[.underline]#Conversie voorbeeld - Alles samen#
+
+We wensen een eenvoudige console applicatie die ons de mogelijkheid laat __inches naar centimeters__, of het omgekeerde (__centimeter naar inches__) om te zetten.  
+
+Het programma moet een menu aanbieden met de voorziene opties...
+
+[source,shell]
+----
+Omzetting:
+1) centimeter -> inch
+2) inch -> centimeter
+Keuze (1/2)?: 2             
+----
+
+Indien de gebruiker hier bijvoorbeeld voor __2__ had gekozen, en op kbd:[ENTER] drukt, dient zij/hij vervolgens een __om-te-zetten waarde__ in te voeren...
+
+[source,shell]
+----
+Om-te-zetten waarde?: 10
+10 inch is 25,4 centimeter.
+Druk op <Enter> om nog een afstand om te zetten...             
+----
+
+Bij invoer van __10__ toon het programma het omgezette resultaat, en biedt het de mogelijkheid overnieuw te beginnen.
+
+Onderstaande code werd daarvoor in eerste instantie opgesteld...
+
+Focus niet teveel op de details maar laat je alvast opvallen hoe:
+
+- Alles samen in één method is gepropt.  De code voor het __afprinten van een menu__, __een keuze laten invoeren__, __weergeven van een foutmelding over de invoer__,  __omzetten van de ingevoerde waardes__, ..., staat allemaal samen.
+- Bepaalde code fragmenten worden zelfs meermaals uitgeschreven.  Zo wordt een tweetal keer op bijna identieke wijze een foutmelding weergegeven.
+
+[source,csharp,linenums]
+----
+static void Main() {
+    Console.ResetColor();
+    do {
+        string menuOptie;
+        bool fouteMenuKeuze;
+        do {
+            Console.Clear();
+            Console.WriteLine("Omzetting:");
+            Console.WriteLine("1) centimeter -> inch");
+            Console.WriteLine("2) inch -> centimeter");
+            Console.Write("Keuze (1/2)?: ");
+            menuOptie = Console.ReadLine().Trim();
+            fouteMenuKeuze = (menuOptie != "1") && (menuOptie != "2");
+
+            if (fouteMenuKeuze) {
+                Console.BackgroundColor = ConsoleColor.Yellow;
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Gelieve een bestaande menu-optie uit te kiezen!");
+                Console.ResetColor();
+                Console.Write("Druk op <Enter> om opnieuw te proberen...");
+                Console.ReadLine();
+            }
+        } while (fouteMenuKeuze);
+
+        double getal;
+        bool fouteWaarde;
+        do {
+            Console.Clear();
+            Console.Write("Om-te-zetten waarde?: ");
+            fouteWaarde = !double.TryParse(Console.ReadLine(), out getal);
+
+            if (fouteWaarde) {
+                Console.BackgroundColor = ConsoleColor.Yellow;
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Gelieve een getal in te voeren!");
+                Console.ResetColor();
+                Console.Write("Druk op <Enter> om opnieuw te proberen...");
+                Console.ReadLine();
+            }
+        } while (fouteWaarde);
+
+        if (menuOptie == "1") {
+            Console.WriteLine($"{getal} centimeter is {getal * 0.3937} inch.");
+        } else if (menuOptie == "2") {
+            Console.WriteLine($"{getal} inch is {getal * 2.54} centimeter.");
+        }
+        Console.Write("Druk op <Enter> om nog een afstand om te zetten...");
+        Console.ReadLine();
+    } while (true);
+}
+----
+****
+
+De code is weinig gestructureerd.  
+
+Het is niet eenvoudig overzicht te verwerven in het het verloop van het programma.  En het is ook niet makkelijk meteen terug te vinden waar in de code je eventuele wijzigingen moet aanbrengen.
+
+=== Method definitie
+
+Meerdere methods kunnen in dezelfde __klasse__ (bijvoorbeeld `class Program`) worden gedefinieerd.  Klassen verzamelen de verschillende methods, bijvoorbeeld deze die tot een bepaald programma behoren.
+
+De volgorde van deze methods in een klasse is vrij uit te kiezen.  Maar het is een goed idee met de hoofdmethod te starten.  Of op zijn minst de verschillende methods in een volgorde te plaatsen die overeenkomt met de volgorde waarin ze worden aangeroepen.
+
+Hoe groter en complexer ons programma wordt, hoe vlugger je gaat focussen op het structureren van je code.
+
+****
+[.underline]#Conversie voorbeeld - Extra methods#
+
+In ons voorgaand voorbeeld zou je bijvoorbeeld de code die zorgt voor het __afdrukken van het menu__ samen kunnen definiëren in een aparte method `PrintMenu`...
+
+[source,csharp,linenums]
+----
+static void PrintMenu()
+{
+    Console.Clear();
+    Console.WriteLine("Omzetting:");
+    Console.WriteLine("1) centimeter -> inch");
+    Console.WriteLine("2) inch -> centimeter");
+    Console.Write("Keuze (1/2)?: ");
+}
+----
+****
+
+Extra methods worden, net zoals onze `Main` method, gedefinieerd met de `static void` sleutelwoorden in de hoofding.  De betekenis van deze sleutelwoorden wordt verderop besproken.
+
+Op `static void` volgt de naam van de method.  Na de naam volgen ronde haakjes `()`.  Straks bespreken we hoe deze haakjes kunnen ingezet worden voor het doorgeven van informatie.
+
+Tussen de accolades wordt de code geplaatst die moet worden uitgevoerd wanneer deze method wordt aangeroepen.
+
+.Namen van extra method
+[NOTE]
+====
+De naam omschrijft welke __functionaliteit__ de method zal vervullen.  Bijvoorbeeld __PrintMenu__,  __ToonFactuur__, __VerhoogSalaris__, __VerwijderWerknemer__.
+
+Typisch start de naam van een method met een werkwoord in gebiedende wijs.
+Vaak volgt op dit werkwoord een zelfstandig naamwoord die wat meer context geeft.
+
+Denk ook aan voorgedefinieerde methods als `Write`, `WriteLine`, `ReadLine` of `ResetColor`.
+
+Het is mogelijk in dezelfde klasse (bijvoorbeeld `class Program`) meerdere methods te definiëren met dezelfde naam.  Zolang er een verschil is in de parameters (type, aantal of volgorde) wordt dit toegestaan.  Het valt echter af te raden dit te doen, het brengt niets bij aan de uitdrukkingskracht van je code.
+====
+
+==== Waar moet ik extra methods plaatsen?
+
+Voordien moest je de code van de oplossingen netjes tussen de accolades van de `Main` method plakken om een volledig en werkend programma te bekomen.
+
+Vanaf hier gaan we met meerdere methods aan de slag.  De extra methods mogen samen met de `Main` method in de `class Program` worden ondergebracht.
+
+De code in je __Visual Studio__ project zal er dus zo moeten uitzien :
+
+[source, csharp, linenums]
+----
+using System;
+
+namespace ConsoleApp1 {
+    class Program {
+		
+        // Hier plaatsen we de Main method ...
+        static void Main() {
+           // ...
+        }
+
+        // Maar ook alle extra methods ...
+		static void PrintMenu() {
+           // ...
+        }
+	    // ...
+
+	}
+}
+----
+
+=== Method call
+
+Daar waar nodig, kan je deze implementatie aanroepen aan de hand van een __method call__.  
+
+Om dat te doen, vermeld je eenvoudigweg de naam van de method die je wenst aan te roepen.
+
+****
+[.underline]#Conversie voorbeeld - Gebruik van de extra method#
+
+In onze `do { ... } while (fouteMenuKeuze);` loop, waar we tot dus ver begonnen met de code die __het menu ging afprinten__, kunnen we deze code vervangen door een __call__ naar onze `PrintMenu` method...
+
+[source,csharp,linenums]
+----
+static void Main() {
+    Console.ResetColor();
+    do {
+        string menuOptie;
+        bool fouteMenuKeuze;
+        do {
+            PrintMenu(); // <1>
+            menuOptie = Console.ReadLine().Trim();
+            fouteMenuKeuze = (menuOptie != "1") && (menuOptie != "2");
+
+            if (fouteMenuKeuze) {
+                Console.BackgroundColor = ConsoleColor.Yellow;
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Gelieve een bestaande menu-optie uit te kiezen!");
+                Console.ResetColor();
+                Console.Write("Druk op <Enter> om opnieuw te proberen...");
+                Console.ReadLine();
+            }
+        } while (fouteMenuKeuze);
+
+        ...
+    } while (true);
+}
+----
+<1> Hier wordt onze extra method `PrintMenu` aangeroepen.
+
+De `Main` method is compacter geworden, en is zo beter leesbaar.  Meteen wordt bij het nalezen duidelijk dat de herhaling start met het __afprinten van een menu__.  Je hoeft niet meer de technische details te doorlezen vooraleer je zoiets doorhebt.
+
+Let erop dat `PrintMenu` in dezelfde klasse (`class Program` in dit geval) is gedefinieerd als de `Main` method.  Voor alle duidelijkheid nog eens alle code van deze klasse samen...
+
+[source,csharp,linenums]
+----
+class Program {
+    static void Main() {
+        Console.ResetColor();
+        do {
+            string menuOptie;
+            bool fouteMenuKeuze;
+            do {
+                PrintMenu();
+                menuOptie = Console.ReadLine().Trim();
+                fouteMenuKeuze = (menuOptie != "1") && (menuOptie != "2");
+
+                if (fouteMenuKeuze) {
+                    Console.BackgroundColor = ConsoleColor.Yellow;
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Gelieve een bestaande menu-optie uit te kiezen!");
+                    Console.ResetColor();
+                    Console.Write("Druk op <Enter> om opnieuw te proberen...");
+                    Console.ReadLine();
+                }
+            } while (fouteMenuKeuze);
+
+            double getal;
+            bool fouteWaarde;
+            do {
+                Console.Clear();
+                Console.Write("Om-te-zetten waarde?: ");
+                fouteWaarde = !double.TryParse(Console.ReadLine(), out getal);
+
+                if (fouteWaarde) {
+                    Console.BackgroundColor = ConsoleColor.Yellow;
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Gelieve een getal in te voeren!");
+                    Console.ResetColor();
+                    Console.Write("Druk op <Enter> om opnieuw te proberen...");
+                    Console.ReadLine();
+                }
+            } while (fouteWaarde);
+
+            if (menuOptie == "1") {
+                Console.WriteLine($"{getal} centimeter is {getal * 0.3937} inch.");
+            } else if (menuOptie == "2") {
+                Console.WriteLine($"{getal} inch is {getal * 2.54} centimeter.");
+            }
+            Console.Write("Druk op <Enter> om nog een afstand om te zetten...");
+            Console.ReadLine();
+        } while (true);
+    }
+    static void PrintMenu() {
+        Console.Clear();
+        Console.WriteLine("Omzetting:");
+        Console.WriteLine("1) centimeter -> inch");
+        Console.WriteLine("2) inch -> centimeter");
+        Console.Write("Keuze (1/2)?: ");
+    }
+}
+----
+****
+
+Straks komen we terug op dit voorbeeld, en maken we het aan de hand van __nog een extra method__, nog compacter en nog beter gestructureerd.
+
+=== Opvolgen van methodactivatie
+
+Programma's worden opgebouwd door verschillende methods van elkaar gebruik te laten maken.  Eén method roept een andere op, die op zijn beurt nog een andere gaat aanroepen.
+Eens de code in een aangeroepen method voltooid is, wordt teruggekeerd naar plaats van aanroep om daar weer verder te gaan.
+
+Het helpt als lezer van de code goed te kunnen volgen hoe de __activatie__ van één method naar een andere overgaat.  Anders uitgedrukt, te kunnen volgen welke code op welk moment in uitvoering is.
+
+Maar laten we het eerst nog eens zelf proberen het verloop van een programma, dat van meerdere methods gebruik maakt, op te volgen...
+
+****
+[.underline]#Voorbeeld van methods die andere methods aanroepen#
+
+Neem onderstaande code over...
+
+[source,csharp,linenums]
+----
+ 1 : using System;
+ 2 : namespace VoorbeeldApp {
+ 3 :     class Program {
+ 4 :         static void Main() {                    // <1>
+ 5 :             PrintMenu();                        // <2> 
+ 6 :             Console.WriteLine("...");           // <10> 
+ 7 :         }
+ 8 :         static void PrintMenu() {
+ 8 :             PrintLijn();                        // <3>
+10 :             PrintTitel();                       // <5>
+11 :             Console.WriteLine("...keuzes...");  // <8>
+12 :             PrintLijn();                        // <9>
+13 :         }
+14 :         static void PrintLijn() {
+15 :             string lijn = new string('-', 50);  // <4>
+16 :             Console.WriteLine(lijn);            
+17 :         }
+18 :         static void PrintTitel() {
+19 :             Console.WriteLine("Voorbeeld App"); // <6> 
+20 :             PrintLijn();                        // <7>
+21 :         }
+22 :     }
+23 : }
+----
+	
+...en probeer eens, nog vóór je onderstaand resultaat bekijkt, zelf te voorspellen welke uitvoer dit zal opleveren?
+
+[source,shell]
+----
+?
+----
+<1> Uiteraard start het programma bij onze `Main` method.  
+<2> Meteen wordt het menu afgedrukt (via `PrintMenu`).
+<3> Hiervoor wordt eerst een lijn (via `PrintLijn`) afgedrukt.
+<4> Een lijn afdrukken komt in dit geval neer op het afdrukken van een tekst bestaande uit 50 koppeltekens.  Eens deze code is voltooid, en de lijn dus werd afgedrukt, ...
+<5> keert het programma terug naar plaats van aanroep (in `PrintMenu`), en gaat het verder met het afdrukken van de titel (via `PrintTitel`).
+<6> De tekst __Voorbeeld App__ wordt afgedrukt, en...
+<7> een nieuwe lijn wordt geprint (via een nieuwe call naar de `PrintLijn` method).  Eens deze titel is geprint, ...
+<8> keert het programma terug naar plaats van aanroep (in `PrintMenu`), en worden de verschillende menu keuzes weergegeven.
+<9> Daarna wordt overnieuw een lijn afgedrukt (via een nieuwe call naar de `PrintLijn` method).  Alle code van `PrintMenu` is uitgevoerd, dus...
+<10> keert het programma bijgevolg terug naar plaats van aanroep (in `Main`), en drukt het programma om af te ronden nog drie puntjes af.
+
+[source,shell]
+----
+--------------------------------------------------   // <1> <2> <3> <4>
+Voorbeeld App                                        // <5> <6>
+--------------------------------------------------   // <7>
+...keuzes...                                         // <8>
+--------------------------------------------------   // <9>
+...                                                  // <10>
+----
+
+Methods `Main`, `PrintMenu` en `PrintTitel` worden elk één keer uitgevoerd.  De laatste twee hebben we in de code zelf aangeroepen.  De hoofdmethod (`Main`) wordt automatisch aangeroepen bij het opstarten van een __console applicatie__.
+
+Method `PrintLijn` wordt in totaal drie keer aanroepen (en uitgevoerd).
+****
+
+Er bestaan in ontwikkelomgevingen tools (in __Visual Studio__ het __Call Stack__ toolvenster) om het verloop van deze activaties te kunnen opvolgen.  Deze helpen ons het overzicht te bewaren, of fouten op te sporen.
+Later hebben we het wel eens over dat __Call Stack__ toolvenster.
+
+=== Lokale variabelen
+
+Elke method kan eigen lokale variabelen hebben.  De __scope__ van deze variabelen is beperkt tot deze method, of zelf tot het __kleinst omvattende code block__ (de dichtst omsluitende accolades).
+
+De scope van een variabele is het bereik in dewelke je van deze variabele gebruik kan maken.
+
+Methods mogen dezelfde namen voor variabelen gebruiken, er is geen verwarring mogelijk.  
+		
+****
+[.underline]#Voorbeeld van Step Over en Out#
+	
+Een variabele `x` in de `Main` method heeft *niets te maken* met een variabele `x` in `MethodA`...
+		
+[source,csharp,linenums]
+----
+static void Main() {
+	int x = 9;
+	
+	Console.WriteLine($"De waarde van x in Main, voor oproep MethodA is {x}.");
+	MethodA();
+	Console.WriteLine($"De waarde van x in Main, na oproep MethodA is {x}.");
+}
+
+static void MethodA() {
+	int x = 20;
+	
+	Console.WriteLine($"De waarde van x in MethodA is {x}.");
+}
+----
+
+De uitvoer is...
+
+[source,csharp,linenums]
+----
+De waarde van x in Main, voor oproep MethodA is 9.
+De waarde van x in MethodA is 20.
+De waarde van x in Main, na oproep MethodA is 9.  // <1>
+----
+<1> De waarde van `x` in `Main` blijft __9__.
+****
+
+Methods kunnen *niet* aan elkaars lokale variabelen.  Daarom noemen we ze ook __lokaal__.
+
+=== Parameters
+
+Bij het oproepen van een method kunnen we hem extra informatie meegeven.  Informatie die door deze method kan worden ingezet om zijn taken te vervullen.
+
+Dit doen we aan de hand van __parameters__ (ook wel __argumenten__ genoemd).  De informatie wordt tussen haakjes gezet bij de method oproep.  
+
+[source,csharp,linenums]
+----
+Console.WriteLine("Hallo");	// <1> 
+int getal = rnd.Next(1,11); // <2>
+----
+<1> Geeft __"Hallo"__ mee aan de oproep van de `WriteLine` method.
+<2> Geeft de waarden __1__ en __11__ mee aan de oproep van de `Next` method.
+
+De aangeroepen methods kunnen vervolgens aan de slag met de ontvangen informatie.  De `WriteLine` method zal de ontvangen informatie afdrukken op het de __console__.  De `Next` method zal een willekeurig getal tussen __1__ en __11__ opleveren.
+
+In de definitie van de method geven we de parameters __namen__, en leggen hun __type__ vast.
+
+****
+[.underline]#Voorbeeld van een method met een parameter#
+
+Wensen we van uit de `Main` method aan de `BegroetGebruiker` method een `voornaam` mee te geven, dan vermelden we die in de oproep tussen de ronde haakjes...
+
+[source,csharp,linenums]
+----
+static void Main() {
+	Console.Write("Geef uw voornaam?: ");
+	string voornaam = Console.ReadLine();
+	
+	BegroetGebruiker(voornaam); // <1>
+	
+	//BegroetGebruiker(123);    // <3>
+	//BegroetGebruiker();       // <4>
+}
+
+static void BegroetGebruiker(string gebruiker) { // <2>
+	Console.WriteLine($"Welkom {gebruiker}, u bent nu aangemeld!");
+}
+----
+<1> Bij het aanroepen van de `BegroetGebruiker` method moeten we een `string` meegeven, in dit geval geven we `voornaam` mee.
+<2> Om een `string` te kunnen ontvangen moet onze method werken met een parameter van dat type.
+<3> Compilefout: er wordt een `string` verwacht, en geen `int`.
+<4> Compilefout: er wordt één waarde verwacht, deze is hier niet aanwezig.
+
+De parameter van `BegroetGebruiker` is gedeclareerd van het type `string`, hierdoor wordt de aanroepende logica verplicht in `string` vorm een waarde op te geven.
+
+Indien de gebruiker __Jan__ invoert, bekomen we...
+
+[source,shell]
+----
+Geef uw voornaam?: Jan
+Welkom Jan, u bent nu aangemeld!
+----
+****
+
+.Welke naam kies ik voor mijn parameters?
+[NOTE]
+====
+Merk op dat de naam van de parameter `gebruiker` van `BegroetGebruiker` niet gekoppeld is aan de variabele `voornaam` uit de `Main` method.  De variabelen hoeven dus niet dezelfde naam te hebben, maar dit mag wel. 
+ 
+Voor de `BegroetGebruiker` method is de rol van de ontvangen waarde de __naam van de gebruiker__ die begroet moet worden.  De parameternaam `gebruiker` lijkt bijgevolg geen slechte keuze.
+Voor de aanroepende logica kan deze __naam van de gebruiker__ bijvoorbeeld een `voornaam` zijn, maar net zo goed komt de __naam van de gebruiker__ uit een variabele `gast`, `user` of `admin`.
+
+Het is met andere woorden niet zo dat omdat het in de context van de `Main` method gaat om een `voornaam`, dat `BegroetGebruiker` dan ook maar een gelijknamige parameter moet krijgen.
+
+Baseer de namen van je parameters op de rol die de ontvangen waardes aannemen binnen de aangeroepen method.
+==== 
+
+Bij het aanroepen van een __geparameteriseerde method__ (een method met parameters) hoef je ook niet persé met variabelen te werken om de parameterwaarde op te geven.
+
+****
+[.underline]#Voorbeeld van meegeven van verschillende parameterwaardes#
+
+Het kan ook aan de hand van expressies in andere vormen...
+
+[source,csharp,linenums]
+----
+static void Main() {
+	// Aan de hand van een literal expressie...
+	BegroetGebruiker("administrator");      // <1>
+	
+	// Aan de hand van een samengestelde expressie...
+	int gastNummer = 123;
+	BegroetGebruiker("gast" + gastNummer);  // <2> 
+	
+	// Aan de hand van een call naar een andere method (die een waarde oplevert)...
+	BegroetGebruiker(Console.ReadLine());   // <3>
+}
+
+static void BegroetGebruiker(string gebruiker) { 
+	Console.WriteLine($"Welkom {gebruiker}, u bent nu aangemeld!");
+}
+----
+<1> De tekst __"administrator"__ wordt meegegeven.
+<2> De tekst __"gast123"__ wordt meegegeven.
+<3> De __ingevoerde tekst__ wordt meegegeven.
+
+Bij elke call naar `BegroetGebruiker` wordt hier één `string` meegegeven, dat is wat technisch gezien ook wordt verwacht.
+
+Indien de gebruiker nu __Jan__ invoert, bekomen we...
+
+[source,shell]
+----
+Welkom administrator, u bent nu aangemeld!
+Welkom gast123, u bent nu aangemeld!
+Jan
+Welkom Jan, u bent nu aangemeld!
+----
+****
+
+Zolang het datatype van de gebruikte expressie maar overkomt met deze van de gedeclareerde parametervariabele.
+
+Dat was niet anders dan bij het gebruik van voorgedefinieerde methods.  Denk bijvoorbeeld aan iets als `int.Parse(Console.ReadLine())`.  
+
+[discrete]
+==== Meerdere parameters
+
+Tot nu toe hadden we in onze eigen methods één parameter, maar dit kunnen er uiteraard meerdere zijn.  
+
+Plaats komma's tussen de verschillend declaraties van parameters (in de definitie) of parameterwaardes (in de call).  
+
+****
+[.underline]#Voorbeeld van meerdere parameters#
+
+Indien we af en toe van verschillende trekkingen de __lotto cijfers__ willen afdrukken, telkens ook voorafgegaan door een eigen omschrijving, kan een method als `PrintLottoCijfers` met een tweetal parameters van pas komen.
+
+De eerste parameter is de reeks van __lotto cijfers__ die je wenst af te drukken.  De tweede parameter is de __omschrijving__ (of het `label`) dat bij het afdrukken vermeld wordt voor de cijfers...
+
+[source,csharp,linenums]
+----
+static void Main() {
+	int[] trekking1 = { 32, 10, 27, 21, 2, 13 };
+	int[] trekking2 = { 10, 24, 34, 8, 19, 25 };
+	
+	PrintLottoCijfers(trekking1, "Trekking van gisteren");
+	PrintLottoCijfers(trekking2, "Trekking van vandaag");
+}
+
+static void PrintLottoCijfers(int[] lottoCijfers, string label) {
+	string cijfersInEénTekst = string.Join("|", lottoCijfers);
+	Console.WriteLine($"{label}: {cijfersInEénTekst}");
+}
+----
+
+Indien we het voorbeeld uitvoeren dan krijgen we volgende output...
+
+[source,shell]
+----
+Trekking van gisteren: 32|10|27|21|2|13
+Trekking van vandaag: 10|24|34|8|19|25
+----
+
+We worden verplicht twee argumentwaardes door te geven.  Een eerste van type `int[]` (__int array__), een tweede van type `string`.
+****
+
+[discrete]
+==== Waarom parameteriseren
+
+Niet altijd moet een method bij elke uitvoering __exact hetzelfde__ doen.  Soms merk je dat code __min of meer__ op dezelfde wijze meermaals is uitgeschreven.  
+
+Indien het verschil hem zit in de waardes waarmee gewerkt wordt, liggen methods met parameters voorhanden.
+
+****
+[.underline]#Conversie voorbeeld - Extra method met parameters#
+
+Het is je misschien opgevallen in ons __conversie voorbeeld (centimeter naar inches en omgekeerd)__ de instructies die de foutmeldingen tonen ook meermaals hadden uitgeschreven.
+
+__Regels 11 tot en met 16__ en __regels 28 tot en met 33__ zijn zo goed als identiek.  
+
+Enkel de tekst die wordt afgedrukt is verschillend.
+
+[source,csharp,linenums]
+----
+ 1 : ...
+ 2 : 
+ 3 : string menuOptie;
+ 4 : bool fouteMenuKeuze;
+ 5 : do {
+ 6 :     PrintMenu();
+ 7 :     menuOptie = Console.ReadLine().Trim();
+ 8 :     fouteMenuKeuze = (menuOptie != "1") && (menuOptie != "2");
+ 9 : 
+10 :     if (fouteMenuKeuze) {
+11 :         Console.BackgroundColor = ConsoleColor.Yellow;
+12 :         Console.ForegroundColor = ConsoleColor.Red;
+13 :         Console.WriteLine("Gelieve een bestaande menu-optie uit te kiezen!");
+14 :         Console.ResetColor();
+15 :         Console.Write("Druk op <Enter> om opnieuw te proberen...");
+16 :         Console.ReadLine();
+17 :     }
+18 : } while (fouteMenuKeuze);
+19 : 
+20 : double getal;
+21 : bool fouteWaarde;
+22 : do {
+23 :     Console.Clear();
+24 :     Console.Write("Om-te-zetten waarde?: ");
+25 :     fouteWaarde = !double.TryParse(Console.ReadLine(), out getal);
+26 : 
+27 :     if (fouteWaarde) {
+28 :         Console.BackgroundColor = ConsoleColor.Yellow;
+29 :         Console.ForegroundColor = ConsoleColor.Red;
+30 :         Console.WriteLine("Gelieve een getal in te voeren!");
+31 :         Console.ResetColor();
+32 :         Console.Write("Druk op <Enter> om opnieuw te proberen...");
+33 :         Console.ReadLine();
+34 :     }
+35 : } while (fouteWaarde);
+36 : 
+37 : ...
+----
+
+Bijvoorbeeld het __instellen van de foutmeldings-kleuren__, het __brengen van de foutmelding__, en het __resetten van de kleuren__, werd twee keer uitgeschreven.
+
+Weliswaar één keer voor de melding __"Gelieve een bestaande menu-optie uit te kiezen!"__, en een andere keer met melding __"Gelieve een getal in te voeren!"__.
+
+Een extra method als `PrintFoutmelding` met een parameter als `melding` kan hier helpen...
+
+[source,csharp,linenums]
+----
+static void PrintFoutmelding(string melding)
+{
+    Console.BackgroundColor = ConsoleColor.Yellow;
+    Console.ForegroundColor = ConsoleColor.Red;
+    Console.WriteLine(melding);  // <1>
+    Console.ResetColor();
+    Console.Write("Druk op <Enter> om opnieuw te proberen...");
+    Console.ReadLine();
+}
+----
+<1> Deze keer wordt de inhoud van de parametervariabele afgedrukt.  Het zal de aanroepende logica zijn die bepaald om welke `melding` het juist gaat.
+
+De ene keer kan `PrintFoutmelding` worden aangeroepen indien een __foutieve menu-keuze__ is gemaakt...
+
+[source,csharp,linenums]
+----
+PrintFoutmelding("Gelieve een bestaande menu-optie uit te kiezen!");
+----
+
+De andere keer indien __er geen getal werd ingevoerd__...
+
+[source,csharp,linenums]
+----
+PrintFoutmelding("Gelieve een getal in te voeren!");
+----
+
+Of nog eens alle code van `class Program` samen...
+
+[source,csharp,linenums]
+----
+    class Program {
+        static void Main() {
+            Console.ResetColor();
+            do {
+                string menuOptie;
+                bool fouteMenuKeuze;
+                do {
+                    PrintMenu();
+                    menuOptie = Console.ReadLine().Trim();
+                    fouteMenuKeuze = (menuOptie != "1") && (menuOptie != "2");
+
+                    if (fouteMenuKeuze) {
+                        PrintFoutmelding("Gelieve een bestaande menu-optie uit te kiezen!");  // <1>
+                    }
+                } while (fouteMenuKeuze);
+
+                double getal;
+                bool fouteWaarde;
+                do {
+                    Console.Clear();
+                    Console.Write("Om-te-zetten waarde?: ");
+                    fouteWaarde = !double.TryParse(Console.ReadLine(), out getal);
+
+                    if (fouteWaarde) {
+                        PrintFoutmelding("Gelieve een getal in te voeren!");                  // <2>
+                    }
+                } while (fouteWaarde);
+
+                if (menuOptie == "1") {
+                    Console.WriteLine($"{getal} centimeter is {getal * 0.3937} inch.");
+                } else if (menuOptie == "2") {
+                    Console.WriteLine($"{getal} inch is {getal * 2.54} centimeter.");
+                }
+                Console.Write("Druk op <Enter> om nog een afstand om te zetten...");
+                Console.ReadLine();
+            } while (true);
+        }
+        static void PrintMenu() {
+            Console.Clear();
+            Console.WriteLine("Omzetting:");
+            Console.WriteLine("1) centimeter -> inch");
+            Console.WriteLine("2) inch -> centimeter");
+            Console.Write("Keuze (1/2)?: ");
+        }
+        static void PrintFoutmelding(string melding) {
+			Console.BackgroundColor = ConsoleColor.Yellow;
+			Console.ForegroundColor = ConsoleColor.Red;
+			Console.WriteLine(melding);
+			Console.ResetColor();
+			Console.Write("Druk op <Enter> om opnieuw te proberen...");
+			Console.ReadLine();
+		}
+	}
+----
+<1> `PrintFoutmelding` wordt aangeroepen voor `melding` __"Gelieve een bestaande menu-optie uit te kiezen!"__.
+<2> `PrintFoutmelding` wordt aangeroepen voor `melding` __"Gelieve een getal in te voeren!"__.
+****
+
+Merk op dat onze `Main` method alvast een stukje eenvoudiger is geworden.  
+
+Bij het bekijken van de code krijg je vrij vlug een beeld hoe het programma zal verlopen.  Je wordt niet meer verstrooid door de technische details van het __printen van de menu__ of het __printen van één of ander foutmelding__.
+
+Wil je dan toch in die technische details duiken, dan kan dat uiteraard door naar de code te gaan kijken van de desbetreffende extra methods.
+
+=== Return values
+
+Een method kan een __waarde produceren__, of anders uitgedrukt: hij kan een *__waarde opleveren__*. 
+
+Bijvoorbeeld...
+
+[source,csharp,linenums]
+----
+string input = Console.ReadLine();  // <1>
+
+Random rnd = new Random();
+int getal = rnd.Next(1, 11);        // <2> 
+
+Console.WriteLine(getal);           // <3>
+----
+<1> Method `ReadLine` produceert een `string` waarde.
+<2> Method `Next` produceert een `int` waarde.
+<3> Andere methods, zoals `WriteLine` leveren geen waarde op.
+
+Het type van de waarde die geproduceerd wordt, wordt opgegeven in de method definitie.  
+Men noemt dit het *__return type__* van de method.
+
+Methods die geen waarde produceren, gebruiken `void` (Nederlands: __leegte__) in plaats van een return type om dat te signaleren.  
+
+In de method zelf kun je aangeven wat de geproduceerde waarde is met een *__return statement__*.
+
+De uitvoering van een method stopt meteen na deze return opdracht.  Waarna de uitvoering uiteraard, net als bij __void methods__, verder gaat net na de method oproep.
+
+****
+[.underline]#Voorbeeld van een method die een waarde oplevert#
+
+In dit voorbeeld zal de `BodyMassIndex` method een `double` waarde opleveren.
+
+[source,csharp,linenums]
+----
+static void Main()                                                   // <4>
+{
+	int kg = 47;
+	int cm = 158;
+
+	double bmi = BodyMassIndex(kg, cm);                              // <3>
+	Console.WriteLine(bmi);
+
+	//Of meteen:
+	Console.WriteLine(BodyMassIndex(47, 158));                       // <3>
+}
+static double BodyMassIndex(int gewichtInKg, int lengteInCentimeter) // <2>
+{
+	double lengteInMeter = lengteInCentimeter / 100.0;
+	double bmi = gewichtInKg / Math.Pow(lengteInMeter, 2);
+	return bmi;                                                      // <1> 
+}
+----
+<1> In de implemenatie van deze method wensen we graag een __bmi__ waarde (`double`) op te leveren.
+<2> Om een `double` te kunnen opleveren (__returnen__) moeten we op de hoofding voor de methodnaam dat return type vermelden.  Op basis van die informatie weet de compiler hoe men deze method kan inzetten (oproepen).
+<3> Gezien de `BodyMassIndex` method een `double` waarde oplevert, kan de call naar deze method als `double` expressie worden gebruikt.
+<4> De `Main` method wil niets __returnen__, en wordt bijgevolg gemarkeerd als `void` method.
+
+Indien we het voorbeeld uitvoeren dan krijgen we volgende output...
+
+[source,csharp,linenums]
+----
+18,8271110398974
+18,8271110398974
+----
+****
+
+We gebruiken een `return` statement voor het opgeven van de op-te-leveren waarde.
+
+Het sleutelwoord `return` moet uiteraard gevolgd worden door een expressie van hetzelfde datatype als het return type dat in de hoofding is vermeld.  In een `double` method moeten we bijvoorbeeld een `double` waarde opleveren.
+
+[NOTE]
+====
+Zelfs in een `void` method kan je een `return` opdrachten opnemen.  Op het sleutelwoord `return` volgt dan geen waarde, dus bijvoorbeeld gewoon `return;`.
+
+Dit beëindigt de method meteen en de uitvoering keert terug naar de plaats van oproep.  Je zou het kunnen vergelijken met wat een `break` doet voor een loop.
+====
+
+[discrete]
+==== Return type van voorgedefinieerde methods
+
+Indien je in de code editor van __Visual Studio__ met je muisaanwijzer hovert boven de naam van de method dan krijg je zijn __hoofding__ (ook wel __signatuur__ genoemd) te zien.
+
+In die hoofding zie je voor de methodnaam staan wat het return type is van deze method.
+
+In het geval van de `Console.ReadLine` method is dit inderdaad `string`...
+
+image:Tooltip voor returntype van ReadLine.png[Tooltip voor returntype van ReadLine.]
+
+Bij de `Random.Next` method is dat `int`...
+
+image:Tooltip voor returntype van Next.png[Tooltip voor returntype van Next.]
+
+`Console.WriteLine` produceert geen waarde, wat we inderdaad opmerken aan de hand van het `void` sleutelwoord...
+
+image:Tooltip voor returntype van WriteLine.png[Tooltip voor returntype van WriteLine.]
+
+Je merkt hoe zo'n __tooltips__ nuttige informatie kunnen opleveren.
+
+=== Command versus Query
+
+Er zijn dus twee soorten methods...
+
+Methods die een resultaat produceren:: Dergelijke method wordt ook wel een *__query__* (Nederlands: __vraag__) genoemd.  De benaming __query__ is niet vreemd, je verwacht immers dat op een __vraag__ een __antwoord__ word geproduceerd.  Het __antwoord__ is dan de opgeleverde waarde.
+
+- Deze methods leveren in hun implementatie een waarde op bij wijze van een `return` statement.  Ze hebben dus een __echt__ return type (dus geen `void`), die op hoofding voor de methodnaam wordt vermeld.
+
+- Omdat deze methods een waarde opleveren, ga je ze typisch *als expressie aanroepen*, bijvoorbeeld in de veronderstelling dat `A` een `int` producerende method is, en method `B` een `string` return type kent: kan `A` en `B` overal gebruikt worden waar grammaticaal gezien respectievelijk een `int` of `string` expressie wordt verwacht...
+
+	int getal1 = A();
+	int getal2 = rnd.Next(1, A());
+	int getal3 = 3 + A();
+	int[] getallen = { 4, getal2, A() };
+	string tekst = B();
+	Console.WriteLine(B().ToLower());
+	
+- Queries krijgen vaak een naam die bestaat uit een zelfstandig naamwoord, of op zijn minst een naam die omschrijft __wat voor soort waarde__ wordt opgeleverd.  Bijvoorbeeld: __BodyMassIndex__.  Soms word een prefix __"Get"__ gebruikt (bijvoorbeeld __GetBodyMassIndex__).  Anderzijds zie je bij `bool` opleverende methods wel een de prefix __"Is"__.  __Conversie queries__ (om waardes om te zetten) krijgen dan typisch een __"To"__ prefix (bijvoorbeeld __ToLower__).
+		
+Method die [.underline]#geen# resultaten produceren:: Dergelijke method wordt ook wel een *__command__* (Nederlands: __opdracht__) genoemd.  De call naar zo'n method grijpt immers plaats als __het geven van een opdracht__.
+		
+- Leveren niets op, we gebruiken om dat te signaleren in de hoofding het `void` sleutelwoord in plaats van een return type.
+
+- Omdat ze niets opleveren, worden ze niet als expressie aangeroepen.  De *call alleen vormt het statement*, bijvoorbeeld...
+
+	C();
+	D();
+	
+- Commands krijgen vaak een naam die bestaat uit een werkwoord (in gebiedende wijs), soms gevolgd door een zelfstandig naamwoord.  Het werkwoord geeft aan wat voor soort actie plaatsvindt (bijvoorbeeld __Write__, __Read__ of __Print__).  Het zelfstandig naamwoord verschaft wat meer context (bijvoorbeeld __WriteLine__ of __PrintQuotient__).
+
+Kies ik voor een *command* of voor een *query*?::
+
+De keuze voor één van de twee, __command__ of __query__ is niet moeilijk.  Denk steeds vanuit het perspectief van de __client code__ (de aanroepende logica).  __Hoe__ wil die gebruik gaan maken van je method:
+
+- Wenst hij de method gewoon aan te roepen, bij wijze van opdracht om een stuk code op te starten?  Kies dan voor een __command__.
+
+- Wenst hij eerder een vraag te stellen waar hij een antwoord op wil, of zal hij met andere woorden de method aanroepen als expressie?  Dan heb je duidelijk een __query__ nodig.
+
+****
+[.underline]#Voorbeeld van keuze voor command vs query#
+
+In volgend stukje code schrijven we meermaals dezelfde __voorwaarde__ uit.  Een voorwaarde meer specifiek die nagaat of een bepaald jaartal (`jaar` of `volgendJaar`) een __schrikkeljaar__ is.
+
+Het meermaals uitschrijven van dezelfde logica willen we vermijden.  Het maakt onze code, op zijn minst gezegd, moeilijker leesbaar.
+
+[source,csharp,linenums]
+----
+static void Main()
+{
+	Console.Write("Jaar?: ");
+	int jaar = int.Parse(Console.ReadLine());
+
+	if (jaar % 400 == 0 || jaar % 4 == 0 && jaar % 100 != 0) {
+		Console.WriteLine($"{jaar} is een schrikkeljaar.");
+	} else {
+		Console.WriteLine($"{jaar} is geen schrikkeljaar.");
+
+		int volgendJaar = jaar + 1;
+		if (volgendJaar % 400 == 0 || volgendJaar % 4 == 0 && volgendJaar % 100 != 0) {
+			Console.WriteLine("Het jaar daarop is wel een schrikkeljaar.");
+		}
+	}
+}
+----
+
+Voorwaarde...
+
+`jaar % 400 == 0 || jaar % 4 == 0 && jaar % 100 != 0` 
+
+...is zo goed als identiek aan...
+
+`volgendJaar % 400 == 0 || volgendJaar % 4 == 0 && volgendJaar % 100 != 0`
+
+Het enigste onderscheid zit hem in de waarde waarmee gewerkt wordt.  Dit maakt dat we dit meermaals uitschrijven kunnen vermijden door toevoeging van een extra method.  Dat telkens met een andere waarde wordt gewerkt, `jaar` of `volgendJaar`, is niet erg, we weten immers hoe we methods kunnen parametriseren.  
+
+In beide `if` statements zouden we dus graag eerder een call gebruiken naar een method die __duidelijk maakt__ of `jaar` of `volgendJaar` al dan niet een __schrikkeljaar__ is.  Iets als...
+
+[source,csharp,linenums]
+----
+static void Main()
+{
+	Console.Write("Jaar?: ");
+	int jaar = int.Parse(Console.ReadLine());
+
+	if (IsSchrikkeljaar(jaar)) {             // <1>
+		Console.WriteLine($"{jaar} is een schrikkeljaar.");
+	} else {
+		Console.WriteLine($"{jaar} is geen schrikkeljaar.");
+
+		int volgendJaar = jaar + 1;
+		if (IsSchrikkeljaar(volgendJaar)) {  // <1>
+			Console.WriteLine("Het jaar daarop is wel een schrikkeljaar.");
+		}
+	}
+}
+----
+<1> De uitgeschreven voorwaarde is vervangen door een method call.
+
+Aan de manier waarop deze method is aangeroepen (zijn grammaticale context) kan je afleiden dat het hier om een __query__ moet gaan.  Tussen de ronde haakjes na het `if` sleutelwoord wordt immers een __expressie__ verwacht.  Meer specifiek een `bool` expressie...
+
+[source,csharp,linenums]
+----
+static bool IsSchrikkeljaar(int jaartal)
+{
+	return (jaartal % 400 == 0 || jaartal % 4 == 0 && jaartal % 100 != 0);
+}
+----
+
+Dat het om __query__ gaat zal je allicht niet verwonderen.  De method zou een __antwoord__ moeten geven (bevestigend of ontkrachtend => `bool` als return type) op de *__vraag__* of een bepaald jaartal (de parameter) al dan niet een schrikkeljaar betreft. 
+****
+
+
+== Geavanceerd gebruik van de debugger
+
+=== Opvolgen van methodactivatie
+
+==== Call Stack toolvenster
+
+Om op te volgen hoe de __activatie__ van één method naar een andere overgaat, welke method welke andere method aanroept, kan je gebruik maken van het __Call Stack__ toolvenster.
+
+Het __Call Stack__ toolvenster toont ons in __stack__ (Nederlands: __stapel__) vorm welke methods __actief__ (__in uitvoering__) zijn.  
+
+We illustreren de werking aan de hand van hetzelfde voorbeeld als in de sectie <<../deel-10/deel-10.adoc#_opvolgen_van_methodactivatie,Opvolgen van methodactivatie>> van voorgaand deel uit het cursusmateriaal.
+
+****
+[.underline]#Voorbeeld van gebruik van het Call Stack toolvenster#
+
+Neem opnieuw onderstaande code over...
+
+[source,csharp,linenums]
+----
+using System;
+namespace VoorbeeldApp {
+    class Program {
+        static void Main() {                    // <1>
+            PrintMenu();                        // <2> 
+            Console.WriteLine("...");           // <10> 
+        }
+        static void PrintMenu() {
+            PrintLijn();                        // <3>
+            PrintTitel();                       // <5>
+            Console.WriteLine("...keuzes...");  // <8>
+            PrintLijn();                        // <9>
+        }
+        static void PrintLijn() {
+            string lijn = new string('-', 50);  // <4>
+            Console.WriteLine(lijn);            
+        }
+        static void PrintTitel() {
+            Console.WriteLine("Voorbeeld App"); // <6> 
+            PrintLijn();                        // <7>
+        }
+    }
+}
+----
+
+Plaats in de code van vorig voorbeeld een breakpoint op __regel 20__, en voor de code tot daar uit.
+
+.Hoe plaats ik weer een breakpoint?
+[NOTE]
+====
+Indien je het ondertussen vergeten zou zijn; een breakpoint kan je bijvoorbeeld plaatsen door te rechterklikken op een regel en te kiezen voor menu:Breakpoint[Insert Breakpoint], of door op de grijze zone te klikken helemaal links in de code editor.
+====
+
+De uitvoer werd onderbroken nog voor __regel 20__ wordt uitgevoerd...
+
+image:Visual Studio - Call Stack toolvenster.png[Visual Studio - Call Stack toolvenster]
+
+Het *Call Stack* toolvenster werd in Visual Studio naar voor gebracht.
+
+.Hoe bekom ik het Call Stack toolvenster?
+[NOTE]
+====
+Wanneer de uitvoer is onderbroken kies je in Visual Studio voor menu:Debug[Windows > Call Stack].
+====
+
+Helemaal vanboven op de stapel ligt een __activatie__ van `PrintTitel`.  We __breken__ de uitvoer (met ons __breakpoint__) op regel 20.  Ook dat wordt weergegeven in het toolvenster.  
+
+Onder de activatie voor `PrintTitel` vinden we een activatie van `PrintMenu`.  Het is inderdaad zo dat we via `PrintMenu` in `PrintTitel` zijn terechtgekomen.  Meer specifiek de call in onze code op __line 10__ zorgt voor een uitvoeringsinstantie van `PrintTitel`.
+
+`PrintMenu` zelf, werd aangeroepen in de `Main` method (op regel 5), ook dat valt uit deze call stack af te leiden.
+
+Uiteraard is onze uitvoer nog maar gedeeltelijk opgebouwd.  Kijk je in het console scherm dan vind je enkel nog maar...
+
+[source,shell]
+----
+--------------------------------------------------  
+Voorbeeld App                                       
+----
+
+Merk ook op hoe in de code editor zelf de `PrintMenu()` en `PrintTitel()` calls waarvan sprake gemarkeerd werden (op regels __5__ en __10__).  
+****
+
+==== Stappen door de code, en evolutie van de call stack
+
+===== Step Into
+
+Om aan de hand van de __debugger__ stap voor stap door onze code te gaan <<../deel-04/deel-04.adoc#_locals_toolvenster,hebben we reeds met een __Step Into__ optie gewerkt>>.
+
+Zonder het gebruik van extra methods werkte het adjectief __"Into"__ van __"Step Into"__ enkel verwarrend.  Er waren immers nog geen andere methods om __"in" te stappen__.  Ondertussen is dat wel het geval.
+
+****
+[.underline]#Voorbeeld van gebruik van Step Into#
+
+Vertrekkende van ons voorgaande breakpoint (op __regel 20__) van onze voorgaand codevoorbeeld, zouden we een stap verder kunnen gaan in de uitvoering, om het verloop van de uitvoer van `PrintLijn` op te volgen.
+
+Kies je in Visual Studio voor menu:Debug[Step Into] of klik je op de __Debug__ werkbalk op de image:Step Into.png[Step Into] knop dan bekomen we volgende call stack...
+
+image:Visual Studio - Call Stack - Debug Step Into.png[Step Into]
+
+Er is halt gehouden op __regel 14__ in een nieuwe activatie van `PrintLijn`.  De call naar `PrintLijn`, of een uitvoeringsinstantie voor deze method, is bovenop de stack (stapel) te komen liggen.
+
+Op het console scherm is onder de titel nog steeds geen lijn te zien...
+
+[source,shell]
+----
+--------------------------------------------------  
+Voorbeeld App                                       
+----
+
+Klikken we nog twee keer op de __Step Into__ knop (image:Step Into.png[Step Into]) dan wordt halt gehouden op het eind (bij de afsluitende accolade) van de `PrintLijn` method...
+
+image:Visual Studio - Call Stack - Debug Step Into - Resultaat.png[Na twee keren 'Step Into']
+
+Aan de call stack zelf is nog niets gewijzigd, maar uitvoer op het console scherm werd wel aangevuld met een lijn...
+
+[source,shell]
+----
+--------------------------------------------------  
+Voorbeeld App                                       
+--------------------------------------------------  
+----
+
+Kiezen we nog één keer voor __Step Into__ knop (image:Step Into.png[Step Into]) dan is onze uitvoering van `PrintLijn` beïndigd...
+
+image:Visual Studio - Call Stack - Debug Step Into - Verder verloop.png[Activatie van PrintLijn is beeindigd.]
+
+De activatie van `PrintLijn` is voltooid, deze is bovenaan de call stack verwijderd.
+
+De uitvoering van `PrintTitel` is opnieuw actief.  De call stack werd afgedaald om terug te keren naar plaats van aanroep.
+****
+
+===== Evolutie van de call stack
+
+De call *__stack__* (of __stapel__) gedraagd zich volgens het __LIFO__ principe (__Last In, First Out__)...
+
+- De call stack *__krimpt__* indien de uitvoer van een method voltooid is.  De laatst toegevoegde activatie (bovenaan de stapel) zal als eerste van de call stack worden verwijderd.
+
+- De call stack *__groeit__* wanneer tijdens uitvoer één method een andere gaat aanroepen.  Er komt een nieuwe activatie bovenaan de stapel te liggen.  De uitvoer van deze laatste zal moeten beëindigen, nog vóór de onderliggende activaties kunnen worden afgesloten.
+
+===== Step Over en Out
+
+Naast __Step Into__ is ook sprake van __Step Over__ en __Step Out__ opties.
+
+Op basis van __wat__ (of __welke uitvoer__) je wenst op te volgen, zal je een keuze maken voor één van deze opties.
+
+[%autowidth]
+|====
+| Knop | Optie | Met herhaling
+
+| image:Step Into.png[Step Into] | Step Into | *Stapt in* een aangeroepen
+ method.  Je kan vervolgens de aangeroepen method gaan opvolgen.  (De call stack groeit hier steeds met één activatie.)
+| image:Step Over.png[Step Over] | Step Over | *Stapt over* een aangeroepen method.  Je bent niet geïnteresseerd en wens de uitvoer van deze method niet op te volgen.  (Je blijft hierbij hangen in dezelfde activatie in de call stack.)
+| image:Step Out.png[Step Out] | Step Out | Je hebt genoeg gezien, en *stap uit* de huidige activatie, om terug te keren naar plaats van aanroep.  (De call stack krimpt.)
+|====
+
+****
+[.underline]#Voorbeeld van Step Over en Out#
+
+Opnieuw vertrekkende van ons voorgaande breakpoint (op __regel 20__) van onze voorgaand codevoorbeeld, zouden we meteen het resultaat van `PrintLijn` kunnen bekomen door __over__ de call naar deze method te stappen.
+
+Kies meteen voor __Step Over__ (image:Step Over.png[Step Over])...
+
+image:Visual Studio - Call Stack - Debug Step Over.png[Step Over]
+
+En merk op dat de volledige titel is afgeprint, inclusief de afsluitende lijn...
+
+[source,shell]
+----
+--------------------------------------------------  
+Voorbeeld App                                       
+--------------------------------------------------  
+----
+
+In de veronderstelling dat we geen interesse hadden de code van `PrintLijn` in detail te gaan opvolgen was __Step Over__ de ideale keuze.
+
+Klikken we nu twee keer op de __Step Out__ knop (image:Step Out.png[Step Out]), dan bemerk je hoe we meteen twee trappen lager zijn terechtgekomen in onze call stack...
+
+image:Visual Studio - Call Stack - Debug Step Out.png[Step Out]
+
+Zowel de uitvoer van `PrintTitel`, als deze van `PrintMenu` werd beëindigd.
+We bevinden ons terug in de activatie van de `Main` method. 
+
+De menu is volledig geprint, de afsluitende drie punten nog niet...
+
+[source,shell]
+----
+-------------------------------------------------- 
+Voorbeeld App                                      
+-------------------------------------------------- 
+...keuzes...                                       
+-------------------------------------------------- 
+----
+****
+
+.Programma verder laten uitvoeren
+[NOTE]
+====
+Ten allen tijd kan je natuurlijk het volledig programma laten verder lopen door op de image:Continue.png[Continue] knop te klikken.  Je vindt deze knop op de __Debug__ werkbalk.
+====
+
+=== Uitvoer van code pauzeren
+
+Visual Studio kan zich in een aantal verschillende modi bevinden, een overzicht...
+
+[%autowidth]
+|====
+| Modus | Omschrijving
+
+| __designmodus__ | De fase waarin Visual Studio ons toestaat code te *editeren*.  Ook wel eens __editmodus__ genoemd.
+| __runmodus__ | De fase waarin Visual Studio een applicatie in *uitvoering* brengt.
+| __breakmodus__ | De fase waarin Visual Studio een applicatie heeft  *gepauzeerd*.  Ook wel __debugmodus__ genoemd. 
+|====
+
+In elke modi is het zo dat de ontwikkelomgeving wordt geoptimaliseerd voor het verrichten van activiteiten die typisch zijn voor deze fase.  Tijdens __debugmodus__ bijvoorbeeld krijgen we tools voorgeschoteld voor het *__debuggen__* van onze applicatie. 
+Denk aan de __Call Stack__ of het __Locals__ toolvenster die we kunnen gebruiken om het verloop van de uitvoer van onze code op te volgen.
+
+.Stop de uitvoer (volledig) voor je code gaat aanpassen.
+[NOTE]
+====
+Technisch zijn er beperkte mogelijkheden ook tijdens __breakmodus__ code aan te passen.  Dit valt echter af te raden, want kan erg verwarrend werken.  Het is moeilijk om bij te houden wat het effect is van de oorspronkelijk code versus de gewijzigde code.
+
+Stop daarom altijd eerst de uitvoer volledig (ook al is de uitvoer gepauzeerd), vooraleer je code gaat aanpassen.  
+
+Het volledig stoppen (en dus niet louter pauzeren) kan bijvoorbeeld aan de hand van de __Stop__ image:Stop.png[Stop] knop.  Je kan ook de stoppen door in de menu te kiezen voor menu:Debug[Stop Debugging].
+====
+
+==== Breakpoints en Run execution to here
+
+Soms heeft het weinig nut, bij het opvolgen van uitvoering van code, __stap voor stap__ te gaan.  Vaak is het zo dat je slechts geïnteresseerd bent in de toestand van het programma op heel specifieke plaatsen in je code.  
+
+Misschien wil je wel op __punt X__ en __punt Y__ de call stack inspecteren, of de inhouden van variabelen nagaan.  Indien __punt X__ en __punt Y__ ver uitéén liggen, is het vervelend __stap voor stap__ (bijvoorbeeld met __Step Into__ of __Step Over__) van het ene naar het ander punt te stappen.
+
+Een aantal oplossingen zijn hiervoor te bedenken:
+
+Met breakpoints::
+
+. Neem op __punt X__ een breakpoint op.
+
+. Start de code image:Start.png[Start Debugging].  Visual Studio schakelt hierbij van __design__- naar __runmodus__, en voer de code uit.  
+
+. Bij het eerste breakpoint (__punt X__) wordt de uitvoer gepauzeerd, en zal Visual Studio schakelen naar __breakmodus__.  In deze modus worden verschillende tools ter beschikking gesteld om het verloop van je applicatie tot op dit punt op te volgen.  Bijvoorbeeld de __Call Stack__ of het __Locals__ toolvensters. 
+
+. Neem op __punt Y__ een breakpoint op.  (Al had je ze meteen ook samen met het breakpoint op __punt X__ kunnen opnemen.)
+
+. Kies voor image:Continue.png[Continue] om het programma te laten doorlopen tot aan het tweede breakpoint (__punt Y__).  Daar schakelt Visual Studio terug over op __breakmodus__.  Opnieuw kan je de toestand van je programma op dit punt (__punt Y__) verifiëren.
+
+In het geval dat je later misschien nogmaals de uitvoer wil pauzeren op deze specifieke plaats in de code (bijvoorbeeld op __punten X__ en __Y__), is het werken met breakpoints aangewezen.  Je breakpoints fungeren dan als een soort van __bookmarks__.
+
+Breakpoints kan je opnemen zowel in __design__-, __run__-, als __breakmodus__.
+
+.Breakpoints tijdelijk uitschakelen.
+[NOTE]
+====
+Breakpoint kan je __enable'n__ en __disable'n__.
+
+Indien je een vermoeden hebt later nog van een bepaald breakpoint gebruik te willen maken, maar deze toch voorlopig wenst uit te schakkelen, kan je ze __disable'n__.  Rechterklik op de instructie met het breakpoint en kies voor menu:Breakpoint[Disable Breakpoint].
+
+Ze terug __enable'n__ kan met menu:Breakpoint[Enable Breakpoint].  Zo wordt ze weer actief.
+====
+
+Run execution to here::
+
+Het is ook mogelijk met de __Run execution to here__ optie te werken.  Eens de __debugger__ actief is, kan je het programma meteen tot op een zelf gekozen plaats (__here__) code uitvoeren.
+
+. Start je programma op met aan de hand van __Step Into__ image:Step Into.png[Step Into].  Dit activeert de debugger, en geeft ons de mogelijkheid van de __Run execution to here__ optie gebruik te maken.  (Misschien kan je deze stap overslaan indien de uitvoer reeds gepauzeerd is en Visual Studio zich dus reeds in __breakmodus__ bevindt.)
+
+. Hover met je muisaanwijzer boven de code van __punt X__, een image:Run execution to here.png[Run execution to here] __'Run execution to here'__ knop verschijnt.  Klik op deze knop om het programma tot daar te laten uitvoeren.  
+
+. Het programma wordt verder uitgevoerd tot aan voorvermeld punt (__punt X__).  Op deze plaats wordt de uitvoer gepauzeerd en schakelt Visual Studio naar __breakmodus__.  Maak gebruik van de toolvensters __Call Stack__ of __Locals__ om de toestand van je programma op dit punt (__punt X__) verifiëren.  
+
+. Herhaal stappen __2__ en __3__ voor __punt Y__.
+
+Indien je vermoed dat je op een plaats in de code éénmalig wil gaan pauzeren, is de __Run execution to here__ optie best handig.  Je hoeft zo geen breakpoints op te nemen, die naderhand toch weer moeten worden verwijderd.
+
+Opgelet: de __Run execution to here__ optie is niet ter beschikking in __designmodus__.  De debugger moet reeds actief zijn, of je moet met andere woorden al de uitvoer van je programma gepauzeerd hebben, vooraleer je van deze optie gebruik kan gaan maken.
+ 
+****
+[.underline]#Voorbeeld verder verloop sturen met 'Run execution to here'#
+
+In volgende code zit een (__logische__) fout.  Het programma doet niet correct wat zou moeten gebeuren.
+
+Op basis van een ingevoerde `lengte` en `breedte` moet het aantal `hectare` worden berekend.  Voert de gebruiker echter __100__ als `lengte`, en __100__ als `breedte` in, dan bekomen we __10 hectare__...
+
+[source,shell]
+----
+Lengte in meter?: 100
+Breedte in meter?: 100
+Aantal hectare: 10
+----
+
+Dit is niet correct, __100 op 100 meter__ is __1 hectare__. 
+
+De code is...
+
+[source,csharp,linenums]
+----
+ 1 : static void Main() {
+ 2 : 	Console.Write("Lengte in meter?: ");
+ 3 : 	double lengte = double.Parse(Console.ReadLine());
+ 4 : 
+ 5 : 	Console.Write("Breedte in meter?: ");
+ 6 : 	double breedte = double.Parse(Console.ReadLine());
+ 7 : 
+ 8 : 	double hectare = GetHectare(lengte, breedte);
+ 9 : 	Console.WriteLine("Aantal hectare: " + hectare);
+10 : }
+11 : 
+12 : static double GetHectare(double lengteInMeter, double breedteInMeter) {
+13 : 	double vierkanteMeter = lengteInMeter * breedteInMeter;
+14 : 	double are = vierkanteMeter / 10;
+15 : 	double hectare = are / 100;
+16 : 	return hectare;
+17 : }
+----
+
+Ergens loopt het dus fout, we moeten opzoek naar de __bug__.  Stap voor stap (bijvoorbeeld met __Step Into__ of __Step Over__) door de code gaan kan, maar is tijdrovend.  We kunnen misschien beter een aantal __points of interest__ bepalen bij het __debuggen__.   Anders uitgedrukt: plaatsen in ons code waarop we ons kunnen inbeelden dat iets fout loopt.
+
+In grote lijnen vertolkt ons programma twee handelingen.  Het opvangen van de invoer, en het berekenen van het aantal __hectare__.  Misschien moeten we van elke van deze handelingen nagaan of ze goed functioneren.
+
+Je zou hiervoor breakpoints kunnen opnemen, bijvoorbeeld op regels __8__ en __16__, maar laten we het deze keer met de __'Run execution to here'__ optie proberen.
+
+Kies voor __Step Into__ image:Step Into.png[Step Into] om het programma op te starten, en tevens de debugger te activeren.  
+
+Klik vervolgens op de image:Run execution to here.png[Run execution to here] __Run execution to here__ knop op de instructieregel `double hectare = GetHectare(lengte, breedte);`...
+
+image:Run execution to here (1).png[]
+
+In het console scherm voer je vervolgens waardes __100__ en __100__ in als __lengte__ en __breedte in meter__...
+
+[source,shell]
+----
+Lengte in meter?: 100
+Breedte in meter?: 100
+----
+
+__Visual Studio__ schakelt naar __breakmodus__.  
+
+Haal het __Call Stack__ en __Locals__ toolvenster boven en inspecteer de huidige toestand.
+
+image:Run execution to here (2).png[]
+
+In de __Call Stack__ zien we hoe de `Main` method actief is.  `GetHectare` werd nog niet aangeroepen, nog voor de oproep van deze method is door de debugger halt gehouden.
+
+Het __Locals__ toolvenster toont ons hoe de `lengte` en `breedte` variabelen correct zijn opgevuld.
+
+Aan het opvangen van de invoer is bijvolg niets fout.  
+
+We laten het programma verder lopen tot alle waardes (`vierkanteMeter`, `are` en `hectare`) berekend zijn.  
+
+Doe dit door op de image:Run execution to here.png[Run execution to here] __Run execution to here__ knop te klikken voor de instructieregel `return hectare`.  Zo gaan we de uitvoer laten stoppen nog voor de aangeroepen method `GetHectare` is beëindigd.
+
+image:Run execution to here (3).png[] 
+
+Haal opnieuw (als dat nog nodig is) het __Call Stack__ en __Locals__ toolvenster boven en inspecteer de huidige toestand.
+
+image:Run execution to here (4).png[] 
+
+We zien hoe de `Main` method `GetHectare` heeft opgeroepen.
+
+In deze schermafbeelding zie je ook de meegegeven waardes (de parameterwaardes).  Als dat bij jou niet het geval is, rechterklik je in de __Call Stack__ op de activatie van `GetHectare` en kies voor __Show Parameter Values__.
+
+De waardes zijn correct doorgegeven, ook daar ligt het probleem dus niet.
+
+Aan de hand van het __Locals__ toolvenster valt onze logische fout misschien wel op...
+
+Aan `vierkanteMeter` is niets fout, __100 op 100 meter__ is inderdaad __10'000 m²__.  
+
+__10'000 m²__ is echter __100__ (en niet __1000__) `are`.  Bij de berekening van het aantal `are` loopt het dus fout.  
+
+Allicht had je dat al lang door ;)
+****
+
+==== Activatie records
+
+Voor elke uitvoer van een method wordt een *__activatie record__* aangemaakt.  
+
+Dit is een blokje geheugen waarop ondermeer de waardes voor de lokale variabelen van deze activatie worden bijgehouden.   Het __Locals__ toolvenster geeft dan ook weer wat op dat moment de waardes van deze lokale variabelen zijn op het activatie record.
+
+Indien een method meerdere keren wordt aangeroepen, wanneer er dus sprake is van meerdere activaties, wordt ook telkens een nieuw activatie record aangemaakt.  Alle lokale variabelen starten hierbij dan ook van hun default waardes.
+
+De informatie die de combinatie van het __Call Stack__ toolvenster enerzijds, en het __Locals__ toolvenster anderzijds, oplevert is best wat.  
+
+Zo kan je bijvoorbeeld ook de toestand van je variabelen gaan inspecteren lager in de call stack.  Deze activaties zijn nog niet beëindigd, ook de uitvoering van die methods moet nog voltooien.  
+
+****
+[.underline]#Terug naar ons voorgaande voorbeeld#
+
+Dubbelklik je op de activatie van de `Main` method in de call stack, dan krijg je in het __Locals__ toolvenster opnieuw de waardes van de lokale variabelen van deze activatie te zien.  
+
+image:Run execution to here (5).png[]
+
+`hectare` hier bijvoorbeeld staat nog altijd op `0`.  De uitvoering `GetHectare` is immers nog niet voltooid, en de call naar deze method heeft bijgevolg nog geen waarde opgeleverd. 
+
+Merk op dat de `hectare` variabele van de `Main` method een andere variabele is dan deze van de `GetHectare` method.
+****

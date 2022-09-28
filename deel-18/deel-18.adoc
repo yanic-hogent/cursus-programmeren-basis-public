@@ -1,0 +1,37 @@
+= Programmeren Basis - Deel 18
+Yanic Inghelbrecht
+v2020.12.13.12.00
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+ 
+== Interfaces
+
+link:attachments/deel-18.pdf[klik hier voor de pdf-versie,window="_blank"]
+
+De zip files met de voorbeeld projecten :
+
+* link:attachments/deel-18-demo1-apart.zip[deel-18-demo1-apart.zip,window="_blank"]
+* link:attachments/deel-18-demo2-samen.zip[deel-18-demo2-samen.zip,window="_blank"]
+* link:attachments/deel-18-demo3-interface.zip[deel-18-demo3-interface.zip,window="_blank"]

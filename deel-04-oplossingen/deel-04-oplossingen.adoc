@@ -1,0 +1,735 @@
+= Programmeren Basis - Deel 04 - Oplossingen
+Frederiek De Wolf
+v2022.02.23.15.06
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+//:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+ 
+ 
+== Debugging 
+
+=== Oplossing D04muntstukken
+
+Je zou een eerste breakpoint kunnen opnemen nadat alle waardes door de gebruiker werden ingevoerd.  Voer je de code uit (voor waardes __5__, __4__ en __3__) en visualiseer je het __Locals__ toolvenster, dan bekomen we bruikbare informatie...
+
+image::Oefening%20D0401%20-%20Breakpoint%201.png[Plaats een breakpoint, en voor uit tot daar in de code.]
+
+De inhoud van onze `muntstukkenVan1Euro` is niet correct.  We hadden nochtans __4__ ingevoerd.  Bekijken we eens aandachtig wat er met de ingevoerde waarde gebeurt dan begrijpen we natuurlijk al snel waar het foutliep...
+
+[source,csharp,linenums]
+----
+int muntstukkenVan1Euro = 0;
+Console.Write("Aantal muntstukken van 1 euro?: ");
+muntstukkenVan2Euro = int.Parse(Console.ReadLine()); // <1>
+----
+<1> Niet aan `muntstukkenVan1Euro` maar aan `muntstukkenVan2Euro` werd de ingevoerde waarde toegekend.  
+
+Dit moeten we alvast corrigeren.
+
+Stop breakmodus (ga in de __Debug__ menu van Visual Studio kiezen voor __Stop Debugging__) en pas de code aan tot...
+
+[source,csharp,linenums]
+----
+int muntstukkenVan1Euro; // <2>
+Console.Write("Aantal muntstukken van 1 euro?: ");
+muntstukkenVan1Euro = int.Parse(Console.ReadLine()); // <1>
+----
+<1> Ken de waarde toe aan de juist variabele.
+<2> De initialisatie op 0 mag worden weggelaten (heeft geen nut).
+
+Laat het breakpoint staan, en voer hetzelfde scenario nogmaals uit.   Als alles goed is vind je deze keer zowel in `muntstukkenVan2Euro`, `muntstukkenVan1Euro` als `muntstukkenVan50Cent` correcte informatie.
+
+Verwijder het breakpoint, voer het programma uit zonder breakpoints, en hoop dat het programma hiermee correct functioneert.
+
+De uitvoer ziet er deze keer als volgt uit...
+
+[source,shell]
+----
+Aantal muntstukken van 1 euro?: 4
+Aantal muntstukken van 50 eurocent?: 3
+5 x 2 + 4 x 1 + 3 x 0.5 = 15 euro
+----
+
+Dat resultaat is al beter.  Er wordt in de formule effectief gesproken over __4 x 1__ (in plaats van __0 x 1__).  
+Echter is het totaal nog niet correct.
+
+Omdat de berekening van het totale bedrag meteen start na de invoer, zouden we ons breakpoint op dezelfde regel als daarstraks kunnen terugzetten.
+We voeren opnieuw hetzelfde scenerio uit (voeren waarde __5__, __4__ en __3__ in).  
+
+Stap voor stap zouden we kunnen nagaan of ons `totaalBedrag` correct wordt samengesteld.  Maak in Visual Studio gebruik van de __Debug__ > __Step Into__ feature om de uitvoer op de volgende regel te onderbreken.
+
+Bij de bewerking `double totaalBedrag = muntstukkenVan2Euro * 2;` lijkt alles goed te verlopen `totaalBedrag` wordt __10__.  
+
+We stappen bijgevolg een regel verder (__Debug__ > __Step Into__).  Ook hier zien we dat de bewerking `totaalBedrag += muntstukkenVan1Euro;` een goed effect gaf, `totaalBedrag` werd aangepast in __14__...
+
+image::Oefening%20D04.01%20-%20Breakpoint%202.png[Ga stap voor stap de effecten van je code opvolgen.]
+
+Opnieuw stappen we een regel verder...
+
+image::Oefening%20D04.01%20-%20Breakpoint%203.png[Vind het probleem.]
+
+Deze keer meteen valt op hoe het `totaalBedrag` niet correct werd aangepast.  `totaalBedrag` is nu __15__ terwijl we eigenlijk al __15,5__ hadden verwacht.  De bewerking `totaalBedrag += muntstukkenVan50Cent / 2;` moet een fout bevatten.  `totaalBedrag` is met __1__ verhoogd, terwijl er __1,5__ had moeten bijkomen.  Onze expressie `muntstukkenVan50Cent / 2` geeft blijkbaar __1__ opgeleverd.
+
+[TIP]
+====
+Indien je met je muiscursor gaat hangen boven de `\` in deze expressie dan zie je ook het resultaat van deze bewerking.
+====
+
+Op dit moment besef je dat dit niet zo onlogisch is.  Beide waardes die hier met de `\` operator worden gecombineerd zijn `int` waardes.   Bijgevolg bekomen we, zoals je ondertussen weet, het resultaat van een gehele deling.
+
+We kunnen dit probleem uiteraard oplossing door daar bijvoorbeeld `muntstukkenVan50Cent / 2.0` van te maken.  Of alle code samen...
+
+[source,csharp,linenums]
+----
+int muntstukkenVan2Euro;
+Console.Write("Aantal muntstukken van 2 euro?: ");
+muntstukkenVan2Euro = int.Parse(Console.ReadLine());
+
+int muntstukkenVan1Euro; // <1>
+Console.Write("Aantal muntstukken van 1 euro?: ");
+muntstukkenVan1Euro = int.Parse(Console.ReadLine()); // <2>
+
+int muntstukkenVan50Cent;
+Console.Write("Aantal muntstukken van 50 eurocent?: ");
+muntstukkenVan50Cent = int.Parse(Console.ReadLine());
+
+double totaalBedrag = muntstukkenVan2Euro * 2;
+totaalBedrag += muntstukkenVan1Euro;
+totaalBedrag += muntstukkenVan50Cent / 2.0;
+
+string formuleAlsTekst = $"{muntstukkenVan2Euro} x 2 + ";
+formuleAlsTekst += $"{muntstukkenVan1Euro} x 1 + ";
+formuleAlsTekst += $"{muntstukkenVan50Cent} x 0.5"; // <3>
+
+Console.WriteLine($"{formuleAlsTekst} = {totaalBedrag} euro");
+----
+<1> Initialisatie weggelaten (geen noodzakelijke aanpassing).
+<2> Toekennen aan de juiste variabele.
+<3> Van de int literal een double literal gemaakt.
+
+== If ... else if ... else ... en logische bewerkingen
+
+=== Oplossing D04groterofgelijk
+// Y04.03
+[source,csharp,linenums]
+----
+Console.Write("Geef een getal : ");
+string getal1AlsTekst = Console.ReadLine();
+int getal1 = int.Parse(getal1AlsTekst);
+
+Console.Write("Geef nog een getal : ");
+string getal2AlsTekst = Console.ReadLine();
+int getal2 = int.Parse(getal2AlsTekst);
+
+if (getal1 > getal2) {
+	Console.WriteLine("het eerste is groter");
+} else if (getal2 > getal1) {
+	Console.WriteLine("het tweede is groter");
+} else {
+	Console.WriteLine("ze zijn gelijk");
+}
+----
+
+=== Oplossing D04bmi
+
+[source,csharp,linenums]
+----
+Console.Write("Lengte in cm?: ");
+double lengteInCm = double.Parse(Console.ReadLine());
+
+Console.Write("Gewicht in kg?: ");
+int gewichtInKg = int.Parse(Console.ReadLine());
+
+double bmi = gewichtInKg / Math.Pow(lengteInCm / 100, 2);
+string categorie = "normaal gewicht";
+if (bmi >= 40) { 
+    categorie = "ernstige zwaarlijvigheid";
+} else if(bmi >= 30) { 
+    categorie = "zwaarlijvigheid"; 
+} else if (bmi >= 25) { 
+    categorie = "overgewicht"; 
+} else if (bmi < 18.5) { 
+    categorie = "ondergewicht";
+}
+
+Console.WriteLine($"BMI: {bmi} ({categorie})");
+----
+
+=== Oplossing D04prijsappels
+
+[source,csharp,linenums]
+----
+Console.Write("Aantal kilo aan te kopen appels?: ");
+int kiloAppels = int.Parse(Console.ReadLine());
+
+double prijs;
+if (kiloAppels >= 20) { 
+	prijs = kiloAppels * 2;
+} else if (kiloAppels >= 10) {
+	prijs = kiloAppels * 2.5;
+} else {
+	prijs = kiloAppels * 3;
+}
+
+Console.WriteLine($"Prijs: {prijs}");
+----
+
+=== Oplossing D04ohm
+
+[source,csharp,linenums]
+----
+Console.Write("Wat wens je te berekenen (Spanning/Weerstand/Stroomsterkte)?: ");
+string keuze = Console.ReadLine();
+
+if (keuze == "Spanning")
+{
+	Console.Write("Stroomsterkte?: ");
+	double stroomsterkte = double.Parse(Console.ReadLine());
+
+	Console.Write("Weerstand?: ");
+	double weerstand = double.Parse(Console.ReadLine());
+
+	double spanning = stroomsterkte * weerstand;
+	Console.WriteLine($"Spanning: {spanning}");
+}
+else if (keuze == "Stroomsterkte")
+{
+	Console.Write("Spanning?: ");
+	double spanning = double.Parse(Console.ReadLine());
+
+	Console.Write("Weerstand?: ");
+	double weerstand = double.Parse(Console.ReadLine());
+
+	double stroomsterkte = spanning / weerstand;
+	Console.WriteLine($"Stroomsterkte: {stroomsterkte}");
+}
+else if (keuze == "Weerstand")
+{
+	Console.Write("Spanning?: ");
+	double spanning = double.Parse(Console.ReadLine());
+
+	Console.Write("Stroomsterkte?: ");
+	double stroomsterkte = double.Parse(Console.ReadLine());
+
+	double weerstand = spanning / stroomsterkte;
+	Console.WriteLine($"Weerstand: {weerstand}");
+}
+----
+
+
+=== Oplossing D04score
+// Y04.04
+[source,csharp,linenums]
+----
+Console.Write("Geef de score in % : ");
+string scoreAlsTekst = Console.ReadLine();
+int score = int.Parse(scoreAlsTekst);
+
+string letter;
+if (score > 82) {
+	letter = "A";
+} else if (score > 67) {
+	letter = "B";
+} else if (score > 52) {
+	letter = "C";
+} else if (score > 37) {
+	letter = "D";
+} else if (score > 22) {
+	letter = "E";
+} else {
+	letter = "F";
+}
+Console.WriteLine($"In Amerika is dat een \"{letter}\"");
+----
+
+=== Oplossing D04inkomprijs
+// Y4.05
+[source,csharp,linenums]
+----
+Console.Write("Geef de leeftijd : ");
+string leeftijdAlsTekst = Console.ReadLine();
+int leeftijd = int.Parse(leeftijdAlsTekst);
+
+Console.Write("Geef de lengte : ");
+string lengteAlsTekst = Console.ReadLine();
+int lengte = int.Parse(lengteAlsTekst);
+
+if (lengte < 160 && leeftijd > 20) {
+	Console.WriteLine("Prijs is 5Eur");
+} else {
+	Console.WriteLine("Prijs is 10Eur");
+}
+----
+
+Of iets gebruiksvriendelijker door geen onnodige vragen te stellen...
+
+[source,csharp,linenums]
+----
+Console.Write("Geef de leeftijd : ");
+string leeftijdAlsTekst = Console.ReadLine();
+int leeftijd = int.Parse(leeftijdAlsTekst);
+
+if (leeftijd > 20) {
+	Console.Write("Geef de lengte : ");
+	string lengteAlsTekst = Console.ReadLine();
+	int lengte = int.Parse(lengteAlsTekst);
+
+	if (lengte < 160) {
+		Console.WriteLine("Prijs is 5Eur");
+	} else {
+		Console.WriteLine("Prijs is 10Eur");
+	}
+} else {
+	Console.WriteLine("Prijs is 10Eur");
+}
+----
+
+Let erop dat je dit keer de code voor de volle prijs twee keer in je code hebt staan.
+
+=== Oplossing D04toelage
+// Y4.06
+[source,csharp,linenums]
+----
+const double toelagePercentage = 3;
+const double maxInkomen = 20000;
+const int minKinderen = 3;
+
+Console.Write("Jaarinkomen : ");
+string inkomenAlsTekst = Console.ReadLine();
+double inkomen = double.Parse(inkomenAlsTekst);
+
+Console.Write("Aantal kinderen ten laste : ");
+string aantalKinderenAlsTekst= Console.ReadLine();
+int aantalKinderen = int.Parse(aantalKinderenAlsTekst);
+
+if (inkomen <= maxInkomen && aantalKinderen >= minKinderen) {
+	double toelage = inkomen * toelagePercentage / 100;
+	Console.WriteLine($"Uw toelage bedraagt {toelage}");
+} else {
+	Console.WriteLine($"U hebt geen recht op een toelage");
+}
+----
+
+Je zou deze oplossing ook kunnen herschrijven zodat er geen onnodige vragen worden gesteld.  Bv. als je ziet dat het `inkomen > maxInkomen`, doet het aantal kinderen er niet meer toe.
+
+=== Oplossing D04dagnummer
+// Y4.07
+[source,csharp,linenums]
+----
+Console.Write("Geef het dagnummer : ");
+string dagAlsTekst = Console.ReadLine();
+int dag = int.Parse(dagAlsTekst);
+
+if (dag >= 1 && dag <= 365) {
+	// muntsorteren
+	if (dag <= 31) {
+		Console.WriteLine("Januari");
+	} else if (dag <= 59) {
+		Console.WriteLine("Februari");
+	} else if (dag <= 90) {
+		Console.WriteLine("Maart");
+	} else if (dag <= 120) {
+		Console.WriteLine("April");
+	} else if (dag <= 151) {
+		Console.WriteLine("Mei");
+	} else if (dag <= 182) {
+		Console.WriteLine("Juni");
+	} else if (dag <= 212) {
+		Console.WriteLine("Juli");
+	} else if (dag <= 243) {
+		Console.WriteLine("Augustus");
+	} else if (dag <= 273) {
+		Console.WriteLine("September");
+	} else if (dag <= 303) {
+		Console.WriteLine("Oktober");
+	} else if (dag <= 334) {
+		Console.WriteLine("November");
+	} else { 
+		Console.WriteLine("December");
+	}
+} else {
+	Console.WriteLine("geen geldige waarde");
+}
+----
+
+Bovenstaande oplossing bevat heel wat magic numbers, dat kan beter.  Bovendien moesten we al die getallen eerst handmatig uitrekenen. 
+
+Een veel betere oplossing is...
+
+[source,csharp,linenums]
+----
+const int eindJanuari = 31;
+const int eindFebruari = eindJanuari + 28;
+const int eindMaart= eindFebruari + 31;
+const int eindApril = eindMaart + 30;
+const int eindMei = eindApril + 31;
+const int eindJuni = eindMei + 30;
+const int eindJuli = eindJuni + 31;
+const int eindAugustus = eindJuli + 31;
+const int eindSeptember = eindAugustus + 30;
+const int eindOktober = eindSeptember + 31;
+const int eindNovember = eindOktober + 30;
+const int eindDecember = eindNovember + 31;
+
+Console.Write("Geef het dagnummer : ");
+string dagAlsTekst = Console.ReadLine();
+int dag = int.Parse(dagAlsTekst);
+
+if (dag >= 1 && dag <= eindDecember) {
+	// muntsorteren
+	if (dag <= eindJanuari) {
+		Console.WriteLine("Januari");
+	} else if (dag <= eindFebruari) {
+		Console.WriteLine("Februari");
+	} else if (dag <= eindMaart) {
+		Console.WriteLine("Maart");
+	} else if (dag <= eindApril) {
+		Console.WriteLine("April");
+	} else if (dag <= eindMei) {
+		Console.WriteLine("Mei");
+	} else if (dag <= eindJuni) {
+		Console.WriteLine("Juni");
+	} else if (dag <= eindJuli) {
+		Console.WriteLine("Juli");
+	} else if (dag <= eindAugustus) {
+		Console.WriteLine("Augustus");
+	} else if (dag <= eindSeptember) {
+		Console.WriteLine("September");
+	} else if (dag <= eindOktober) {
+		Console.WriteLine("Oktober");
+	} else if (dag <= eindNovember) {
+		Console.WriteLine("November");
+	} else { 
+		Console.WriteLine("December");
+	}
+} else {
+	Console.WriteLine("geen geldige waarde");
+}
+----
+
+=== Oplossing D04geslaagd
+// Y04.10
+[source,csharp,linenums]
+----
+Console.Write("geef score 1 : ");
+string score1AlsTekst = Console.ReadLine();
+int score1 = int.Parse(score1AlsTekst);
+
+Console.Write("geef score 2 : ");
+string score2AlsTekst = Console.ReadLine();
+int score2 = int.Parse(score2AlsTekst);
+
+Console.Write("geef score 3 : ");
+string score3AlsTekst = Console.ReadLine();
+int score3 = int.Parse(score3AlsTekst);
+
+if (score1 >= 5 && score2 >= 5 && score3 >= 5) {
+	Console.WriteLine("Geslaagd");
+} else {
+	int som = score1 + score2 + score3;
+	if (som >= 18 && score1 >= 4 && score2 >= 4 && score3 >= 4) {
+		Console.WriteLine("Geslaagd");
+	} else {
+		Console.WriteLine("Niet geslaagd");
+	}
+}
+----
+
+Of...
+	
+[source,csharp,linenums]
+----
+int som = score1 + score2 + score3;
+
+bool directGeslaagd = (score1 >= 5 && score2 >= 5 && score3 >= 5);
+bool indirectGeslaagd = (som >= 18 && score1 >= 4 && score2 >= 4 && score3 >= 4);
+
+if (directGeslaagd || indirectGeslaagd) {
+	Console.WriteLine("Geslaagd");
+} else {
+	Console.WriteLine("Niet geslaagd");
+}
+----
+
+
+=== Oplossing D04grootste
+// Y04.11
+[source,csharp,linenums]
+----
+Console.Write("Geef het eerste getal : ");
+string g1AlsTekst = Console.ReadLine();
+int g1 = int.Parse(g1AlsTekst);
+
+int maxTotNuToe = g1;
+
+Console.Write("Geef het tweede getal : ");
+string g2AlsTekst = Console.ReadLine();
+int g2 = int.Parse(g2AlsTekst);
+
+if (g2 > maxTotNuToe) {
+	maxTotNuToe = g2;
+}
+
+Console.Write("Geef het derde getal : ");
+string g3AlsTekst = Console.ReadLine();
+int g3 = int.Parse(g3AlsTekst);
+
+if (g3 > maxTotNuToe) {
+	maxTotNuToe = g3;
+}
+
+Console.WriteLine($"Het grootste getal van {g1}, {g2} en {g3} is {maxTotNuToe}");
+----
+
+Je had misschien gedacht aan een oplossing die eerst alle getallen inleest en daarna...
+[source,csharp,linenums]
+----
+...
+if (g1 >= g2 && g1 >= g3) {
+	// g1 is de grootste
+} else if (g2 >=g1 && g2 >= g3) {
+	// g2 is de grootste
+} else {
+	// g3 is de grootste
+}
+...
+----		
+Dat kan, maar zo'n aanpak is onhoudbaar als de opdracht over meer dan 3 getallen zou gaan.
+
+Een alternatieve (en elegante) oplossing op basis van Math.Max() :
+[source,csharp,linenums]
+----
+Console.Write("Geef het eerste getal : ");
+string g1AlsTekst = Console.ReadLine();
+int g1 = int.Parse(g1AlsTekst);
+
+Console.Write("Geef het tweede getal : ");
+string g2AlsTekst = Console.ReadLine();
+int g2 = int.Parse(g2AlsTekst);
+
+Console.Write("Geef het derde getal : ");
+string g3AlsTekst = Console.ReadLine();
+int g3 = int.Parse(g3AlsTekst);
+
+int maxTotNogToe = Math.Max(g1, g2);
+maxTotNogToe = Math.Max(maxTotNogToe, g3);
+
+Console.WriteLine($"Het grootste getal van {g1}, {g2} en {g3} is {maxTotNuToe}");
+----
+
+=== Oplossing D04schrikkeljaar
+
+Volgende code zou werken...
+
+[source,csharp,linenums]
+----
+Console.Write("Jaartal?: ");
+int jaartal = int.Parse(Console.ReadLine());
+
+if (jaartal % 4 == 0 && jaartal % 100 != 0 || jaartal % 400 == 0) {
+	Console.WriteLine($"{jaartal} is een schrikkeljaar.");
+} else {
+	Console.WriteLine($"{jaartal} is geen schrikkeljaar.");
+}
+----
+
+Of een uitwerking met `bool` variabelen, deze keer zonder logischer operatoren, kan er zo uit zien...
+
+[source,csharp,linenums]
+----
+bool viervoud = (jaartal % 4 == 0);
+bool honderdvoud = (jaartal % 100 == 0);
+bool vierhonderdvoud = (jaartal % 400 == 0);
+
+if (viervoud) {
+	if (honderdvoud) {
+		if (vierhonderdvoud) {
+			// viervoud, hondervoud en vierhonderdvoud
+			Console.WriteLine($"{jaartal} is een schrikkeljaar.");
+		} else {
+			// viervoud, hondervoud, maar niet vierhonderdvoud
+			Console.WriteLine($"{jaartal} is geen schrikkeljaar.");
+		}
+	} else {
+		// viervoud, maar niet hondervoud
+		Console.WriteLine($"{jaartal} is een schrikkeljaar.");
+	}
+} else {
+	// niet viervoud
+	Console.WriteLine($"{jaartal} is geen schrikkeljaar.");
+}
+----
+
+Het helpt eventueel hiervoor een overzichtelijke tabel op te stellen...
+
+image::Oefening%20D04.schrikkeljaar.png[Uit de tabel kan je afleiden hoe de voorwaardes te combineren.]
+
+Of indien we toch voorwaardes met logische operatoren gaan combineren...
+
+[source,csharp,linenums]
+----
+if ((viervoud && !honderdvoud) || (viervoud && honderdvoud && vierhonderdvoud)) {
+	Console.WriteLine($"{jaartal} is een schrikkeljaar.");
+} else {
+	Console.WriteLine($"{jaartal} is geen schrikkeljaar.");
+}
+----
+
+Maar de `if` kan natuurlijk eenvoudiger, indien __vierhondervoud__ is natuurlijk ook __viervoud__ en __honderdvoud__, dus maken we daarvan...
+
+[source,csharp,linenums]
+----
+if ((viervoud && !honderdvoud) || vierhonderdvoud) {
+	Console.WriteLine($"{jaartal} is een schrikkeljaar.");
+} else {
+	Console.WriteLine($"{jaartal} is geen schrikkeljaar.");
+}
+----
+
+Een nog andere oplossing, die -op het vlak van __voorwaarde opbouw__- ook vrij elegant is, gaat als volgt...
+
+[source,csharp,linenums]
+----
+if (vierhonderdvoud) {
+	Console.WriteLine($"{jaartal} is een schrikkeljaar.");
+} else if (honderdvoud) {
+	Console.WriteLine($"{jaartal} is geen schrikkeljaar.");
+} else if (viervoud) {
+	Console.WriteLine($"{jaartal} is een schrikkeljaar.");
+} else {
+	Console.WriteLine($"{jaartal} is geen schrikkeljaar.");
+}
+----
+
+Jammer genoeg is dit niet volledig __DRY__.
+
+=== Oplossing D04weer
+
+[source,csharp,linenums]
+----
+Console.Write("Schijnt de zon (ja/nee)?: ");
+string zon = Console.ReadLine();
+bool deZonSchijnt = (zon == "ja");
+
+Console.Write("Regent het (ja/nee)?: ");
+string regen = Console.ReadLine();
+bool hetRegent = (regen == "ja");
+
+if (hetRegent && deZonSchijnt) {
+	Console.Write("Regenboog.");
+} else if (hetRegent && !deZonSchijnt) {
+	Console.Write("Slecht weer.");
+} else if (!hetRegent && deZonSchijnt) {
+	Console.Write("Mooi weer.");
+} else {
+	Console.Write("Saaie dag.");
+}
+----
+
+=== Oplossing D04weerzonderlogischeoperatoren
+
+[source,csharp,linenums]
+----
+Console.Write("Schijnt de zon (ja/nee)?: ");
+string zon = Console.ReadLine();
+bool deZonSchijnt = (zon == "ja");
+
+Console.Write("Regent het (ja/nee)?: ");
+string regen = Console.ReadLine();
+bool hetRegent = (regen == "ja");
+
+if (deZonSchijnt) {
+	if (hetRegent) {
+		Console.Write("Regenboog.");
+	} else {
+		Console.Write("Mooi weer.");
+	}
+} else {
+	if (hetRegent) {
+		Console.Write("Slecht weer.");
+	} else {
+		Console.Write("Saaie dag.");
+	}
+}
+----
+
+Variaties (waar je in andere volgorde de voorwaardes aftoetst) zijn natuurlijk mogelijk, bijvoorbeeld...
+
+[source,csharp,linenums]
+----
+Console.Write("Schijnt de zon (ja/nee)?: ");
+string zon = Console.ReadLine();
+bool deZonSchijnt = (zon == "ja");
+
+Console.Write("Regent het (ja/nee)?: ");
+string regen = Console.ReadLine();
+bool hetRegent = (regen == "ja");
+
+if (hetRegent) {
+	if (deZonSchijnt) {
+		Console.Write("Regenboog.");
+	} else {
+		Console.Write("Slecht weer.");
+	}
+} else {
+	if (deZonSchijnt) {
+		Console.Write("Mooi weer.");
+	} else {
+		Console.Write("Saaie dag.");
+	}
+}
+----
+
+Hier in dit geval, omdat we de 4 mogelijke gevallen (__regenboog__, __slecht weer__, __mooi weer__ of __saaie dag__) willen rapporteren, maakt het niet veel uit welke variatie je kiest.
+
+Zou je echter bijvoorbeeld enkel interesse hebben in het rapporteren van de gevallen __regenboog__ en __mooi weer__, dan ga je allicht opteren voor de eerste variatie.
+
+== Invoer robuust opvangen
+ 
+=== Oplossing D04weermetrobuusteinvoer
+
+[source,csharp,linenums]
+----
+Console.Write("Schijnt de zon (ja/nee)?: ");
+string zon = Console.ReadLine().ToLower().Trim();
+bool deZonSchijnt = (zon == "ja");
+
+Console.Write("Regent het (ja/nee)?: ");
+string regen = Console.ReadLine().ToLower().Trim();
+bool hetRegent = (regen == "ja");
+
+if (deZonSchijnt) {
+	if (hetRegent) {
+		Console.Write("Regenboog.");
+	} else {
+		Console.Write("Mooi weer.");
+	}
+} else {
+	if (hetRegent) {
+		Console.Write("Slecht weer.");
+	} else {
+		Console.Write("Saaie dag.");
+	}
+}
+----

@@ -1,0 +1,329 @@
+﻿= Programmeren Basis - Deel 15 - Verdieping
+Frederiek De Wolf
+v2021.11.30.14.44
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+
+== (Non-auto) Implemented properties
+
+Alle properties die tot dus ver gedefinieerd werden in alle voorgaande voorbeelden zijn *auto-implemented properties*.  Een property definitie, bijvoorbeeld van een `public string` property als...
+
+[source,csharp,linenums]
+----
+public double BtwPercentage { get; set; } = 21.0;
+----
+
+Wordt voor ons op de achtergrond (__we zien dat niet__) omgezet naar iets als...
+
+[source,csharp,linenums]
+----
+private double _btwPercentage = 21.0;   // <1>
+public double BtwPercentage { 
+	get {
+		return _btwPercentage;          // <2>
+	}
+	set {
+		_btwPercentage = value;         // <3>
+	}
+}
+----
+<1> Een `private` veld van corresponderend datatype (hier `double`) wordt toegevoegd.
+<2> Van dit veld wordt de waarde in de __getter__ uitgelezen.
+<3> De waarde van dat veld wordt in de __setter__ met de nieuwe -aan de property toegekende- waarde overschreven.
+
+Hiervoor bespraken we reeds hoe de `get` accessor aan de property de mogelijkheid toevoegd uitgelezen te worden.  In plaats van een auto-implemented `get;` accessor, kan je die aan eender welke implementatie binden: `get { /* de code die wordt uitgevoerd bij het uitlezen van de property */ }`.
+
+Een `set` accessor zorgt voor de mogelijkheid tot het instellen van (__toekennen aan__) de property.   In plaats van een auto-implemented `set;` accessor, kan je die aan eender welke implementatie binden: `set { /* de code die wordt uitgevoerd bij het instellen van de property */ }`. 
+De impliciet gedeclareerde `value` wordt ingesteld op de nieuwe -aan de property toegekende- waarde. 
+
+[source,csharp,linenums]
+----
+artikelX.BtwPercentage = 6.0;                // <1>
+Console.WriteLine(artikelX.BtwPercentage);   // <2>
+----
+<1> Bij het toekennen aan de property wordt hier het onderliggende veld `_btwPercentage` insteld op `6.0`.
+<2> Het uitlezen van de property resultaat in het uitvoeren van de __getter__, wat opnieuw `6.0` zal opleveren.
+
+.Boilerplate code 
+[NOTE]
+====
+Dergelijke constructie...
+
+- een veld van corresponderend datatype
+- waarvan de waarde wordt opgeleverd in de getter
+- en de waarde wordt overschreven in de setter
+
+Valt zo vaak voor dat men hiervoor de __auto-implemented__ constructie heeft voorzien.  Met een minium aan code kunnen we in de typische functionaliteit voorzien.
+
+Kies dan ook -in dergelijke situatie- voor de __auto-implemented__ constructie, ze maakt de code eleganter, compacter, declaratiever.
+====
+
+Soms wil je echter zelf uitkiezen welke logica wordt uitgevoerd bij het instellen of uitlezen van een property.  In dat geval kan je makkelijk zelf de __getter__ en __setter__ gaan implementeren.  Een __backing field__ (achterliggend veld gebruikt voor de opslag van de __toestand__) moet je eventueel zelf nog gaan toevoegen.
+
+****
+[.underline]#Voorbeeld met zelf geïmplementeerde properties#
+
+Bij eenvoudige afgeleide queries valt het wel eens voor dat men __readonly properties__ voorziet die zelf worden geïmplementeerd.
+
+De landcode, het controle getal en het identificatienummer van een bankrekening zijn bijvoorbeeld afgeleid van het IBAN nummer.
+
+.Bankrekening.cs
+[source,csharp,linenums]
+----
+class Bankrekening {
+    public string IbanNummer { get; set; } // <1>
+
+    public string LandCode {
+        get { 
+			return IbanNummer.Substring(0, 2);    // Eerste twee karakters.
+		}
+    }
+    public string ControleGetal
+    {
+        get { 
+			return IbanNummer.Substring(2, 2);    // Derde en vierde karakters.
+		}
+    }
+    public string IdentificatieNummer
+    {
+        get { 
+			return IbanNummer.Substring(4);       // Vanaf het vijfde karakter.
+		}
+    }
+
+    public bool IsGeldigIbanNummer() {
+        string nummer = IdentificatieNummer + LandCode;
+        string[] karakters = new string[] { 
+		   "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
+           "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" };
+        for (int index = 0; index < karakters.Length; index++) {
+            string karakter = karakters[index];
+            string karakterWaarde = (index + 10).ToString();
+            nummer = nummer.Replace(karakter, karakterWaarde)
+                            .Replace(karakter.ToUpper(), karakterWaarde);
+        }
+        string checksum = (98 - (int)(((decimal.Parse(nummer + "00") / 
+		                                97) % 1) * 97)).ToString();
+        return (ControleGetal == checksum);
+    }
+}
+----
+<1> Deze property werd __auto-implemented__ gedefinieerd, zelf een implementatie toevoegen zou geen enkel voordeel bieden.
+
+.Program.cs
+[source,csharp,linenums]
+----
+using System;
+
+class Program {
+    static void Main() {
+        Bankrekening b = new Bankrekening();
+
+        b.IbanNummer = "BE68539007547034";         // <1>
+
+        Console.WriteLine(b.LandCode);             // <2>
+        Console.WriteLine(b.ControleGetal);        // <2>
+        Console.WriteLine(b.IdentificatieNummer);  // <2>
+
+        Console.WriteLine(b.IsGeldigIbanNummer());
+    }
+}
+----
+<1> Instellen property IbanNummer, de __setter__ van deze property wordt uitgevoerd.
+<2> Uitlezen van de properties `LandCode`, `ControleGetal` en `IdentificatieNummer`.  De __getters__ van deze properties worden uitgevoerd.
+
+[source,shell]
+----
+BE
+68
+539007547034
+True
+----
+****
+
+== Queries aan de hand van readonly properties of methods
+
+Voordat we zelf properties gingen implementeren, kon een query die wel verkozen logica ging uitvoeren, enkel aan de hand van een method worden gedefinieerd.  Nu echter, hebben we twee mogelijkheden, (readonly) properties of methods.
+
+Over het algemeen representeren methods __acties__ terwijl properties eerder __informatie__ voorstellen.
+Properties zijn bedoeld om te gebruiken net alsof het variabelen zouden zijn.  Je kan er op heel natuurlijke wijze, `objectNaam.propertyNaam = waarde`, een waarde aan toekennen.
+Minder ervaren ontwikkelaars zouden het gebruik van properties eenvoudiger vinden.
+
+*Als het om een eenvoudige, snel uit te voeren, implementatie gaat, kies je voor een property.*  Maar zelfs indien men een relatief lichte operatie zou uitvoeren, als het opleveren van een Substring waarde, kiest men doorgaans voor een property.
+
+*Er wordt afgesproken te werken met een method vanaf de implementatie meer belastende operaties gaat verrichten.*
+Voor de query `IsGeldigIbanNummer` is met een method gewerkt.  Technisch kon dit net zo goed aan de hand van een readonly property.
+Maar door hier een method te gebruiken, signaleren we aan de clientprogrammeur, dat het om een implementatie gaat waar toch wel wat (processor)tijd in wordt geïnvesteerd.
+
+Heeft een applicatie meermaals deze `IsGeldigIbanNummer()` waarde nodig, dan zal allicht beslist worden deze éénmalig op te vragen, om verder deze opgeslagen waarde te gebruiken...
+
+[source,csharp,linenums]
+----
+bool geldig = b.IsGeldigIbanNummer();   // <1>
+
+Console.WriteLine(geldig);              // <2>
+Console.WriteLine(geldig);              // <2>
+Console.WriteLine(geldig);              // <2>
+----
+<1> Eénmaal opslaan.
+<2> Meermaals gebruiken.
+
+Zolang het `IbanNummer` waarop `IsGeldigIbanNummer()` is gebaseerd niet wijzigt, zou deze method toch telkens dezelfde waarde opleveren.
+
+Indien een implementatie kopies gaat maken van bepaalde instanties kan je spreken van een toch wat zwaardere implementatie.
+Bijvoorbeeld `Clone()` methods...
+
+.Bankrekening.cs
+[source,csharp,linenums]
+----
+class Bankrekening
+{
+    public string IbanNummer { get; set; }
+    public string Klantnaam { get; set; }
+
+    public Bankrekening Clone()
+    {
+        Bankrekening c = new Bankrekening();
+        c.IbanNummer = this.IbanNummer;
+        c.Klantnaam = this.Klantnaam;
+        return c;
+    }
+}
+----
+
+Ook indien informatie in omgezette vorm wordt opgeleverd, zoals bij conversie functionaliteiten wordt doorgaans gewerkt met function methods.
+De voorgedefinieerde `ToString()` bijvoorbeeld is bruikbaar om van eender welke instantie een tekstuele representatie op te vragen.
+
+[source,csharp,linenums]
+----
+decimal bedrag = 12.34m;
+DateTime datum = new DateTime(2017, 11, 30);
+
+string label = bedrag.ToString() + " euro op " + datum.ToString();
+
+Console.WriteLine(label);            // 12,34 euro op 30/11/2017
+----
+
+Een ander voorbeeld is `ToArray()`.  Deze kan je aanroepen op een instantie van type `List<T>` en zal dezelfde elementen in arrayvorm (`T[]`) opleveren.
+
+[source,csharp,linenums]
+----
+List<int> getallen1 = new List<int> { 10, 20, 30 };
+int[] getallen2 = getallen1.ToArray();
+----
+
+[NOTE]
+====
+Vaak wordt een __To__ prefix gebruikt in de naam van dergelijke conversie functionaliteit.
+====
+
+Ook indien de query bij elke call een andere waarde gaat opleveren, wordt met een method gewerkt om dit te signaleren.
+Van een `Bankrekening` willen we een `Uittreksel()` kunnen opvragen, deze zou in `string` vorm een beeld van het `IbanNummer`, `Saldo` en het __huidig tijdstip__ moeten opleveren.
+
+.Bankrekening.cs
+[source,csharp,linenums]
+----
+class Bankrekening
+{
+    public string IbanNummer { get; set; }
+
+    public decimal Saldo { get; private set; }
+    public void Stort(decimal bedrag) {
+        _saldo = Saldo + bedrag;
+    }
+
+    public string Uittreksel() {
+        return $"{IbanNummer} heeft een saldo van {Saldo} op {DateTime.Now}.";
+    }
+}
+----
+
+== Garbage collection
+
+Een object is alleen bruikbaar als je er een verwijzing naar hebt.  Om die reden verschijnt er niet zo zeer...
+
+[source,csharp,linenums]
+----
+New Rechte();
+----
+
+...in onze code, maar eerder...
+
+[source,csharp,linenums]
+----
+Rechte r = New Rechte();
+----
+
+Hiermee bekomen we immers de mogelijkheid, aan de hand van de `r` variabele, te refereren aan het aangemaakt `Rechte` object.
+
+Indien we nergens nog in ons programma (in eender welke dataholder die nog in scope is) kunnen verwijzen naar een object dan wordt het voor ons programma __afval__ (Engels: __garbage__).  Het bezet enkel werkgeheugen, en zou dus maar beter __opgeruimd__ (Engels: __collected__) worden.
+
+****
+[.underline]#Voorbeeld#
+
+Bij creatie van een object van type `Rechte` worden meteen twee `Punt` objecten aangemaakt, waarvan de verwijzingen terecht komen in de properties `Start` en `Eind`.
+
+.Punt.cs
+[source,csharp,linenums]
+----
+class Punt {
+    public Punt(int x, int y) {
+        this.X = x;
+        this.Y = y;
+    }
+    public int X { get; set; }
+    public int Y { get; set; }
+}
+----
+
+.Rechte.cs
+[source,csharp,linenums]
+----
+class Rechte {
+    public Punt Start { get; set; } = new Punt(0, 0);  // <1>
+    public Punt Einde { get; set; } = new Punt(0, 0);  // <1>
+}
+----
+<1> Velden `Start` en `Einde` worden geïnitialiseerd.
+
+Overschrijven we van `rechte2` het __eindpunt__ met het __startpunt__ van `rechte1` dan wordt het oorspronkelijk `Punt` object waar de `Einde` property van `rechte2` naartoe verwees __afval__.
+
+.Program.cs
+[source,csharp,linenums]
+----
+using System;
+
+class Program {
+    public static void Main() {
+        Rechte rechte1 = new Rechte();
+        Rechte rechte2 = new Rechte();
+        rechte2.Eind = rechte1.Start;  // <1>
+    }
+}
+----
+<1> Van de vier `Punt` objecten is er na uitvoer van deze regel één __garbage__ geworden.
+****
+
+Dergelijk __afval__ wordt door de *__garbage collector__* van de __.NET Runtime__ automatisch voor ons opgeruimd.  Zelf hoef je hiervoor geen stappen te ondernemen.  Op gepaste tijdstippen (vaste intervallen, wanneer geheugen kritisch wordt, bij het afsluiten van het programma) gaat deze __collector__ het geheugen scannen en kijken of bepaalde gereserveerde ruimte mag worden vrijgegeven.

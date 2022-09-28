@@ -1,0 +1,870 @@
+= Programmeren Basis - Deel 01
+Frederiek De Wolf
+v2021.09.29.09.02
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+
+[NOTE]
+======================================
+In dit cursusmateriaal wordt verondersteld dat Visual Studio op je toestel is geïnstalleerd.  
+
+In dit cursusmateriaal wordt gewerkt met de __Enterprise__ editie, geïnstalleerd op een Windows 10.  We raden aan de studenten van onze opleiding dezelfde configuratie aan .  De Enterprise versie heeft de meest volledige set aan mogelijkheden.
+
+In het verdiepingsmateriaal vind je meer informatie over de verschillende versies van Visual Studio, en over het downloaden en installeren van Visual Studio.
+======================================
+
+== Hello World!
+
+=== Projecten en solutions
+
+Om een __programma__, __applicatie__, __app__, ..., en dit zijn allemaal synoniemen, op te bouwen, creëren we in Visual Studio een __project__.  Dit project hoort op zijn beurt tot een __solution__.
+Een project is een technologische eenheid die deel uitmaakt van het te ontwikkelen systeem.  Het resultaat is een applicatie of een applicatie-component.
+
+We kunnen verschillende soorten van projecten creëren.  Visual Studio helpt ons daarmee door verschillende templates aan te bieden.
+Enkele voorbeelden van templates zijn: __console applicaties__, __Windows Forms applicaties__, __WPF applicaties__ en __class libraries__.
+
+Meerdere van dergelijke applicatie-componenten kunnen gecombineerd worden om tot een gehele __oplossing__ te komen.  In dat geval spreken we over een __solution__.
+Een solution is dus een verzameling en configuratie van alle componenten (als projecten) die deel uit maken van het te ontwikkelen systeem.
+
+De meeste voorbeelden en oefeningen die je in dit cursusmateriaal vindt, zijn opgesteld aan de hand van console applicaties.
+Dit soort van applicaties heeft beperkte mogelijkheden voor invoer en uitvoer, en zijn bedoeld voor het creëren van opdrachtregel programma's (__command line applications__).
+Console applicaties worden in deze cursus ook ingezet vanwege hun eenvoud.  De aangebrachte stof kan je echter later ook in andere soorten applicaties (bijvoorbeeld desktop, web of mobile applicaties) gaan inzetten.
+
+=== Starten vanuit de voorbeeldsolution
+
+Voor de eenvoud vertrekken we in het begin van een reeds opgezet project en solution.  
+
+Download het link:attachments/solution1.zip[solution1.zip] archief en pak het uit.
+
+.Wat is een archief (__zip__) bestand?
+[NOTE]
+===============================
+In een archief bestand, bijvoorbeeld met de extensie __zip__, zitten meerdere bestanden en mappen samen verpakt.
+===============================
+
+.Hoe pak ik in Windows een archief uit?
+[TIP]
+===============================
+In __Windows__ kan je deze __uitpakken__ (__decomprimeren__) door in de __Verkenner__ te rechterklikken op de bestandsnaam, en te kiezen voor een optie als __Alles uitpakken...__...
+
+image::Windows - Zip uitpakken.png[Windows - Zip uitpakken]
+
+Kies in welke map je dit archief wil decomprimeren, klik op __Uitpakken__ en open deze doelmap...
+
+image::Windows - Zip uitpakken - Doel selecteren.png[Windows - Zip uitpakken - Doel selecteren]
+===============================
+
+Open het bestand met de __.sln__ extensie (bijvoorbeeld door er op te dubbelklikken)...
+
+image::Voorbeeldsolution openen.png[Voorbeeldsolution openen.png]
+
+Visual Studio opent de solution en het bijhorende project...
+
+image::Voorbeeldsolution geopend in Visual Studio.png[Voorbeeldsolution geopend in Visual Studio]
+
+Het is in dit bestand (__Program.cs__) dat we onze eigen code gaan verwerken.
+
+.Wat doe ik als ik geen broncode krijg te zien?
+[TIP]
+===============================
+Indien je geen broncode te zien krijgt, vouw je in het __Solution Explorer__ toolvenster de __Project1__ node open (klik op het pijltje naast __Project1__), en dubbelklik je op de naam van ons broncodebestand __Program.cs__.
+===============================
+
+.Waar vind ik de Solution Explorer?
+[TIP]
+===============================
+Vind je de __Solution Explorer__ niet terug kies dan in de __View__ menu van Visual Studio voor __Solution Explorer__.  Doorgaans verschijnt dit toolvenster vervolgens aan de rechterkant van onze ontwikkelomgeving.
+===============================
+
+.Waarvoor dient deze Solution Explorer?
+[NOTE]
+===============================
+In de __Solution Explorer__ krijgen we te zien hoe het broncodebestand __Program.cs__ deel uit maakt van het project __Project1__, dat op zijn beurt deel uitmaakt van de solution __Solution1__.
+Naast het eenvoudigweg openen van broncodebestanden, kan je dit toolvenster gebruiken om de configuratie van je oplossing te __verkennen__ of aan te passen.  
+
+Je zou er bijvoorbeeld broncodebestanden of projecten kunnen toevoegen, hernoemen, verwijderen, ... .  
+
+Momenteel is dat voor ons nog niet noodzakelijk.  Wanneer we later complexere projecten en solutions gaan opzetten, komen we hierop terug. 
+===============================
+
+=== Een app(licatie) uitvoeren
+
+Om het programma te starten klik je in de werkbalk op de __play knop__ (een groene pijl) waarop de projectnaam staat vermeld...
+
+image::Visual Studio - Programma starten.png[Programma uit de voorbeeldsolution starten.]
+
+TIP: Er bestaan verschillende manieren om programma's op te starten.  
+Naast het klikken op de play knop kan je in de __Debug__ menu van Visual Studio bijvoorbeeld ook kiezen voor __Start Debugging__.
+
+Het programma wordt uitgevoerd en de tekst __Hello World!__ wordt op de console gedrukt...
+
+image::Voorbeeldsolution - Hello World - Uitvoer.png[Uitvoer van het Hello World voorbeeld]
+
+NOTE: We krijgen van de console mee dat het programma succesvol beëindigd werd (__exited with code 0__).
+
+Druk als gebruiker eender welke toets om de console af te sluiten, of gebruik de systeemknop voor het sluiten (het kruisje bovenaan rechts in het venster). 
+Sinds Visual Studio 2019 zal bij het uitvoeren van een console applicatie by default de console niet meer sluiten eens het programma is beëindigd.  Vroeger was dit wel het geval, en was het moeilijk op deze wijze de uitvoer af te lezen.  Het console scherm sloot immers onmiddelijk na het afdrukken van de tekst __Hello World!__.
+
+[NOTE]
+===============================
+Wat hier de __console__ wordt genoemd, is het venster -of anders gezegd de uitvoeringsomgeving- in dewelke het programma wordt uitgevoerd.
+
+In het verdiepingsmateriaal vind je meer informatie over deze tekstuele __uitvoeromgeving__.
+===============================
+
+=== Wat is een Hello World app?
+
+Programmeercursussen starten typisch met een __Hello World__ voorbeeld.  Dergelijk voorbeeld illustreert een basishandeling van een programma, namelijk het brengen van uitvoer.  In dit geval het brengen van tekst op de __console__.
+
+Vaak brengt men in deze voorbeelden de tekst __Hello World!__ naar voor, maar om te illustreren hoe je die uitvoer brengt maakt het niet uit met welke tekst je werkt.
+
+Als je naar de code kijkt begrijpt je allicht hoe ons algoritme het programma de opdracht geeft een __regel te schrijven__ (`WriteLine`) die bestaat uit de tekst `"Hello World!"`.  
+Hiervoor zorgt dus de instructie `Console.WriteLine("Hello World!")`.  
+
+Het goede bron voor __Hello World__ broncode -in zowat elke mogelijke taal- is de http://helloworldcollection.de/[The Hello World Collection (http://helloworldcollection.de)]
+
+=== Verdere werkwijze in deze cursus
+
+Voorlopig komen alle instructies van de voorbeelden en oefeningen in dit cursusmateriaal in de `Main` __method__ terecht.  Meer specifiek tussen diens accolades, of met ander woorden tussen de `{` en `}` symbolen...
+
+****
+
+.Program.cs
+[source,csharp,linenums]
+----
+using System;
+
+namespace Project1 
+{
+    class Program 
+    {
+        static void Main() 
+        {
+            ... <1>
+        }
+    }
+}
+----
+<1> hier komt onze eigen code te staan
+
+****
+
+We kunnen momenteel steeds dezelfde Solution1, Project1 en Program.cs voor het uittesten van de voorbeelden, en het maken van de oefeningen gebruiken.
+
+Indien je een stuk programmacode wil bewaren, kan je bijvoorbeeld de inhoud van het broncode document (of van de `Main` method) kopiëren, en in een ander document opslaan.  Daarna kan je eventueel de inhoud van de `Main` method vervangen om met een nieuw voorbeeld of oefening aan de slag te gaan.
+
+Taalelementen als __namespaces__ (`namespace` sleutelwoord) en __klassen__ (`class` sleutelwoord) mag je momenteel gewoon negeren.  We komen hier later uitvoering op terug.
+
+[NOTE]
+===============================
+Kan je je toch niet bedwingen, dan vind je in bij de het verdiepingsmateriaal meer informatie terug over: 
+
+- Dot notaties, bijvoorbeeld in `Console.WriteLine` of `Console` __dot__ `WriteLine`
+- Using directives (`using` sleutelwoord)
+- Namespaces (`namespace` sleutelwoord)
+- Sleutelwoorden 
+===============================
+
+[NOTE]
+===============================
+Ook over het hoe en waarom code te structuren over verschillende methods, klassen, namespace of broncodedocumenten, kan je bij de verdieping nalezen:
+
+- Code onderdelen of klassen
+- Hoofdmethod Main
+- Meerdere methods in een klasse
+- Een method publiek of privaat definiëren
+===============================
+
+[NOTE]
+===============================
+Ook al bij de verdieping kan je terugvinden hoe we in Visual Studio een nieuwe project creëren.
+===============================
+
+[NOTE]
+======================================
+Technisch gezien kan je sinds __C# 9.0__ ook aan de slag met __top-level statements__.  Deze komen rechtstreeks (eventueel 
+in combinatie met using directives) in een broncode bestand worden opgenomen.
+
+De omsluitende `Main(string[] args)`, klasse en namespace container wordt er dan op de achtergrond voor ons rond gezet.
+
+Je kan met andere woorden hetzelfde resultaat bereiken met...
+
+.Program.cs
+[source,csharp,linenums]
+----
+using System;
+
+... <1>
+----
+<1> hier komt onze eigen code te staan
+
+Bijvoorbeeld...
+
+.Program.cs
+[source,csharp,linenums]
+----
+using System;
+
+Console.WriteLine("Hello World!");
+----
+
+Toch zal je al snel gebruik willen maken van extra methods, klassen of namespace.  Om die reden is het geen slecht idee, deze voor de volledigheid meteen ook op te nemen.
+======================================
+
+== Compileren en de IDE
+
+=== Compiler
+
+Visual Studio maakt gebruik van de C# compiler om onze C# broncode, bij het creëren van een Console Application, om te zetten naar een uitvoerbaar bestand.
+Onze C# broncode zit doorgaans vervat in een bestand met de .cs extensie.  __cs__ als logische afkorting voor __See Sharp__, de eerder fonetische schrijfwijze van __C#__.
+Het uitvoerbaar bestand, ook wel de __executable__ of simpelweg de __applicatie__ genoemd, zit typisch vervat in een bestand met de .exe extensie.
+
+De compiler is de tool waar wij als ontwikkelaar mee communiceren.  We vertellen deze compiler, aan de hand van een __algoritme__ (een verzameling van instructies), noem het gerust een __programma__, hoe onze applicatie er uit ziet, hoe het programmaverloop in elkaar zit.
+
+Als de compiler ons, of dus de broncode, verstaat, kan het een applicatie, of een onderdeel voor een applicatie __bouwen__.  Men spreekt hier ook wel over het __build__ proces.
+Visual Studio zal na het __compileren__, en dus het bouwen van de Console Application executable, deze executable gaan opstarten in de opdrachtregel-omgeving.  Dit op het moment dat we op de __play__ knop klikken op de __Standard__ werkbalk, of kiezen voor __Start Debugging__ in de __Debug__ menu-optie.
+
+[NOTE]
+===============================
+Je kan het openen van de opdrachtregel-omgeving, en het opstarten van de applicatie, ook manueel verrichten.  
+Visual Studio maakt dit proces voor ons echter vele malen eenvoudiger.
+===============================
+
+==== Compilefouten
+
+Als de compiler ons niet verstaat, zal het aan ons vertellen __wat__ het niet verstaat, en soms zelfs suggesties maken __hoe__ we deze fout kunnen corrigeren.  We spreken hier over een __compile-__ of __buildfout__.
+Stel dat we in voorgaand programma, in plaats van de voor gedefinieerde functionaliteit met de naam `WriteLine`, opeens `WwriteLine` proberen aan te roepen.  We tikken bijvoorbeeld per ongeluk een __w__ te veel.  Dan krijgen we in Visual Studio te zien dat de compiler ons niet meer begrijpt.
+
+image::Visual%20Studio%20-%20Compilefout%20-%20Error%20List.png[Visual Studio - Compilefout - Error List]
+
+===== Error List toolvenster
+
+Het __Error List__ toolvenster toon een overzicht van alle compilefouten.  Per fout krijgen we een omschrijving, eventuele verbeter suggesties en de locatie (bestand en regel) te zien.
+
+TIP: Dubbelklik je in dit toolvenster op dergelijke foutregel dan verspringt de focus naar de code editor en staat de cursus meteen op de positie waar iets fout is.  Dit is uitermate handig in situaties waar we met veel broncode en eventueel veel compilefouten zitten.
+
+.Waar kan ik het Error List toolvenster vinden?
+[TIP]
+===============================
+Vind je het Error List toolvenster niet terug, kan kies je in de menu van Visual Studio onder __View__ voor __Error List__.
+
+image::Visual Studio - View toolvensters.png[Visual Studio - View - Error List]
+===============================
+
+===== Error squiggles
+
+Ook de rode kartellijn (__error squiggle__) onder __wWriteLine__ maakt meteen in de code editor duidelijk dat zich daar een fout bevindt.
+
+image::Visual%20Studio%20-%20Compilefout%20-%20Kartellijn.png[Visual Studio - Compilefout - Kartellijn]
+
+TIP: Hover je met je muisindicator boven deze kartellijn, dan krijg je dezelfde omschrijving van deze fout te zien, als in het __Error List__ toolvenster wordt getoond.
+
+===== Quick Action
+
+Merk op dat in geval van compilefouten de code editor soms ook __quick action__ lichtbol icoontjes vertoont.  Deze bieden ons __vlugge__ toegang tot __handelingen__ die hopelijk leiden tot verbetering.
+
+image::Visual%20Studio%20-%20Compilefout%20-%20Quick%20action.png[Visual Studio - Compilefout - Quick action]
+
+Kies je hier effectief voor __Change wWriteLine to WriteLine.__ dan zal onze code worden aangepast.  Het preview venster visualiseerde dit alvast.
+
+NOTE: Bij elke nieuwe versie van een taal als C#, zeg dus maar gerust bij elke nieuwe versie van een compiler, verstaat deze andere, nieuwe, eenvoudigere instructies/algoritmes en wordt deze beter in het duidelijk maken wat deze niet verstaat.
+
+=== Integrated Development Environment
+
+Doorgaans verschijnt het __Error List__ toolvenster onderaan links in de Visual Studio IDE.  Deze plaatsing valt echter makkelijk aan te passen, je kan bijvoorbeeld het toolvenster aan eender welke kant van het Visual Studio hoofdvenster, of eender welke kant van een ander toolvenster vasthaken (__docking__), of zelf laten drijven (__floating__) boven het hoofdvenster.
+
+Versleep het toolvenster (klik op de titel en beweeg de muisindicator) om deze ergens anders te plaatsen.  Als je met de muisindicator sleept boven één van de voorgedefinieerde layout-posities, in het kruis midden op het scherm, dan geeft Visual Studio een preview, in de vorm van een blauw vak, waar dit toolvenster zal terechtkomen.
+
+image::Visual%20Studio%20-%20Toolvensters%20verplaatsen.png[Visual Studio - Toolvensters verplaatsen]
+
+Of rechterklik op de titel van het toolvenster om de mogelijkheden te verkennen.
+
+NOTE: Men spreekt wel eens over een __IDE__, of voluit __Integrated Development Environment__.  Logisch, want we merken al snel dat deze Visual Studio ontwikkelomgeving een samenhangen is van verschillende tools als: de code editor, de compiler, het __Error List__ of __Solution Explorer__ toolvenster, ... .
+
+== Enkele taalelementen
+
+=== Statements en terminators
+
+__Instructies__ worden ook wel eens __statements__ genoemd.
+
+****
+
+[source,csharp,linenums]
+----
+Console.WriteLine("Hello World!");  
+----
+
+Bemerk dat instructies worden afgesloten met een `;`.  Deze moet duidelijk maken dat dat het einde is van de opdracht die we geven (__statement terminator__).
+
+****
+
+https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/statements-expressions-operators/statements[Microsoft Docs: Statements (C# Programming Guide)]
+
+=== Literals
+
+****
+
+[source,csharp,linenums]
+----
+Console.WriteLine("Hello World!");  
+----
+
+De bedoeling van deze instructie is om de tekst __Hello World!__ op de console te drukken, hoe vaak je het programma ook uitvoert.  
+
+****
+
+Omdat deze tekst een onveranderlijk -lees __letterlijk__- stuk tekst is, noemt men dit ook wel een __string literal__.  Een __string__ is een __aaneenschakeling__ van meerdere karakters.
+
+Een string literal plaats men steeds tussen aanhalingstekens (`"..."`).  
+
+****
+
+Probeer het zelf eens zelf, maak hiervan...
+
+[source,csharp,linenums]
+----
+Console.WriteLine("Console.WriteLine();"); 
+----
+
+****
+
+Voer het programma uit, en merk op dat we een geheel andere uitvoer verkrijgen.
+Deze keer komt de tekst __Console.WriteLine();__ op de console.  
+
+[TIP]
+===============================
+Gelukkig toont Visual Studio tekstuele data in het rood (bij default kleuren-instellingen), dus kan je makkelijk zien of je goed bezig bent qua aanhalingstekens.
+Als plots de helft van je programma in het rood staat ben je wellicht een afsluitend aanhalingsteken vergeten.
+
+Je kan Visual Studio ook zo configureren dat andere kleuren in de code editor worden gebruikt.
+===============================
+
+https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/reference-types#the-string-type[Microsoft Docs: string (C# Reference)]
+
+=== Commentaar
+
+Wens je je programma's te verduidelijken dan kan dit aan de hand van __commentaar__.  
+
+****
+
+Volgend voorbeeld zal, net als voorgaande, __Hello World!__ afdrukken.  Tekst die worden voorafgegaan door `//` wordt geïnterpreteerd als __commentaar__ en wordt bijgevolg door de compiler genegeerd.
+
+[source,csharp,linenums]
+----
+//Volgende instructie
+//zorgt voor
+//uitvoer...
+Console.WriteLine("Hello World!");
+----
+
+Indien we het voorbeeld uitvoeren dan krijgen we opnieuw net dezelfde uitvoer...
+
+[source, shell]
+----
+Hello World!
+----
+
+****
+
+Let echter op, het feit dat commentaar eender wat kan inhouden (gezien het niet wordt gecompileerd, of dus ook niet wordt gecontroleerd), is zowel het sterkste als het zwakste punt van commentaar.  Maar al te vaak wordt nagelaten bij aanpassingen van de code, ook de commentaar aan te passen.  
+
+Commentaar dat niet up-to-date is, is zinloos en contraproductief.
+
+TIP: Commentaar wordt vaak gebruikt tijdens het aanpassen van code.  Soms helpt het bepaalde stukken code tijdelijk uit te schakelen.
+
+NOTE: Bemerk dat ook lege regels, of overige __whitespace__ karakters zoals tabs, genegeerd worden door de compiler, en dus geen enkele invloed hebben op het programmaverloop.
+
+****
+
+Commentaar die meerdere regels beslaat, kan je ook éénmalig starten met `/\*` en afsluiten met `*/`.
+
+[source,csharp,linenums]
+----
+/* Volgende instructie
+   zorgt voor
+   uitvoer... */
+Console.WriteLine("Hello World!");
+----
+
+****
+
+=== Variabelen
+
+Om tijdens uitvoer van een programma informatie bij te houden, kan je gebruik maken van variabelen.
+Bij het introduceren van een variabele wordt geheugen gereserveerd.  Dat geheugen wordt gebruikt om de informatie op te slaan.  
+
+[NOTE]
+===============================
+De meeste algoritmes gaan typisch __informatie__ aanpassen en doorsluizen doorheen het programma.
+===============================
+
+Om welke informatie of waardes gaat het dan?
+
+- letterlijke waarden die we in ons algoritme nodig hebben, dit noemen we __literal values__
+- resultaten van berekeningen
+- input van de gebruiker
+- waardes ingelezen uit een bestand
+- informatie die binnenkomt over een netwerkverbinding
+- ...
+
+
+****
+De informatie die een method als `Console.WriteLine` moet afdrukken, kunnen we bijvoorbeeld aan de hand een __variabele__ opgeven...
+
+[source,csharp,linenums]
+----
+string s = "Hallo";     <1>
+Console.WriteLine(s);   <2>
+
+s = "Salut";            <3>
+Console.WriteLine(s);   <4>
+----
+<1> we introduceren een variabele met naam __s__ en kennen er de waarde __Hallo__ aan toe
+<2> we lezen de inhoud van de variabele uit door van zijn naam __s__ gebruik te maken
+<3> we kennen een nieuwe waarde __Salut__ toe aan onze __s__ variabele
+<4> we kunnen opnieuw onze variabele __s__ uitgelezen
+
+Indien we het voorbeeld uitvoeren dan krijgen we volgende output...
+
+[source, shell]
+----
+Hallo
+Salut
+----
+
+****
+
+Bij het uitlezen van een variabele verwijs je eenvoudigweg naar zijn naam.  
+
+[CAUTION]
+=======================
+Laat opvallen dat er bijvoorbeeld geen omsluitende karakters worden ingezet.
+
+****
+
+Kun je de output van deze code voorspellen en verklaren?
+			
+[source,csharp,linenums]
+----
+string s = "Hello World";
+Console.WriteLine(s);
+Console.WriteLine("s");
+----
+
+****
+=======================
+
+==== Declaratie
+
+Nog voor je er een waarde aan kan toekennen, moet deze __gedeclareerd__ worden.  
+
+Bij dergelijke __declaratie__ vertel je wat...
+
+- de naam is van deze variabele
+- het soort van informatie is die je wenst bij te houden
+
+Het soort van informatie, of de vorm die deze kan aannemen, noemen we ook wel het __datatype__.
+
+****
+
+In dit geval werken we met tekst, bijgevolg kiezen we voor het `string` datatype.
+		
+[source,csharp,linenums]
+----
+string s;
+s = "Hallo";
+----
+
+Op de declaratieregel kan je ook meteen een waarde aan deze variabele toekennen.
+
+[source,csharp,linenums]
+----
+string s = "Hallo";
+----
+
+****
+
+Zo meteen bekijken we ook enkele andere datatypes.
+
+==== Analogie, geheugen en datatype
+
+Een variabele kan je zien als een doosje met een naam op, waarin alleen een bepaald soort van data past.  
+`string s = "Hallo";` levert een doosje op -voor tekstuele informatie- met naam __s__ waarin de tekst __Hallo__ zit.
+
+De waarde die een variabele aanneemt kan tijdens de uitvoer van het programma __variëren__.  In ons voorbeeld eerst de tekst __Hallo__, daarna de tekst __Salut__.
+Als je er een waarde instopt, blijft die er altijd inzitten, totdat je ze overschrijft met een andere waarde.
+Bij het toekennen van deze laatste waarde, gaat de eerst uiteraard verloren.
+
+Pas op dat je de analogie tussen variabelen en 'een doosje' niet te ver doortrekt.  Als je de inhoud van een echt doosje gebruikt, blijft er een leeg doosje achter.  Voor een variabele geldt dit helemaal niet, deze behouden hun waarde!
+Een echt doosje kan om het even wat bevatten maar een variabele kan enkel data bevatten van een specifieke soort (van een specifiek __datatype__).
+
+==== Meerdere variabelen en hun naam
+
+Een programma kan gerust meerdere variabelen introduceren en gebruiken.
+
+Kies goeie namen voor je variabelen.  __i__ en __d__ en __s__ zijn goed voor kleine prutsprogramma's, een beter keuze is bijvoorbeeld __leeftijd__, __voornaam__ of __gemiddelde__.
+
+.Naming guideline
+[NOTE] 
+=======================
+We spreken af de naam van een variabele te starten met een kleine letter (__camelCasing__). 
+
+Bestaat de naam uit meerdere woorden, dan start men elk nieuw woord in de samenstelling met een hoofdletter.  Bijvoorbeeld __gemiddeldeLeeftijd__ of __maxLengte__.
+=======================
+
+Merk op dat een naam geen spaties mag bevatten.
+
+==== Gebruiken van de variabele 
+
+Je kunt de naam van een variabele op twee manieren gebruiken:
+
+. om een andere waarde in de variabele te stoppen, bv. `s = "Salut";`, dit stopt de waarde __Salut__ in de variabele `s`
+. om huidige waarde van de variabele te gebruiken, bv. `Console.WriteLine(s);`, dit lees de waarde van de variabele `s` uit en geeft ze mee met de `WriteLine` method
+
+=== String, int en double waardes
+
+Vaak gebruikte datatypes zijn:
+
+- `string`: gebruikt voor tekst
+- `int`: gebruikt voor gehele getallen
+- `double`: gebruikt voor getallen met cijfers na de __komma__
+
+Het datatype geeft aan wat ...
+
+- wat voor informatie deze variabele kan bevatten
+- welke acties we met deze, of op deze variabele kunnen toepassen
+
+****
+
+Twee numerieke variabelen bijvoorbeeld, kunnen getallen bevatten die men kan optellen, delen, vermenigvuldigen, enzovoort.
+
+[source,csharp,linenums]
+----
+int bedrag = 125;
+Console.WriteLine(bedrag * 2);            // 250 (verdubbelde bedrag)
+
+double kilometer = 12.3;
+Console.WriteLine(kilometer * 0.621371);  // 7,6428633 (mijl)
+----
+
+Indien we het voorbeeld uitvoeren dan krijgen we volgende output...
+
+[source, shell]
+----
+250
+7,6428633
+----
+
+****
+
+We kunnen twee waardes van numerieke datatypes combineren met de `*` operator.  Het product (resultaat van de vermenigvuldiging) wordt opgeleverd.
+Straks bespreken we andere __rekenkundige operatoren__.
+
+.int en double literals
+[NOTE]
+===============================
+Bemerk dat __int literals__, vast-opgegeven `int` waardes, in tegenstelling tot __string literals__, niet worden omsloten door aanhalingstekens, maar gewoon bestaan uit een geheel getal.  Bijvoorbeeld `125`.
+
+__Double literals__, vast-opgegeven `double` waardes, bevatten een punt als __scheidingssymbool__.  Dit symbool scheidt de eenheden van de fracties.  Bijvoorbeeld `12.3`.
+===============================
+
+Bij het afdrukken van de `double` waarde __7,6428633__ zie je waarschijnlijk op de console een komma als decimal.
+Op de console wordt steeds met tekst gewerkt.  Geef je bij het aanroepen van een method als `Console.WriteLine` een getal mee, dan wordt deze omgezet in tekst.
+Deze tekst wordt vervolgens op de console weergegeven.
+Bij die omzetting wordt bekeken hoe het huidige systeem, waarop de toepassing wordt uitgevoerd, is geconfigureerd.  Er wordt opgezocht welk symbool wordt gebruikt voor het scheiden van de eenheden en fracties is ingesteld.
+Omdat wij (allicht) werken met een komma als scheidingssymbool, wordt het getal ook zo weergegeven.  Voer je dit voorbeeld uit onder andere __regional settings__ dan krijg je misschien wel een punt te zien.
+
+=== Static type checking
+
+De compiler helpt ons fouten te vermijden.  Bij een poging handelingen uit te voeren die niet ondersteunt zijn, krijgen we __compilefouten__.
+
+Wat als operatie (handeling) al dan is toegelaten, is afhankelijk van het datatype van deze informatie.
+
+****
+
+Proberen we `string` waardes te combineren met de `*` operator, dan krijgen we een compilefout.  
+
+[source,csharp,linenums]
+----
+string groet = "Hallo";
+Console.Write(groet * "wereld");  // compilefout: Operator '*' cannot be applied
+                                  //              to operands of type 'string' and 'string'
+----
+
+Er is geen ondersteuning voor het combineren van `string` waardes met deze operator.
+Geen ondersteuning betekent dat nergens is gedefinieerd wat het zou betekenen om `string` waardes hiermee te gaan combineren.
+
+****
+
+Op `string` waardes kan je dan weer andere operaties uitvoeren, die niet mogelijk zijn met waardes van types als `int` of `double`.  
+
+****
+
+Zo kan je bijvoorbeeld van teksten een hoofdlettervariant opvragen via de `ToUpper` method.  
+
+[source,csharp,linenums]
+----
+string groet = "Hallo";
+Console.WriteLine(groet.ToUpper());    
+Console.WriteLine("wereld".ToUpper()); 
+----
+
+Indien we het voorbeeld uitvoeren dan krijgen we volgende output...
+
+[source, shell]
+----
+HALLO
+WERELD
+----
+
+Zoiets is dan weer onmogelijk met int's of double's...
+
+[source,csharp,linenums]
+----
+int bedrag = 125;
+Console.Write(bedrag.ToUpper());      // compilefout: 'int' does not contain 
+                                      //               a definition for 'ToUpper' ...
+Console.Write(125.ToUpper());         // compilefout
+
+double kilometer = 12.3;
+Console.Write(kilometer.ToUpper());   // compilefout
+Console.Write(12.3.ToUpper());        // compilefout
+----
+
+
+****
+
+Gelukkig krijgen we meteen bij het compileren foutmelding over onzinnige operaties als `groet * "wereld"` of `kilometer.ToUpper()`.
+Het zou vervelend zijn als deze code zou compileren, en we pas tijdens uitvoering opmerken dat voor deze operaties geen ondersteuning bestaat.  We zouden enkel tijd verliezen, wat de productiviteit niet ten goede zou komen.
+
+==== Expressies en hun datatype
+
+Voor de compiler is elke waarde die we in onze code uitdrukken van een welbepaald datatype.  Dat stukje code dat de waarde uitdrukt wordt ook wel de __expressie__ genoemd.
+Het datatype van die expressie gebruikt de compiler om uit te vissen wat mogelijk is met deze expressie.  Om op te zoeken hoe die waarde kan worden ingezet, en bijgevolg ook uit te zoeken of er een foutmelding wordt opgeleverd.
+
+Tot nu toe hebben we gezien hoe we grammaticaal op verschillende plaatsen expressie kunnen gebruiken.
+
+- Rechts van de toekenningsoperator `=` staat het stukje code die aangeeft __welke waarde__ aan de variabele wordt toegekend.  Bv. `x = <expressie>`
+- Tussen haakjes bij `WriteLine` staat het stukje code die aangeeft __welke waarde__ op de console wordt gedrukt.  Bv. `Console.WriteLine(<expressie>)`
+- Links en rechts van de vermenigvuldigingsoperator `*` staat het stukje code die aangeeft __welke waardes__ worden vermenigvuldigd.  Bv. `x = <expressie1> * <expressie2>`
+
+Tijdens runtime zal steeds worden bekeken naar welke waarde deze expressie evalueert, welke waarde hiermee met andere woorden wordt voorgesteld.
+
+Een expressie kan voorkomen...
+
+- in literal vorm, bijvoorbeeld `"Hallo"` 
+- in de vorm van het uitlezen van een variabele, bijvoorbeeld `s`
+- in nog complexere vorm als `bedrag * 2` waarbij __subexpressies__ gecombineerd worden met operatoren
+
+Zo meteen kijken we hoe we verschillende waardes aan de hand van dergelijke __operatoren__ (bijvoorbeeld `*`) kunnen combineren.
+
+.Datatype van een literal
+[NOTE]
+========================
+Aan de literal vorm kan de compiler herkennen wat het type is van deze waarde...
+
+- staat de literal tussen aanhalingstekens dan is dit voor de compiler een `string`
+- bestaat de literal uit een geheel getal dan wordt dit beschouwd als een `int`
+- heeft het getal een punt als separator dan is dit voor de compiler een `double` waarde
+- ...
+========================
+
+.Datatype van een variabele
+[NOTE]
+========================
+Bij het uitlezen van een variabele kan de compiler op basis van de declaratie opzoeken wat het type is van deze waarde.  Daarvoor dient ook deze declaratie, we vertellen aan de compiler met welke soort waardes we werken.  En vragen hiermee bijgevolg ook ons toe te laten, of te verhinderen, bepaalde operaties uit te voeren.
+========================
+
+=== Berekeningen maken
+
+Naast de `*` operator voor het berekenen van het product, beschikken we ook nog over:
+
+- de `+` voor het berekenen van de som
+- de `-` voor het berekenen van het verschil
+- de `/` voor het berekenen van het quotiënt
+- de `%` voor het berekenen van de rest na deling
+
+****
+
+[source,csharp,linenums]
+----
+int a = 6;
+int b = 5;
+
+int som = a + b;
+int verschil = a - b;
+int product = a * b;
+int quotient = b / a;
+int restNaDeling = a % b;
+
+Console.WriteLine(som);
+Console.WriteLine(verschil);
+Console.WriteLine(product);
+Console.WriteLine(quotient);
+Console.WriteLine(restNaDeling);
+----
+
+Indien we het voorbeeld uitvoeren dan krijgen we volgende output...
+
+[source, shell]
+----
+11
+1
+30
+0
+1
+----
+
+****
+
+.Hoe bekom ik cijfers na de komma bij een deling?
+[TIP] 
+==============================
+Vervang in deze demo eens alle __ints__ door __doubles__ en probeer de demo opnieuw uit.  Bemerk dat voor de `/` operator, afhankelijk van het datatype van de waardes die we combineren, een ander resultaat wordt opgeleverd.
+
+****
+
+Indien beide __operanden__ (waardes die we combineren) uitgedrukt zijn in `int` vorm bekomen we het resultaat van een __gehele deling__.  Je kan één gehele keer __2__ uit __3__ halen...
+
+[source,csharp,linenums]
+----
+Console.WriteLine(3 / 2);  // levert 1 op
+
+int x = 3;
+Console.WriteLine(x / 2);  // levert 1 op
+----
+
+****
+
+****
+
+Vanaf minstens één operand geformuleerd werd aan de hand van een `double` expressie, bekomen we het resultaat van een __gewone deling__.  Waarmee we bedoelen dat er in het resultaat ook cijfers na de __komma__ kunnen staan...
+
+[source,csharp,linenums]
+----
+Console.WriteLine(3.0 / 2);  // levert 1,5 op
+
+double x = 3.0;
+Console.WriteLine(x / 2);    // levert 1,5 op
+----
+
+****
+
+==============================
+
+.Datatype van een gecombineerde expressie
+[NOTE]
+========================
+In een gecombineerde expressie worden aan de hand van __operatoren__ meerdere waardes met elkaar gecombineerd, bijvoorbeeld `x / 2`.
+
+Het datatype van zo'n gecombineerde expressie, is afhankelijk van hoe deze operator is gedefinieerd.  Bij de definitie van operatoren kon men vrij bepalen wat de vorm is in dewelke het resultaat wordt opgeleverd.
+========================
+
+==== Rest na deling
+
+De modulo operator `%` kan handig zijn om na te gaan of een getal even of oneven is...
+
+....
+7 % 2 = 1
+5 % 2 = 1
+8 % 2 = 0
+3 % 2 = 1
+1 % 2 = 1
+....
+
+****
+
+Bijvoorbeeld om wisselgeld te berekenen kan de operator zijn nut bewijzen...
+
+[source,csharp,linenums]
+----
+int bedrag = 19;
+
+int biljettenVan5 = bedrag / 5;
+int bedragInBiljettenVan5 = biljettenVan5 * 5;
+int muntstukkenVan2 = (bedrag - bedragInBiljettenVan5) / 2;  <1>
+int muntstukkenVan1 = (bedrag - bedragInBiljettenVan5) % 2 ; <1>
+
+Console.WriteLine(biljettenVan5);
+Console.WriteLine(muntstukkenVan2);
+Console.WriteLine(muntstukkenVan1);
+----
+<1> bemerk het gebruik van meerdere operatoren en de ronde haakjes
+
+Indien we het voorbeeld uitvoeren dan krijgen we volgende output...
+
+[source, shell]
+----
+3
+2
+0
+----
+
+****
+				
+==== Operator precedence
+
+Merk op hoe we verschillende operatoren kunnen combineren.  In één bewerking gebruik maken zowel van de `-` als `/` is bijvoorbeeld geen enkel probleem.
+
+TIP: Test eens uit wat de uitvoer is van voorgaand voorbeeld indien je de haakjes zou verwijderen.
+
+Net zoals in de gewone wiskunde hebben bepaalde operatoren voorrang op andere operatoren.   Zo hebben de `*`, `/` en `%` operatoren voorrang op de `+` en `-` operatoren.
+
+In een notatie als `100 x 1,21 + 200 x 1,21` verwachten de meesten onder jullie allicht ook dat hiermee de som wordt bedoeld van __121__ en __242__ (of `121 + 242`).  
+
+****
+
+Net hetzelfde mag je verwachten van deze code...
+
+[source,csharp,linenums]
+----
+Console.WriteLine(100 * 1.21 + 200 * 1.21);  // 363
+----
+
+De som van __121__ en __242__, of dus __363__ wordt opgeleverd.
+
+****
+
+===== Haakjes 
+
+Indien je de leesbaarheid wil bevorderen, of indien je de volgorde wil veranderen, gebruik je ronde haakjes om prioriteiten aan te duiden.
+
+****
+
+Strikt gezien zijn de haakjes hier overbodig, toch bevorderen ze de leesbaarheid van onze code...
+
+[source,csharp,linenums]
+----
+Console.WriteLine((100 * 1.21) + (200 * 1.21));  // 363
+----
+
+Wat zou volgend voorbeeld opleveren?
+
+[source,csharp,linenums]
+----
+Console.WriteLine(100 * (1.21 + 200) * 1.21);
+----
+
+****

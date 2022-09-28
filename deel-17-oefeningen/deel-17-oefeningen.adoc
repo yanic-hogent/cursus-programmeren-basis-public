@@ -1,0 +1,500 @@
+= Programmeren Basis - Deel 17 - Oefeningen
+Yanic Inghelbrecht
+v2022.05.06.10.00
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+// geen auto section numbering voor oefeningen (handigere titels en toc)
+//:sectnums:  
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+:deel-09-oefeningen: ../deel-09-oefeningen/deel-09-oefeningen.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+
+
+ 
+== Dictionaries
+
+
+
+=== Oefening D17scheldwoorden
+// Y7.01
+
+Schrijf een programma dat de gebruiker om een woord vraagt. Indien de gebruiker een gekend scheldwoord intypt, toont het programma wat dit woord betekent. Als het geen scheldwoord is, toont het programma `Geen gekend scheldwoord`. Het programma eindigt nooit.
+
+Je kunt de betekenis opzoeken op 
+link:https://nl.wiktionary.org/wiki/Categorie:Scheldwoord_in_het_Nederlands[,window="_blank"]
+
+Stop 5 scheldwoorden in je programma zodat je het kan uitproberen.
+
+Een mogelijke uitvoering :
+
+[source,shell]
+----
+Geef een scheldwoord : appelflap
+stommeling, sufferd
+Geef een scheldwoord : mutten
+Geen gekend scheldwoord
+Geef een scheldwoord :
+Geen gekend scheldwoord
+Geef een scheldwoord : badgast
+rare kerel, iemand die zich vreemd gedraagt
+Geef een scheldwoord :
+----
+
+
+=== Oefening D17morse
+
+In link:{deel-09-oefeningen}#_oefening_d09_morse[oefening D09morse] gebruikten we twee parallelle arrays om de __mapping__ bij te houden tussen letters `A-Z` en hun corresponderende Morse code (in beide richtingen!).
+
+In deze oefening gebruiken we een dictionary om bij te houden wat de Morse code is van elke letter. Voor de eenvoud beschouwen we enkel de letters `A-F`.
+
+Schrijf een `Main` method met een oneindige loop die de gebruiker om een tekst vraagt en de overeenkomstige ITU Morse code op het scherm zet.
+
+Een voorbeeld uitvoering :
+
+[source,shell]
+----
+Geef een woord : A
+.- 
+Geef een woord : ABC
+.- -... -.-. 
+Geef een woord : BEEF
+-... . . ..-. 
+----
+	
+De omzetting van letter naar morse code is als volgt
+
+* `A` -> `.-`
+* `B` -> `-...`
+* `C` -> `-.-.`
+* `D` -> `-..`
+* `E` -> `.`
+* `F` -> `..-.`
+
+Je mag ervan uitgaan dat de gebruiker altijd correcte input ingeeft (woorden met hoofdletters van A t.e.m. F dus).
+
+In de output worden de Morse codes gescheiden door een spatie.
+
+
+
+=== Oefening D17dobbelsteen
+// Y7.02
+
+Schrijf een programma dat het rollen van een dobbelsteen simuleert en de resultaten op het scherm toont. 
+
+Genereer 100 willekeurige getallen van 1 t.e.m. 6 en toon hoe vaak elk cijfer voorkwam. Gebruik een Dictionary om de tellingen bij te houden.
+
+De volgorde waarin de getallen voorkomen, is niet belangrijk.
+
+Een mogelijke uitvoering :
+
+[source,shell]
+----
+1 kwam 18 keer voor
+2 kwam 12 keer voor
+3 kwam 17 keer voor
+4 kwam 19 keer voor
+5 kwam 14 keer voor
+6 kwam 20 keer voor
+----
+
+Merk op dat het in principe toeval is dat de getallen hier netjes in volgorde van 1 t.e.m. 6 getoond worden.
+
+
+
+=== Oefening D17frequentie
+// Y7.04
+Schrijf een programma dat de gebruiker om een tekst vraagt en voor alle symbolen in die tekst, weergeeft hoe vaak elk symbool voorkomt. 
+
+De volgorde waarin de symbolen en hun aantallen getoond worden, is niet belangrijk. 
+
+Een mogelijke uitvoering waarbij de gebruiker `aannemen` invoerde :
+
+[source,shell]
+----
+Geef een tekst : aannemen
+symbool 'a' komt 2 keer voor
+symbool 'n' komt 3 keer voor
+symbool 'e' komt 2 keer voor
+symbool 'm' komt 1 keer voor
+----
+
+
+
+=== Oefening D17telefoonnummer
+// Y7.05
+
+Schrijf een programma dat de gebruiker om een woord vraagt en dit omzet naar een telefoonnummer.
+
+Je mag ervan uitgaan dat het woord enkel uit de letters `a-z` bestaat (hoofdletterongevoelig).
+
+De omzetting gebeurt volgens link:https://en.wikipedia.org/wiki/Telephone_keypad[de letters op de toetsen van je telefoon, window="_blank"]. 
+
+Bv. het stukje `GETFOOD` uit `1-800-get-food` wordt `4 3 8 3 6 6 3`.
+
+Gegeven is een dictionary `digitToLetters` dat als volgt wordt opgevuld :
+
+[source,csharp,linenums]
+----
+Dictionary<int, string> digitToLetters = new Dictionary<int, string> {
+          {2, "ABC"},
+          {3, "DEF"},
+          {4, "GHI"},
+          {5, "JKL"},
+          {6, "MNO"},
+          {7, "PQRS"},
+          {8, "TUV"},
+          {9, "WXYZ"}
+};
+----
+
+Helaas hebben wij precies de omgekeerde _mapping_ nodig, van letter naar cijfer!
+
+Schrijf de nodige code om m.b.v. `digitToLetters` een nieuwe dictionary `letterToDigit` op te vullen dat van pas zal komen bij het omzetten van een woord naar een telefoonnummer.
+
+In `letterToDigit` staat bv. de informatie D->3, C->2, T->8 enz.
+
+Een mogelijke uitvoering waarbij de gebruiker `GeTFOod` intypt :
+
+[source,shell]
+----
+Geef een woord : GeTFOod
+Telefoonnummer is : 4383663
+----
+
+
+=== Oefening D17gecombineerdetellingen
+
+Jaarlijks trekken ambtenaren van het 'Agentschap voor Wegen & Verkeer' de straat op om het weggebruik in kaart te brengen.
+Ze houden van alle passanten het middel van transport bij, om zo te kunnen tellen hoeveel fietsers, voetgangers, vrachtwagenbestuurders, ... passeren.
+
+Voor deze oefening stuurden we er twee ambtenaren op uit : Jan deed de ochtendshift en Piet wisselde hem af op de middag. Ze telden de passanten die ze voorbij zagen komen op de Rooiegemlaan.
+
+Jan telde de volgende passanten :
+
+* automobilist -> 573
+* stepper -> 2
+* voetganger -> 114
+* fietser -> 481
+* vrachtwagenbestuurder -> 134
+
+en Piet zag de volgende aantallen passeren :
+
+* vrachtwagenbestuurder -> 81
+* automobilist -> 488
+* voetganger -> 137
+* fietser -> 392
+* paardrijder -> 1
+
+**Voorzie in je `Main` method twee variabelen `tellingenJan` en `tellingenPiet` om deze gegevens in op te slaan.**
+
+Voor beide gebruik je een dictionary van `string` naar `int` :
+
+* de `string` is een verwijzing naar het transportmiddel (bv. "automobilist")
+* de `int` is het aantal keren dat dit transportmiddel voorbij kwam (bv. 173)
+
+We zouden graag deze tellingen samenvoegen zodat we een overzicht kunnen maken van wie er zoal in deze straat voorbijkwam.
+
+**Definieer een method `Gecombineerd` die twee tellingen samenvoegt** (bv. die van Jan en Piet) in een nieuw dictionary. Deze method zal twee parameters hebben, elk stelt een telling voor. De teruggeefwaarde van deze method is het nieuwe dictionary met de getelde totalen.
+
+* Indien beide tellingen eenzelfde transportmiddel bevatten, dan tellen we hun aantallen samen in het eindresultaat
+** Bv. het resultaat zal 'automobilist -> 251' bevatten (nl. 114 van Jan en 137 van Piet)
+* Indien een transportmiddel slechts in 1 van beide tellingen voorkomt, wordt dat aantal gewoon overgenomen
+** Bv. het resultaat zal 'stepper -> 2' bevatten (enkel Jan zag steppers)
+** Bv. het resultaat zal 'paardrijder -> 1' bevatten (enkel Piet zag een paardrijder)
+
+**Test je `Gecombineerd` method met onderstaande code** die je in de `Main` method plaatst :
+
+[source,csharp,linenums]
+----
+// TODO : vul dit dictionary met de tellingen van Jan
+Dictionary<string, int> tellingenJan = ...
+
+// TODO : vul dit dictionary met de tellingen van Piet
+Dictionary<string, int> tellingenPiet = ...
+
+// Voeg beide tellingen samen d.m.v. de Gecombineerd method
+Dictionary<string, int> gecombineerdeTellingen = Gecombineerd(tellingenJan, tellingenPiet);
+
+// Toon de samengevoegde tellingen op de console
+string output = string.Join(Environment.NewLine, gecombineerdeTellingen);
+Console.WriteLine(output);
+----
+
+De output van dit programma is als volgt (let op : de volgorde hoeft niet dezelfde te zijn, daar heb je geen invloed op)
+
+[source,shell]
+----
+[automobilist, 1061]
+[stepper, 2]
+[voetganger, 251]
+[fietser, 873]
+[vrachtwagenbestuurder, 215]
+[paardrijder, 1]
+----
+
+
+=== Oefening D17gemiddeldetellingen
+Voor deze oefening sturen we er 2 vrienden (Jan en Mieke) op uit om de dieren te tellen die ze tegenkomen in twee verschillende bossen.
+
+Voor elk houden we een dictionary bij van `string` naar `int` met de tellingen van die persoon.
+
+* de `string` is de naam van de diersoort (bv. "hond")
+* de `int` is het aantal keren dat een dier van die soort werd gezien (bv. 3)
+
+Na afloop zouden we graag weten hoeveel dieren er *gemiddeld* gespot werden, we doen dit door de tellingen van Jan en Mieke samen te voegen :
+
+* indien een diersoort WEL in beide tellingen voorkomt
+** berekenen we het gemiddelde van die tellingen en stoppen we dit in het resultaat
+* indien een diersoort NIET in beide tellingen voorkomt
+** berekenen we niks en komt er geen telling voor deze soort in het resultaat
+
+Bijvoorbeeld, indien de 2 tellingen als volgt zijn :
+
+* tellingen Jan : 5 x hond, 1 x papegaai
+* tellingen Mieke : 2 x hond, 2 x dromedaris
+
+Dan bevat het resultaat de volgende tellingen :
+
+* resultaat : 3,5 x hond (gemiddelde van 5x hond en 2x hond)
+
+De tellingen voor papegaai en dromedaris komen niet in het gemiddelde voor omdat ze niet door beiden geteld werden.
+
+Gegeven is de volgende code :
+
+[source,csharp,linenums]
+----
+static void Main() {
+	// de tellingen van Jan
+	Dictionary<string, int> tellingenJan = new Dictionary<string, int>() {
+		{ "hond", 5},
+		{ "papegaai", 1 },
+		{ "worm", 3 },
+		{ "konijn", 2 },
+		{ "gruffalo", 0 }
+	};
+
+	// de tellingen van Mieke
+	Dictionary<string, int> tellingenMieke = new Dictionary<string, int>() {
+		{ "hond", 2},
+		{ "worm", 1 },
+		{ "konijn", 3 },
+		{ "gruffalo", 1 },
+		{ "dromedaris", 2 }
+	};
+
+	// Voeg beide tellingen samen d.m.v. de GetGemiddelde method
+	Dictionary<string, double> gemiddelde = GetGemiddelde(tellingenJan, tellingenMieke); // <1>
+
+	// Toon de gemiddelden op de console
+	string output = string.Join(Environment.NewLine, gemiddelde);
+	Console.WriteLine(output);
+}
+----
+<1> De `GetGemiddelde` method voegt de tellingen samen zoals hierboven werd beschreven.
+
+**Schrijf de ontbrekende method `GetGemiddelde` die de tellingen samenvoegt.**
+
+Je kunt uit de code in de `Main` method afleiden, welke parameters en teruggeeftype deze `GetGemiddelde` method moet hebben.
+
+De output van dit programma is 
+
+[source,shell]
+----
+[hond, 3,5]
+[worm, 2]
+[konijn, 2,5]
+[gruffalo, 0,5]
+----
+
+
+== Met eigen klassen
+
+
+
+=== Oefening D17telefoonboek
+// Y7.03
+
+Schrijf een klasse `PhoneDirectory` zodat een object van die klasse per naam één telefoonnummer kan bijhouden.
+
+[source,csharp,linenums]
+----
+class PhoneDirectory {
+
+      public void Add(string name, string phoneNumber) { } // <1> 
+      public string GetPhoneNumberByName(string name)  { } // <2>
+
+}
+----
+<1> `Add` voegt een koppeling toe, of overschrijft ze met het nieuwe nummer indien er voor die naam al een telefoonnummer bestond
+<2> `GetPhoneNumberByName` retourneert het telefoonnummer dat bij de opgegeven naam hoort. Indien er geen telefoonnummer gekoppeld is aan die naam (of de naam was `null`), wordt `null` teruggegeven.
+
+Je zult natuurlijk nog meer in klasse `PhoneDirectory` moeten stoppen dan enkel die twee methods.
+
+Test je klasse met de volgende broncode :
+
+.Program.cs
+[source,csharp,linenums]
+----
+public class Program {
+
+	static void Main(string[] args) {
+		PhoneDirectory pd = new PhoneDirectory();
+
+		pd.Add("Jan", "1234");
+		pd.Add("Piet", "3456");
+		pd.Add("Mieke", "5678");
+
+		if (pd.GetPhoneNumberByName("Jan") == "1234") {
+			Console.WriteLine("Jan is ok");
+		} else {
+			Console.WriteLine("Jan is niet ok");
+		}
+			
+		if (pd.GetPhoneNumberByName("Piet") == "3456") {
+			Console.WriteLine("Piet is ok");
+		} else {
+			Console.WriteLine("Piet is niet ok");
+		}
+			
+		if (pd.GetPhoneNumberByName("Mieke") == "5678") {
+			Console.WriteLine("Mieke is ok");
+		} else {
+			Console.WriteLine("Mieke is niet ok");
+		}
+
+		if (pd.GetPhoneNumberByName("Corneel") == null) {
+			Console.WriteLine("onbekende naam is ok");
+		} else {
+			Console.WriteLine("onbekende naam is niet ok");
+		}
+
+		if (pd.GetPhoneNumberByName(null) == null) {
+			Console.WriteLine("'null' als naam is ok");
+		} else {
+			Console.WriteLine("'null' als naam is niet ok");
+		}
+	}
+
+}
+----
+
+De output zou er als volgt moeten uitzien :
+
+[source,shell]
+----
+Jan is ok
+Piet is ok
+Mieke is ok
+onbekende naam is ok
+'null' als naam is ok
+----
+
+
+
+=== Oefening D17telefoonboekbeiderichtingen
+// Y7.06
+
+Herwerk oplossing `D17telefoonboek` zodat de volgende method erbij komt, waarmee je de naam kunt opvragen die bij een telefoonnummer hoort :
+
+[source,csharp,linenums]
+----
+public string GetNameByPhoneNumber(string phoneNumber) { }
+----
+
+Bovenop de code voor deze nieuwe method zul je wellicht nog meer code moeten toevoegen/wijzigen aan deze klasse.
+
+Je mag ervan uitgaan dat 2 personen nooit hetzelfde telefoonnummer hebben.
+
+Indien het telefoonnummer niet gevonden wordt, geeft de method `null` terug (idem indien de parameter null is).
+
+Probeer deze method uit met de volgende broncode :
+
+.Program.cs
+[source,csharp,linenums]
+----
+public class Program {
+
+	static void Main(string[] args) {
+		PhoneDirectory pd = new PhoneDirectory();
+
+		pd.Add("Jan", "1234");
+		pd.Add("Piet", "3456");
+		pd.Add("Mieke", "5678");
+
+		if (pd.GetPhoneNumberByName("Jan") == "1234" && pd.GetNameByPhoneNumber("1234")=="Jan") {
+			Console.WriteLine("Jan is ok");
+		} else {
+			Console.WriteLine("Jan is niet ok");
+		}
+
+		if (pd.GetPhoneNumberByName("Piet") == "3456" && pd.GetNameByPhoneNumber("3456") == "Piet") {
+			Console.WriteLine("Piet is ok");
+		} else {
+			Console.WriteLine("Piet is niet ok");
+		}
+
+		if (pd.GetPhoneNumberByName("Mieke") == "5678" && pd.GetNameByPhoneNumber("5678") == "Mieke") {
+			Console.WriteLine("Mieke is ok");
+		} else {
+			Console.WriteLine("Mieke is niet ok");
+		}
+
+		if (pd.GetPhoneNumberByName("Corneel") == null) {
+			Console.WriteLine("onbekende naam is ok");
+		} else {
+			Console.WriteLine("onbekende naam is niet ok");
+		}
+
+		if (pd.GetNameByPhoneNumber("8888") == null) {
+			Console.WriteLine("onbekend nummer is ok");
+		} else {
+			Console.WriteLine("onbekend nummer is niet ok");
+		}
+
+		if (pd.GetPhoneNumberByName(null) == null) {
+			Console.WriteLine("'null' als naam is ok");
+		} else {
+			Console.WriteLine("'null' als naam is niet ok");
+		}
+
+		if (pd.GetNameByPhoneNumber(null) == null) {
+			Console.WriteLine("'null' als nummer is ok");
+		} else {
+			Console.WriteLine("'null' als nummer is niet ok");
+		}
+	}
+
+}
+----
+
+De output zou er als volgt moeten uitzien :
+
+[source,shell]
+----
+Jan is ok
+Piet is ok
+Mieke is ok
+onbekende naam is ok
+onbekend nummer is ok
+'null' als naam is ok
+'null' als nummer is ok
+----

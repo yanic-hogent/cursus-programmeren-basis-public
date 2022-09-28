@@ -1,0 +1,350 @@
+= Programmeren Basis - Deel 02 - Oplossingen
+Yanic Inghelbrecht
+v2022.02.23.15.06
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+// geen auto section numbering voor oefeningen (handigere titels en toc)
+//:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+ 
+
+
+
+== Een tip vooraf
+
+[TIP]
+====
+Om leesbare en begrijpbare programma's te bekomen moet je consequent zijn in de code die je schrijft. 
+
+Vergelijk eens de oplossingen hieronder en let erop hoe gelijkaardig ze zijn qua opbouw, naamgeving van variabelen, volgorde (input/berekenen/output), de bundeling van gerelateerde opdrachten en scheiding d.m.v. lege regels, etc.
+====
+
+== String concatenatie en input/output
+
+
+=== Oplossing D02frietjes
+// Y2.01
+[source,csharp,linenums]
+----
+Console.Write("Geen een naam : ");
+string naam1 = Console.ReadLine();
+
+Console.Write("Geef nog een naam : ");
+string naam2 = Console.ReadLine();
+
+Console.Write("Geef een gerecht : ");
+string gerecht = Console.ReadLine();
+
+Console.WriteLine(naam1 + " en " + naam2 + " eten graag " + gerecht + ".");
+----
+
+
+=== Oplossing D02leeftijd
+// Y2.03
+[source,csharp,linenums]
+----
+Console.Write("Geef je naam : ");
+string naam = Console.ReadLine();
+
+Console.Write("Geef je leeftijd : ");
+string leeftijdAlsTekst = Console.ReadLine();
+
+Console.WriteLine("Goeiedag " + naam + ", je bent dus " + leeftijdAlsTekst + " jaar oud!");
+----
+
+Merk op dat het hier niet nodig is om de `leeftijdAlsTekst` naar een `int` te converteren omdat we er niet mee gaan rekenen!
+
+
+== Conversie
+
+
+=== Oplossing D02leeftijdvolgendjaar
+//Y2.04
+[source,csharp,linenums]
+----
+Console.Write("Geef je naam : ");
+string naam = Console.ReadLine();
+
+Console.Write("Geef je leeftijd : ");
+string leeftijdAlsTekst = Console.ReadLine();
+int leeftijd = int.Parse(leeftijdAlsTekst);
+
+int leeftijdVolgendJaar = leeftijd + 1;
+
+Console.WriteLine("Oei oei " + naam + ", volgend jaar ben je al " + leeftijdVolgendJaar + " jaar oud.");
+----
+Merk op dat de berekening van de nieuwe leeftijd NIET gemengd werd met de string concatenatie maar ervoor al gebeurde!
+
+
+=== Oplossing D02som
+// Y2.02
+[source,csharp,linenums]
+----
+Console.Write("Geef een getal : ");
+string getal1AlsTekst = Console.ReadLine();
+int getal1 = int.Parse(getal1AlsTekst);
+
+Console.Write("Geef nog een getal : ");
+string getal2AlsTekst = Console.ReadLine();
+int getal2 = int.Parse(getal2AlsTekst);
+
+int som = getal1 + getal2;
+
+Console.WriteLine(getal1 + " plus " + getal2 + " is " + som + ".");
+----
+
+
+=== Oplossing D02totalebedrag
+// C03
+[source,csharp,linenums]
+----
+Console.Write("Aantal muntstukken van 2 euro : ");
+string aantalMuntstukkenVan2EuroAlsTekst = Console.ReadLine();
+int aantalMuntstukkenVan2Euro = int.Parse(aantalMuntstukkenVan2EuroAlsTekst);
+
+Console.Write("Aantal muntstukken van 1 euro : ");
+string aantalMuntstukkenVan1EuroAlsTekst = Console.ReadLine();
+int aantalMuntstukkenVan1Euro = int.Parse(aantalMuntstukkenVan1EuroAlsTekst);
+
+int bedrag = aantalMuntstukkenVan1Euro + aantalMuntstukkenVan2Euro * 2;
+
+Console.WriteLine("Het totale bedrag is " + bedrag + " Euro.");
+----
+
+
+=== Oplossing D02gemiddelde
+// Y2.05
+[source,csharp,linenums]
+----
+Console.Write("Geef een getal : ");
+string getal1AlsTekst = Console.ReadLine();
+double getal1 = double.Parse(getal1AlsTekst);
+
+Console.Write("Geef nog een getal : ");
+string getal2AlsTekst = Console.ReadLine();
+double getal2 = double.Parse(getal2AlsTekst);
+
+Console.Write("Geef nog een getal : ");
+string getal3AlsTekst = Console.ReadLine();
+double getal3 = double.Parse(getal3AlsTekst);
+
+double gemiddelde = (getal1 + getal2 + getal3) / 3;
+
+Console.WriteLine("Het gemiddelde van de drie getallen is " + gemiddelde + ".");
+----
+
+Merk op dat de berekening `getal1 + getal2 + getal / 3` (zonder haakjes dus) niet het gewenste resultaat oplevert!
+
+Een oplossing op basis van gehele getallen zou er zo kunnen uitzien :
+
+[source,csharp,linenums]
+----
+Console.Write("Geef een getal : ");
+string getal1AlsTekst = Console.ReadLine();
+int getal1 = int.Parse(getal1AlsTekst);
+
+Console.Write("Geef nog een getal : ");
+string getal2AlsTekst = Console.ReadLine();
+int getal2 = int.Parse(getal2AlsTekst);
+
+Console.Write("Geef nog een getal : ");
+string getal3AlsTekst = Console.ReadLine();
+int getal3 = int.Parse(getal3AlsTekst);
+
+double gemiddelde = Convert.ToDouble(getal1 + getal2 + getal3) / 3; // <1>
+
+Console.WriteLine(gemiddelde);
+----
+<1> `(getal1 + getal2 + getal3) / 3.0` had ook gekund, maar `(getal1 + getal2 + getal3) / 3` zou NIET correct zijn (de berekening zou een gehele deling gebruiken, zelfs al is `gemiddelde` een double!).
+
+
+
+
+=== Oplossing D02temperatuur
+// Y2.07
+[source,csharp,linenums]
+----
+Console.Write("Geef de temperatuur in graden Fahrenheit : ");
+string fahrenheitAlsTekst = Console.ReadLine();
+double fahrenheit = double.Parse(fahrenheitAlsTekst);
+
+double celsius = 5.0 / 9 * (fahrenheit - 32); // <1>
+
+Console.WriteLine("De temperatuur is " + celsius + " graden Celsius.");
+----
+<1> Let op : als je begint met `5/9` ipv `5.0/9` dan ziet de compiler __int gedeeld door int__ en zal er een gehele deling uitgevoerd worden (en dan begin je links al met een vermenigvuldiging met `0`)!
+
+=== Oplossing D02getalontleden
+// Y2.10
+[source,csharp,linenums]
+----
+Console.Write("Geef een getal : ");
+string getalAlsTekst = Console.ReadLine();
+int getal = int.Parse(getalAlsTekst);
+
+int rest = getal;
+int hondertallen = rest / 100;
+rest = rest - (hondertallen * 100); // <1>
+
+int tientallen = rest / 10;
+rest = rest - (tientallen * 10); // <1>
+
+int eenheden = rest / 1;
+
+Console.WriteLine("Het getal " + getal + " bestaat uit");
+Console.WriteLine(hondertallen + " x 100");
+Console.WriteLine(tientallen + " x  10");
+Console.WriteLine(eenheden + " x   1");
+----
+<1> we kunnen de twee berekeningen van `rest` makkelijker schrijven met een modulo bewerking :
+
+[source,csharp,linenums]
+----
+...
+int rest = getal;
+int hondertallen = rest / 100;
+rest = rest % 100;
+
+int tientallen = rest / 10;
+rest = rest % 10;
+
+int eenheden = rest / 1;
+...
+----
+
+
+== Controlestructuren if en if/else
+
+
+=== Oplossing D02volwassen
+// Y2.14
+[source,csharp,linenums]
+----
+Console.Write("Geef je leeftijd : ");
+string leeftijdAlsTekst = Console.ReadLine();
+int leeftijd = int.Parse(leeftijdAlsTekst);
+
+if (leeftijd >= 18 ) {
+	Console.WriteLine("Je bent wel volwassen.");
+} else {
+	Console.WriteLine("Je bent niet volwassen.");
+}
+----
+
+of op een ander manier  :	
+
+[source,csharp,linenums]
+----
+Console.Write("Geef je leeftijd : ");
+string leeftijdAlsTekst = Console.ReadLine();
+int leeftijd = int.Parse(leeftijdAlsTekst);
+
+Console.Write("je bent");
+if (leeftijd >= 18) {
+	Console.Write(" wel");
+} else {
+    Console.Write(" niet");
+}
+Console.WriteLine(" volwassen.");
+----
+
+
+=== Oplossing D02gelijk
+// Y2.15
+[source,csharp,linenums]
+----
+Console.Write("Geef een getal : ");
+string getal1AlsTekst = Console.ReadLine();
+int getal1 = int.Parse(getal1AlsTekst);
+
+Console.Write("Geef nog een getal : ");
+string getal2AlsTekst = Console.ReadLine();
+int getal2 = int.Parse(getal2AlsTekst);
+
+if (getal1 == getal2) {
+	Console.WriteLine("Ze zijn gelijk.");
+} else {
+	Console.WriteLine("Ze zijn verschillend");
+}
+----
+
+
+=== Oplossing D02quotient
+// C05
+[source,csharp,linenums]
+----
+Console.Write("Deeltal?: ");
+string deeltalAlsTekst = Console.ReadLine();
+double deeltal = double.Parse(deeltalAlsTekst);
+
+Console.Write("Deler?: ");
+string delerAlsTekst = Console.ReadLine();
+double deler = double.Parse(delerAlsTekst);
+
+if (deler != 0) {
+	double quotient = deeltal / deler;
+	Console.WriteLine("Quotient: " + quotient);
+} else {
+	Console.WriteLine("Deling door nul wordt niet toegelaten.");
+}
+----
+Merk op we met kommagetallen werken (dus geen `int` maar wel `double` variabelen en berekeningen) en dat de deling 
+
+- pas uitgevoerd wordt als we zeker zijn dat de deler niet nul is
+- niet gemengd wordt met de string concatenatie maar ervoor gebeurt
+
+
+=== Oplossing D02even
+// Y2.16
+[source,csharp,linenums]
+----
+Console.Write("Geef een getal : ");
+string getalAlsTekst = Console.ReadLine();
+int getal = int.Parse(getalAlsTekst);
+
+if (getal % 2 == 0) { // <1>
+	Console.WriteLine("Het getal is even.");
+} else {
+	Console.WriteLine("Het getal is oneven");
+}
+----
+<1> een even getal is perfect deelbaar door 2 dus de rest-na-deling is 0
+
+
+=== Oplossing D02absolutewaarde
+// Y2.17
+[source,csharp,linenums]
+----
+Console.Write("Geef een getal : ");
+string getalAlsTekst = Console.ReadLine();
+int getal = int.Parse(getalAlsTekst);
+
+int absoluteWaarde = getal;
+if (getal < 0) {
+	absoluteWaarde = (-1) * getal; // <1>
+}
+
+Console.WriteLine("De absolute waarde is " + absoluteWaarde);
+----
+<1> Hier moet het minteken van `getal` worden omgekeerd. We doen het met `(-1) * getal`, maar `-getal` of `0-getal` had ook gekund.
+

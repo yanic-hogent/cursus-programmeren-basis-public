@@ -1,0 +1,66 @@
+= Programmeren Basis - Deel GFX2 - Oplossingen
+Yanic Inghelbrecht
+v2021.12.03.10.00
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+// geen auto section numbering voor oefeningen (handigere titels en toc)
+//:sectnums:  
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+ 
+== Oplossingen
+
+
+=== Oplossing DGFX2.01
+
+De oplossing vind je in link:attachments/deel-gfx2-oplossing-01.zip[deel-gfx2-oplossing-01.zip]
+
+
+=== Oplossing DGFX2.02
+
+Er is een potentieel conflict tussen de namen van de klassen
+
+* domain.Rectangle
+* System.Drawing.Rectangle
+
+Ze hebben namelijk beiden de korte naam 'Rectangle'!
+	
+Normaliter is dit geen probleem : bij de volledige naam is er immers geen conflict, de ene begint met namespace `domain` en de andere met namespace `System.Drawing`.
+	
+Zodra we echter `using System.Drawing;` bovenaan onze code zetten, ontstaat er een conflict op plaatsen elders in de code waar het type `Rectangle` staat. 
+
+De compiler ziet nu 2 mogelijke klassen die bij de naam `Rectangle` zouden kunnen passen, vandaar het conflict.
+
+
+=== Oplossing DGFX2.03
+
+Een objectdiagramn dat de situatie in het geheugen toont, op het moment dat method `DiagramControl.OnPaint()` wordt uitgevoerd. 
+
+image:deel-gfx2-oplossing-03.png[de oplossing]
+
+
+=== Oplossing DGFX2.04
+
+De oplossing vind je in link:attachments/deel-gfx2-oplossing-04.zip[deel-gfx2-oplossing-04.zip]
+
+
+

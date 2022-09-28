@@ -1,0 +1,1015 @@
+= Programmeren Basis - Deel 12
+Yanic Inghelbrecht
+v2022.04.24.08.17
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+ 
+
+
+== Standaard documentatie
+
+We gaan in het vervolg steeds meer gebruik beginnen maken van de methods (en klassen) die meegeleverd worden met de .NET omgeving.
+
+Het is belangrijk dat je weet dat er voor alles een officiële documentatie bestaat die je kunt vinden op : 
+
+* link:https://docs.microsoft.com/en-us/dotnet/api/[de .NET API documentatie website,window="_blank"]
+
+De afkorting API staat trouwens voor **A**pplication **P**rogrammer's **I**nterface. Geparafraseerd betekent dit "de mogelijkheden waarvan applicatie programmeurs gebruik kunnen maken".
+
+Een greep uit de voorbeelden die we al tegenkwamen :
+
+* de link:https://docs.microsoft.com/en-us/dotnet/api/system.math#methods[methods uit de `Math` klasse,window="_blank"]
+* de link:https://docs.microsoft.com/en-us/dotnet/api/system.random.next#System_Random_Next_System_Int32_System_Int32_[`Next()` method,window="_blank"] die ons een willekeurig getal opleverde
+* de link:https://docs.microsoft.com/en-us/dotnet/api/system.convert.toint32#System_Convert_ToInt32_System_Double_[Convert.ToInt32(),window="_blank"] method
+* de link:https://docs.microsoft.com/en-us/dotnet/api/system.string.split#System_String_Split_System_Char___System_Int32_[Split() method,window="_blank"] van strings
+* de link:https://docs.microsoft.com/en-us/dotnet/api/system.array.indexof[Array.IndexOf() method,window="_blank"] voor arrays
+
+Op elke pagina zie je in de zijbalk wel iets staan over __classes__, __fields__, __properties__, __methods__ en/of __constructors__. De relevantie hiervan zal duidelijk worden eenmaal we klassen behandeld hebben.
+
+== Afronden
+
+=== Numerieke datatypes en (impliciete) afrondingsfouten
+
+In deel 0 zagen we dat waarden in een computer voorgesteld worden door combinaties van *bits*. In onze programma's legt het *datatype* van een variabele vast welk soort waarde we in de opslagplaats kunnen bijhouden.
+
+Voor getallen hebben we tot nu toe vooral gewerkt met `int` en `double`. 
+Er bestaan in C# echter veel meer numerieke datatypes. Ze verschillen o.a. in het aantal bits dat gebruikt wordt om de numerieke waarde voor te stellen.
+
+==== Datatypes voor gehele getallen
+
+Voor gehele getallen zijn dit de mogelijkheden
+
+[%autowidth]
+|====
+| Datatype | Aantal bits | Mogelijke waarden
+
+| byte | 8 bits | `0` t.e.m. `255`
+| sbyte |  8 bits | `-128` t.e.m. `127`
+| ushort | 16 bits | `0` t.e.m. `65535`
+| short | 16 bits | `-32768` t.e.m. `32767`
+| uint | 32 bits | `0` t.e.m. `4 294 967 296`
+| *int* | **32 bits** |  `-2 147 483 648` t.e.m. `2 147 483 647`
+| ulong | 64 bits | `0` t.e.m. `18 446 744 073 709 551 615`
+| long | 64 bits | `-9 223 372 036 854 775 808` t.e.m. `9 223 372 036 854 775 807`
+|====
+
+Bij elke soort zijn er twee varianten, prefix `s` staat voor __signed__ (d.w.z. inclusief negatieve getallen) en prefix `u` betekent __unsigned__ (enkel positieve getallen).
+
+De 8 bits en 16 bits varianten zijn eigenlijk alleen maar relevant als je probeert het geheugengebruik in te perken. Soms kom je ze ook tegen als je methods oproept die er gebruik van maken voor hun parameters of return value. De 64 bits varianten gebruik je enkele als je programma met hele grote waarden moet kunnen werken.
+
+[TIP]
+====
+Wij werken altijd met `int`, bovenstaande oplijsting is enkel als achtergrondinformatie bedoeld.
+====
+
+Het valt op dat hoe meer bits er gebruikt worden, hoe groter de mogelijke waarden zijn. Als je meer bits samenneemt kun je meer combinaties vormen : met N bits kun je 2^N^ mogelijke patronen vormen. Bijvoorbeeld, met 3 bits kun je 8 (2^3^ of '2 x 2 x 2') combinaties maken: `000`, `001`, `010`, `011`, `100`, `101`, `110` en `111`.  
+
+
+
+==== Datatypes voor kommagetallen
+
+Er bestaan ook meerdere datatypes voor kommagetallen en ook zij verschillen in het aantal bits dat gebruikt wordt om een getal voor te stellen. 
+
+Een term die belangrijk is in deze context is *precisie*. Precisie gaat om het totaal aantal cijfers in een getal (voor en na de komma tesamen) dat een datatype correct kan voorstellen.
+
+Hoe een kommagetal in bits kan worden voorgesteld, is nogal ingewikkeld en zullen we in deze cursus niet behandelen.
+
+[IMPORTANT]
+====
+Als je bedenkt dat er oneindig veel reële getallen bestaan en dat een numeriek datatype maar een eindig aantal bits gebruikt, dan kom je al snel tot de conclusie dat geen van deze datatypes alle kommagetallen correct zal kunnen voorstellen.
+====
+
+Elk waarde van een numeriek datatype (bv. `double`) komt eigenlijk overeen met een klein interval van de reële getallen. Elke reëel getal in dat interval wordt in ons programma door dezelfde waarde voorgesteld.
+
+Er zijn weliswaar bepaalde kommagetallen die __exact__ zullen voorgesteld kunnen worden, maar in het algemeen is er altijd een **(impliciete) afrondingsfout** als je met waarden van een numeriek datatype werkt.
+
+Merk op dat dit een ander soort afrondingsfout is dan de onnauwkeurigheid die we zelf veroorzaken door expliciet af te ronden met bv. `Math.Round()` of `Convert.ToInt32()`.
+
+
+
+===== Floating point datatypes : float en double
+
+We hebben tot nu toe altijd met `double` gewerkt, maar dit datatype heeft ook een kleiner broertje dat `float` heet.
+
+[%autowidth]
+|====
+| Datatype | Aantal bits | Precisie (ongeveer) | Mogelijke waarden (ongeveer)
+
+| float | 32 bits | 6 tot 9 cijfers | ±1.5 x 10^−45^ to ±3.4 x 10^38^
+| *double* | **64 bits** | **15 tot 17 cijfers** | ±5.0 × 10^−324^ to ±1.7 × 10^308^
+|====
+
+Zoals eerder uitgelegd werd, zij zullen de meeste kommagetallen slechts kunnen benaderen en niet exact voorstellen. Let ook eens op de precisie.
+
+**Er zijn dus bijna altijd __afrondingsfouten__** en als je met de waarden gaat rekenen worden deze fouten steeds groter.
+
+Wij gebruiken in deze cursus eigenlijk nooit datatype `float`, we vermelden het hier enkel om makkelijker een aantal problemen te illustreren die `double` ook heeft :
+
+. (impliciete) afrondingsfouten
+. grote (implicete) afrondingsfouten voor grote getallen
+. onnauwkeurige vergelijkingen
+
+****
+[.underline]#Voorbeeld probleem 1 : impliciete afrondingsfouten#
+
+We kiezen hier `float` als datatype om impliciete afrondingsfouten te illustreren, omdat het probleem sneller opvalt dan bij `double` waarden.
+
+[source,csharp,linenums]
+----
+float f = 0.1f;
+
+Console.WriteLine($"0.1 wordt als float voorgesteld door {f,0:f10}");
+
+f=0;
+for (int i = 0; i < 10; i++) {
+	f += 0.1f;
+}
+
+Console.WriteLine($"0.1 als float 10 keer optellen geeft {f,0:f10} ");
+----
+
+De output van dit programma is
+
+[source,shell]
+----
+0.1 wordt als float voorgesteld door 0.1000000015
+0.1 als float 10 keer optellen geeft 1.0000001192
+----
+
+Datatype `double` heeft hetzelfde probleem, maar daar is de fout kleiner omdat de precisie hoger is. 
+
+Anders gezegd : de afrondingsfout bij `double` zit meer 'naar rechts' na de komma, maar het probleem is hetzelfde.
+****
+
+Een tweede probleem is dat de afrondingsfouten groter zijn bij grotere getallen. Dus de afrondingsfout rond `0.1` is veel kleiner dan pakweg bij `1000000000`. 
+
+****
+[.underline]#Voorbeeld probleem 2 : grote afrondingsfouten bij grote waarden#
+
+We nemen weerom `float` als voorbeeld omdat het probleem dan sneller opvalt.
+
+[source,csharp,linenums]
+----
+float f = 1000000000;
+
+f = f + 30;
+
+Console.WriteLine("1000000000 + 30 =");
+Console.WriteLine($"{f,0:f10}");
+Console.WriteLine("(als we met float werken)");
+----
+
+De output van dit programma is
+
+[source,shell]
+----
+1000000000 + 30 =
+1000000000.0000000000
+(als we met float werken)
+----
+
+Je ziet dat de `f = f + 30` opdracht geen effect had. Dit komt omdat het interval rond `1000000000` zo groot is dat `1000000030` door dezelfde `float` waarde `1000000000` wordt voorgesteld.
+
+Datatype `double` heeft hetzelfde probleem, maar het valt pas goed op bij nog (veel) grotere getallen omdat de precisie van `double` hoger is. 
+****
+
+Een derde probleem is dat exacte vergelijkingen onbetrouwbaar kunnen worden. Immers, als je twee waarden vergelijkt met `==` dan kan het voorkomen dat de afrondingsfouten ervoor zorgen dat de vergelijking `false` oplevert terwijl het (puur wiskundig) `true` had moeten zijn.
+
+****
+[.underline]#Voorbeeld probleem 3 : onnauwkeurige vergelijkingen#
+
+Dit keer nemen we `double` als voorbeeld omdat het probleem bij `double` ook snel opduikt.
+
+[source,csharp,linenums]
+----
+double d = 0;
+
+for (int i = 0; i < 10; i++) {
+        d += 0.1;
+}
+
+if (d == 1.0d) {
+        Console.WriteLine("berekening correct");
+} else {
+        Console.WriteLine($"berekening incorrect (want d is eigenlijk {d:f20})");
+}
+----
+
+De output van dit programma is
+
+[source,shell]
+----
+berekening incorrect (want d is eigenlijk 0,99999999999999988898)
+----
+
+We verwachten dat 10 keer `0.1` optellen exact `1` oplevert maar door afrondingsfouten is dat niet het geval. 
+
+In de uitleg over for loops hebben we iets gelijkaardigs gezien : door afrondingsfouten in een `double` teller werd een loop 1 keer meer herhaald dan bedoeld.
+
+De oplossing is om niet exact te vergelijken met `1`, maar wel te checken of het resultaat __dicht genoeg__ bij 1 ligt. Wat 'dicht genoeg' is, hangt af van de grootte van de getallen en de berekeningen die je maakt.  Maar de mate van  tolerantie bepaal je uiteindelijk zelf...
+
+[source,csharp,linenums]
+----
+double d = 0;
+
+for (int i = 0; i < 10; i++) {
+        d += 0.1;
+}
+
+if (Math.Abs(d - 1.0d) < 0.001) {
+        Console.WriteLine("berekening correct");
+} else {
+        Console.WriteLine($"berekening incorrect (want d is eigenlijk {d:f20})");
+}
+----
+
+Deze keer gaan we na of het resultaat van de berekening ('d') wel voldoende (met een __afwijking__ kleiner dan een duizendste '0.001') het verwachte resultaat ('1.0d') al benaderen.
+
+De output van dit programma is
+
+[source,shell]
+----
+berekening correct
+----
+
+****
+
+Door al deze problemen met `float` en `double` als datatype voor kommagetallen, deze goede raad van tante Kaat (TM) :
+
+[WARNING]
+====
+Datatypes `float` en `double` gebruik je beter niet voor financiële transacties of geldbedragen.
+====
+
+
+
+==== Datatype decimal
+
+Voor financiële transacties en geldbedragen gebruik je in C# beter het *decimal* datatype :
+
+[%autowidth]
+|====
+| Datatype | Aantal bits | Precisie (ongeveer) | Mogelijke waarden (ongeveer)
+
+| *decimal* | **128 bits** | **28 tot 29 cijfers** | ±1.0 x 10^-28^ to ±7.9228 x 10^28^
+|====
+
+Bij `decimal` worden kommagetallen op een andere manier voorgesteld dan bij `float` en `double` waardoor de meeste van de afrondingsproblemen vermeden kunnen worden (omdat de fout zeer klein is). Deze `decimal` voorstelling vergt dubbel zoveel bits als een `double` voorstelling, nl. 128 bits. Een `decimal` waarde gebruikt dus meer geheugen en `decimal` berekeningen verlopen ook iets trager, omdat moderne processoren slechts met blokken van 64bits werken. Deze beide nadelen vallen echter pas op als je veel waarden moet onthouden of heel veel complexe berekeningen moet maken.
+
+Om een __literal value__ van type `decimal` te bekomen in je broncode, schrijf je er een `m` achter. Bijvoorbeeld `123.45m`.
+
+****
+[.underline]#Voorbeeld met decimal#
+
+[source,csharp,linenums]
+----
+decimal d = 0; // <1>
+
+for (int i = 0; i < 10; i++) {
+	d += 0.1m; // <2>
+}
+
+if (d == 1.0m) {
+	Console.WriteLine("berekening correct");
+} else {
+	Console.WriteLine("berekening incorrect");
+}
+----
+<1> declaratie van een `decimal` variabele
+<2> een `decimal` __literal value__
+
+De output van dit programma is
+
+[source,shell]
+----
+berekening correct
+----
+****
+
+Voor het overige werkt `decimal` net als alle andere numeriek datatypes.
+
+Er zijn dus ook `decimal.Parse()` en `decimal.TryParse()` methods en die werken net zo als hun `double` en `int` tegenhangers.
+
+En ja, er is ook een `Convert.ToDecimal()` en ook die werkt zoals je zou verwachten.
+
+[TIP]
+====
+Gebruik altijd datatype `decimal` voor financiële transacties of geldbedragen.
+====
+
+
+
+=== Expliciet afronden van kommagetallen
+
+Doorgaans zul je in een programma met kommagetallen, ergens wel waarden moeten afronden. Vaak gebeurt dit om de output voor de gebruiker overzichtelijker te maken, maar soms is het ook een kwestie van correctheid. Bijvoorbeeld, prijzen in Euro moeten op 2 cijfers na de komma worden afgerond bij het toepassen van BTW-percentages en kortingspercentages.
+
+De methods om expliciet af te ronden vind je allemaal terug in de link:https://docs.microsoft.com/en-us/dotnet/api/system.math#methods[Math klasse].
+
+* Math, bekend van gouwe ouwe zoals `Math.Min()`, `Math.Max()`, `Math.Sqrt()` en natuurlijk link:https://www.imdb.com/title/tt0240468/[`Math.KungPow()`,window="_blank"].
+
+==== Afronden naar een geheel getal
+
+We kunnen expliciet afronden naar een geheel getal met de volgende methods :
+
+[%autowidth]
+|====
+| Method | Resultaat type | Afronden naar ...
+
+| `Math.Round(getal)` | zelfde type als `getal` | naar dichtstbijzijnde geheel getal (*)
+| `Math.Ceiling(getal)` | zelfde type als `getal` | naar boven (richting + oneindig)
+| `Math.Floor(getal)` | zelfde type als `getal` | naar onder (richting - oneindig)
+|====
+
+[WARNING]
+====
+Merk op dat bij het afronden van een `double`, het resultaat ook een `double` is en geen `int`!
+====
+
+(*) Indien het getal netjes eindigt op `.5`, gebruikt `Math.Round()` net als `Convert.ToInt32()` de link:https://en.wikipedia.org/wiki/Rounding#Round_half_to_even["round half to even" ofte "banker’s rounding"] strategie.
+
+
+Indien je een andere afrondingsstrategie wil gebruiken, moet je een variant gebruiken met een extra parameter :
+
+[%autowidth]
+|====
+| Method | Resultaat type | Afronden naar ...
+
+| `Math.Round(getal, strategie)` | zelfde type als `getal` | hangt af van de `strategie` parameter (*)
+| `Math.Round(getal, strategie)` | zelfde type als `getal` | hangt af van de `strategie` parameter (*)
+|====
+
+Die `strategie` is een waarde van de link:https://docs.microsoft.com/en-us/dotnet/api/system.midpointrounding[enumeratie MidpointRounding]. De gebruikelijk afronding uit het dagelijks leven voor getallen die eindigen op `.5` is wellicht `MidpointRounding.AwayFromZero`.
+
+****
+[.underline]#Voorbeeld#
+
+[source,csharp,linenums]
+----
+double d75 = Math.Round(7.5);
+double d85 = Math.Round(8.5);
+Console.WriteLine("Math.Round(getal) : ");
+Console.WriteLine($"7.5 wordt {d75} en 8.5 wordt {d85}");
+
+Console.WriteLine();
+
+d75 = Math.Round(7.5, MidpointRounding.AwayFromZero);
+d85 = Math.Round(8.5, MidpointRounding.AwayFromZero);
+Console.WriteLine("Math.Round(getal, MidpointRounding.AwayFromZero) : ");
+Console.WriteLine($"7.5 wordt {d75} en 8.5 wordt {d85}");
+----
+
+De output van dit programma is :
+
+[source,shell]
+----
+Math.Round(getal) :
+7.5 wordt 8 en 8.5 wordt 8
+
+Math.Round(getal, MidpointRounding.AwayFromZero) :
+7.5 wordt 8 en 8.5 wordt 9
+----
+****
+
+=== Expliciet afronden op n cijfers na de komma
+
+Als je een kommagetal wil afronden tot op `n` cijfers na de komma, kun je deze varianten gebruiken :
+
+[%autowidth]
+|====
+| Method | Resultaat type | Afronden op `n` cijfers na de komma met
+
+| `Math.Round(getal, n)` | zelfde type als `getal | "round half to even" ofte "banker’s rounding" strategie
+| `Math.Round(getal, n, strategie)` | zelfde type als `getal` | hangt af van de `strategie` parameter (*)
+|====
+
+(*) Hier gebruik je weer een waarde van de link:https://docs.microsoft.com/en-us/dotnet/api/system.midpointrounding[enumeratie MidpointRounding]
+
+[WARNING]
+====
+Let op, als je met `double` waarden werkt kunnen/zullen er impliciete afrondingsfouten in de waarden sluipen. Hierdoor kan het zijn dat de gekozen `strategie` soms niet gebruikt wordt in situaties waar je het wel zou verwachten; omdat er in de echte waarde op een bepaalde positie niet netjes een `5` staat.
+====
+
+****
+[.underline]#Voorbeeld#
+
+We gebruiken in dit voorbeeld opzettelijk `decimal` en niet `double` om te vermijden dat impliciete afronding roet in het eten komt gooien.
+
+[source,csharp,linenums]
+----
+const decimal d1 = 1.275m;
+const decimal d2 = d1 + 0.01m;
+
+decimal rd1 = Math.Round(d1, 2);
+decimal rd2 = Math.Round(d2, 2);
+Console.WriteLine("Math.Round(getal, 2) : ");
+Console.WriteLine($"{d1} wordt {rd1} en {d2} wordt {rd2}");
+
+Console.WriteLine();
+
+rd1 = Math.Round(d1, 2, MidpointRounding.AwayFromZero);
+rd2 = Math.Round(d2, 2, MidpointRounding.AwayFromZero);
+Console.WriteLine("Math.Round(getal, 2, MidpointRounding.AwayFromZero) : ");
+Console.WriteLine($"{d1} wordt {rd1} en {d2} wordt {rd2}");
+----
+
+De output van dit programma is :
+
+[source,shell]
+----
+Math.Round(getal, 2) :
+1.275 wordt 1.28 en 1.285 wordt 1.28
+
+Math.Round(getal, 2, MidpointRounding.AwayFromZero) :
+1.275 wordt 1.28 en 1.285 wordt 1.29
+----
+
+Je ziet dat er netjes afgerond is zoals verwacht.
+****
+
+Als je de datatypes in dit voorbeeld zou omzetten naar `double` dan is het moeilijk om de werking van `MidpointRounding.AwayFromZero` te demonstreren! Indien bv. `d1 == 1.375` zou het mooi lukken, maar bij `d1 == 1.275` krijg je een verwarrend resultaat.
+
+De reden hiervoor is dat de `MidpointRounding` strategie enkel relevant is als het getal mooi eindigt op `5` op positie `n+1` na de komma. Bij `double` kan de eigenlijke waarde door impliciete afronding er net naast liggen waardoor de strategie niet eens relevant is voor dat getal.
+
+****
+[.underline]#Voorbeeld#
+
+We gaan eens checken hoe de getallen `1.275` en `1.375` als double waarden worden voorgesteld :
+
+[source,csharp,linenums]
+----
+double dd1 = 1.275;
+double dd2 = 1.375;
+
+Console.WriteLine($"{dd1,0:f20}");
+Console.WriteLine($"{dd2,0:f20}");
+----
+
+De output van dit programma is :
+
+[source,shell]
+----
+1.27499999999999991118
+1.37500000000000000000
+----
+
+De `double` waarde voor `1.375` heeft als derde cijfer na de komma netjes een `5` (zoals verwacht), maar die voor `1.275` heeft dit niet. Als je dus laat afronden op twee cijfers na de komma, zal de opgegeven `MidpointRounding` strategie niet meespelen bij de `double` waarde voor `1.275`.
+
+Er wordt in dit voorbeeld gebruik gemaakt van de __format strings__ '0:f20').
+****
+
+==== Interne waarden afronden of pas afronden bij output?
+
+In deel 07 kwam aan bod hoe we bij het omzetten van een kommagetal naar een geformatteerde string, ook al een expliciete afronding konden bekomen. Dit werkt natuurlijk ook met `decimal` waarden.
+
+****
+[.underline]#Voorbeeld van een geformatteerde string met afronding voor een decimal waarde#
+
+[source,csharp,linenums]
+----
+decimal getal = 123.4567m;
+Console.WriteLine($"decimal {getal} afgerond met 0:f2 geeft {getal,0:f2}");
+----
+
+De output van dit programma is :
+
+[source,shell]
+----
+decimal 123.4567 afgerond met 0:f2 geeft 123.46
+----
+
+* De algemene vorm van de 'double' of 'decimal' __format string__ is `x:fy`
+- x is het totaal aantal posities voor het getal in de tekst (desnoods aangevuld met spaties aan de linkerkant). Hou er rekening mee dat de `.` of `,` scheiding voor de fractie ook meetelt.
+- y is het aantal cijfers na de komma (afgerond of aangevuld met extra nullen ná het getal)
+
+We kunnen de formattering toepassen door deze __format string__ aan onze __string interpolation__ toe te voegen, nl. tussen de accolades `{` `}` van de variabele die we willen formatteren.
+****
+
+In plaats van pas af te ronden bij het tonen van de geformatteerde string, zou je natuurlijk ook eerst de afgeronde waarde kunnen produceren (met bv. `Math.Round()`) en dan die waarde tonen. Beide zijn mogelijk, het hangt er maar van af wat je makkelijker vindt en welke strategie je wil gebruiken.
+
+Je moet je echter de vraag stellen : als je aan de gebruiker een afgerond tussenresultaat toont, moet je dan __intern in je programma__ hiermee verder rekenen? Of reken je beter verder met de oorspronkelijke niet-afgeronde waarde?
+
+Hier is geen algemeen antwoord op te geven, het hangt af van de situatie.
+
+Bijvoorbeeld, op een factuur komen doorgaans meerdere regels met (afgeronde) bedragen voor, wiens som dan onderaan als totaalbedrag staat. Klanten verwachten natuurlijk dat het getoonde totaal daadwerkelijk overeenkomt met de som van de getoonde bedragen.
+
+== DateTime en TimeSpan
+
+=== Momenten voorstellen met DateTime
+
+Een waarde van het datatype `DateTime` stelt een moment voor en is een combinatie van
+
+* een datum : dag, maand, jaar
+* een tijdstip : uren, minuten, seconden en milliseconden
+
+De documentatie voor `DateTime` vind je op link:https://docs.microsoft.com/en-us/dotnet/api/system.datetime[]
+
+Je zou je kunnen voorstellen dat elke `DateTime` waarde, uit 7 getallen bestaat die samen een moment vastleggen. Technisch gezien is `DateTime` trouwens een `struct` (een bundeling van andere waarden) dus elke `DateTime` waarde is een bundeling van andere waarden die we als 1 geheel kunnen manipuleren.
+
+Eenmaal we zo'n `DateTime` waarde hebben, kunnen we er een aantal nuttige dingen mee doen :
+
+* de onderdelen opvragen (bv. welke maand, hoeveel minuten, etc)
+* berekeningen maken (aantal dagen verschil tov een ander moment)
+
+Het `DateTime` datatype (i.e. de klasse zelf) biedt ook een paar interessante mogelijkheden die niet te maken hebben met een specifiek moment :
+
+* bepalen hoeveel dagen in een bepaalde maand zijn
+* bepalen of een jaar een schrikkeljaar is
+* `DateTime` waarden omzetten van en naar strings
+
+
+
+==== DateTime waarden maken
+
+Om een DateTime waarde te bekomen in ons programma zijn er 3 manieren :
+
+* expliciet een moment opgeven
+* een bekend moment gebruiken zoals "nu" of "vandaag"
+* een moment maken op basis van een tekstuele voorstelling in een string
+
+****
+[.underline]#Voorbeelden#
+
+[source,csharp,linenums]
+----
+DateTime geboorteDatum = new DateTime(1995, 12, 19);                      // <1>
+DateTime verzendMoment = new DateTime(2020, 12, 19, 23, 59, 50);          // <2>
+DateTime registratieMoment = new DateTime(2019, 12, 19, 23, 59, 50, 357); // <3>
+DateTime nu = DateTime.Now;        // <4>
+DateTime vandaag = DateTime.Today; // <5>
+----
+<1> 19 december 1995 om middernacht (00u00m00s)
+<2> 19 december 2020 om 23u59m50s
+<3> 19 december 2019 om 23u59m50s en 357 milliseconden (23:59:50,357)
+<4> "nu"
+<5> "vandaag", d.w.z. de datum van vandaag met middernacht als tijdstip (00:00:00,000)
+****
+
+Er zijn vele manieren om een `DateTime` waarde te bekomen op basis van een tekstuele voorstelling. 
+
+We beperken ons tot 1 manier, nml. met link:https://docs.microsoft.com/en-us/dotnet/api/system.datetime.tryparseexact[TryParseExact]
+
+Een voorbeeld dat toont hoe het moet..
+
+****
+[.underline]#Voorbeeld#
+
+Dit fragment moet je overnemen in je eigen code en aanpassen waar nodig :
+
+[source,csharp,linenums]
+----
+System.Globalization.CultureInfo nlBe = new System.Globalization.CultureInfo("nl-BE"); // <1>
+DateTime moment;
+bool gelukt = DateTime.TryParseExact("11/12/2013 23:59:50,357", "dd/MM/yyyy hh:mm:ss,fff", nlBe, System.Globalization.DateTimeStyles.None, out moment);
+----
+<1> Cultuurgebonden formattering voor Vlaanderen (BE-NL)
+
+Dit codefragment is wat breed, dus hieronder nog eens de verschillende parameters van `TryParseExact` :
+
+* `"11/12/2013 23:59:50,357"`
+** dit is de string waar we een datum in verwachten, bv. afkomstig van gebruikersinput
+* `"dd/MM/yyyy HH:mm:ss,fff"`
+** dit is de formaat string die aangeeft waar welke onderdelen verwacht worden in de tekst
+*** dd = dag van de maand in 2 cijfers (2 cijfers verplicht!)
+*** MM = maand in 2 cijfers (2 cijfers verplicht)
+*** yyyy = jaartal in 4 cijfers (weerom, het moeten 4 cijfers zijn)
+*** HH = uren in 2 cijfers en 24u formaat
+*** mm = minuten in 2 cijfers
+*** ss = seconden in 2 cijfers
+*** fff = duizendsten in 3 cijfers
+** een overzicht met alle mogelijkheden vind je op
+*** link:https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings[]
+** speciale vermelding
+*** indien de formaat string wel een tijdstip maar geen datum deel bevat, zal `moment` de datum van vandaag aannemen
+*** indien de formaat string wel een datum maar geen tijdstip deel bevat, zal `moment` op middernacht vallen
+* `nlBe`
+** dit is een format provider die cultuurspecifieke zaken voorziet (wat dat ook moge betekenen)
+* `System.Globalization.DateTimeStyles.None`
+** hier kunnen een paar extra opties voor het parsen worden meegegeven, maar wij zullen die niet gebruiken vandaar de `None` enumeratie waarde.
+** als je nieuwsgierig bent, zie
+*** link:https://docs.microsoft.com/en-us/dotnet/api/system.globalization.datetimestyles[]
+* `out moment`
+** stop de `DateTime` waarde in variabele `moment`
+** vergelijkbaar met de `out` parameter van `int.TryParse()`
+
+****
+
+De `TryParseExact` oproep zal dus proberen in de string een tekst te herkennen, op basis van het opgegeven formaat.
+
+*Indien er in de string een geschikte tekst gevonden werd* met een moment in het opgelegde formaat, dan
+
+* bevat de variabele `gelukt` de waarde `True`, net als bij `int.TryParse()`
+* bevat de variabele `moment` de gewenste `DateTime` waarde
+** indien enkel een datum wordt gelezen, zal het tijdstip middernacht zijn
+** indien enkel een tijdstip wordt gelezen, zal het datum gedeelte de datum van vandaag zijn
+
+*Indien er in de string geen geschikte tekst gevonden werd*, dan
+
+* bevat de variabele `gelukt` de waarde `False`, net als bij `int.TryParse()`
+* bevat de variabele `moment` de kleinste `DateTime` waarde
+** dit is `DateTime.MinValue` (middernacht op 1 januari in het jaar 1)
+		
+		
+		
+==== Werken met DateTime waarden	
+
+Merk vooreerst op dat DateTime waarden *immutable* zijn (net zoals string waarden). Ze kunnen dus nooit veranderen, we kunnen hoogstens een nieuwe `DateTime` waarde maken/bekomen op basis van een bestaande `DateTime` waarde met wat wijzigingen.
+
+In wat volgt veronderstellen we dat de variabele `dt` een `DateTime` waarde bevat.
+	
+We kunnen de verschillende *onderdelen* van het moment opvragen :
+
+* `dt.Date`
+** dit zal een nieuwe `DateTime` waarde opleveren met dezelfde datum als `dt` maar met middernacht als tijdstip
+* `dt.TimeOfDay`
+** dit levert een `TimeSpan` waarde op (zie volgende sectie) die voorstelt hoeveel tijd er zit tussen het moment `dt` en het begin van die dag (middernacht).
+* `dt.Year`, `dt.Month`, `dt.Day`, `dt.Hour`, `dt.Minute`, `dt.Second` en `dt.Millisecond`
+** let op : maand en dag beginnen te tellen van `1`!
+** dit levert de verschillende onderdelen van het `dt` moment als `int` waarde
+* `dt.Ticks`
+** het aantal ticks voor dit moment geteld vanaf middernacht 1 januari jaar 0001
+** er zitten 10 miljoen ticks in elke seconde, 100 ticks is 1 nanoseconde
+
+****
+[.underline]#Voorbeeld#
+
+[source,csharp,linenums]
+----
+DateTime dt = new DateTime(2019, 12, 19, 23, 59, 50, 357);
+
+Console.WriteLine($"Jaartal {dt.Year}, maand {dt.Month}, dag {dt.Day}");
+Console.WriteLine($"Ticks sinds middernacht 1 januari jaar 1 : {dt.Ticks}");
+----
+
+De output van dit programma is
+
+[source,shell]
+----
+Jaartal 2019, maand 12, dag 19
+Ticks sinds middernacht 1 januari jaar 1 : 637123967903570000
+----
+****
+
+We kunnen ook bewerkingen uitvoeren om een *vroeger/later* moment te bekomen
+
+* `AddYears()`, `AddMonths()`, `AddDays()`
+* `AddHours()`, `AddMinutes()`, `AddSeconds()`, `AddMilliseconds()`
+
+Elk van deze methods heeft een `double` parameter die de verschuiving vroeger/later opgeeft en produceert een nieuwe `DateTime` waarde. 
+
+De richting vroeger/later wordt bepaald door een negatieve/positieve parameter.
+
+****
+[.underline]#Voorbeeld#
+
+[source,csharp,linenums]
+----
+DateTime dt = DateTime.Now;
+
+DateTime theZombieApocalypse = dt.AddDays(28);          // <1>
+DateTime toenLeekHetNogEenGoedIdee = dt.AddMinutes(-5); // <2>
+DateTime examenEinde = dt.AddHours(2.5);                // <3>
+----		
+<1> maakt een nieuwe `DateTime` waarde die precies 28 dagen later is dan het moment `dt`
+<2> maakt een nieuwe `DateTime` waarde die 5 minuten *voor* `dt` komt
+<3> maakt een nieuwe `DateTime` waarde die 2.5 uur na `dt` komt
+****
+
+Vaak zul je ook een *tekstuele voorstelling* nodig hebben van een `DateTime` moment.
+
+Hiervoor kun je de `.ToString()` method gebruiken. Deze heeft 1 parameter waarmee je kunt vastleggen in welk formaat het moment moet getoond worden.
+
+Deze formaat string is op dezelfde manier gestructureerd als bij `TryParseExact()`, bv. `"dd/MM/yyyy HH:mm:ss,fff"`.
+
+****
+[.underline]#Voorbeeld#
+
+[source,csharp,linenums]
+----
+DateTime dt = new DateTime(2019, 12, 19, 23, 59, 50, 357);
+
+string dagEnMaand = dt.ToString("dd/MM");        // <1>
+string secondeEnFractie = dt.ToString("ss,fff"); // <2>
+
+Console.WriteLine(dagEnMaand);
+Console.WriteLine(secondeEnFractie);
+----
+<1> dag en maand gedeelte
+<2> seconde en fractie van een seconde
+
+De output van dit programma is :
+
+[source,shell]
+----
+19/12
+50,357		
+----
+****
+
+
+
+==== DateTime waarden vergelijken
+
+We kunnen twee DateTime waarden `dt1` en `dt2` met elkaar vergelijken, alle wiskundige vergelijkingen werken zoals verwacht :
+
+[%autowidth]
+|====
+| Vergelijking
+
+| `dt1 == dt2`
+| `dt1 != dt2`
+| `dt1 <  dt2`
+| `dt1 \<= dt2`
+| `dt1 >  dt2`
+| `dt1 >= dt2`
+|====
+
+[WARNING]
+====
+Let op, de vergelijkingen zijn enkel correct indien de `dt1` en `dt2` momenten in dezelfde tijdzone zitten!
+
+Vermits wij in deze cursus niks speciaals met tijdzones doen, zal dit voor ons altijd ok zijn.
+====
+	
+Let ook op met het vergelijken van `DateTime` waarden die je enkel als datum gebruikt. Als er eentje (per ongeluk) een tijdsgedeelte heeft kan dit onverwachte resultaten opleveren.
+
+[source,csharp,linenums]
+----
+DateTime dt1 = DateTime.Now;
+System.Threading.Thread.Sleep(1000); // wacht 1 sec
+DateTime dt2 = DateTime.Today;
+Console.WriteLine( dt1 < dt2 ); // geeft false
+----
+
+Om zeker te zijn dat je geen appels met peren vergelijkt kun je in zo'n gevallen `dt.Date` schrijven (`.Date` kwam hierboven bij de onderdelen aan bod).
+	
+	
+	
+=== Een tijdsduur voorstellen met TimeSpan
+
+Een `TimeSpan` waarde stelt een tijdsduur voor (een tijdsinterval, verstreken tijd). Deze is uitgedrukt in een (positief of negatief) aantal dagen, uren, minuten, seconden en fractie van een seconde.
+
+De documentatie vind je op link:https://docs.microsoft.com/en-us/dotnet/api/system.timespan[].
+
+Je bekomt een `TimeSpan` waarde doorgaans door twee `DateTime` momenten van elkaar af te trekken, de `TimeSpan` waarde stelt dan de tijdsduur tussen de twee momenten voor. Dit kan negatief zijn.
+
+In wat volgt veronderstellen we dat de variabele `ts` een `TimeSpan` waarde bevat.
+
+Je kunt de onderdelen van een `TimeSpan` waarde opvragen :
+
+* `ts.Days`, `ts.Hours`, `ts.Minutes`, `ts.Seconds`
+** Het aantal dagen, uren, minutes en seconden in de tijdsduur
+
+Indien je liever niet met negatieve waarden werkt, kun je een soort __absolute waarde__ van de tijdsduur bekomen met `ts.Duration()`. Dat levert altijd een positieve tijdsduur op.
+
+Je kunt ook opvragen hoe groot *de tijdsduur in 1 specifieke tijdsmaat*  is :
+
+* `ts.TotalDays`
+** De tijdsduur volledig uitgedrukt in dagen (een `double`)
+* `ts.TotalHours`
+** De tijdsduur volledig uitgedrukt in uren (een `double`)
+* `ts.TotalMinutes`
+** De tijdsduur volledig uitgedrukt in minuten (een `double`)
+* `ts.TotalSeconds`
+** De tijdsduur volledig uitgedrukt in seconden (een `double`)
+* `ts.TotalMilliseconds`
+** De tijdsduur volledig uitgedrukt in milliseconden (een `double`)
+* `ts.Ticks`
+** De tijdsduur volledig uitgedrukt in __ticks__ (een `long`)
+
+****
+[.underline]#Voorbeeld#
+
+
+[source,csharp,linenums]
+----
+static void ToonInfo(TimeSpan ts) {
+	Console.WriteLine($"{ts.Days} dagen, {ts.Hours} uren en {ts.Minutes} minuten");
+}
+
+static void Main() {
+	DateTime vroeg = new DateTime(2019, 12, 19, 23, 59, 50, 357);
+	DateTime laat = new DateTime(2019, 12, 26, 13, 34, 12, 678);
+
+	TimeSpan positief = laat - vroeg; // <1>
+	TimeSpan negatief = vroeg - laat; // <1>
+
+	ToonInfo(positief);
+	ToonInfo(negatief);
+	ToonInfo(negatief.Duration());    // <2>
+
+	Console.WriteLine($"Dat komt overeen met in totaal {positief.TotalDays} dagen");
+	Console.WriteLine($"Dat komt overeen met in totaal {positief.TotalMinutes} minuten");
+	Console.WriteLine($"Dat komt overeen met in totaal {positief.TotalSeconds} seconden");
+}
+----
+<1> de tijdsduur tussen twee momenten bepalen d.m.v. een aftrekking
+<2> de `.Duration()` oproep levert een even grote positieve tijdsduur op
+
+De output van dit programma is :
+
+[source,shell]
+----
+6 dagen, 13 uren en 34 minuten
+-6 dagen, -13 uren en -34 minuten
+6 dagen, 13 uren en 34 minuten
+Dat komt overeen met in totaal 6.565536122685185 dagen
+Dat komt overeen met in totaal 9454.372016666666 minuten
+Dat komt overeen met in totaal 567262.321 seconden
+----
+****
+
+== Dot notatie, using en namespaces
+
+=== Dot notatie
+
+[source,csharp,linenums]
+----
+System.Console.WriteLine("Hello");
+System.Console.WriteLine("World");
+----
+
+De __method__ `WriteLine`, die we in voor vermelde code aanroepen, is gedefinieerd in een __klasse__ met de naam `Console`, vandaar de __punt__ (Engels: *__dot__*) notatie `Console.WriteLine` (spreek het uit als: __Console dot WriteLine__).
+
+De klasse `Console` is op zijn beurt gedefinieerd in de __namespace__ `System`.  Ook hier mag je bijgevolg verwijzen naar de `Console` klasse aan de hand van de notatie `System.Console`.
+
+[#Namespaces]
+=== Namespaces en using
+
+Misschien heb je ondertussen links of rechts in de code *__namespaces__* zien opduiken.  
+
+Bijvoorbeeld bij het creëren van een __nieuw Console App (.NET Core) project__ krijgen we alvast volgende code om van te vertrekken.  Ook daar is sprake van een __namespace__...
+
+[source,csharp,linenums]
+----
+using System;
+
+namespace HelloWorldApp {  // <1>
+    class Program {
+        static void Main(string[] args) {
+            Console.WriteLine("Hello World!");
+        }
+    }
+}
+----
+<1> De naam van de __namespace__, hier `HelloWorldApp` zal overeenkomen met de uitgekozen __projectnaam__.
+
+__Namespaces__ mag je bekijken als een __map__, of noem het een __rubriek__, waarin code onderdelen als klassen worden uitgeschreven.  In dergelijke __rubriek__ verzamelen we bijvoorbeeld alle klassen die samenhoren.
+
+.Analogie met mappen
+[NOTE]
+====
+Een namespace kan je op verschillende manieren vergelijken met __een map in een filesysteem__, bijvoorbeeld een __folder__ op onze harde schijf.  We maken mappen in hoofdzaak aan om een tweetal redenen: 
+
+- De eerste is structuur in ons filesysteem te bekomen.  Door documenten in verschillend mappen onder te brengen, groeperen we gerelateerde documenten.  Gerelateerde mappen kunnen ook nog eens samen in een map geplaatst worden.  Zonder mappen zouden we moeilijker een document, of submap terugvinden.  We plaatsen bijvoorbeeld al onze recepten in een map __MijnRecepten__, die zich op zijn beurt bevindt in een map __MijnDocumenten__.
+
+- De tweede reden is om naamconflicten te vermijden.  Meerdere bestanden mag je dezelfde naam geven, maar dan moeten deze bestanden zich elk in een andere map bevinden.  Anders uitgedrukt is een map een __ruimte__ (Engels:__space__) om een document of map een (unieke) __naam__ moet aannemen.
+====
+
+Net hetzelfde is van toepassingen bij namespaces en hun onderdelen, bijvoorbeeld klassen.
+
+- Enerzijds kunnen *verschillende klassen met dezelfde naam* (bv `Program`) voorkomen, zolang ze zich maar bevinden *in een andere namespace*.
+
+- Indien we over vele klassen beschikken, kan het helpen deze klassen in namespaces, met eventuele subnamespaces onder te brengen.  Een *hiërarchische structuur* kan zo worden opgebouwd.
+
+Ook bij het voorgedefinieerde is dat het geval, zo kan je bijvoorbeeld in de `IO` subnamespace van de `System` namespace (of dus `System.IO` namespace) alles vinden wat te maken heeft met het __lezen uit__ of __schrijven naar bestanden__.  `System.Drawing` bijvoorbeeld bevat dan het nodig om __grafische vormen te teken__.
+
+Een __namespace__ wordt gedefinieerd aan de hand van een `namespace` statementblok.  Je start met het sleutelwoord `namespace` gevolgd door de naam van deze __rubriek__.  
+
+[source,csharp,linenums]
+----
+namespace MijnRubriek {
+    ...
+}
+----
+
+Alles wat tot de `namespace` behoort wordt tussen accolades gezet.
+
+Een __namespace__ kan __sub-namespaces__ bevatten...
+
+[source,csharp,linenums]
+----
+namespace MijnRubriek {
+    namespace MijnSubRubriek {
+        ...
+    }
+}
+----
+
+Wat ook aan de hand van één statementblok kan, dit door gebruik te maken van een __dot-notation__...
+
+[source,csharp,linenums]
+----
+namespace MijnRubriek.MijnSubRubriek {
+    ...
+}
+----
+
+https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/namespaces/index[Microsoft Docs: Namespaces (C# Programming Guide)]
+
+[discrete]
+==== Qualifying identifier
+
+Om te verwijzen naar een bepaalde namespace, klasse, of zelfs onderdeel van deze klasse kunnen we de __qualifying identifier__ inzetten.  Deze __identifier__ (of __naam__) __kwalificeert__ (__maakt duidelijk__) waaruit het afkomstig is.  
+
+De naam van de klasse of namespace waartoe dit onderdeel behoort, wordt met andere woorden ook vermeldt...
+
+[source,csharp,linenums]
+----
+namespace MijnApplicatie {
+    class Program {
+        static void Main() {
+            MijnRubriek.MijnSubRubriek.MijnCodeblok.MijnMethod();  // <1>     
+        }
+    }
+}
+
+namespace MijnRubriek.MijnSubRubriek
+{
+    class MijnCodeblok { 
+        static void MijnMethod() {
+            ...
+        }
+    }
+}
+----
+<1> Hier wordt een qualifying identifier van de `MijnMethod` gebruikt om duidelijk te maken dat ze is gedefinieerd in de `MijnCodeblok` klasse van de `MijnRubriek.MijnSubRubriek` namespace.
+
+Je gebruikt hiervoor de dot notatie en laat de naam van het onderdeel telkens voorafgaan door de naam van de __container__ waarin het zich bevindt.
+
+[discrete]
+==== Using directives
+
+Om op verkorte wijze gebruik te kunnen maken van bijvoorbeeld de `Sleep` method van de `System.Threading.Thread` klasse, zonder telkens te moeten aangeven dat deze `Thread` gedefinieerd is in de `System.Threading` namespace, kan men gebruik maken van de `using System.Threading` __directive__.
+
+Je kan je broncode document (of een namespace) starten met één of meerder `using` statements.  Daarmee geef je aan iets te gebruiken uit deze namespace...
+
+[source,csharp,linenums]
+----
+using System;            // <4>
+using System.Threading;  // <2>
+
+class Program
+{
+    static void Main()
+    {
+        Thread.Sleep(1000);                  // <1>
+        Console.WriteLine("Hello World!");   // <3>
+    }
+}
+----
+<1> Gebruik maken van de `Sleep` method uit de `Thread` klasse kan eenvoudigweg met `Thread.Sleep`...
+<2> ...op zijn minst indien met een `using` is aangegeven dat we onderdelen van de `System.Threading` namespace gaan aanspreken.
+<3> Om op deze regel een __qualifying identifier__ als `System.Console` te vermijden...
+<4> ...is een `using` directive nodig waar we verwijzen naar de `System` namespace.  De `Console` klasse is immers in deze namespace gedefinieerd.
+
+Ook om `MijnMethod` aan te roepen hadden we met een `using` kunnen werken...
+
+[source,csharp,linenums]
+----
+namespace MijnApplicatie {
+    using MijnRubriek.MijnSubRubriek.MijnCodeblok;   // <2>
+
+    class Program {
+        static void Main() {
+            MijnMethod();                            // <1>     
+        }
+    }
+}
+
+namespace MijnRubriek.MijnSubRubriek
+{
+    class MijnCodeblok { 
+        static void MijnMethod() {
+            ...
+        }
+    }
+}
+----
+<1> Bij het aanroepen van de `MijnMethod` verwijzen we enkel naar de naam van deze method.
+<2> Om dat te kunnen doen moeten we bovenaan het broncode document, of op zijn minst in de bevattende namespace (waar we deze code hanteren) een `using` directive opnemen die verwijst naar de `MijnRubriek.MijnSubRubriek.MijnCodeblok` klasse.
+
+NOTE: In het geval dat een `using` statement staat opgenomen in een `namespace`, is ze uiteraard enkel van toepassing binnen die `namespace`.
+
+https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/using-directive[Microsoft Docs: using Directive (C# Reference)]

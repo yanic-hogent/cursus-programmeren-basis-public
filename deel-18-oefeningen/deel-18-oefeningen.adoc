@@ -1,0 +1,897 @@
+= Programmeren Basis - Deel 18 - Oefeningen
+Yanic Inghelbrecht
+v2022.05.23.08.54
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+// geen auto section numbering voor oefeningen (handigere titels en toc)
+//:sectnums:  
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+
+
+
+== Vooraf
+
+Alle klassen in deze oefeningen staan in een namespace `D18` en de `Main` method staat in een klasse `Program`.
+
+
+
+== Eenvoudig
+
+
+
+=== Oefening D18persoonopleeftijd
+Schrijf een klasse `Persoon` met 2 properties, `Naam` en `Leeftijd`, die via de constructor kunnen ingesteld worden.
+
+Vervolledig in de `Program` klasse de volgende `PrintPersonen` method :
+
+[source,csharp,linenums]
+----
+static void PrintPersonenMetTitel(string titel, List<Persoon> personen) { 
+	Console.WriteLine($"--- {titel} ---");
+	
+	// Toon alle personen op de console <1>
+}
+----
+<1> Per persoon 1 regel waarin de naam en de leeftijd van die persoon staat.
+
+Schrijf in de Program klasse een Main method waarin een `List` wordt gemaakt met de volgende inhoud (in de gegeven volgorde!) aan `Persoon` objecten :
+
+* Jan, 23 jaar
+* Miet, 45 jaar
+* Joris, 34 jaar
+* Corneel, 12 jaar
+* Phara, 34 jaar
+
+Daarna wordt `PrintPersonenMetTitel` opgeroepen (titel : `ongesorteerd`) met die lijst als parameter.
+
+**Sorteer vervolgens de lijst op leeftijd.**
+
+Roep opnieuw `PrintPersonenMetTitel` op (titel : `gesorteerd op leeftijd`).
+
+De output van dit programma ziet er zo uit :
+
+[source,shell]
+----
+--- ongesorteerd ---
+Jan, 23 jaar
+Miet, 45 jaar
+Joris, 34 jaar
+Corneel, 12 jaar
+Phara, 34 jaar
+--- gesorteerd op leeftijd ---
+Corneel, 12 jaar
+Jan, 23 jaar
+Joris, 34 jaar
+Phara, 34 jaar
+Miet, 45 jaar
+----
+
+
+
+=== Oefening D18persoonopnaam
+
+Pas de oplossing van D18persoonopleeftijd aan, zodat achteraf de personen ook eens op naam (a->z) gesorteerd en getoond worden (titel : `gesorteerd op naam`).
+
+Schrijf hiervoor een klasse `PersoonNaamComparer`.
+
+De output van dit programma ziet er zo uit :
+
+[source,shell]
+----
+--- ongesorteerd ---
+Jan, 23 jaar
+Miet, 45 jaar
+Joris, 34 jaar
+Corneel, 12 jaar
+Phara, 34 jaar
+--- gesorteerd op leeftijd ---
+Corneel, 12 jaar
+Jan, 23 jaar
+Joris, 34 jaar
+Phara, 34 jaar
+Miet, 45 jaar
+--- gesorteerd op naam ---
+Corneel, 12 jaar
+Jan, 23 jaar
+Joris, 34 jaar
+Miet, 45 jaar
+Phara, 34 jaar
+----
+
+
+
+=== Oefening D18persoonopnaamomgekeerd
+
+Wat zou je aan de code van `PersoonNaamComparer` uit oplossing D18persoonopnaam moeten veranderen zodat er van z->a gesorteerd wordt?
+
+Probeer dit uit, de output wordt dan :
+
+[source,shell]
+----
+--- ongesorteerd ---
+Jan, 23 jaar
+Miet, 45 jaar
+Joris, 34 jaar
+Corneel, 12 jaar
+Phara, 34 jaar
+--- gesorteerd op leeftijd ---
+Corneel, 12 jaar
+Jan, 23 jaar
+Joris, 34 jaar
+Phara, 34 jaar
+Miet, 45 jaar
+--- gesorteerd op naam ---
+Phara, 34 jaar
+Miet, 45 jaar
+Joris, 34 jaar
+Jan, 23 jaar
+Corneel, 12 jaar
+----
+
+
+
+== Iets ingewikkelder
+
+
+
+=== Oefening D18persooncomparertelling
+
+Pas de oplossing van D18persoonopnaam aan, zodat **elke comparer op de console toont welke personen hij (zij?) vergelijkt**.
+
+Voeg deze regel toe bovenaan de `Compare` method van elke klasse die de `IComparer<T>` interface implementeert :
+
+[source,csharp,linenums]
+----
+System.Console.WriteLine($"   {x.Naam} en {y.Naam} worden vergeleken");
+----
+
+Pas de `Main` method aan, zodat deze op het einde *nogmaals* sorteert op naam en opnieuw de inhoud toont van de lijst (titel : `nogmaals gesorteerd op naam`).
+
+Voor de duidelijkheid, het programma **sorteert dus achtereenvolgens drie keer** :
+
+. op leeftijd
+. op naam
+. op naam (nogmaals!)
+
+De output van het programma wordt dan :
+
+[source,shell]
+----
+--- ongesorteerd ---
+Jan, 23 jaar
+Miet, 45 jaar
+Joris, 34 jaar
+Corneel, 12 jaar
+Phara, 34 jaar
+   Miet en Jan worden vergeleken		// <1>
+   Joris en Miet worden vergeleken
+   Joris en Jan worden vergeleken
+   Corneel en Miet worden vergeleken
+   Corneel en Joris worden vergeleken
+   Corneel en Jan worden vergeleken
+   Phara en Miet worden vergeleken
+   Phara en Joris worden vergeleken
+--- gesorteerd op leeftijd ---
+Corneel, 12 jaar
+Jan, 23 jaar
+Joris, 34 jaar
+Phara, 34 jaar
+Miet, 45 jaar
+   Jan en Corneel worden vergeleken		// <2>
+   Joris en Jan worden vergeleken
+   Phara en Joris worden vergeleken
+   Miet en Phara worden vergeleken
+   Miet en Joris worden vergeleken
+--- gesorteerd op naam ---
+Corneel, 12 jaar
+Jan, 23 jaar
+Joris, 34 jaar
+Miet, 45 jaar
+Phara, 34 jaar
+   Jan en Corneel worden vergeleken		// <3>
+   Joris en Jan worden vergeleken
+   Miet en Joris worden vergeleken
+   Phara en Miet worden vergeleken
+--- nogmaals gesorteerd op naam ---
+Corneel, 12 jaar
+Jan, 23 jaar
+Joris, 34 jaar
+Miet, 45 jaar
+Phara, 34 jaar
+----
+<1> output van de `PersoonLeeftijdComparer`
+<2> output van de `PersoonNaamComparer`
+<3> output van de `PersoonNaamComparer` (voor reeds op naam gesorteerde lijst)
+
+[IMPORTANT]
+====
+Zoals je ziet wordt bij het sorteren *niet* systematisch elk element met elk ander element vergeleken!
+
+Het aantal vergelijkingen hangt af van de beginvolgorde van de elementen in de lijst.
+====
+
+
+
+=== Oefening D18persoonopleeftijddanopnaam
+
+De code in de `Sort` method van `List<T>` gebruikt een bepaald link:https://nl.wikipedia.org/wiki/Sorteeralgoritme[sorteer algoritme] om de elementen op de juiste plaats te krijgen.
+
+Er zijn vele link:https://www.youtube.com/watch?v=ZZuD6iUe3Pc[soorten sorteer algoritmen,window=_blank], die o.a. verschillen in
+
+* snelheid (bv. aantal vergelijkingen/verplaatsingen)
+* geheugengebruik
+* of ze stabiel zijn of niet
+* ...
+
+We noemen een sorteeralgoritme *stabiel* als het de onderline volgorde van "gelijke" elementen behoudt.
+
+Als je naar het voorbeeld kijkt uit oefening D18persoonopnaam :
+
+[source,shell]
+----
+--- ongesorteerd ---
+Jan, 23 jaar
+Miet, 45 jaar
+Joris, 34 jaar
+Corneel, 12 jaar
+Phara, 34 jaar
+--- gesorteerd op leeftijd ---
+Corneel, 12 jaar
+Jan, 23 jaar
+Joris, 34 jaar
+Phara, 34 jaar
+Miet, 45 jaar
+----
+
+dan zie je dat de onderlinge volgorde van `Joris` en `Phara`, die dezelfde leeftijd hebben, behouden bleef.
+
+Dit zou erop wijzen dat de `Sort` method een stabiel sorteer algoritme gebruikt. **Het kan echter ook toeval zijn!** 
+
+Dit soort informatie zou in link:https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1.sort[de documentatie,window=_blank] moeten staan. In de 'Remarks' sectie vinden we inderdaad :
+
+* __This implementation **performs an unstable sort**; that is, if two elements are equal, their order might not be preserved. In contrast, a stable sort preserves the order of elements that are equal.__
+
+Het is dus toeval.
+
+Een groot nadeel van een onstabiel sorteer algoritme is, dat het sorteren van een lijst op basis van 2 criteria meer werk vraagt. 
+
+Bijvoorbeeld, met sorteren **"op leeftijd en dan op naam"** bedoelen we : 
+
+* personen op leeftijd sorteren
+* personen met dezelfde leeftijd onderling op naam sorteren
+
+Bij een stabiel sorteer algoritme is dit makkelijk : sorteer eerst op naam en sorteer daarna nog eens op leeftijd.
+
+Bij een onstabiel sorteer algoritme, moeten we echter een speciale comparer `PersoonLeeftijdDanNaamComparer` klasse schrijven.
+
+Schrijf deze klasse en probeer ze uit op de volgende lijst van personen :
+
+* Mietje, 12 jaar
+* Jantje, 12 jaar
+* Phara, 34 jaar
+* Corneel, 12 jaar
+* Joris, 34 jaar
+
+Gebruik voor de `Main` method dezelfde structuur als in oefening D18persoonopnaam.
+
+De output van dit programma is :
+
+[source,shell]
+----
+--- ongesorteerd ---
+Mietje, 12 jaar
+Jantje, 12 jaar
+Phara, 34 jaar
+Corneel, 12 jaar
+Joris, 34 jaar
+--- gesorteerd op leeftijd dan naam ---
+Corneel, 12 jaar
+Jantje, 12 jaar
+Mietje, 12 jaar
+Joris, 34 jaar
+Phara, 34 jaar
+----
+
+
+
+=== Oefening D18persoonopnaamslim
+
+Pas oplossing D18persoonopleeftijd aan zodat een slimmere comparer gebruikt wordt die op naam kan sorteren, zowel a->z als z->a.
+
+Schrijf een klasse `PersoonNaamComparerSlim` die personen op naam vergelijkt.
+
+Aan de constructor wordt een `bool` parameter `isNormaleVolgorde` meegegeven die de volgorde vastlegt :
+
+* indien true, dan vergelijkt de comparer de namen in a->z volgorde
+* indien false, dan vergelijkt de comparer de namen in z->a volgorde
+
+Pas de Main method aan zodat deze lijst 
+
+* Jan, 23 jaar
+* Miet, 45 jaar
+* Joris, 34 jaar
+* Corneel, 12 jaar
+* Phara, 34 jaar
+
+driemaal getoond wordt :
+
+. ongesorteerd
+. gesorteerd op naam a->z
+. gesorteerd op naam z->a
+
+De output van dit programma is :
+
+[source,shell]
+----
+--- ongesorteerd ---
+Jan, 23 jaar
+Miet, 45 jaar
+Joris, 34 jaar
+Corneel, 12 jaar
+Phara, 34 jaar
+--- gesorteerd op naam a->z ---
+Corneel, 12 jaar
+Jan, 23 jaar
+Joris, 34 jaar
+Miet, 45 jaar
+Phara, 34 jaar
+--- gesorteerd op naam z->a ---
+Phara, 34 jaar
+Miet, 45 jaar
+Joris, 34 jaar
+Jan, 23 jaar
+Corneel, 12 jaar
+----
+
+
+=== Oefening D18factuur
+
+**Schrijf een klasse `Factuur` ** die beantwoordt aan volgende eisen :
+
+* een constructor met parameters om het bedrag (een `decimal`) en de vervaldatum van het te creëren `Factuur` object in te stellen
+* een property `Betaald` om na te gaan of de factuur reeds betaald is?
+* een property `Vervaldatum` (enkel uitleesbaar, niet instelbaar) om de vervaldatum van de factuur na te gaan (d.i. de datum waarop ten laatste betaald moet zijn)
+* een property `Bedrag` (enkel uitleesbaar, niet instelbaar) om het bedrag van de factuur op te vragen
+* een method `IsAchterstallig` met een `DateTime` parameter om na te gaan of de factuur op de meegegeven datum al dan niet achterstallig is
+
+Een factuur is *achterstallig* op een bepaalde datum X indien : ze nog niet betaald is en de vervaldatum nog niet verder ligt dan datum X.
+
+Bijvoorbeeld op datum van 11 januari 2021 is...
+
+* een   betaalde factuur met vervaldatum 10 januari 2021
+** niet achterstallig
+* een **on**betaalde factuur met vervaldatum 10 januari 2021
+** WEL achterstallig
+* een   betaalde factuur met vervaldatum 11 januari 2021
+** niet achterstallig
+* een **on**betaalde factuur met vervaldatum 11 januari 2021
+** NIET achterstallig (weliswaar onbetaald, maar nog niet voorbij de vervaldatum)
+* een **on**betaalde factuur met vervaldatum 12 januari 2021
+** niet achterstallig
+* een   betaalde factuur met vervaldatum 12 januari 2021
+** niet achterstallig
+
+Gegeven is een klasse `Program` met daarin een `Main` method die objecten van deze klasse gebruikt :
+
+[source,csharp,linenums]
+----
+class Program {
+
+	static void Main() {
+		// We maken 4 facturen aan, met elk hun eigen bedrag (een decimal) en 
+		// vervaldatum die tijdens creatie van de objecten wordt opgegeven...
+		Factuur f1 = new Factuur(200, new DateTime(2021, 1, 6));
+		Factuur f2 = new Factuur(100, new DateTime(2020, 1, 6));
+		Factuur f3 = new Factuur(400, new DateTime(2019, 1, 6));
+		Factuur f4 = new Factuur(300, new DateTime(2019, 1, 6));
+
+		// Het bedrag en de vervaldatum zijn verder (na creatie) niet meer 
+		// aan te passen, uiteraard wel op te vragen...
+		Console.WriteLine($"Bedrag factuur f4: {f4.Bedrag}");            // 300
+		Console.WriteLine($"Vervaldatum factuur f4: {f4.Vervaldatum}");  // 6/01/2019 0:00:00
+		Console.WriteLine();
+		//f4.Bedrag = 401;                           // zou een compilefout moeten opleveren
+		//f4.Vervaldatum = new DateTime(2020, 1, 6); // zou een compilefout moeten opleveren
+
+		// Wel kan men instellen of de factuur al dan niet betaald is...
+		f4.Betaald = true;
+
+		// By default zijn facturen nog niet betaald...
+		Console.WriteLine($"Factuur f3 is betaald: {f3.Betaald}");    // False
+		Console.WriteLine($"Factuur f4 is betaald: {f4.Betaald}");    // True
+		Console.WriteLine();
+
+		// Er kan worden nagegaan of een factuur achterstallig is op een bepaalde datum (de parameterwaarde).
+		DateTime dt = new DateTime(2020, 1, 6);
+		Console.WriteLine($"Factuur f1 is achterstallig: {f1.IsAchterstallig(dt)}");   // False
+		Console.WriteLine($"Factuur f2 is achterstallig: {f2.IsAchterstallig(dt)}");   // False
+		Console.WriteLine($"Factuur f3 is achterstallig: {f3.IsAchterstallig(dt)}");   // True
+		Console.WriteLine($"Factuur f4 is achterstallig: {f4.IsAchterstallig(dt)}");   // False
+		Console.WriteLine();
+
+		// Alle aparte factuur objecten worden aan een lijst toegevoegd...
+		List<Factuur> facturen = new List<Factuur>() { f1, f2, f3, f4 };
+
+		// De lijst wordt afgedrukt...
+		Console.WriteLine("Ongesorteerd");
+		PrintFacturen(facturen);
+
+		// De lijst wordt gesorteerd op bedag, van groot naar klein, en opnieuw afgedrukt...
+		facturen.Sort(new BedragComparer());               // <1>
+		Console.WriteLine("Gesorteerd");
+		PrintFacturen(facturen);
+	}
+
+	static void PrintFacturen(List<Factuur> facturen) {
+		foreach (Factuur f in facturen) {
+			PrintFactuurDetails(f);
+		}
+		Console.WriteLine();
+	}
+
+	static void PrintFactuurDetails(Factuur f) {           // <2>
+		// TODO : deze method moet je zelf schrijven
+	}
+
+}
+----
+<1> Hier wordt de klasse `BedragComparer` gebruikt
+<2> De method `PrintFactuurDetails`
+
+**Schrijf de method `PrintFactuurDetails` ** zodanig dat de output er zo uitziet :
+
+[source,shell]
+----
+Bedrag factuur f4: 300
+Vervaldatum factuur f4: 6/01/2019 0:00:00
+
+Factuur f3 is betaald: False
+Factuur f4 is betaald: True
+
+Factuur f1 is achterstallig: False
+Factuur f2 is achterstallig: False
+Factuur f3 is achterstallig: True
+Factuur f4 is achterstallig: False
+
+Ongesorteerd
+Factuur voor bedrag 200 met vervaldatum 6/01/2021 0:00:00. <1>
+Factuur voor bedrag 100 met vervaldatum 6/01/2020 0:00:00. <1>
+Factuur voor bedrag 400 met vervaldatum 6/01/2019 0:00:00. <1>
+Factuur voor bedrag 300 (betaald).                         <1>
+
+Gesorteerd
+Factuur voor bedrag 400 met vervaldatum 6/01/2019 0:00:00. <1>
+Factuur voor bedrag 300 (betaald).                         <1>
+Factuur voor bedrag 200 met vervaldatum 6/01/2021 0:00:00. <1>
+Factuur voor bedrag 100 met vervaldatum 6/01/2020 0:00:00. <1>
+----
+<1> Hieraan kun je zien wat voor tekst `PrintFactuurDetails` moet tonen.
+
+Je ziet aan de output wat het effect van het sorteren is : de tweede keer verschijnen de facturen gesorteerd op bedrag, van groot naar klein.
+
+Zoals je in de `Main` method kunt zien, wordt een `BedragComparer` object gebruikt om een lijst te sorteren d.m.v. de `Sort` method :
+
+[source,csharp,linenums]
+----
+    facturen.Sort(new BedragComparer());
+----
+
+**Schrijf de klasse `BedragComparer` ** zodat de facturen na het sorteren in de gewenste volgorde verschijnen (gesorteerd op bedrag, van groot naar klein).
+
+Voor deze oefening moet je dus in totaal drie stukje code schrijven :
+
+. de klasse `Factuur`
+. de method `PrintFactuurDetails`
+. de klasse `BedragComparer`
+
+
+=== Oefening D18interval
+
+Een interval is deelverzameling van de natuurlijke getallen die alle getallen bevat tussen een ondergrens en een bovengrens. 
+
+Bijvoorbeeld het interval `[2,5[` bevat alle getallen groter of gelijk aan 2 en kleiner dan 5 (dus 2, 3 en 4) en de lengte van dit interval is 3 (namelijk 5 - 2).
+
+Let erop dat de ondergrens tot het interval behoort maar de bovengrens niet!
+
+**Schrijf een __immutable__ klasse `Interval`** met volgende members:
+
+* een constructor met parameters om de onder- en bovengrenzen in te stellen
+** je mag ervan uitgaan dat altijd geldt dat de meegegeven ondergrens < bovengrens
+* properties `Min` en `Max` (enkel uitleesbaar, niet instelbaar) om na te gaan wat de onder- en bovengrens is van dit interval
+* property `Lengte` (enkel uitleesbaar, niet instelbaar) dat de lengte van dit interval voorstelt
+* een method `OverlaptMet` met een parameter van type `Interval`, om na te gaan of de beide intervallen elkaar overlappen
+
+**Schrijf een klasse `MinDanLengteComparer`**, die is een _comparer_ die we bv. kunnen gebruiken om met `Sort()` een verzameling `Interval` objecten te sorteren. 
+
+* Intervallen worden vergeleken op basis van hun ondergrens (volgorde : laag naar hoog).
+** indien de ondergrenzen gelijk zijn, wordt gekeken naar hun lengte (volgorde : kort naar lang).
+
+**Schrijf tot slot de nodige code in de Main method** om de lijst met intervallen te sorteren.
+
+Gegeven is onderstaande code die de verschillende mogelijkheden van je `Interval` objecten uitprobeert.
+
+Je zult deze code nog moeten aanvullen zodat de lijst op het einde gesorteerd wordt.
+
+[source, csharp,linenums]
+----
+class Program {
+
+	static void Main() {
+		Interval i1 = new Interval(2, 5);
+		Interval i2 = new Interval(6, 9);
+		Interval i3 = new Interval(3, 6);
+		Interval i4 = new Interval(3, 4);
+		Interval i5 = new Interval(5, 9);
+
+		Console.WriteLine($"i1 en i2 {i1.OverlaptMet(i2)} {i2.OverlaptMet(i1)}");  // false false
+		Console.WriteLine($"i1 en i3 {i1.OverlaptMet(i3)} {i3.OverlaptMet(i1)}");  // true true
+		Console.WriteLine($"i1 en i4 {i1.OverlaptMet(i4)} {i4.OverlaptMet(i1)}");  // true true
+		Console.WriteLine($"i1 en i5 {i1.OverlaptMet(i5)} {i5.OverlaptMet(i1)}");  // false false
+
+		List<Interval> intervallen = new List<Interval> { i3, i5, i2, i4, i1 };
+
+		foreach (Interval i in intervallen) {
+			Console.WriteLine($"[{i.Min},{i.Max}[");
+		}
+
+		Console.WriteLine("Gesorteerd : ");
+
+		// TODO : lijst sorteren met comparer <1>
+
+		foreach (Interval i in intervallen) {
+			Console.WriteLine($"[{i.Min},{i.Max}[");
+		}
+	}
+
+}
+----
+<1> Hier zul je code moeten toevoegen om de lijst met intervallen te sorteren met je `MinDanLengteComparer`.
+
+Het programma zal dan de volgende output produceren op de console :
+
+[source,shell]
+----
+i1 en i2 False False
+i1 en i3 True True
+i1 en i4 True True
+i1 en i5 False False
+[3,6[
+[5,9[
+[6,9[
+[3,4[
+[2,5[
+Gesorteerd :
+[2,5[
+[3,4[
+[3,6[
+[5,9[
+[6,9[
+----
+
+
+=== Oefening D18afspraak
+
+**Schrijf een (immutable) klasse `Afspraak`** met volgende members:
+
+* een constructor met parameters voor start-, eindtijdstip en de omschrijving
+** om de waarden van het te creëren `Afspraak` object in te stellen
+* properties `Start` en `Einde` (enkel uitleesbaar, niet instelbaar)
+** om na te gaan wat het start- en eindtijdstip is van deze afspraak
+* een property `Omschrijving` (enkel uitleesbaar, niet instelbaar)
+** om de omschrijving van de afspraak op te vragen
+* een method `Overlapt` met een `Afspraak` parameter 
+** om na te gaan of de afspraak overlapt met een andere
+
+Veruit het moeilijkste stuk hiervan zal de `Overlapt` method zijn, die beslist of deze afspraak (_this_) en de andere afspraak (via de parameter) met elkaar overlappen.
+
+[IMPORTANT]
+====
+Twee afspraken overlappen indien het starttijdstip van de latere afspraak VOOR het eindtijdstip van de eerdere afspraak ligt.
+====
+
+In de afbeelding hieronder zie je enkele afspraken (A1 t.e.m. A6) alsook hun start- en eindtijdstippen (T1 t.e.m. T4). 
+
+De tijd loopt op naar rechts toe, m.a.w. T4 is bijvoorbeeld later dan T1, T2 is vroeger dan T3, enz.
+
+image:d18-afspraak-overlap.jpg[Enkele overlappende afspraken]
+
+Je ziet bv. dat A1 en A3 NIET overlappen maar dat A4 en A3 WEL overlappen.
+
+**Schrijf ook een klasse `TijdsduurComparer`** die we kunnen gebruikt om een lijst van afspraken te sorteren, op basis van hun tijdsduur (d.w.z. hoe lang ze duren). De sorteervolgorde moet "__van korter naar langer__" zijn.
+
+Hieronder staat een programma dat je `Afspraak` object uitprobeert. Aan de output helemaal onderaan kun je ook nog eens zien hoe het sorteren verloopt. Als je deze code aanpast bij een experiment, zet dan achteraf de originele code weer terug.
+
+[source,csharp,linenums]
+----
+class Program {
+
+	static void Main() {
+		DateTime tijdstip1 = new DateTime(2021, 1, 20, 10, 00, 00);
+		DateTime tijdstip2 = new DateTime(2021, 1, 20, 12, 30, 00);
+		DateTime tijdstip3 = new DateTime(2021, 1, 20, 13, 30, 00);
+		DateTime tijdstip4 = new DateTime(2021, 1, 20, 16, 00, 00);
+
+		// We maken 5 afspraken aan, met elk hun eigen start- en 
+		// eindtijdstippen, en omschrijving die tijdens creatie van 
+		// de objecten wordt opgegeven...
+		Afspraak afspraak1 = new Afspraak(tijdstip1, tijdstip2, "Tandarts");
+		Afspraak afspraak2 = new Afspraak(tijdstip3, tijdstip4, "Boekhouder");
+		Afspraak afspraak3 = new Afspraak(tijdstip2, tijdstip4, "Vaccinatie");
+		Afspraak afspraak4 = new Afspraak(tijdstip1, tijdstip3, "Examen");
+		Afspraak afspraak5 = new Afspraak(tijdstip2, tijdstip3, "Kapper");
+		Afspraak afspraak6 = new Afspraak(tijdstip1, tijdstip4, "Autokeuring");
+
+		Console.WriteLine("Alle aangemaakte afspraken zijn:");
+		// De start, het einde en de omschrijving zijn verder (na creatie) 
+		// op te vragen (zie PrintAfspraak implementatie)... 
+		PrintAfspraak("afspraak1: ", afspraak1);
+		PrintAfspraak("afspraak2: ", afspraak2);
+		PrintAfspraak("afspraak3: ", afspraak3);
+		PrintAfspraak("afspraak4: ", afspraak4);
+		PrintAfspraak("afspraak5: ", afspraak5);
+		PrintAfspraak("afspraak6: ", afspraak6);
+		Console.WriteLine();
+
+		// Maar kunnen niet meer worden aangepast...
+		// afspraak1.Start = tijdstip4;         // zou een compilefout moeten opleveren
+		// afspraak1.Einde = tijdstip4;         // zou een compilefout moeten opleveren
+		// afspraak1.Omschrijving = "Oogarts";  // zou een compilefout moeten opleveren
+
+		// Er kan worden nagegaan of een afspraak overlapt met een andere afspraak.
+		// Uit onderstaande uitvoer kan je afleiden wat met overlapping wordt bedoeld...
+		// bedoeld...
+		Console.WriteLine("Overlappingen:");
+		//
+		Console.WriteLine($"afspraak3 overlapt met afspraak4: {afspraak3.Overlapt(afspraak4)}"); // True
+		Console.WriteLine($"afspraak4 overlapt met afspraak3: {afspraak4.Overlapt(afspraak3)}"); // True
+		//
+		Console.WriteLine($"afspraak1 overlapt met afspraak4: {afspraak1.Overlapt(afspraak4)}"); // True
+		Console.WriteLine($"afspraak4 overlapt met afspraak1: {afspraak4.Overlapt(afspraak1)}"); // True
+		//
+		Console.WriteLine($"afspraak4 overlapt met afspraak5: {afspraak4.Overlapt(afspraak5)}"); // True
+		Console.WriteLine($"afspraak5 overlapt met afspraak4: {afspraak5.Overlapt(afspraak4)}"); // True
+		//
+		Console.WriteLine($"afspraak5 overlapt met afspraak6: {afspraak5.Overlapt(afspraak6)}"); // True
+		Console.WriteLine($"afspraak6 overlapt met afspraak5: {afspraak6.Overlapt(afspraak5)}"); // True
+		//
+		Console.WriteLine($"afspraak1 overlapt met afspraak2: {afspraak1.Overlapt(afspraak2)}"); // False
+		Console.WriteLine($"afspraak2 overlapt met afspraak1: {afspraak2.Overlapt(afspraak1)}"); // False
+		//
+		Console.WriteLine($"afspraak1 overlapt met afspraak3: {afspraak1.Overlapt(afspraak3)}"); // False
+		Console.WriteLine($"afspraak3 overlapt met afspraak1: {afspraak3.Overlapt(afspraak1)}"); // False
+		//
+		Console.WriteLine();
+
+		// Alle aparte afspraak objecten worden aan een lijst toegevoegd...
+		List<Afspraak> agenda = new List<Afspraak>() { afspraak1, afspraak2, afspraak3, afspraak4, afspraak5, afspraak6 };
+
+		// De lijst kan worden gesorteerd op tijdsduur bij wijze van de TijdsduurComparer...
+		agenda.Sort(new TijdsduurComparer()); // <1>
+
+		Console.WriteLine("Alle afspraken gesorteerd op tijdsduur:");
+		foreach (Afspraak a in agenda) {
+			PrintAfspraak("- ", a);
+		}
+	}
+	
+	static void PrintAfspraak(string label, Afspraak a) {
+		Console.WriteLine($"{label}{a.Start} - {a.Einde}: {a.Omschrijving}");
+	}
+
+}
+----
+<1> Hier wordt je `TijsduurComparer` gebruikt.
+
+Het programma produceert de volgende uitvoer op de console :
+
+[source,shell]
+----
+Alle aangemaakte afspraken zijn:
+afspraak1: 20/01/2021 10:00:00 - 20/01/2021 12:30:00: Tandarts
+afspraak2: 20/01/2021 13:30:00 - 20/01/2021 16:00:00: Boekhouder
+afspraak3: 20/01/2021 12:30:00 - 20/01/2021 16:00:00: Vaccinatie
+afspraak4: 20/01/2021 10:00:00 - 20/01/2021 13:30:00: Examen
+afspraak5: 20/01/2021 12:30:00 - 20/01/2021 13:30:00: Kapper
+afspraak6: 20/01/2021 10:00:00 - 20/01/2021 16:00:00: Autokeuring
+
+Overlappingen:
+afspraak3 overlapt met afspraak4: True
+afspraak4 overlapt met afspraak3: True
+afspraak1 overlapt met afspraak4: True
+afspraak4 overlapt met afspraak1: True
+afspraak4 overlapt met afspraak5: True
+afspraak5 overlapt met afspraak4: True
+afspraak5 overlapt met afspraak6: True
+afspraak6 overlapt met afspraak5: True
+afspraak1 overlapt met afspraak2: False
+afspraak2 overlapt met afspraak1: False
+afspraak1 overlapt met afspraak3: False
+afspraak3 overlapt met afspraak1: False
+
+Alle afspraken gesorteerd op tijdsduur:
+- 20/01/2021 12:30:00 - 20/01/2021 13:30:00: Kapper
+- 20/01/2021 10:00:00 - 20/01/2021 12:30:00: Tandarts
+- 20/01/2021 13:30:00 - 20/01/2021 16:00:00: Boekhouder
+- 20/01/2021 12:30:00 - 20/01/2021 16:00:00: Vaccinatie
+- 20/01/2021 10:00:00 - 20/01/2021 13:30:00: Examen
+- 20/01/2021 10:00:00 - 20/01/2021 16:00:00: Autokeuring
+----
+
+
+== Strings
+
+
+=== Oefening D18stringznaara
+
+Schrijf een `Main` method die de volgende lijst alfabetisch sorteert en op het scherm toont :
+
+[source,csharp,linenums]
+----
+List<string> woorden = new List<string> { "kAT", "Aap", "kat", "HOND", "varken", "zebra", "hondshaai", "aap", "grinch", "varkenshaasje", "hond"};
+----
+
+Schrijf een klasse `StringComparerOmgekeerd` waarmee een lijst van strings gesorteerd kan worden van z->a.
+
+Voeg aan het einde van de `Main` method, code toe die de lijst sorteert van z->a en toont.
+
+De output van dit programma is :
+
+[source,shell]
+----
+aap, Aap, grinch, hond, HOND, hondshaai, kat, kAT, varken, varkenshaasje, zebra
+zebra, varkenshaasje, varken, kAT, kat, hondshaai, HOND, hond, grinch, Aap, aap
+----
+
+Merk op dat in de a->z volgorde :
+
+* hoofdletters blijkbaar na kleine letters komen (bv. `aap` voor `Aap`)
+* kortere woorden voor langere woorden komen (bv. `varken` voor `varkenshaasje`)
+
+Vreemd genoeg staat `HOND` voor `hondshaai`, dus lengte is blijkbaar toch belangrijker dan inhoud &#128579;
+
+
+
+=== Oefening D18reversedstringcomparer
+
+Schrijf een `Main` method die de volgende lijst alfabetisch sorteert en op het scherm toont :
+
+[source,csharp,linenums]
+----
+List<string> woorden = new List<string> { "kAT", "Aap", "kat", "HOND", "varken", "zebra", "hondshaai", "aap", "grinch", "varkenshaasje", "hond", "rothond"};
+----
+
+Schrijf een klasse `ReversedStringComparer` waarmee een lijst van strings gesorteerd kan worden op de volgende manier :
+
+* `zebra` komt voor `aap`, omdat `arbez` voor `paa` komt
+
+Er wordt dus gekeken naar de achterstevoren versie van de strings en die versies wordt alfabetisch gesorteerd. Anders gezegd, de comparer gebruikt de achterstevoren versie van de strings die hij moet vergelijken.
+
+Je kunt hierbij gebruik maken van de `ReverseText` method :
+
+[source,csharp,linenums]
+----
+static private string ReverseText(String text) {
+	string result = "";
+	foreach (char c in text) {
+		result = c + result;
+	}
+	return result;
+}
+----
+
+De output van dit programma is :
+
+[source,shell]
+----
+aap, Aap, grinch, hond, HOND, hondshaai, kat, kAT, rothond, varken, varkenshaasje, zebra
+zebra, hond, HOND, rothond, varkenshaasje, grinch, hondshaai, varken, aap, Aap, kat, kAT
+----
+
+Als je naar de laatste letter van elk woord kijk in de tweede lijst, zie je dat die netjes in a->z volgorde staan.
+
+
+
+=== Oefening D18stringoplengte
+
+Schrijf een `Main` method die de volgende lijst alfabetisch sorteert en op het scherm toont :
+
+[source,csharp,linenums]
+----
+List<string> woorden = new List<string> { "grinch", "hond", "kat", "zebra", "aap", "musti"};
+----
+
+Schrijf een klasse `StringLengteComparer` waarmee een lijst van strings gesorteerd kan worden op hun lengte (kort komt voor lang). Als twee strings even lang zijn, wordt naar hun alfabetische volgorde gekeken.
+
+De output van dit programma is :
+
+[source,shell]
+----
+aap, grinch, hond, kat, musti, zebra
+aap, kat, hond, musti, zebra, grinch
+----
+
+
+
+== Eigen interface
+
+
+
+=== Oefening D18printmetopmaak
+
+Bij deze oefening is het de bedoeling dat de onderstaande `Program` klasse...
+
+[source,csharp,linenums]
+----
+using System;
+
+namespace D18.D18printmetopmaak {
+
+    public class Program {
+
+         static void PrintStyled(string text, IStyle style) {
+            string styledText = style.GetStyledTextFor(text);
+            Console.WriteLine(styledText);
+        }
+
+        static void Main(string[] args) {
+            AllCapsStyle acs = new AllCapsStyle();
+            ExclamationStyle es = new ExclamationStyle();
+            CapitalCasingStyle ccs = new CapitalCasingStyle();
+
+            PrintStyled("Veel geluk!", acs); // toont : VEEL GELUK!
+            PrintStyled("Vergeet het niet...", es); // toont: Vergeet het niet!!!
+            PrintStyled("geachte heer,", ccs); // toont : Geachte Heer,
+        }
+    }
+
+}
+----
+
+...deze output produceert ...
+
+[source,shell]
+----
+VEEL GELUK!
+Vergeet het niet!!!
+Geachte Heer,
+----
+
+Bovenstaande informatie is eigenlijk voldoende om deze oefening op te lossen.  Op basis van de meegegeven code, en bijhorend gewenste output zou je de ontbrekende code kunnen formuleren.
+
+Indien je niet meteen weet waar te starten, bekijk je nog onderstaande richtlijnen...
+
+Schrijf een interface `IStyle` waarmee een string naar een bepaalde stijl kan omgezet worden. In method `PrintStyled` hierboven, zie je hoe deze interface gebruikt wordt (en welke method hij moet bevatten).
+
+Schrijf drie klasse die deze interface implementeren :
+
+* Klasse `AllCapsStyle` is een stijl waarin alle letters hoofdletters worden
+* Klasse `ExclamationStyle` is een stijl waarbij elk punt symbool vervangen wordt door een uitroepteken
+* Klasse `CapitalCasingStyle` is een stijl die elke beginletter van een woord een hoofdletter geeft en alle andere letters klein maakt
+
+[TIP]
+====
+Probeer ze niet alle drie tegelijk te schrijven. 
+Begin met `AllCapStyle` (de gemakkelijkste) en probeer het programma uit. Zet de regels voor de andere stijlen voorlopig in commentaar.
+====
+
+Merk op dat `PrintStyled` dankzij de `IStyled` interfaces met allerlei verschillende stijlen kan werken, zonder dat we de code in die method moeten aanpassen!

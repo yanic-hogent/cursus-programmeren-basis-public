@@ -1,0 +1,764 @@
+= Programmeren Basis - Deel 03
+Yanic Inghelbrecht
+v2022.02.23.15.06
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+:deel-02-oplossingen: ../deel-02-oplossingen/deel-02-oplossingen.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+ 
+== Strings bouwen met string interpolatie
+
+In een vorig deel zagen we hoe we een string kunnen opbouwen uit stukjes d.m.v. de `+` bewerking voor strings :
+
+[source,csharp,linenums]
+----
+string naam = "Jan";
+int leeftijd = 34;
+
+string bericht = "Dag " + naam + ", je bent dus " + leeftijd + " jaar oud."; // <1>
+----
+<1> string concatenatie waarbij verschillende string literals worden samengeplakt met `string` en `int` variabelen.
+
+De vele `"` en `+` symbolen maken het moeilijk om te zien hoe de tekst er eigenlijk uitziet en de spaties goed te krijgen.
+
+
+Een betere manier is **string interpolatie** te gebruiken!
+
+Door een `$` symbool voor je string literal te zetten, kun je _in_ de literal een of meerdere expressies tussen `{` en `}` accolades plaatsen. De actuele waarde van die expressies zullen dan tijdens de uitvoering in de tekst ingelast worden.
+
+****
+[.underline]#Voorbeeld string interpolatie#
+
+----
+string naam = "Jan";
+int leeftijd = 34;
+
+string bericht = $"Dag {naam}, je bent dus {leeftijd} jaar oud."; // <1>
+----
+<1> Let op de `$` vooraan en de variabelen `naam` en `leeftijd` tussen accolades in de string literal.
+
+De output van dit fragment is
+
+[source,shell]
+----
+Dag Jan, je bent dus 34 jaar oud.
+----
+****
+
+Code die string interpolatie gebruikt zal veel leesbaarder zijn dan code die met string concatenatie werkt.
+
+Als het eindresultaat letterlijk een `{` of `}` symbool moet bevatten, zul je in je string literal een `{{` of `}}` moeten schrijven om het gewenste resultaat te bekomen.
+
+
+[IMPORTANT]
+====
+Meng geen berekeningen met string interpolatie, dit maakt je code moeilijker te begrijpen voor anderen (alsook je toekomstige zelf).
+
+Anders gezegd, tussen de accolades zet je enkel namen van variabelen, geen berekeningen.
+====
+
+Dus, in plaats van 
+
+[source,csharp,linenums]
+----
+Console.WriteLine($"De som is {getal1+getal2}.");
+----
+
+schrijf je beter
+
+[source,csharp,linenums]
+----
+int som = getal1 + getal2;
+Console.WriteLine($"De som is {som}.");
+----
+
+Dat is leesbaarder en dat was toch net de ganse reden om met string interpolatie te werken, niet?
+
+Dit is trouwens een algemeen principe in complexere programma's : hou het produceren van output gescheiden van de berekeningen. Op die manier kun je dan dezelfde 'berekeningscode' gebruiken voor meerdere soorten output, bv. een factuur tonen in een webpagina of in een pdf document.
+
+
+== Werken met getallen
+
+=== Random getallen
+
+Om je programma een willekeurig getal te laten bepalen kun je onderstaande code gebruiken
+
+[source,csharp,linenums]
+----
+Random rnd = new Random();
+int willekeurigGetal = rnd.Next(5, 10); // <1>
+----
+<1> variabele `willekeurigGetal` zal een random getal bevatten dat groter of gelijk is aan 5 maar kleiner dan 10 (dus ofwel 5 of 6 of 7 of 8 of 9).
+
+Indien je meerdere random getallen nodig hebt, kun je gewoon meermaals `rnd.Next()` gebruiken.
+
+****
+[.underline]#Voorbeeld van 2 worpen met een dobbelsteen#
+[source,csharp,linenums]
+----
+Random rnd = new Random();  // <1>
+int worp1 = rnd.Next(1, 7); // <2>
+int worp2 = rnd.Next(1, 7); // <2>
+----
+<1> deze regel is slechts 1x nodig
+<2> het random getal ligt in [1,7[ d.w.z. groter of gelijk aan 1 en kleiner dan 7.
+****
+
+=== Math functionaliteit
+
+C# bevat heel wat ingebouwde mogelijkheden rond wiskunde en berekeningen. De `Math` klasse bundelt deze en geeft ons de mogelijkheid ze gebruiken (wat een klasse is komt later aan bod en is hier niet belangrijk).
+
+We behandelen hieronder maar een paar mogelijkheden van `Math`. De officiële documentatie kun je terugvinden op
+
+- link:https://docs.microsoft.com/en-us/dotnet/api/system.math[]
+
+
+
+==== Min en Max
+
+Met `Math.Min()` en `Math.Max()` kunnen we resp. het kleinste of het grootste van twee getallen bepalen.
+
+****
+[.underline]#Voorbeeld met Min en Max voor gehele getallen#
+[source,csharp,linenums]
+----
+int a = 12;
+int b = 56;
+
+int kleinste = Math.Min(a, b); // <1>
+int grootste = Math.Max(a, b); // <2>
+
+Console.WriteLine($"van {a} en {b} is {kleinste} het kleinste getal en {grootste} het grootste getal.");
+----
+<1> variabele `kleinste` krijgt de waarde 12
+<2> variabele `grootste` krijgt de waarde 56
+****
+
+De expressie `Math.Min(a,b)` heeft trouwens hetzelfde type als `a` en `b`. Dus in het voorbeeld hierboven zal het type `int` zijn. Maar indien `a` en `b` echter `double` waarden zijn, zal deze expressie ook van type `double` zijn.
+
+****
+[.underline]#Voorbeeld met Min en Max voor kommagetallen#
+[source,csharp,linenums]
+----
+double a = 12.34;
+double b = 56.78;
+
+double kleinste = Math.Min(a, b); // <1>
+double grootste = Math.Max(a, b); // <2>
+
+Console.WriteLine($"van {a} en {b} is {kleinste} het kleinste getal en {grootste} het grootste getal.");
+----
+<1> variabele `kleinste` krijgt de waarde 12.34
+<2> variabele `grootste` krijgt de waarde 56.78
+****
+
+Zoals je ziet werkt het op dezelfde manier voor doubles en ints.
+
+We kunnen het kleinste of grootste van twee getallen natuurlijk ook met een if/else structuur achterhalen, maar met `Math.Min()` en `Math.Max()` is het makkelijker en duidelijker.
+
+
+==== Pi
+
+Als je ooit eens de waarde van pi nodig hebt, kun je in je broncode gewoon `Math.PI` schrijven. 
+
+Het is dus nooit nodig een `double` literal als `3.14159` in je code op te nemen!
+
+==== Pow en Sqrt
+
+Om een machtsverheffing te berekenen gebruiken we `Math.Pow()`. Bijvoorbeeld om 4^3^ te bepalen schrijven we `Math.Pow(4,3)`.
+
+Het grondtal en de exponent kunnen eender welke expressie (van type `double`) zijn.
+
+****
+[.underline]#Voorbeeld waarin een macht van Pi berekend wordt#
+[source,csharp,linenums]
+----
+Console.WriteLine("Geef een exponent : ");
+string exponentAlsTekst = Console.ReadLine();
+int exponent = int.Parse(exponentAlsTekst);
+
+double resultaat = Math.Pow(Math.PI, exponent); // <1>
+
+Console.WriteLine($"de {exponent}e macht van Pi is {resultaat}");
+----
+<1> variabele `exponent` is weliswaar een `int` maar wordt via een __widening conversion__ omgezet naar een `double`
+****
+
+Met `Math.Sqrt()` kunnen we de vierkantswortel van een `double` laten berekenen. Het resultaat is een `double` waarde.
+
+[source,csharp,linenums]
+----
+Console.WriteLine("Geef een getal : ");
+string getalAlsTekst = Console.ReadLine();
+double getal = int.Parse(getalAlsTekst);
+
+double wortel = Math.Sqrt(getal);
+
+Console.WriteLine($"De vierkantswortel van {getal} is {wortel}");
+----
+
+==== Abs
+
+Met `Math.Abs()` kunnen we de absolute waarde bekomen van een getal.
+
+Bijvoorbeeld
+[source,csharp,linenums]
+----
+double d = -9.34;
+double absoluut = Math.Abs(d); // <1>
+
+Console.WriteLine($"De absolute waarde van {d} is {absoluut}");
+----
+<1> variabele `absoluut` krijgt de waarde 9.34
+
+
+=== Verkorte notatie voor eenvoudige berekeningen
+
+Het is gebruikelijk om bepaalde berekeningen korter te noteren in C#. 
+
+De _voluit_ en de _verkorte_ notatie hieronder betekenen exact hetzelfde (`x` en `y` zijn numerieke variabelen, bv. `int` of `double`).
+|====
+| Voluit | Verkort | Effect
+
+| `x = x + 1;` | `x++;` | Verhoog de waarde in de variabele `x` met 1
+| `x = x - 1;` | `x--;` | Verminder de waarde in de variabele `x` met 1
+| `x = x + 10;` | `x += 10`; |  Verhoog de waarde in de variabele `x` met 10
+| `x = x + y;` | `x += y;` |  Verhoog de waarde in de variabele `x` met de waarde van variabele `y`
+|====
+
+Merk op dat de waarde in de variabele `x` dus telkens verandert, in de _voluit_ notatie zie je immers dat er een toekenning gebeurt aan de variabele `x`.
+
+****
+[.underline]#Voorbeeld#
+[source,csharp,linenum]
+----
+int x = 10;
+int y = 5;
+
+x++; // <1>
+Console.WriteLine(x);
+
+x += y; // <2>
+Console.WriteLine(x);
+----
+<1> `x` wordt `11`
+<2> `x` wordt `16` (11 plus 5)
+****
+
+En hetzelfde geldt ook voor aftrekkingen, vermenigvuldigingen en delingen
+
+|====
+| Voluit | Verkort | Effect
+
+| `x = x - y;` | `x -= y;` | Verminder de waarde in de variabele `x` met de waarde van de variabele `y`
+| `x = x * y;` | `x *= y;` | Vermenigvuldig de waarde in de variabele `x` met de waarde van de variabele `y`
+| `x = x / y;` | `x /= y;` | Deel de waarde in de variabele `x` door de waarde van de variabele `y`
+|====
+
+****
+[.underline]#Voorbeeld#
+[source,csharp,linenum]
+----
+int x = 10;
+int y = 5;
+
+x *= y; // <1>
+Console.WriteLine(x);
+
+x /= 25; // <2>
+Console.WriteLine(x);
+----
+<1> `x` wordt `50` (5 maal 10)
+<2> `x` wordt `2` (50 gedeeld door 25)
+****
+
+Dit werkt trouwens ook met de `+` van string concatenatie, bijvoorbeeld
+
+[source,csharp,linenum]
+----
+string s1 = "Hello";
+
+s1 += " world!"; // <1>
+Console.WriteLine(s1);
+----
+<1> `s1` wordt `Hello world!` (want `Hello` samengeplakt met `` world!``)
+
+
+== Variabelen en scope
+
+Variabelen zijn opslagplaatsen voor gegevens en we declareren ze als volgt :
+
+[source,csharp,linenums]
+----
+int i = 12;
+double d = 34.56;
+string s = "Hello world!";
+----
+
+Elk van deze regels bevat een *declaratie van een variabele*. Deze declaratie introduceert een variabele, geeft deze een naam en geeft aan wat voor soort waarde erin kan opgeslagen worden. Telkens staat er ook bij wat de beginwaarde zal zijn voor de variabele (dit is trouwens optioneel).
+
+De compiler zal code produceren die (tijdens de uitvoering) in het geheugen een opslagplaats voorziet voor deze variabele.
+
+Elders in ons programma kunnen we dan via de naam naar de variabele verwijzen, ofwel om diens waarde te gebruiken ofwel om er een nieuwe waarde in te stoppen.
+
+
+=== Naamgeving en declaraties
+
+Variabelen krijgen een **duidelijke naam** die aangeeft wat de inhoud van die variabele voorstelt. Bijvoorbeeld, liever `leeftijd` dan `getalA` als de variabele een leeftijd voorstelt.
+
+Wees ook consequent in je naamgeving. De eerste wereldoorlog heette in '14-'18 nog niet de _eerste_ wereldoorlog, maar eenmaal er een twee wereldoorlog bijkwam was het wel zo. Dus twee variabelen `naam` en `naam2` ogen een beetje vreemd, gebruik dan liever `naam1` en `naam2`.
+
+Variabelennamen in C# beginnen altijd met een kleine letter en we voorzien nooit een prefix die het type aanduidt, dus bv. `leeftijd` en niet `Leeftijd` of `intLeeftijd`. 
+
+Als een naam uit meerdere woordjes bestaat, dan begint elk volgend woord met een hoofdletter (men noemt dit *_camelCasing_*) en we gebruiken nooit underscores. Bijvoorbeeld `minimumLeeftijdLidmaatschap` en niet `minimum_leeftijd_lidmaatschap`.
+
+Introduceer slechts 1 variabele per regel. Plaats de declaratie daar waar je de variabele voor het eerst nodig hebt. Het lijkt misschien overzichtelijker om alle variabelen tegelijk (helemaal bovenaan je code) te introduceren, maar dat is statistisch zelfs foutgevoeliger dus doe dit niet.
+
+****
+[.underline]#Voorbeeld zwakke code qua variabelen#
+[source,csharp,linenums]
+----
+string deeltalAlsTekst, deler_als_tekst;
+double getal1, Getal2, x;
+
+Console.Write("Deeltal?: ");
+deler_als_tekst = Console.ReadLine();
+getal1 = double.Parse(deler_als_tekst);
+
+Console.Write("Deler?: ");
+delerAlsTekst = Console.ReadLine();
+Getal2 = double.Parse(delerAlsTekst);
+
+if (Getal2 != 0) {
+	x = getal1 / Getal2;
+	Console.WriteLine("Quotient: " + x);
+} else {
+	Console.WriteLine("Deling door nul wordt niet toegelaten.");
+}
+----
+De zwakke punten van deze code zijn :
+
+* alle variabelen worden alle bovenaan geïntroduceerd i.p.v. daar waar ze voor het eerst nodig zijn
+* er staan meerdere declaraties op dezelfde regel
+* underscores in de naam van een variabele (`deler_als_tekst`) i.p.v. camelCasing
+* één van de namen begint met een hoofdletter (`Getal2`) i.p.v. een kleine letter
+* sommige namen vertellen niks over wat de waarde in hun variabele voorstelt (`getal1`, `Getal2`, `x`)
+
+Hetzelfde programma maar nu beter qua variabelen :
+
+[source,csharp,linenums]
+----
+Console.Write("Deeltal?: ");
+string deeltalAlsTekst = Console.ReadLine();
+double deeltal = double.Parse(deeltalAlsTekst);
+
+Console.Write("Deler?: ");
+string delerAlsTekst = Console.ReadLine();
+double deler = double.Parse(delerAlsTekst);
+
+if (deler != 0) {
+	double quotient = deeltal / deler;
+	Console.WriteLine("Quotient: " + quotient);
+} else {
+	Console.WriteLine("Deling door nul wordt niet toegelaten.");
+}
+----
+****
+
+=== Scope
+
+Een variabele mag eender waar in je code gedeclareerd worden. De plaats waar je dit doet, bepaalt de *scope van de variabele* : dit zijn de __regels in de source code__ waar de variabele mag gebruikt worden. 
+
+We zagen reeds eerder dat de programma opdrachten in __code blocks__ georganiseerd worden d.m.v. `{` en `}` accolades. Bijvoorbeeld een if/else structuur bevat twee __code blocks__
+
+[source,csharp,linenums]
+----
+if (voowaarde) {
+    code block 1
+} else {
+    code block 2
+}
+----
+
+De scope van een variabele begint bij diens declaratie en houdt op bij "het einde van het direct omsluitende __code block__". 
+
+[source,csharp,linenums]
+----
+ 1 : static void Main(string[] args) {
+ 2 :     Console.Write("Geef het aantal items : ");
+ 3 :     string aantalAlsTekst = Console.ReadLine();
+ 4 :     int aantal = int.Parse(aantalAlsTekst);
+ 5 :
+ 6 :     if (aantal > 50) {
+ 7 :         Console.WriteLine("aantal is meer dan 50");
+ 8 :         int helft = aantal / 2;
+ 9 :         Console.WriteLine($"de helft is {helft}");
+10 :     } else {
+11 :         Console.WriteLine("aantal is 50 of minder");
+12 :         int dubbel = aantal * 2;
+13 :         Console.WriteLine($"het dubbel is {dubbel}");
+14 :     }
+15 : }
+----
+
+De variabelen in dit voorbeeld hebben de volgende scope :
+
+|====
+| Variabele | Scope van de variabele
+
+| `aantalAlsTekst` | regels 3 t.e.m. 14
+| `aantal` | regels 4 t.e.m. 14
+| `helft` | regels 8 t.e.m. 9
+| `dubbel` | regels 12 t.e.m. 13
+|====
+
+
+Merk op dat er in dit voorbeeld drie __code blocks__ zijn! 
+
+. een __code block__ dat bij `Main` hoort (regels 2 t.e.m. 14)
+. een __code block__ dat bij de 'if' hoort (regels 7 t.e.m. 9)
+. een __code block__ dat bij de 'else' hoort (regels 11 t.e.m. 13)
+
+Elke regel maakt deel uit van minstens één __code block__, maar sommige regels zitten vervat in meerdere __code blocks__! 
+
+Een __code block__ zelf kan ook in een ander __code block__ vervat zitten, net als de bekende link:https://www.youtube.com/watch?v=-xMYvVr9fd4[Matroesjka poppen, window="_blank"].
+
+****
+[.underline]#Voorbeeld#
+
+Kijken we eens naar regel 12.
+
+Regel 12 maakt deel uit van twee __code blocks__ : 
+
+* het `Main` _block_ (regels 1-15)
+* het 'else' _block_ (regels 10-14)
+
+Het "direct omsluitende" van die twee is het 'else' _block_ want dat omsluit regel 12 direct (het kleinste Matroesjka poppetje waar regel 12 in zit). Het `Main` _block_ omsluit regel 12 weliswaar ook, maar eerder indirect.
+
+Op regel 12 wordt de variabele `dubbel` gedeclareerd.
+
+De scope van `dubbel` begint dus op regel 12 en loopt volgens de definitie door tot aan "het einde van het direct omvattende __code block__". Tot aan het einde van het 'else' _block_ op regel 13 dus.
+****
+
+Als een regel in ons programma tot de scope van een variabele `x` behoort, zeggen we dat `x` *__in scope__* is op die regel. Zoniet, zeggen we dat `x` *__out of scope__* is op die regel.
+
+Op regel `11` zijn enkel de variabelen `aantalAlsTekst` en `aantal` __in scope__, dit zijn dus de enige variabelen die we op regel `11` zouden kunnen gebruiken. De variabelen `helft` en `dubbel` zijn op regel 11 _out of scope_.
+
+Het lijkt misschien wat beperkend om een variabele enkel in bepaalde stukken van de broncode te kunnen gebruiken, maar voor complexere programma's heeft dit een aantal voordelen 
+
+* eenzelfde naam kan op verschillende plaatsen in de broncode voor iets anders gebruikt worden. Bijvoorbeeld `leeftijd` kan zowel in code voor de __user interface__ als in de code voor het produceren van een pdf rapport, gebruikt worden.
+* als je over een stuk code redeneert, moet je slechts met een klein deel van alle variabelen in het programma rekening houden.
+* de scope van een variabele bepaalt ook enigszins hoe lang het geheugen voor die variabele gereserveerd moet blijven.
+
+[TIP]
+====
+Geef een variabele steeds een zo klein mogelijke scope, onderzoek wijst uit dat er dan statistisch minder kans is op fouten (dat is trouwens ook de reden waarom we niet alle variabelen samen bovenaan declareren).
+====
+
+****
+[.underline]#Voorbeeld met een beperkte scope#
+
+Hernemen we eens link:{deel-02-oplossingen}#_oplossing_d02_quotient[de oplossing van D02quotient] en kijken naar de variabele `quotient` :
+
+[source,csharp,linenums]
+----
+Console.Write("Deeltal?: ");
+string deeltalAlsTekst = Console.ReadLine();
+double deeltal = double.Parse(deeltalAlsTekst);
+
+Console.Write("Deler?: ");
+string delerAlsTekst = Console.ReadLine();
+double deler = double.Parse(delerAlsTekst);
+
+if (deler != 0) {
+	double quotient = deeltal / deler; // <1>
+	Console.WriteLine("Quotient: " + quotient);
+} else {
+	Console.WriteLine("Deling door nul wordt niet toegelaten.");
+}
+----
+<1> door `quotient` in het 'if' _block_ te declareren, beperken we diens scope tot dat block. De variabele is immers enkel relevant indien we weten dat `deler != 0`.
+
+****
+
+=== Const
+
+Een __const variabele__ is een variabele wiens waarde niet meer kan veranderen na initialisatie. Die 'const' komt van 'constante', op zich een beetje een tegenspraak : constant en variabel tegelijk!
+
+We declareren zo'n const variabele door er `const` voor te zetten :
+
+[source,csharp,linenums]
+----
+const double meterPerMijl = 1609.34;
+const int aantalStudenten = 20;
+const string imageFilePrefix = "resources/images/";
+
+aantalStudenten = 30; // <1>
+----
+<1> Visual Studio zal op deze regel een fout aanduiden, een const variabele kan geen nieuwe waarde krijgen
+
+Een const variabele wordt gebruikt om een vaste waarde (die je normaliter met een _literal_ zou schrijven), een naam te geven. Dit maakt de code leesbaarder en makkelijker aan te passen.
+
+[IMPORTANT]
+====
+In tegenstelling tot variabelen zetten we const declaraties wel samen bovenaan, zodat we ze makkelijk terugvinden.
+====
+
+****
+[.underline]#Voorbeeld#
+
+[source,csharp,linenums]
+----
+Console.Write("Geef het aantal pakjes koeken : ");
+string aantalPakkenAlsTekst = Console.ReadLine();
+int aantalPakken = int.Parse(aantalPakkenAlsTekst);
+
+Console.Write("Geef het aantal deelnemers : ");
+string aantalDeelnemersAlsTekst = Console.ReadLine();
+int aantalDeelnemers = int.Parse(aantalDeelnemersAlsTekst);
+                                                // <1>
+double calorieenPerDeelnemer = aantalPakken * 15 * 94.0 / Convert.ToDouble(aantalDeelnemers);
+
+Console.WriteLine($"Elke deelnemer eet {calorieenPerDeelnemer} calorieen");
+----
+<1> Wat zijn deze magic values `15` en `94`? En waarom werden ze niet vervangen door hun product (`1410.0`)?
+
+Het programma wordt veel duidelijker als we de magic values door const variabelen vervangen :
+
+[source,csharp,linenums]
+----
+const int aantalKoekenPerPak = 15;
+const double aantalCalorieenPerKoek = 94.0;
+
+Console.Write("Geef het aantal pakjes koeken : ");
+string aantalPakkenAlsTekst = Console.ReadLine();
+int aantalPakken = int.Parse(aantalPakkenAlsTekst);
+
+Console.Write("Geef het aantal deelnemers : ");
+string aantalDeelnemersAlsTekst = Console.ReadLine();
+int aantalDeelnemers = int.Parse(aantalDeelnemersAlsTekst);
+
+double calorieenPerDeelnemer = aantalPakken * aantalKoekenPerPak * aantalCalorieenPerKoek / Convert.ToDouble(aantalDeelnemers); // <1>
+
+Console.WriteLine($"Elke deelnemer eet {calorieenPerDeelnemer} calorieen");
+----
+Merk op dat beide __magic values__ slechts 1x voorkwamen.
+****
+
+Over het algemeen probeer je bepaalde soorten __literal values__ in je code te vermijden, deze noemt men *__magic values__*.
+
+__Magic values__ zijn waarden die je middenin onbekende code tegenkomt en waarvan je je afvraagt waar ze vandaan komen en wat ze betekenen ("Geen idee, maar ze zijn nodig om het programma te doen werken : __they must be magic!__).
+
+Eenzelfde magic value komt vaak meermaals voor in je code (al hoeft dit niet, sommige komen maar 1 keer voor).
+
+Het probleem met __magic values__ is 
+
+- Het is niet altijd duidelijk wat ze betekenen of waar ze vandaan komen. Bijvoorbeeld, als er middenin een stuk code hier en daar `1609.34` voorkomt is het wellicht niet duidelijk wat dit betekent of waarom het precies dit getal moet zijn. Als er daarentegen `meterPerMijl` staat (omdat we een const declareerden voor die `1609.34`), dan is het meteen duidelijk.
+- Als de waarde ooit zou veranderen, dan moeten we die op meerdere plaatsen in de code aanpassen (en als we er eentje vergeten veroorzaken we een bug). Hadden we echter een const variabele gedeclareerd voor die waarde, dan zouden we enkel op die ene plaats de code moeten wijzigen.
+
+[TIP]
+====
+Vervang magic values altijd door const variabelen.
+====
+
+Let echter op, niet alle __literal values__ zijn magic values en soms is het een grijze zone. Het is misschien geen __magic value__ als je meerdere van onderstaande bedenkingen kunt maken
+
+- de literal vervangen door een naam maakt het niet echt duidelijker (of je kunt geen betekenisvolle naam bedenken)
+- het is ondenkbaar dat de waarde ooit verandert
+- de waarde komt maar 1x voor
+
+****
+[.underline]#Voorbeeld#
+[source,csharp,linenums]
+----
+Console.Write("Geef de diameter : ");
+string diameterAlsTekst = Console.ReadLine();
+double diameter = double.Parse(diameterAlsTekst);
+
+double straal = diameter / 2; // <1>
+
+double omtrek = 2 * Math.PI * straal; // <1>
+
+Console.WriteLine("De omtrek van de cirkel is " + omtrek); // <2>
+----
+<1> de _literal_ `2` is geen magic value. Een const maakt het niet duidelijker (veel beter dan `const int twee = 2;` wordt het niet) en het zal ook nooit een andere waarde kunnen zijn dan `2`.
+<2> de _literal_ `"De omtrek van de cirkel is "` is geen duidelijk magic value, de literal beschrijft zichzelf en komt ook maar 1x voor dus niemand doet de moeite om hiervoor een const te declareren.
+****
+
+
+
+== Traceertabellen
+
+Het is voor een programmeur belangrijk om snel in te zien hoe een programma variabelen manipuleert en wat hun scope is. Om dit te illustreren is het nuttig om een traceertabel op te stellen.
+
+Een *traceertabel* is een tabel die weergeeft hoe de waarden van een variabelen evolueren doorheen de uitvoering van het programma. De tabel is dus gebaseerd op een specifieke uitvoering van het programma.
+
+De tabel toont voor elke (interessante) variabele een kolom en meestal voorzien we ook een kolom voor de console output.
+ 
+Elke rij stelt een (interessant) moment voor tijdens de uitvoering, overeenkomstig met een regel in de broncode.
+
+Elke cel toont de actuele waarde van een variabele op dat moment in de uitvoering.
+
+De rijen staan in volgorde van uitvoering, i.e. de tijd loopt op naar onderen toe.
+
+****
+[.underline]#Voorbeeld#
+
+Veronderstel dit code voorbeeld :
+
+[source,csharp,linenums]
+----
+ 1 : int a = 5;
+ 2 : int b = 13;
+ 3 : 
+ 4 : int temp = a;
+ 5 : a = b;
+ 6 : b = temp;
+ 7 :
+ 8 : Console.WriteLine(a);
+ 9 : Console.WriteLine(b);
+----
+	
+Er zijn drie variabelen : `a`, `b` en `temp` en we willen doorgaans ook de output tonen. De traceertabel heeft dus vier kolommen en de volgende hoofding :
+
+|====
+|Regel | waarde van `a` | waarde van `b` | waarde van `temp` | Output
+
+|====
+
+De bedoeling is om in de tabel weer te geven wat de waarde van elke variabele is na de uitvoering van die regel. Indien een variabele __out of scope__ is noteren we een `/` als waarde.
+
+Na de uitvoering van regel 1 heeft `a` de waarde `5`, de variabelen `b` en `temp` zijn __out of scope__ :
+
+|====
+|Regel | waarde van `a` | waarde van `b` | waarde van `temp` | Output
+
+| 1 | 5 | / | / |
+|====
+
+Na de uitvoering van regel 2 is `a` ongewijzigd, maar `b` kreeg de waarde 13. Variabele `temp` is nog steeds __out of scope__ :
+
+|====
+| 2 | 5 | 13 | / |
+|====
+
+Regel 3 bevat geen code, dus `a` en `b` behouden gewoon hun waarde en `temp` is nog steeds __out of scope__ :
+	
+|====
+| 3 | 5 | 13 | / |
+|====
+
+Na de uitvoering van regel 4 hebben `a` en `b` nog steeds dezelfde waarde maar nu komt `temp` __in scope__ en krijgt dezelfde waarde als `a` :
+
+|====
+| 4 | 5 | 13 | 5 |
+|====
+
+Na regel 5 heeft `a` dezelfde waarde als `b`, `temp` is ongewijzigd :
+
+|====
+| 5 | 13 | 13 | 5 |
+|====
+
+Na regel 6 is `a` ongewijzigd en bevat `b` dezelfde waarde als `temp`
+
+|====
+| 6 | 13 | 5 | 5 |
+|====
+
+In regel 7 verandert er niks aan de variabelen :
+
+|====
+| 7 | 13 | 5 | 5 |
+|====
+
+Regels 8 en 9 tonen iets op de console maar veranderen de waarden van de variabelen niet :
+
+|====
+| 8 | 13 | 5 | 5 | 13
+| 9 | 13 | 5 | 5 | 5
+|====
+
+Alles tesamen geeft ons de volledige traceertabel :
+
+|====
+|Regel | waarde van `a` | waarde van `b` | waarde van `temp` | Output
+
+| 1 | 5 | / | / | 
+| 2 | 5 | 13 | / | 
+| 3 | 5 | 13 | / | 
+| 4 | 5 | 13 | 5 | 
+| 5 | 13 | 13 | 5 | 
+| 6 | 13 | 5 | 5 | 
+| 7 | 13 | 5 | 5 | 
+| 8 | 13 | 5 | 5 | 13
+| 9 | 13 | 5 | 5 | 5
+|====
+
+Merk op dat we hier voor elke regel in de broncode exact één rij in de tabel bekomen. Dit is beslist *geen* algemeen principe! 
+
+Zodra we een if/else gebruiken zullen er regels overgeslaan worden. Als we verderop in de cursus herhalingen in ons programma stoppen, kunnen sommige regels zelfs in meerdere rijen voorkomen (omdat ze door de herhalingen meermaals kunnen uitgevoerd worden).
+
+****
+
+We kunnen zo'n traceertabel aanzienlijk vereenvoudigen als we de volgende afspraken maken :
+
+- we laten oninteressante regels weg die aan geen enkele variabele een waarde toekennen (bv. regels 3, 7 ,8 en 9)
+- we vullen enkel een cel in als de variabele door die regel een waarde kreeg toegekend (bv. op regel 6 vullen we enkel de kolom voor `b` in)
+- in de eerste rij vullen we een `/` in bij elke variabele die __out of scope__ is op die regel in de broncode.
+
+Het resultaat is een veel overzichtelijkere tabel.
+
+****
+[.underline]#Voorbeeld#
+
+De tabel uit het vorige voorbeeld wordt dan
+
+|====
+|Regel | waarde van `a` | waarde van `b` | waarde van `temp` | Output
+
+| 1 | 5  | /  | / | 
+| 2 |    | 13 | | 
+| 4 |    |    | 5 | 
+| 5 | 13 |    | | 
+| 6 |    |  5 | | 
+| 8 |    |    | | 13
+| 9 |    |    | | 5
+|====
+****
+
+We zien meteen wanneer welke waarde werd toegekend aan welke variabele.
+
+Als we na de uitvoering van een regel, de waarde van een variabele willen weten dan vinden die waarde ofwel in de bewuste rij ofwel meer naar boven in de kolom voor die variabele. 
+
+****
+[.underline]#Voorbeeld#
+
+Hoe vinden we in de tabel hierboven dat `b` de waarde `13` bevat na de uitvoering van regel 5?
+
+We kijken in de rij voor regel 5 naar de cel in de kolom voor variabele `b`. Die cel is leeg, dus kijken we verder naar boven in die kolom en komen uit bij `13`. We zien dat `b` die waarde kreeg tijdens de uitvoering van regel 2.
+****
+
+Als je zelf een traceertabel wil opstellen, kun je dit makkelijk doen met een blaadje ruitjespapier (vierkante of langwerpig). Je kunt dit natuurlijk ook op de computer doen, maar op papier gaat het vaak sneller.
+

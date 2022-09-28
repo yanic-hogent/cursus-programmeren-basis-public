@@ -1,0 +1,255 @@
+= Programmeren Basis - Deel 04 - Oefeningen
+Frederiek De Wolf
+v2022.02.23.15.06
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+//:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+
+[NOTE]
+======================================
+Het is een aanrader bij elke oefeningenreeks te starten met eventuele *__inleidende oefeningen__*.
+Naast deze focus je vooral op de *__essentiële oefeningen__*.
+
+Heb je tijd over, dan helpen de *__aanvullende oefeningen__* je de stof nog beter in de vingers te krijgen.
+======================================
+
+== Inleidende oefening
+ 
+=== Debugging 
+
+==== Oefening D04muntstukken
+
+Momenteel loopt er één en ander fout in een bepaald stuk code, de code levert een foutief programmaverloop, of op zijn minst foutieve uitvoer op.
+
+[source,csharp,linenums]
+----
+int muntstukkenVan2Euro;
+Console.Write("Aantal muntstukken van 2 euro?: ");
+muntstukkenVan2Euro = int.Parse(Console.ReadLine());
+
+int muntstukkenVan1Euro = 0;
+Console.Write("Aantal muntstukken van 1 euro?: ");
+muntstukkenVan2Euro = int.Parse(Console.ReadLine()); 
+
+int muntstukkenVan50Cent;
+Console.Write("Aantal muntstukken van 50 eurocent?: ");
+muntstukkenVan50Cent = int.Parse(Console.ReadLine());
+
+double totaalBedrag = muntstukkenVan2Euro * 2;
+totaalBedrag += muntstukkenVan1Euro;
+totaalBedrag += muntstukkenVan50Cent / 2;
+
+string formuleAlsTekst = $"{muntstukkenVan2Euro} x 2 + ";
+formuleAlsTekst += $"{muntstukkenVan1Euro} x 1 + ";
+formuleAlsTekst += $"{muntstukkenVan50Cent} x 0.5"; 
+
+Console.WriteLine($"{formuleAlsTekst} = {totaalBedrag} euro");
+----
+
+Indien de gebruiker de getallen __5__, __4__ en __3__ invoert, bekomen we...
+
+[source,shell]
+----
+Aantal muntstukken van 2 euro?: 5
+Aantal muntstukken van 1 euro?: 4
+Aantal muntstukken van 50 eurocent?: 3
+4 x 2 + 0 x 1 + 3 x 0.5 = 9 euro
+----
+
+Dat resultaat is uiteraard niet correct.  Het totaal zou __15,5__ moeten zijn, maar ook in de formule zouden we __4 x 1__ in plaats van __0 x 1__ moeten terugvinden.
+
+Indien de gebruiker de getallen __5__, __4__ en __3__ invoert, zouden we volgende uitvoer moeten bekomen...
+
+[source,shell]
+----
+Aantal muntstukken van 2 euro?: 5
+Aantal muntstukken van 1 euro?: 4
+Aantal muntstukken van 50 eurocent?: 3
+5 x 2 + 4 x 1 + 3 x 0.5 = 15,5 euro
+----
+
+Het totaal zou effectief __15,5__ moeten zijn, en in de formule moeten we __4 x 1__ terugvinden.
+
+Maak gebruik van de debugger om in te schatten waar het foutloopt, en wat er foutloopt.  Corrigeer dan ook de code op gepaste wijze.
+
+== Essentiële oefeningen
+
+
+=== If ... else if ... else ... en logische bewerkingen
+
+==== Oefening D04groterofgelijk
+// Y04.03
+Schrijf een programma dat de gebruiker om twee getallen en naargelang de situatie "het eerste is groter", "het tweede is groter" en "ze zijn gelijk" afbeeldt.
+
+==== Oefening D04bmi
+
+Maak een programma om onderstaand programmaverloop te bekomen... .  (In het getoonde scenario werd __153__ en __84__ ingevoerd.
+
+[source,shell]
+----
+Lengte in cm?: 153
+Gewicht in kg?: 84
+BMI: 35,8836344995515 (zwaarlijvigheid)
+----
+
+Er wordt gevraagd naar de lengte in centimeter en het gewicht in kilogram.
+Na invoer van de gebruiker zal ons programma de body mass index (gewicht-in-kilogram / lengte-in-meter²) berekenen en afdrukken.
+
+Niet allen het bmi maar ook de bijhorende omschrijving (__ondergewicht__, __normaal gewicht__, __overgewicht__, ...) wordt door het programma afgedrukt.
+
+- Onder de 18,5: __ondergewicht__.
+- Vanaf 18,5 en minder dan 25: __normaal gewicht__.
+- Vanaf 25 en minder dan 30: __overgewicht__.
+- Vanaf 30 en minder dan 40: __zwaarlijvigheid__.
+- Vanaf 40: __ernstige zwaarlijvigheid__.
+
+==== Oefening D04prijsappels
+
+Schrijf een programma dat de gebruiker vraagt hoeveel kilo appels hij wenst aan te kopen.  Druk vervolgens de prijs af.  De prijs bedraagt 3 euro per kilo, of 2,5 euro indien minstens 10 kilo wordt afgenomen, 2 euro bij een minimum aankoop van 20 kilo.
+
+Voorbeeld programmaverloop (indien __17__ wordt ingevoerd)...
+
+[source,shell]
+----
+Aantal kilo aan te kopen appels?: 17
+Prijs: 42,5
+----
+
+==== Oefening D04toelage
+// Y4.06
+Een bepaalde instantie voorziet in een toelage bovenop het inkomen van grote minderbedeelde gezinnen. De toelage
+	- bedraagt 3% van het jaarinkomen
+	- vervalt indien het jaarinkomen meer is dan 20000Eur of het aantal kinderen minder is dan 3.
+	
+Schrijf een programma dat de gebruiker om het jaarinkomen en aantal kinderen vraagt, en vervolgens de toelage voor dat gezin toont.
+
+==== Oefening D04schrikkeljaar
+
+Maak een programma dat van een ingevoerd jaartal op de console brengt of het gaat om een schrikkeljaar of niet.
+
+Een schrikkeljaar is een jaar dat deelbaar is door 4 en niet door 100, of deelbaar is door 400.
+
+==== Oefening D04weer
+
+Maak een programma om een bepaald weerbeeld af te drukken, we hebben vier mogelijkheden:
+
+- __Regenboog.__ (indien het regent en de zon schijnt)
+- __Slecht weer.__ (indien het regent en de zon niet schijnt)
+- __Mooi weer.__ (indien het niet regent en de zon schijnt)
+- __Saaie dag.__ (indien het niet regent en zon niet schijnt)
+
+Vul hiervoor volgende code aan...
+
+[source,csharp,linenums]
+----
+Console.Write("Schijnt de zon (ja/nee)?: ");
+string zon = Console.ReadLine();
+bool deZonSchijnt = (zon == "ja");
+
+Console.Write("Regent het (ja/nee)?: ");
+string regen = Console.ReadLine();
+bool hetRegent = (regen == "ja");
+
+// <1>
+----
+<1> hier aanvullen
+
+Zoals je ziet gaan we er voor de eenvoud van uit dat de gebruiker netjes "ja" of "nee" gaat invoeren.  Robuustheid bij het opvangen van deze invoer verzorgen we later wel.
+
+Gebruik voor deze oefening `||`, `&&` of `!` operatoren.
+
+Een mogelijk programmaverloop kan er zo uitzien.
+
+[source,shell]
+----
+Schijnt de zon (ja/nee)?: ja
+Regent het (ja/nee)?: ja
+Regenboog.
+----
+
+==== Oefening D04weerzonderlogischeoperatoren
+
+Maak oefening D04weer opnieuw, maar vermijd voor deze oefening het gebruik van de `&&` of `||` operatoren.
+
+=== Invoer robuust opvangen
+
+==== Oefening D04weermetrobuusteinvoer
+
+Maak oefening D04weerzonderlogischeoperatoren opnieuw, maar houd deze keer rekening met 
+
+- de mogelijkheid dat de gebruiker hoofdletters of kleine letters gebruikt (bv. "JA", "Ja" of "ja")
+- de mogelijkheid dat voor de ingevoerde tekst, of na de ingevoerde tekst, nietszeggende spaties werden opgenomen
+
+== Aanvullende oefeningen
+
+=== If ... else if ... else ... en logische bewerkingen
+
+==== Oefening D04ohm
+
+Maak een programma dat vraagt aan de gebruiker wat zij/hij wenst te berekenen: __Spanning__, __Weerstand__ of __Stroomsterkte__. 
+  
+Vraag vervolgens de twee andere waarden (indien de gebruiker "Spanning" kiest vraag je aan de gebruiker de stroomsterkte en de weerstand) en bereken de gewenste waarde.
+
+Hier kunnen we de 'wet van Ohm' gebruiken.  U = I x R.
+
+Hierin staat de letter U voor spanning, de I staat voor de stroomsterkte, en de R staat voor de weerstand.  
+Of met ander woorden: Spanning = Stroomsterkte x Weerstand
+
+
+
+==== Oefening D04score
+// Y04.04
+Schrijf een programma dat de gebruiker om een score vraagt (in procent) en vervolgens de Amerikaanse lettercode weergeeft.
+
+	A indien score > 82%
+	B indien score > 67% en <=82%
+	C indien score > 52% en <=67%
+	D indien score > 37% en <=52%
+	E indien score > 22% en <=37%
+	F indien score <= 22%
+
+==== Oefening D04inkomprijs
+// Y4.05
+Op de afterparty van de premiere van de nieuwe kabouter Plop film kost de inkom 10Eur. Wie echter kleiner is dan 160cm en ouder is dan 20jaar mag binnen aan halve prijs!
+
+Schijf een programma dat de gebruiker om de lengte en leeftijd vraagt en vervolgens de inkomprijs toont.
+
+==== Oefening D04dagnummer
+// Y4.07
+Vraag de gebruiker om een dagnummer in het jaar (i.e. van 1 t.e.m. 365, dus geen schrikkeljaar). Het programma toont vervolgens in welke maand (als tekst) die dag zich bevindt. 
+
+Bv. als de gebruiker 100 ingeeft, toont het programma "April".
+
+==== Oefening D04geslaagd
+// Y04.10
+Een openbaar examen bestaat uit drie delen die elk met een cijfer op 10 beoordeeld worden. Om te slagen moet men :
+
+- ofwel minstens 5/10 behalen voor elk deel
+- ofwel in totaal minstens 18/30 zonder een cijfer < 4
+
+Schrijf een programma dat de gebruiker om drie scores op 10  vraagt en vervolgens "geslaagd" of "niet geslaagd" toont.
+
+==== Oefening D04grootste
+// Y04.11
+Schrijf een programma dat 3 getallen van de gebruiker inleest en achteraf meldt wat het grootste getal is van de drie. Bv. Als de gebruiker 2 8 en 4 ingeeft toont het programma "Het grootste getal van 2, 8 en 4 is 8".

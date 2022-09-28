@@ -1,0 +1,362 @@
+= Programmeren Basis - Deel 03 - Oplossingen
+Yanic Inghelbrecht
+v2022.02.23.15.06
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+// geen auto section numbering voor oefeningen (handigere titels en toc)
+//:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// paden
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+
+
+== String interpolatie
+
+
+=== Oplossing D03frietjesinterpolatie
+
+[source,csharp,linenums]
+----
+Console.Write("Geen een naam : ");
+string naam1 = Console.ReadLine();
+
+Console.Write("Geef nog een naam : ");
+string naam2 = Console.ReadLine();
+
+Console.Write("Geef een gerecht : ");
+string gerecht = Console.ReadLine();
+
+Console.WriteLine($"{naam1} en {naam2} eten graag {gerecht}.");
+----
+
+
+=== Oplossing D03leeftijdinterpolatie
+
+[source,csharp,linenums]
+----
+Console.Write("Geef je naam : ");
+string naam = Console.ReadLine();
+
+Console.Write("Geef je leeftijd : ");
+string leeftijdAlsTekst = Console.ReadLine();
+int leeftijd = int.Parse(leeftijdAlsTekst);
+
+int leeftijdVolgendJaar = leeftijd + 1;
+
+Console.WriteLine($"Oei oei {naam}, volgend jaar ben je al {leeftijdVolgendJaar} jaar oud.");
+----
+Merk op dat de berekening van de nieuwe leeftijd NIET gemengd werd met de string interpolatie maar ervoor al gebeurde!
+
+
+=== Oplossing D03sominterpolatie
+
+[source,csharp,linenums]
+----
+Console.Write("Geef een getal : ");
+string getal1AlsTekst = Console.ReadLine();
+int getal1 = int.Parse(getal1AlsTekst);
+
+Console.Write("Geef nog een getal : ");
+string getal2AlsTekst = Console.ReadLine();
+int getal2 = int.Parse(getal2AlsTekst);
+
+int som = getal1 + getal2;
+
+Console.WriteLine($"{getal1} plus {getal2} is {som}.");
+----
+
+
+== Werken met getallen
+
+
+=== Oplossing D03getalraden
+[source,csharp,linenums]
+----
+Console.WriteLine("De computer denkt aan een getal tussen 0 en 10.");
+Console.Write("Welk getal denkt u dat het is : ");
+string gokAlsTekst = Console.ReadLine();
+int gok = int.Parse(gokAlsTekst);
+
+Random rnd = new Random();
+int getal = rnd.Next(1,10); // <1>
+
+if (getal == gok) {
+	Console.WriteLine("Proficiat, u heeft goed geraden!");
+} else {
+	Console.WriteLine($"Helaas, het getal was {getal}!");
+}
+----
+<1> om een getal *tussen* 0 en 10 te krijgen moet de ondergrens 1 zijn
+
+Merk op dat we hier eerst de user input doen en dan pas een willekeurig getal bepalen. Dit had ook omgekeerd gekund maar maakt uiteindelijk geen verschil omdat de gebruiker dit toch niet merkt.
+
+We hadden natuurlijk ook de if/else anders kunnen formuleren :
+
+[source,csharp,linenums]
+----
+if (getal != gok) { // <1>
+	Console.WriteLine($"Helaas, het getal was {getal}!");
+} else {
+	Console.WriteLine("Proficiat, u heeft goed geraden!");
+}
+----
+<1> als we de voorwaarde omkeren, moeten we natuurlijk ook de code blocks van plaats wisselen.
+
+
+=== Oplossing D03kleinermetif
+[source,csharp,linenums]
+----
+Console.Write("Geef een getal : ");
+string getal1AlsTekst = Console.ReadLine();
+int getal1 = int.Parse(getal1AlsTekst);
+
+Console.Write("Geef een ander getal : ");
+string getal2AlsTekst = Console.ReadLine();
+int getal2 = int.Parse(getal2AlsTekst);
+
+if (getal1 < getal2) {
+	Console.WriteLine($"{getal1} is kleiner");
+} else {
+	Console.WriteLine($"{getal2} is kleiner");
+}
+----
+
+Als we kunnen vermijden dat we de output tekst meermaals in onze code schrijven, wordt de oplossing nog net iets beter :
+
+[source,csharp,linenums]
+----
+int kleinste = 0;
+if (getal1 < getal2) {
+	kleinste = getal1;
+} else {
+	kleinste = getal2;
+}
+
+Console.WriteLine($"{kleinste} is kleiner.");
+----
+
+
+=== Oplossing D03kleinermetmathmin
+[source,csharp,linenums]
+----
+Console.Write("Geef een getal : ");
+string getal1AlsTekst = Console.ReadLine();
+int getal1 = int.Parse(getal1AlsTekst);
+
+Console.Write("Geef een ander getal : ");
+string getal2AlsTekst = Console.ReadLine();
+int getal2 = int.Parse(getal2AlsTekst);
+
+int kleinste = Math.Min(getal1, getal2);
+
+Console.WriteLine($"{kleinste} is kleiner.");
+----
+
+Je ziet dat de oplossing aanzienlijk eenvoudiger is dan hiervoor.
+
+
+=== Oplossing D03cirkel
+[source,csharp,linenums]
+----
+Console.Write("Geef de straal van een cirkel : ");
+string straalAlsTekst = Console.ReadLine();
+double straal = double.Parse(straalAlsTekst);
+
+double omtrek = 2 * Math.PI * straal;
+double oppervlakte = Math.PI * Math.Pow(straal, 2);
+
+Console.WriteLine($"De omtrek is {omtrek}.");
+Console.WriteLine($"De oppervlakte is {oppervlakte}.");
+----
+
+
+=== Oplossing D03pythagoras
+[source,csharp,linenums]
+----
+Console.Write("Geef de basis : ");
+string basisAlsTekst = Console.ReadLine();
+double basis = double.Parse(basisAlsTekst);
+
+Console.Write("Geef de hoogte : ");
+string hoogteAlsTekst = Console.ReadLine();
+double hoogte = double.Parse(hoogteAlsTekst);
+
+double schuineZijde = Math.Sqrt( Math.Pow(basis,2) + Math.Pow(hoogte,2) );
+
+Console.WriteLine($"De lengte van de schuine zijde is {schuineZijder}");
+----
+
+
+=== Oplossing D03absolutewaarde
+[source,csharp,linenums]
+----
+Console.Write("Geef een getal : ");
+string getalAlsTekst = Console.ReadLine();
+int getal = int.Parse(getalAlsTekst);
+
+int absoluteWaarde = Math.Abs(getal);
+
+Console.WriteLine($"De absolute waarde is {absoluteWaarde}");
+----
+De oplossing werd leesbaarder door het gebruik van `Math.Abs()` en string interpolatie.
+
+
+== Variabelen en scope
+
+
+=== Oplossing D03imperial
+// Y2.08
+[source,csharp,linenums]
+----
+const double cmPerFoot = 30.48; // <1>
+const double cmPerInch = 2.54;  // <1>
+
+Console.Write("Geef het aantal feet : ");
+string aantalFeetAlsTekst = Console.ReadLine();
+double aantalFeet = double.Parse(aantalFeetAlsTekst);
+
+Console.Write("Geef het aantal inches : ");
+string aantalInchesAlsTekst = Console.ReadLine();
+double aantalInches = double.Parse(aantalInchesAlsTekst);
+
+double aantalFeetInCm = aantalFeet * cmPerFoot;	    // <2>
+double aantalInchesInCm = aantalInches * cmPerInch; // <2>
+
+double totaalInCm = aantalFeetInCm + aantalInchesInCm;
+
+Console.WriteLine($"Dat is {totaalInCm}cm.");	
+----
+<1> declaraties const variabelen
+<2> hier werden de magic values vervangen door de const variabelen
+
+
+=== Oplossing D03persecondewijzer
+// Y2.09
+[source,csharp,linenums]
+----
+ 1 : const int secondenPerMinuut = 60;
+ 2 : const int secondenPerUur = 60 * secondenPerMinuut;
+ 3 :
+ 4 : Console.Write("Geef het totaal aantal seconden : ");
+ 5 : string totaalSecondenAlsTekst = Console.ReadLine();
+ 6 : int totaalSeconden = int.Parse(totaalSecondenAlsTekst);
+ 7 :
+ 8 : int resterendeSeconden = totaalSeconden;
+ 9 : int uren = resterendeSeconden / secondenPerUur;       // <1>
+10 : resterendeSeconden = resterendeSeconden - uren * secondenPerUur;
+11 :
+12 : int minuten = resterendeSeconden / secondenPerMinuut; // <1>
+13 : resterendeSeconden = resterendeSeconden - minuten * secondenPerMinuut;
+14 : 
+15 : int seconden = resterendeSeconden;
+16 : 
+17 : Console.WriteLine($"{totaalSeconden}s is {uren}u, {minuten}min en {seconden}s.");
+----
+<1> gehele deling!
+
+
+== Traceertabellen
+
+=== Oplossing D03traceergetalontleden
+// Y3.03
+We nummeren de broncode als volgt :
+[source,csharp,linenums]
+----
+ 1 : Console.Write("Geef een getal : ");
+ 2 : string getalAlsTekst = Console.ReadLine();
+ 3 : int getal = int.Parse(getalAlsTekst);
+ 4 :
+ 5 : int rest = getal;
+ 6 : int hondertallen = rest / 100;
+ 7 : rest = rest - (hondertallen * 100);
+ 8 :
+ 9 : int tientallen = rest / 10;
+10 : rest = rest - (tientallen * 10);
+11 : 
+12 : int eenheden = rest / 1;
+13 : 
+14 : Console.WriteLine("Het getal " + getal + " bestaat uit");
+15 : Console.WriteLine(hondertallen + " x 100");
+16 : Console.WriteLine(tientallen + " x  10");
+17 : Console.WriteLine(eenheden + " x   1");
+----
+
+Merk op dat het hierboven weinig zin heeft om const variabelen in te voeren voor de literals `100` en `10`.
+
+De traceertabel voor een uitvoering waarbij de gebruiker `123` ingeeft is :
+
+|====
+|Regel | `getalAlsTekst` | `getal` | `rest` | `hondertallen` | `tientallen` | `eenheden`
+
+|2| "123" | / | / | / | / | /
+|3|       |123|   |   |   |
+|5|       |   |123|   |   |
+|6|       |   |   |1  |   |
+|7|       |   | 23|   |   | 
+|9|       |   |   |   |  2|
+|10|      |   |  3|   |   |
+|12|      |   |   |   |   |   3
+|====
+
+=== Oplossing D03traceeralfabetsoep
+//Y3.01
+
+De traceertabel voor de uitvoering is
+
+|====
+|Regel|`a`|`b`|`c`|`e`|`f`|`g`|`h`|`t`|`u`|`v`
+
+| 1|5|/|/|/|/|/|/|/|/|
+| 2||10||||||||
+| 3|||0|||||||
+| 4|||0|||||||
+| 5|||4|||||||
+| 6|||-16|||||||
+| 7||9||||||||
+| 8|||4|||||||
+| 9||||3.3||||||
+|10|||||0|||||
+|11||||||1.833333..||||
+|12|||||||0.3|||
+|13|||||||3.3|||
+|14||||||||true||
+|15|||||||||true|
+|16||||||||||true
+|====
+
+
+=== Oplossing D03traceerpersecondewijzer
+// Y3.02
+
+Vermits de const variabelen nooit van waarde veranderen zijn ze niet zo interessant en laten we ze weg uit de traceertabel.
+
+De traceertabel voor een uitvoering waarbij de gebruiker `8587` ingeeft is
+
+|====
+|Regel|`totaalSecondenAlsTekst`|`totaalSeconden`|`resterendeSeconden`|`uren`|`minuten`|`seconden`
+| 5|"8587"|/|/|/|/|/
+| 6||8587||||
+| 8|||8587|||
+| 9||||2||
+|10|||1387|||
+|12|||||23|
+|13|||7|||
+|15||||||7

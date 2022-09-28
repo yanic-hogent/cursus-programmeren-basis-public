@@ -1,0 +1,244 @@
+﻿= Programmeren Basis - Deel 13 - Oefeningen
+Frederiek De Wolf
+v2022.03.30.11.00
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+// geen auto section numbering voor oefeningen (handigere titels en toc)
+//:sectnums:  
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+
+== Tekstbestanden en exceptions
+
+=== Oefening D13srt
+
+Bij het afspelen van video of audio, bijvoorbeeld lokaal of op streaming platformen, kunnen de video- of audiobestand gecombineerd worden met een __.srt__ bestand die __ondertiteling__ (__subtitles__) bevatten.
+
+Een __.srt__ bestand is een eenvoudig tekstbestand die er bijvoorbeeld als volgt uitziet...
+
+.test.srt
+[source, shell]
+----
+1
+00:02:16,012 --> 00:02:19,376
+Senator, we're making
+our final approach into Coruscant.
+
+2
+00:02:19,482 --> 00:02:21,609
+Very good, Lieutenant.
+
+3
+00:03:13,336 --> 00:03:15,167
+We made it.
+
+4
+00:03:18,608 --> 00:03:20,371
+I guess I was wrong.
+
+5
+00:03:20,476 --> 00:03:22,671
+There was no danger at all.
+----
+
+De opbouw per __ondertiteling__ is als volgt (link:https://en.wikipedia.org/wiki/SubRip#SubRip_file_format[WikipediA - SubRip file format]):
+
+. Een *__teller__* die het tekstfragment identificeert.  De teller start uiteraard op __1__.  Elke volgend tekstfragment zal met het volgende gehele getal genummerd worden.
+. De *__tijdspanne__* waarin het tekstfragment moet worden getoond.  Twee __timecodes__ worden gescheiden door de tekst __" --&gt; "__ (spatie, twee koppeltekens, groter dan teken en spatie).  Een __timecode__ heeft volgende opbouw: `hours:minutes:seconds,milliseconds`.  `hours`, `minutes` en `seconds` steeds in twee cijfers, `milliseconds` aan de hand van drie cijfers.  
+. Het *__tekstfragment__* in één of meerdere lijnen.
+. Een *__lege regel__* om het einde van het voorafgaande tekstfragment te markeren.
+
+Omdat in video- of audiomateriaal intro's vaak anders versneden worden (vroeger of later worden ingezet) is de synchronisatie met de ondertiteling vaak zoek.
+Om hieraan te verhelpen schrijven we een programma dat de __timecodes__ in een __.srt bestand__ kan aanpassen.  
+
+Het programma vraagt de gebruiker welk bestand moet worden aangepast, en leest een (positieve of negatieve) __milliseconden offset__ in. 
+De aanpassing wordt doorgevoerd binnen hetzelfde bestand, een backup van de orginele __.srt__ is echter weggeschreven (in dezelfde folder als het orginele bestand) naar een bestand met een gelijkaardige benaming met uitbreiding van __".backup"__ (bijvoorbeeld __test.srt.backup__).
+
+Bij invoer van het bestandspad __test.srt__, en offset __-1100__ bekomen we volgend programmaverloop...
+
+[source, shell]
+----
+Welke .srt bestand wil u aanpassen?: test.srt
+Milliseconden (positief of negatief) offset?: -1100
+
+1
+Senator, we're making
+our final approach into Coruscant.
+Start timecode 00:02:16,012 aangepast in 00:02:14,912.
+Einde timecode 00:02:19,376 aangepast in 00:02:18,276.
+
+2
+Very good, Lieutenant.
+Start timecode 00:02:19,482 aangepast in 00:02:18,382.
+Einde timecode 00:02:21,609 aangepast in 00:02:20,509.
+
+3
+We made it.
+Start timecode 00:03:13,336 aangepast in 00:03:12,236.
+Einde timecode 00:03:15,167 aangepast in  00:03:14,067.
+
+4
+I guess I was wrong.
+Start timecode 00:03:18,608 aangepast in 00:03:17,508.
+Einde timecode 00:03:20,371 aangepast in 00:03:19,271.
+
+5
+There was no danger at all.
+Start timecode 00:03:20,476 aangepast in 00:03:19,376.
+Einde timecode 00:03:22,671 aangepast in 00:03:21,571.
+
+De aanpassingen zijn doorgevoerd in: test.srt
+De orginele .srt is nog steeds terug te vinden in: test.srt.backup
+----
+
+De aanpassingen zien er effectief zo(als het programma meldt) uit...
+
+.test.srt
+[source, shell]
+----
+1
+00:02:14,912 --> 00:02:18,276
+Senator, we're making
+our final approach into Coruscant.
+
+2
+00:02:18,382 --> 00:02:20,509
+Very good, Lieutenant.
+
+3
+00:03:12,236 --> 00:03:14,067
+We made it.
+
+4
+00:03:17,508 --> 00:03:19,271
+I guess I was wrong.
+
+5
+00:03:19,376 --> 00:03:21,571
+There was no danger at all.
+----
+
+Let op de __eind-timecode__ voor __tekstfragment 3__.  Laat daar opvallen dat het om `067` __milliseconden__ gaat, en bijvoorbeeld niet `67`.  Zorg dat dit bij jouw ook het geval is.
+
+Controleer natuurlijk ook of de orginele informatie nog steeds in het __backup bestand__ terug te vinden is.
+
+Breng enkele uitzonderlijke omstandigheden in rekening:
+
+- Het aan te passen bestand is om één of ander reden niet benaderbaar, het bestand wordt bijvoorbeeld niet teruggevonden.
+
+- Iets loopt fout bij het maken van het __backup bestand__, het bestaat bijvoorbeeld al.
+
+- Het aanpassen van het __.srt bestand__ lukt niet, het bestand is bijvoorbeeld __read-only__. 
+
+[TIP]
+====
+Rechterklik in de __Windows Verkenner__ op een bestand en kies in de context-menu voor iets als __Eigenschappen__ (of __Properties__).  Vink daar het __attribuut 'Read-only'__ aan, om dergelijke omstandigheid uit te testen.
+====
+
+In elk geval brengt het programma op zijn minst (vanaf het kan) een foutmelding __"Er treedt een probleem op "__ (aangevuld met de __opgevangen exception__ `Message`), en begint het programma overnieuw (vragen naar een __.srt pad__ en __offset__).
+
+Enkele voorbeelden...
+
+[source, shell]
+----
+Er treedt een probleem op (interne fout: "Could not find file '...\bestaat-niet.srt'."), 
+probeer het opnieuw... 
+---- 
+
+[source, shell]
+----
+Er treedt een probleem op (interne fout: "The file '...\test.srt.backup' already exists."), 
+probeer het opnieuw...
+---- 
+
+[source, shell]
+----
+Er treedt een probleem op (interne fout: "Access to the path '...\test.srt' is denied."), 
+probeer het opnieuw...
+---- 
+
+Je mag uiteraard (indien het eenvoudig in je code te verweven is) ook van meer precieze foutmeldingen gebruik maken.  __"Het bestand werd niet gevonden"__, __"de vermelde folder bestaat niet"__, __"het backup bestand bestaat reeds"__, ... .  Zonder dat dan bijvoorbeeld op een Engelstalige __exception__ `Message` moet worden teruggevallen.
+
+Zorg dat je programma foutieve timecodes (in een niet erkend formaat) rapporteert, maar verder gaat met het verwerken van timecodes die daar op volgen...
+
+[source, shell]
+----
+Welke .srt bestand wil u aanpassen?: foutief.srt
+Milliseconden (positief of negatief) offset?: -1100
+
+1
+Senator, we're making
+our final approach into Coruscant.
+Start timecode "00:0214,912" wordt niet herkend, en wordt bijgevolg niet aangepast.
+Einde timecode 00:02:19,376 aangepast in 00:02:18,276.
+
+2
+Very good, Lieutenant.
+Start timecode 00:02:19,482 aangepast in 00:02:18,382.
+Einde timecode "00:02:2a,509" wordt niet herkend, en wordt bijgevolg niet aangepast.
+
+3
+We made it.
+Start timecode 00:03:13,336 aangepast in 00:03:12,236.
+Einde timecode "00:03:14,67" wordt niet herkend, en wordt bijgevolg niet aangepast.
+
+4
+I guess I was wrong.
+Start timecode 00:03:18,608 aangepast in 00:03:17,508.
+Einde timecode 00:03:20,371 aangepast in 00:03:19,271.
+
+5
+There was no danger at all.
+Start timecode 00:03:20,476 aangepast in 00:03:19,376.
+Einde timecode 00:03:22,671 aangepast in 00:03:21,571.
+
+
+De aanpassingen zijn doorgevoerd in: test.srt
+De orginele .srt is nog steeds terug te vinden in: test.srt.backup
+---- 
+
+Bijvoorbeeld bij...
+
+.foutief.srt
+[source, shell]
+----
+1
+00:0214,912 --> 00:02:18,276
+Senator, we're making
+our final approach into Coruscant.
+
+2
+00:02:18,382 --> 00:02:2a,509
+Very good, Lieutenant.
+
+3
+00:03:12,236 --> 00:03:14,67
+We made it.
+
+4
+00:03:17,508 --> 00:03:19,271
+I guess I was wrong.
+
+5
+00:03:19,376 --> 00:03:21,571
+There was no danger at all.
+----

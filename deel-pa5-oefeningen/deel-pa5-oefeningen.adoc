@@ -1,0 +1,40 @@
+= Programmeren Basis - Deel PA5 - Oefeningen
+Yanic Inghelbrecht
+v2021.11.12.15.00
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+// geen auto section numbering voor oefeningen (handigere titels en toc)
+//:sectnums:  
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+:deel-pa4-oplossingen: ../deel-pa4-oplossingen/deel-pa4-oplossingen.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+ 
+ 
+== Oefening DPA5.metcollecties
+
+**Om deze oefening te kunnen oplossen moet je het stuk over de collectieklassen `List`, `LinkedList` en `HashSet` al doorgenomen hebben.**
+
+Herwerk link:{deel-pa4-oplossingen}#_oplossing_dpa4_metpersoonklasse[de oplossing DPA4.metpersoonklasse] zodat de `Persoon` objecten in een collectie worden bijgehouden i.p.v. in een `Persoon` array. 
+
+Gebruik de mogelijkheden van de collectieklasse zo goed mogelijk!
+
+Je zult op meerdere plaatsen in de `Main` method aanpassingen moeten doen, enkel het array vervangen door een collectie zal niet genoeg zijn. Als je de mogelijkheden van de gebruikte collectieklasse goed benut, zul je veel code kunnen weggooien (bv. bij het verwijderen van een persoon).

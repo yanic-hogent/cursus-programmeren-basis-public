@@ -1,0 +1,44 @@
+= Programmeren Basis - Deel PA4
+Yanic Inghelbrecht
+v2021.11.12.15.00
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+ 
+== Personen applicatie met class Persoon
+
+In deze oefeningen gaan we de code van de personen applicatie aanpassen (verbeteren!) zonder dat er iets verandert aan de functionaliteit van het programma.
+
+Voor de gebruiker verandert er dus niks, maar intern zal het programma beter gestructureerd zijn.
+
+[TIP]
+====
+Een dergelijk aanpassing heet een _refactoring_.
+
+* *_Refactoring_*  : een wijzing in de structuur van het programma die niks veranderd aan de functionaliteit.
+
+Als je een betere programmeur wil worden valt het aan te raden het link:https://martinfowler.com/books/refactoring.html[Refactoring boek] te lezen (_bestuderen_ is wellicht een betere term).
+====
+
+In de oefeningen gaan we de applicatie refactoren door **een class Persoon te introduceren, zodat we alle informatie over een persoon kunnen bundelen in 1 object.**

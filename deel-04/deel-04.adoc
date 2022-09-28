@@ -1,0 +1,1096 @@
+= Programmeren Basis - Deel 04
+Frederiek De Wolf
+v2021.10.22.13.53
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+
+== Invoer meteen converteren
+
+Tot dus ver hebben we voor het opvangen van de console invoer een extra `string` variabele gebruikt.  
+In de console kan immers enkel met tekst worden gewerkt (afgedrukt of ingelezen).  `Console.ReadLine()` levert dan ook altijd de ingevoerde waarde (wat je intikt voor je op kbd:[Enter] drukt) op in `string` vorm.
+
+Indien...
+
+- de ingevoerde waarde echter als numeriek gegeven mag en kan worden geïnterpreteerd
+- je wil beginnen rekenen met die informatie
+
+...converteren we deze `string` naar het gepaste numerieke datatype.
+
+****
+[.underline]#Voorbeeld van opvangen en daarna converteren#
+
+Bijvoorbeeld aan de hand van de `int.Parse()` functionaliteit...
+
+[source,csharp,linenums]
+----
+Console.Write("Geef het aantal deelnemers : ");
+string aantalDeelnemersAlsTekst = Console.ReadLine();
+int aantalDeelnemers = int.Parse(aantalDeelnemersAlsTekst);
+
+int helft = aantalDeelnemers / 2;
+Console.WriteLine($"De helft van dat aantal is: {helft}");
+----
+****
+
+Het opvangen van de invoer enerzijds, en het converteren anderzijds, mag ook samen gebeuren.
+
+****
+[.underline]#Voorbeeld van meteen converteren van de opgevangen invoer#
+
+De aanroep naar `Console.ReadLine()` kan meteen tussen de haakjes van onze `int.Parse(...)` gebeuren.
+
+[source,csharp,linenums]
+----
+Console.Write("Geef het aantal deelnemers : ");
+int aantalDeelnemers = int.Parse(Console.ReadLine());
+
+int helft = aantalDeelnemers / 2;
+Console.WriteLine($"De helft van dat aantal is: {helft}");
+----
+****
+
+== Debugging
+
+[discrete]
+=== Soorten fouten bij het programmeren
+
+Nu onze algoritmes steeds complexer worden, treden er steeds makkelijk fouten op.  
+
+Twee soorten van fouten hebben we reeds aangehaald... 
+
+- __Compilefouten__ die optreden wanneer de compiler ons niet verstaat, of wanneer de compiler ons expliciet wil verhinderen een bepaalde operatie uit te voeren.
+- __Runtimefouten__ (__excepties__), die niet bij het compileren, maar pas daarna bij het uitvoeren naar voor komen.  Dit in moeilijk te voorziene, __exceptionele__ omstandigheden.
+
+Een derde en laatste categorie van fouten zijn de __logische fouten__.  Hierbij is er geen compiler of runtime die tussenkomt om ons te melden dat iets fout loop, maar doet het programma gewoon niet wat het eigenlijk zou moeten doen.  Deze laatste categorie van fouten is de moeilijkste om op te sporen, er is immers niets of niemand die ons aanwijst waar het fout loopt.
+
+****
+[.underline]#Voorbeeld van een logische fout#
+
+Wens je een programma die de som maakt van twee getallen dan functioneert volgende code niet naar behoren...
+
+[source,csharp]
+----
+int getal1 = 10;
+int getal2 = 20;
+
+int som = getal1 * getal2;
+
+Console.WriteLine("Som: " + som);
+----
+
+Indien we het voorbeeld uitvoeren krijgen we volgende *foutieve output*...
+
+....
+Som: 200
+....
+
+Er treedt geen compilefout, noch een runtimefout op.
+****
+
+In dergelijk eenvoudig algoritme is het natuurlijk niet zo moeilijk uit te maken wat het probleem veroorzaakt.  In complexer stukken code kan het helpen code stap voor stap te ontleden, waarbij je steeds ook verifieert of de inhouden van je variabelen correct evolueren.
+
+=== Debugging in Visual Studio
+
+Visual Studio reikt ons enkele tools aan om fouten op te sporen.  Het inzetten van de __debugger__ in combinatie met een __Locals__ toolvenster is vaak een goede start bij het opsporen van fouten.
+
+****
+[.underline]#Voorbeeld van een programma dat niet goed functioneert#
+
+Stel dat we een oppervlakte willen berekenen op basis van een ingevoerde lengte en breedte.  We laten het programma op basis van die informatie het aantal vierkante meters en hectare berekenen en afdrukken...
+
+Je zou de ingevoerde meters kunnen vermenigvuldigen tot vierkante meters, en omzetten naar hectare.  
+We nemen in de berekening een tussenstap, van vierkante meters gaan we eerst naar are, en van are naar hectare.
+
+[source,csharp]
+----
+Console.Write("Lengte in meter?: ");
+double lengteInMeter = double.Parse(Console.ReadLine());
+
+Console.Write("Breedte in meter?: ");
+double breedteInMeter = double.Parse(Console.ReadLine());
+
+double vierkanteMeter = lengteInMeter * breedteInMeter;
+double are = vierkanteMeter / 10;
+double hectare = are / 100;
+
+Console.WriteLine("\nAantal vierkante meter: " + vierkanteMeter);
+Console.WriteLine("Aantal hectare: " + hectare);
+----
+
+Indien we het voorbeeld uitvoeren en de gebruiker de waardes __100__ en __100__ invoert bekomen we volgende output...
+
+....
+Lengte in meter?: 100
+Breedte in meter?: 100
+
+Aantal vierkante meter: 10000
+Aantal hectare: 10
+....
+
+Bij een lengte en breedte van __100 meter__, hebben we bijgevolg __100 are__, wat __1 hectare__ is.
+Ons programma gaat echter __10 hectare__ rapporteren.
+
+Ofwel bij het opvangen van de ingevoerde waardes, ofwel bij het maken van de opeenvolgende berekeningen, moet iets fout gelopen zijn.
+****
+
+Zo meteen sporen we de fout op, en zoeken we naar een oplossing.
+
+==== Breakpoint en debugmodus
+
+Indien er een logische fout optreedt en het niet meteen duidelijk is wat het probleem veroorzaakt, helpt het stap voor stap door de code te gaan.
+Om daarbij na elke stap op te volgen hoe onze variabelen evolueren.  Het zijn ten slotte onze variabelen waarin de ingevoerde waardes, of de berekende resultaten worden gestockeerd.
+
+Een __breakpoint__, die op één of meerdere regels in onze code wordt opgenomen, zal de uitvoer van de code, bij het bereiken van deze regel, onderbreken.  Het brengt ons in een __breakmodus__ (ook wel __debugmodus__ genoemd).  In deze __modus__ stelt onze ontwikkelomgeving ons in staat aan de hand van verschillende tools het verloop van onze applicatie te gaan monitoren.
+Zo kunnen we bekijken hoe we op een bepaalde plaats in onze code zijn terechtgekomen, of kunnen we nagaan wat de actuele inhoud is van onze variabelen.
+
+****
+We hernemen het vorige voorbeeld...
+
+We zouden bijvoorbeeld kunnen beginnen met het plaatsen van een __breakpoint__ op de declaratieregel van `vierkanteMeter`.
+Je kan dat doen door te rechterklikken op deze regel en te kiezen voor __menu:Breakpoint[Insert Breakpoint]__.
+
+image::Visual%20Studio%20-%20Insert%20Breakpoint.png[Visual Studio - Insert Breakpoint]
+
+De regel wordt in het rood gemarkeerd als hierop een breakpoint is ingesteld.
+
+image::Visual%20Studio%20-%20Breakpoint.png[Visual Studio - Breakpoint]
+
+Starten we nu de applicatie, en voeren we bijvoorbeeld opnieuw dezelfde waardes in, dan merkt je op hoe Visual Studio effectief op de breakpoint-regel, de uitvoering staakt...
+Deze regel wordt in het geel gemarkeerd.
+
+image::Visual%20Studio%20-%20Debugmodus.png[Visual Studio - Debugmodus]
+****
+
+==== Locals toolvenster
+
+****
+Graag zouden op dit punt tijdens uitvoer alvast eens controleren of onze `lengteInMeter` en `breedteInMeter` variabelen correct zijn opgevuld.
+
+Kies voor __menu:Debug[Windows > Locals]__.
+
+image::Visual%20Studio%20-%20Debug%20Windows%20menu.png[Visual Studio - Debug Windows menu]
+
+Het __Locals__ toolvenster verschijnt die ons een overzicht geeft van de inhoud van onze __lokale variabelen__.
+****
+
+.Wat is een lokale variabele?
+[NOTE]
+====
+Lokale variabelen zijn deze die __lokaal__ in de functionaliteit (hier de `Main()` method) worden gedeclareerd.
+Het effect van een __lokale declaratie__ is dat de variabele enkel daar ter beschikking is (__beperkte scope__), en dat ze slechts tijdelijk (zolang de method in uitvoering is) in het geheugen zijn ingeladen (__korte lifespan__).
+====
+
+****
+image::Visual%20Studio%20-%20Locals%20toolvenster.png[Visual Studio - Locals toolvenster]
+
+We stellen vast dat de inhoud van onze twee variabelen `lengteInMeter` en `breedteInMeter` correct zijn opgevuld.
+****
+
+==== Door de code stappen
+
+We kunnen een programma stap voor stap, regel voor regel, laten uitvoeren.  Dit is zinvol om de ondertussen wijzigende inhouden van onze variabelen op te volgen.
+
+****
+Kies in de menu voor __menu:Debug[Step Into]__ om de uitvoer één stap verder, in dit geval één regel verder, halt te laten houden.
+
+image::Visual%20Studio%20-%20Debug%20Step%20Into.png[Visual Studio - Debug Step Into]
+
+De uitvoering wordt onderbroken nog voor uitvoer van de volgende regel.
+
+image::Visual%20Studio%20-%20Locals%202.png[Visual Studio - Locals 2]
+
+[TIP]
+====
+Een __Step Into__ kan via een knop op de __Debug__ werkbalk.  De knop met dezelfde afbeelding als weergegeven naast de menu optie __Step Into__.
+====
+
+Ook hier zien we hoe de uitvoer correct is verlopen, het aantal vierkante meters is correct samengesteld tot __10 000__.
+Deze informatie is ook terug te vinden (op regel 7) in een hierna weergegeven traceertabel.
+
+Nemen we nog een stap, opnieuw via __Debug__ en __Step Into__, dan zien we waar het probleem is opgetreden.
+
+image::Visual%20Studio%20-%20Locals%203.png[Visual Studio - Locals 3]
+
+Waar we __100__ are hadden verwacht, hebben we blijkbaar een fout in onze berekening gemaakt, gedeeld door __10__ in plaats van __100__, waardoor we de foutieve __1000__ are zijn uitgekomen.
+Logischerwijs zal onze verdere berekening die op basis van deze are waarde gebeurt, ook geen correct resultaat opleveren.
+
+Een overzicht van de waardes in onze variabelen is ook terug te vinden (op regel 8) in een hierna weergegeven traceertabel.
+****
+
+De oorzaak van ons probleem is gevonden.  De code kan worden gecorrigeerd.
+
+.Hoe verlaat ik de debugmodus?
+[TIP]
+====
+Debugmodus verlaten, kan door in de menu te kiezen voor __menu:Debug[Stop Debugging]__.. 
+
+image::Visual%20Studio%20-%20Debug%20Stop%20Debugging.png[Visual Studio - Debug Stop Debugging]
+
+Opnieuw kan je ook via de __Debug__ werkbalk kiezen voor __Stop Debugging__.
+====
+
+=== Debuggen met een traceertabel
+
+Ook aan de hand van een traceertabel kan je natuurlijk fouten terugvinden...
+
+****
+[.underline]#Voorbeeld#
+
+[source,csharp,linenums]
+----
+  1 : Console.Write("Lengte in meter?: ");
+  2 : double lengteInMeter = double.Parse(Console.ReadLine());
+  3 : 
+  4 : Console.Write("Breedte in meter?: ");
+  5 : double breedteInMeter = double.Parse(Console.ReadLine());
+  6 : 
+  7 : double vierkanteMeter = lengteInMeter * breedteInMeter;
+  8 : double are = vierkanteMeter / 10;
+  9 : double hectare = are / 100;
+----
+
+De tabel wordt dan...
+
+|====
+|Regel | `lengteInMeter` | `breedteInMeter` | `vierkanteMeter` | `are` | `hectare`
+
+| 1 | / | / | / | / | /
+| 2 | 100 ||||
+| 5 || 100 |||
+| 7 ||| 10000 ||
+| 8 |||| *1000* |
+| 9 ||||| *10*
+|====
+
+In dit overzicht wordt allicht ook vlug duidelijk dat de problemen starten na het berekenen van de `are`.
+****
+
+De aanpak met een zelf uitgeschreven traceertabel is uiteraard veel meer werk.  Typisch bekijk je alle regels en alle variabelen terwijl je vaak wel een idee hebt waar de fout zich ongeveer bevindt.
+
+== If ... else if ... else ...
+
+Ondertussen weten we hoe we op basis van __één voorwaarde__ in een `if` statement met `else` block ons algoritme kunnen opslitsen in __twee uitvoeringspaden__.  Op basis van die ene voorwaarde wordt een keuze gemaakt ofwel __code block 1__, ofwel __code block 2__ uit te voeren.
+
+	if (voorwaarde) {
+		code block 1
+	} else {
+		code block 2
+	}
+	
+Code block 1 wordt uiteraard uitgevoerd indien de voorwaarde correct is (`true`), code block 2 indien de voorwaarde niet correct is (`false`).
+
+=== Geneste if's
+
+Als in één uitvoeringspad ook voorwaardelijkheid van pas komt, kan je probleemloos een nieuw `ìf` statement toevoegen.  Het effect is dan geneste `if` statements.
+
+****
+[.underline]#Voorbeeld met één if#
+
+Om te bepalen of een temperatuur al dan niet __enorm warm__ is, volstaat één `if` statement met één voorwaarde...
+
+[source,csharp,linenums]
+----
+Console.Write("Geef de actuele temperatuur in : ");
+string temperatuurAlsTekst = Console.ReadLine();
+int temperatuur = int.Parse(temperatuurAlsTekst);
+
+if (temperatuur >= 30) { 
+	Console.WriteLine("Het is enorm warm.");
+} else {
+	Console.WriteLine("Het is niet enorm warm.");
+}
+----
+
+Momenteel zal bij de invoer van temperatuur onder de 30 graden worden gesteld dat het __niet enorm warm__ is.  
+****
+
+****
+[.underline]#Voorbeeld met geneste if's#
+
+Volstaat dat niet, of wens je een meer gedetailleerde conclusie, dan kan een tweede `if` statement, met een tweede voorwaarde, oplossing brengen...
+
+[source,csharp,linenums]
+----
+if (temperatuur >= 30) {
+	Console.WriteLine("Het is enorm warm.");
+} else {
+	if (temperatuur < 10) {
+		Console.WriteLine("Het is koud.");
+	} else {
+		Console.WriteLine("Het is aangenaam warm.");
+	}
+}
+----
+
+Slechts indien het niet zo is dat `temperatuur >= 30`, gaat ons algoritme na of `temperatuur < 10`.
+
+Ons programma kan 3 mogelijke conclusies trekken (__enorm warm__, __koud__ of __aangenaam warm__) op basis van een combinatie van voorwaardes.
+		
+|===
+||temperatuur >= 30|temperatuur < 10
+
+|enorm warm|true|(niet van toepassing)
+|koud|false|true
+|aangenaam warm|false|false
+|===
+
+Enkel wanneer het niet zo is dat `temperatuur >= 30`, wordt bekeken of `temperatuur < 10`.  
+
+Indien het wel klopt dat `temperatuur >= 30`, wordt de tweede voorwaarde zelfs niet geëvalueerd.  Het programma hoeft immers geen tijd te verliezen aan dergelijke beslissing.
+****
+
+We hadden reeds in __selecties__ gebruik gemaakt van __sequentie controlestructuren__.  Nu merken we op hoe je net zo makkelijk binnen één selectie, andere selecties kan inbouwen.   
+
+Anders gesteld, een `ìf` kan in een andere `if` worden uitgeschreven.  
+
+==== Met else if block
+
+Vaak worden de accolades rond een `if` statement in een `else` block weggelaten.
+
+****
+[.underline]#Voorbeeld met geneste if zonder accolades#
+
+Voorgaande geneste if's...
+
+[source,csharp,linenums]
+----
+if (temperatuur >= 30) {
+	Console.WriteLine("Het is enorm warm.");
+} else {
+	if (temperatuur < 10) {
+		Console.WriteLine("Het is koud.");
+	} else {
+		Console.WriteLine("Het is aangenaam warm.");
+	}
+}
+----
+
+Kan dus ook zo...
+
+[source,csharp,linenums]
+----
+if (temperatuur >= 30) {
+	Console.WriteLine("Het is enorm warm.");
+} else if (temperatuur < 10) {
+	Console.WriteLine("Het is koud.");
+} else {
+	Console.WriteLine("Het is een matige temperatuur.");
+}
+----
+
+Ook hierbij zal slechts indien het niet zo is dat `temperatuur >= 30`, ons programma nagaan of `temperatuur < 10`.
+****
+
+[TIP]
+====
+Het weglaten van de accolades kan de leesbaarheid van onze code bevorderen.
+
+Zoals je ziet, start men typisch de tweede `if` meteen volgend op `else` (op dezelfde regels).
+====
+
+==== Meerdere else if blocks
+
+Er staan geen limieten op het aantal `if` statements die je in elkaar kan nestelen.
+
+****
+Om nog meer gedetailleerde conclusies te trekken over de ingevoerde temperatuur voegen we extra `if` statements toe...
+
+[source,csharp,linenums]
+----
+if (temperatuur >= 30) {
+	Console.WriteLine("Het is enorm warm.");
+} else if (temperatuur >= 15) {
+	Console.WriteLine("Het is aangenaam warm.");
+} else if (temperatuur < 10) {
+	Console.WriteLine("Het is koud.");
+} else {
+	Console.WriteLine("Het is eerder fris.");
+}
+----
+
+Enkel indien het 
+
+- niet zo is dat `temperatuur >= 30`
+- én niet zo is dat `temperatuur >= 15`
+- én niet is dat `temperatuur < 10`
+
+zal ons algoritme concluderen dat het __eerder fris__ is.
+		
+|===
+||temperatuur >= 30|temperatuur >= 15|temperatuur < 10
+
+|enorm warm|true|(niet van toepassing)|(niet van toepassing)
+|aangenaam warm|false|true|(niet van toepassing)
+|koud|false|false|true
+|fris|false|false|false
+|===
+****
+
+
+.Meerdere else if blocks, maar slechts één else block...
+[NOTE]
+====
+Samengevat kan je stellen dat we nul of meerdere `else if` blocks mogen inzetten. 
+
+Het `else` gedeelte is optioneel, maar kan maximaal één keer voorkomen.  Daar wordt de logica opgenomen die wordt uitgevoerd indien aan geen enkel van bovenstaande voorwaardes is voldaan.
+====
+
+=== Vergelijking met if's in sequentie
+
+Merk op dat...
+
+	if (a < b) {
+		code block 1
+	} else if (b < a) {
+		code block 2
+	} else {
+		code block 3
+	}
+
+*Niet* hetzelfde is als...
+
+	if (a < b) {
+		code block 1
+	}
+	if (b < a) {
+		code block 2
+	}
+	if (a == b) {
+		code block 3
+	}
+
+Indien, zoals deze laatste aanpak, de verschillende if's na elkaar worden uitgeschreven, zullen ze ook eenvoudigweg in opeenvolging -onvoorwaardelijk- allen tot uitvoering worden gebracht.
+
+****
+[.underline]#Voorbeeld met 3 if's in sequentie#
+
+[source,csharp,linenums]
+----
+Console.Write("Aantal personen?: ");
+int personen = int.Parse(Console.ReadLine());
+Console.Write("Aantal glazen?: ");
+int glazen = int.Parse(Console.ReadLine());
+
+if (glazen < personen) {
+    // code block 1
+	Console.WriteLine("We hebben glazen tekort, we openen een nieuwe doos glazen...");
+	glazen = glazen + 6;
+} 
+if (glazen > personen) {
+    // code block 2
+	Console.WriteLine("We hebben meer dan voldoende glazen.");
+} 
+if (glazen ==  personen) {
+    // code block 3
+	Console.WriteLine("We hebben voor elke persoon precies één glas.");
+}
+----
+
+Bij de invoer van __10 personen__ en __5 glazen__ bekomen we...
+
+[source,shell]
+----
+Aantal personen?: 10
+Aantal glazen?: 5
+We hebben glazen tekort, we openen een nieuwe doos glazen...
+We hebben meer dan voldoende glazen.
+----
+
+Dat de laatste zin werd opgenomen in de uitvoer is op zijn minst gesteld vreemd.
+
+De aanpassing van het aantal glazen in codefragment 1, leidde ook tot het uitvoeren van codefragement 3. 
+****
+
+Door verschillende beslissingen in sequentie uit te schrijven, worden ze hoe dan ook allen uitgevoerd, en wordt elke voorwaarde geëvalueerd.
+ 
+****
+[.underline]#Voorbeeld met geneste if's#
+
+We kunnen dit vermijden door de `ìf` statements in elkaar te nestelen...
+
+[source,csharp,linenums]
+----
+if (glazen < personen) {
+    // code block 1
+    Console.WriteLine("We hebben glazen tekort, we openen een nieuwe doos glazen...");
+    glazen = glazen + 6;
+} else if (glazen > personen) {
+    // code block 2
+    Console.WriteLine("We hebben meer dan voldoende glazen.");
+} else {
+    // code block 3
+    Console.WriteLine("We hebben voor elke persoon precies één glas.");
+}
+----
+
+Deze keer bekomen we bij invoer van __10 personen__ en __5 glazen__ een ander resultaat...
+
+[source,shell]
+----
+Aantal personen?: 10
+Aantal glazen?: 5
+We hebben glazen tekort, we openen een nieuwe doos glazen...
+----
+
+Er heerst __exclusiviteit__ tussen codefragment 1, 2 en 3.  Ten hoogste één van deze codefragmenten wordt uitgevoerd.
+****
+
+== Logische bewerkingen
+
+=== And
+
+Indien niet aan één, maar aan meerdere voorwaardes moet voldaan zijn, alvorens bepaalde logica uit te voeren, kan je deze voorwaardes combineren met een logische __and__ (`&&`) operator.
+
+****
+[.underline]#Voorbeeld met een and operator#
+
+Om na te gaan of een getal zich in een bepaald bereik valt, bijvoorbeeld __1 tot en met 100__, moet het 
+
+- minstens even groot zijn dan de ondergrens (`getal >= ondergrens`)
+- maximaal even groot zijn dan de bovengrens (`getal \<= bovengrens`)
+
+[source,csharp,linenums]
+----
+int ondergrens = 1;
+int bovengrens = 100;
+
+Console.Write("Getal?: ");
+int getal = int.Parse(Console.ReadLine());
+
+if (getal >= ondergrens && getal <= bovengrens) {
+	Console.Write($"{getal} ligt tussen {ondergrens} en {bovengrens}");
+}
+----
+****
+
+Een logische __and__ (`&&`) operator is bruikbaar om twee `bool` expressies te combineren.  
+
+Het resultaat van de combinatie is ook een `bool`.  Meer specifiek enkel `true` indien beide onderdelen `true` zijn.
+		
+.And logica
+[IMPORTANT]
+====
+|===
+|voorwaarde 1|voorwaarde 2|voorwaarde 1 and voorwaarde 2
+
+|*true*|*true*|*true*
+|true|false|false
+|false|true|false
+|false|false|false
+|===
+====
+
+[NOTE]
+====
+Merk op dat __voorwaarde 2__ totaal irrelevant is voor de uitkomst indien __voorwaarde 1__ alvast `false` is.  De uitkomst is dan immers steeds `false`.
+
+Deze tweede voorwaarde wordt in zo'n geval dan ook __kortgesloten__.  Er wordt geen tijd verloren met het evalueren van deze voorwaarde.
+====
+
+[discrete]
+==== Meer dan 2 voorwaardes combineren
+
+Je bent niet beperkt in het aantal voorwaardes die je gaat combineren.
+
+****
+[.underline]#Voorbeeld met meer dan twee voorwaardes#
+
+Indien we bijkomend moeten verifiëren of de `ondergrens` effectief wel __onder__ de `bovengrens` ligt, kan je een bijkomende voorwaarde toevoegen...
+
+[source,csharp,linenums]
+----
+if (ondergrens <= bovengrens && getal >= ondergrens && getal <= bovengrens) {
+	...
+----
+
+Hier hebben we drie voorwaardes die steeds met __and__ logica worden gecombineerd.
+****
+
+In theorie is er geen limiet.
+
+[discrete]
+==== Alternatief zonder and operator
+
+Ook zonder gebruik te maken van een __and__ operator (`&&`) kunnen we hetzelfde resultaat bereiken.  
+
+Neem in het `if` block van een eerste controle, waar je alvast de eerste voorwaarde kan verifiëren, een tweede `if` statement op.  Daarmee kan je ook de tweede voorwaarde afdwingen.
+
+****
+[.underline]#Alternatief voorbeeld zonder and operator#
+
+[source,csharp,linenums]
+----
+if (getal >= ondergrens) {
+	if (getal <= bovengrens) {
+		Console.Write($"{getal} ligt tussen {ondergrens} en {bovengrens}");
+	}
+}
+----
+
+Zowel in deze, al bij voorgaande oplossing zal de `Write` opdracht enkel worden voltooid indien aan beide voorwaardes is voldaan...
+		
+|===
+|| `getal >= ondergrens` | `getal \<= bovengrens`|
+
+|`Write` opdracht|*true*|*true*|bv. bij __getal 50__
+|(geen output)|true|false|bv. bij bij __getal 500__
+|(geen output)|false|true|bv. bij bij __getal 0__
+|(geen output)|false|false|(*)
+|===
+
+(*) Niet mogelijk zolang de `ondergrens` effectief lager ligt dan de `bovengrens`.
+****
+
+Onze oorspronkelijke aanpak, met __and__ operator (`&&`) is eleganter (beter leesbaar), en dus een veel beter keuze. 
+
+Er zijn situaties mogelijk waar je toch voor een geneste `if` aanpak zou opteren.  Bij elke voorwaarde kan je hier immers meteen een alternatief (`else`) scenario uitschrijven.
+
+****
+[.underline]#Voorbeeld#
+
+Stel je voor dat je een gepaste foutmelding wil opleveren.  __Te klein__ of __te groot__ bijvoorbeeld.  Dan kan onze laatste aanpak, met geneste `if` statements daar vrij makkelijk op worden voorzien...
+
+[source,csharp,linenums]
+----
+if (getal >= ondergrens) {
+	if (getal <= bovengrens) {
+		Console.Write($"{getal} ligt tussen {ondergrens} en {bovengrens}");
+	} else {
+		Console.Write("te groot");
+	}
+} else {
+	Console.Write("te klein");
+}
+----
+
+Ook in onze eerste aanpak, met __and__ operator, kan dergelijke logica worden geïntegreerd.  Het zal echter meer vereisen dan louter een `else` block voorzien voor onze `if (getal >= ondergrens && getal <= bovengrens)`.  Als niet voldaan was aan de combinatie van voorwaardes moet het programma immers nog steeds uitzoeken welke specifieke foutmelding wordt weergegeven.
+****
+
+=== Or 
+
+Indien aan minstens één van meerdere voorwaardes moet voldaan zijn, alvorens bepaalde logica uit te voeren, kan je deze voorwaardes combineren met een logische __or__ (`||`) operator.
+
+****
+[.underline]#Voorbeeld met een or operator#
+
+Voorwaardes als `getal < ondergrens` en `getal > bovengrens` kunnen we combineren met een `||` operator om aan te geven dat vanaf er aan één van beide voldaan is, een melding mag worden opgeleverd...
+
+[source,csharp,linenums]
+----
+int ondergrens = 1;
+int bovengrens = 100;
+
+Console.Write("Getal?: ");
+int getal = int.Parse(Console.ReadLine());
+
+if (getal < ondergrens || getal > bovengrens) {
+	Console.Write($"{getal} valt buiten het bereik {ondergrens} tot en met {bovengrens}");
+}
+----
+****
+
+Een logische __or__ (`||`) operator is gebruiken we opnieuw om twee `bool` expressies te combineren.  
+
+Het resultaat van de combinatie is ook een `bool`.  Meer specifiek `true` vanaf één van beide onderdelen `true` zijn.
+		
+.Or logica
+[IMPORTANT]
+====
+|===
+|voorwaarde 1|voorwaarde 2|voorwaarde 1 \|\| voorwaarde 2
+
+|*true*|*true*|*true*
+|*true*|*false*|*true*
+|*false*|*true*|*true*
+|false|false|false
+|===
+====
+
+[WARNING]
+====
+In ons dagelijk taalgebruik wordt met __of__ vaak gesuggereerd dat het gaat om ofwel het ene, ofwel het andere, bemerkt dat dit hier niet het geval is.
+====
+
+[NOTE]
+====
+Merk op dat __voorwaarde 2__ totaal irrelevant is voor de uitkomst indien __voorwaarde 1__ alvast `true` is.  De uitkomst is dan immers steeds `true`.  
+
+Deze tweede voorwaarde wordt in zo'n geval dan ook __kortgesloten__.  Er wordt geen tijd verloren met het evalueren van deze voorwaarde.
+====
+
+[discrete]
+==== Alternatief zonder or operator
+
+Ook deze keer kunnen we zonder gebruik te maken van een __or__ operator (`||`) hetzelfde resultaat bereiken.  
+ 
+****
+[.underline]#Alternatief voorbeeld zonder or operator#
+
+Een verbetering kunnen we het echter niet noemen...
+
+[source,csharp,linenums]
+----
+if (getal < ondergrens) {
+	Console.Write($"{getal} valt buiten het bereik {ondergrens} tot en met {bovengrens}");
+} else {
+	if (getal > bovengrens) {
+		Console.Write($"{getal} valt buiten het bereik {ondergrens} tot en met {bovengrens}");
+	}
+}
+----
+
+Bij deze aanpak gaan we in beide `if` codeblocks dezelfde logica moeten uitschrijven.
+****
+
+[discrete]
+==== Don't Repeat Yourself
+
+Jezelf herhalen is nooit een goed idee.  Men spreekt ook wel een over het __DRY__ principe (__Don't Repeat Yourself__).
+
+Centraliseer zo vaak als mogelijk logica.  Dit maakt je algoritmes niet alleen beter leesbaar, je kan ze zo later ook makkelijk aanpassen.
+Als je op meerdere plaatsen dezelfde code ziet, moet je je afvragen of je dit niet kan herformuleren zodat de code er maar één keer staat.
+
+Stel...
+
+	if (voorwaarde) {
+		doe A
+		doe B
+		doe D
+	} else {
+		doe A
+		doe C
+		doe D
+	}
+
+Vermits elke uitvoering van dit programma steeds eerst A zal doen en steeds achteraf D zal doen, kunnen we dit herleiden tot...
+
+	doe A
+	if (voorwaarde) {
+		doe B
+	} else {
+		doe C
+	}
+	doe D
+
+Voor de computer maakt dit niet uit, de beide fragmenten zijn immers equivalent, maar voor de toekomstige lezer is het tweede heel wat duidelijker.
+
+=== Not 
+
+Een `bool` waarde (__true__ of __false__) kan met een logische __not__ (`!`) operator makkelijk worden geïnverteerd.
+__Not true__ is gelijk aan __false__, en __not false__ uiteraard gelijk aan __true__.  
+
+.Not logica
+[IMPORTANT]
+====
+|===
+| voorwaarde | not voorwaarde 
+
+|true|false
+|false|true
+|===
+====
+
+****
+[.underline]#Voorbeeld met not operator#
+
+Om niet meermaals te moeten definiëren wat het betekent om te vriezen (`temperatuur \<= 0`) zou je een `bool` variabele als `hetVriest` kunnen herbruiken.  
+
+[source,csharp,linenums]
+----
+Console.Write("Temperatuur?: ");
+int temperatuur = int.Parse(Console.ReadLine());
+
+bool hetVriest = (temperatuur <= 0);
+if (hetVriest)
+	Console.WriteLine("Bij deze temperatuur vriest het.");
+
+Console.Write("Dank je voor het invoeren van de ");
+if (!hetVriest) // <1>
+	Console.Write("warme ");
+Console.Write("temperatuur.");
+----
+<1> Of althans een geïnverteerde versie ervan als je niet wil doen wanneer het niet vriest.
+****
+
+[NOTE]
+====
+In het geval van numerieke vergelijkingsoperatoren hadden we reeds aangehaald dat er voor elke operator een tegenovergestelde variant bestaat.  Niet `<` is hetzelfde als `>=`, niet `>` is identiek aan `\<=`, niet `==` is dan `!=`, enzovoort.
+
+Een expressie als `!(temperatuur \<= 0)` kan je natuurlijk ook formuleren als `temperatuur > 0`.
+====
+
+== Interval checking 
+
+Soms moet je bepalen in welk __interval__ (__bereik__) een waarde voorkomt.
+
+****
+[.underline]#Voorbeeld#
+
+Je zou verschillende leeftijdscategorie als volgt kunnen definiëren:
+
+- __kind__ indien de leeftijd kleiner is dan 10
+- __gepensioneerd__ vanaf 65 jaar
+- __tiener__ indien de leeftijd minstens 10 is, én kleiner dan 18
+- __volwassene__ bij een leeftijd van 25 of meer, maar onder de 65
+- __jongvolwassene__ indien de leeftijd minstens 18 is, én kleiner dan 25
+		
+Letterlijk in code omgezet zou dit iets geven als...
+
+[source,csharp,linenums]
+----
+if (leeftijd < 10) {
+	// kind
+} else if (leeftijd >= 65) {
+	//gepensioneerd
+} else if (leeftijd >= 10 && leeftijd < 18) {
+	// tiener
+} else if (leeftijd >= 25 && leeftijd < 65) {
+	// volwassene
+} else if (leeftijd >= 18 && leeftijd < 25) {
+	// jongvolwassene
+}
+----
+
+In totaal hebben we hier een zestal voorwaardes moeten uitschrijven.  Sommigen daarvan werden gecombineerd (aan de hand __and__ logica) met andere voorwaardes.
+****
+
+Als intervallen netjes op elkaar aansluiten (geen gaten ertussen), kan je dergelijke __interval controles__ beter sorteren.  Dit vereenvoudigt de vereiste voorwaardes.
+
+****
+[.underline]#Zelfde voorbeeld maar met gesorteerde controles#
+
+Je zou van de jongste leeftijd kunnen vertrekken, en zo opwerken naar de oudste...
+
+[source,csharp,linenums]
+----	
+if (leeftijd < 10) {
+	// kind
+} else if (leeftijd < 18) {
+	// tiener
+} else if (leeftijd < 25) {
+	// jongvolwassene
+} else if (leeftijd < 65) {
+	// volwassene
+} else {
+	// gepensioneerd
+}
+----
+		
+Bij een *__tiener__* bijvoorbeeld hoef je al niet meer te controleren of de leeftijd ook wel minstens __10__ is.  Er wordt immers pas gecontroleerd of het om een __tiener__ gaat indien reeds duidelijk was dat het geen kind was.
+		
+|===
+|| `leeftijd < 10` | `leeftijd < 18` | `leeftijd < 25` | `leeftijd < 65`
+
+|__kind__|true|||
+|*__tiener__*|*false*|*true*||
+|__jongvolwassene__|false|false|true|
+|__volwassene__|false|false|false|true
+|__gepensioneerd__|false|false|false|false
+|===
+****
+	
+****	
+In aflopende volgorde kan het natuurlijk ook...
+	
+[source,csharp,linenums]
+----
+if (leeftijd >= 65) {
+	// gepensioneerd
+} else if (leeftijd >= 25) {
+	// volwassene
+} else if (leeftijd >= 18) {
+	// jongvolwassene
+} else if (leeftijd >= 10) {
+	// tiener
+} else {
+	// kind
+}
+----
+
+In beide gevallen volstaat een viertal voorwaardes.  Zelfs logische operatoren waren in deze voorbeelden niet noodzakelijk.
+****
+		
+[NOTE]
+====
+Je kunt dit een beetje vergelijken met een __coin sorter__.  Zoals hier ook in beeld werd gebracht: https://www.youtube.com/watch?v=A94h19O7_fo.
+	
+Verschillende mogelijkheden worden uitgeprobeerd.  De eerste die past wordt verkozen.  Let erop dat de gaatjes ook gesorteerd zijn volgens grootte.
+====
+
+== Invoer robuust opvangen
+
+=== Strings vergelijken
+
+Strings kan je vergelijken met `==` of `!=` operatoren.
+
+****	
+[.underline]#Voorbeeld van string vergelijking#
+
+[source,csharp,linenums]
+----
+Console.Write("Antwoord?: ");
+string input = Console.ReadLine();
+
+if (input == "ja") {
+	Console.WriteLine("U koos voor JA.");
+} else if (input == "nee") {
+	Console.WriteLine("U koos voor NEE.");
+} else {
+    Console.WriteLine("U koos voor nog iets anders.");
+}
+----
+
+Let op, wordt bij de uitvoer door de gebruiker iets als __"Ja"__ ingevoerd, dan bekommen we...
+
+[source,shell]
+----
+Antwoord?: Ja
+U koos voor nog iets anders.
+----
+****
+
+In het geval van invoer door de gebruiker weet je vaak niet hoe hij/zij zijn informatie gaat invoeren.  Bijvoorbeeld qua hoofdletter, omsluitende spaties e.d.
+
+****	
+[.underline]#Voorbeeld van string vergelijking#
+
+De tekst __ja__, dat kan worden opleverd als `"ja"`, `"Ja"`, `"JA"`, `"jA"`, `" ja"`, `"ja "`, `"  ja   "`, ... .
+
+Rekening houden met al die mogelijkheden is op zijn minst gesteld omslachtig...
+
+[source,csharp,linenums]
+----
+if (input == "ja" || input == "Ja" || input == "JA" || ...) {
+	...
+----
+****
+
+Een betere aanpak volgt hieronder.
+	
+=== Omzetten naar kleine letters of hoofdletters
+
+Tekst omzetten in kleine letters of hoofdletters kan met functionaliteiten als `.ToLower()` of `.ToUpper()`. 
+
+****	
+[.underline]#Voorbeeld van omzetting in kleine letters#
+
+Voor de punt (__dot__) verwijs je (met een `string` expressie), naar de tekst waarvan een variant in kleine letters of hoofdletters wordt opgeleverd.
+
+[source,csharp,linenums]
+----
+Console.Write("Geef wat tekst: ");
+string input = Console.ReadLine();
+
+Console.WriteLine("In kleine letters: " + input.ToLower());
+Console.WriteLine("In hoofdletters  : " + input.ToUpper());
+
+Console.WriteLine("Hello".ToLower());
+Console.WriteLine("world".ToUpper());
+----
+
+Als hier __"Ja"__ wordt ingevoerd, bekomen we...
+
+[source,shell]
+----
+Geef wat tekst:  Ja
+In kleine letters: ja
+In hoofdletters  : JA
+hello
+WORLD
+----
+****
+
+Zo kan je ook tekst omzetten in kleine letters of hoofdletters om éénduidig af te toetsen met de referentiewaarde.  
+
+****	
+[.underline]#Voorbeeld van omzetting in kleine letters bij invoer#
+
+Zet bijvoorbeeld de input om in kleine letters of hoofdletters voor je begint te vergelijken...
+
+[source,csharp,linenums]
+----
+string input = Console.ReadLine();
+
+if (input.ToLower() == "ja") {
+	Console.WriteLine("U koos voor JA.");
+} else if (input.ToLower() == "nee") {
+	Console.WriteLine("U koos voor NEE.");
+} else {
+    Console.WriteLine("U koos voor nog iets anders.");
+}
+----
+
+Deze code werkt ongeacht de gebruiker `"Ja"`, `"JA"`, `"ja"`, `"NeE"`, `"NEe"`, ... invoert.
+****
+
+=== Omsluitende spaties wegknippen
+
+Om spaties vooraan of achteraan in een tekst weg te knippen kan je gebruik maken van een `Trim()` functionaliteit.
+
+****	
+[.underline]#Voorbeeld van spaties wegknippen#
+
+Voor de punt (__dot__) verwijs je (met een `string` expressie), naar de tekst waaruit de je __leading__ of __trailing__ spaties wil verwijderen...
+
+[source,csharp,linenums]
+----
+string begroeting = " Hello World!   ".Trim();
+
+Console.Write($"[{begroeting}]");  // <1>
+----
+<1> Levert de tekst __[Hello World!]__ op. 
+****
+
+Ook bij het verwerken van invoer (van een gebruiker) kan `Trim()` nuttig zijn.
+
+****	
+[.underline]#Voorbeeld van spaties wegknippen in invoer#
+
+Voor de punt (__dot__) verwijs je (met een `string` expressie, naar de tekst waarvan een variant in kleine letters of hoofdletters wordt opgeleverd.
+
+[source,csharp,linenums]
+----
+string input = Console.ReadLine();
+string verwerkteInput = input.ToLower().Trim();
+
+if (verwerkteInput == "ja") {
+	Console.WriteLine("U koos voor JA.");
+} else if (verwerkteInput == "nee") {
+	Console.WriteLine("U koos voor NEE.");
+} else {
+    Console.WriteLine("U koos voor nog iets anders.");
+}
+----
+
+Zelfst indien er heel wat spaties op __Ja__ volgen, of eraan voorafgaan, bekomen we...
+
+[source,shell]
+----
+Geef wat tekst:         Ja   
+U koos voor JA.
+----
+****
+
+Invoer opvangen kan zo een stuk robuuster gebeuren.

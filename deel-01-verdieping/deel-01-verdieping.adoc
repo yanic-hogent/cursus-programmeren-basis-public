@@ -1,0 +1,623 @@
+= Programmeren Basis - Deel 01 - Verdieping
+Frederiek De Wolf
+v2022.09.24.16:45
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+
+// de secties:
+// - Dot notatie, using en namespaces
+// - Projecten in Visual Studio
+// zijn exacte kopies van deze uit deel 13
+
+== Dot notatie, using en namespaces
+
+=== Dot notatie
+
+[source,csharp,linenums]
+----
+System.Console.WriteLine("Hello");
+System.Console.WriteLine("World");
+----
+
+De __method__ `WriteLine`, die we in voor vermelde code aanroepen, is gedefinieerd in een __klasse__ met de naam `Console`, vandaar de __punt__ (Engels: *__dot__*) notatie `Console.WriteLine` (spreek het uit als: __Console dot WriteLine__).
+
+De klasse `Console` is op zijn beurt gedefinieerd in de __namespace__ `System`.  Ook hier mag je bijgevolg verwijzen naar de `Console` klasse aan de hand van de notatie `System.Console`.
+
+[#Namespaces]
+=== Namespaces en using
+
+Misschien heb je ondertussen links of rechts in de code *__namespaces__* zien opduiken.  
+
+Bijvoorbeeld bij het creëren van een __nieuw Console App (.NET Core) project__ krijgen we alvast volgende code om van te vertrekken.  Ook daar is sprake van een __namespace__...
+
+[source,csharp,linenums]
+----
+using System;
+
+namespace HelloWorldApp {  // <1>
+    class Program {
+        static void Main(string[] args) {
+            Console.WriteLine("Hello World!");
+        }
+    }
+}
+----
+<1> De naam van de __namespace__, hier `HelloWorldApp` zal overeenkomen met de uitgekozen __projectnaam__.
+
+__Namespaces__ mag je bekijken als een __map__, of noem het een __rubriek__, waarin code onderdelen als klassen worden uitgeschreven.  In dergelijke __rubriek__ verzamelen we bijvoorbeeld alle klassen die samenhoren.
+
+.Analogie met mappen
+[NOTE]
+====
+Een namespace kan je op verschillende manieren vergelijken met __een map in een filesysteem__, bijvoorbeeld een __folder__ op onze harde schijf.  We maken mappen in hoofdzaak aan om een tweetal redenen: 
+
+- De eerste is structuur in ons filesysteem te bekomen.  Door documenten in verschillend mappen onder te brengen, groeperen we gerelateerde documenten.  Gerelateerde (sub)mappen kunnen ook nog eens samen in een (hoofd)map geplaatst worden.  Zonder mappen zouden we moeilijker een document, of submap terugvinden.  We plaatsen bijvoorbeeld al onze recepten in een map __MijnRecepten__, die zich op zijn beurt bevindt in een map __MijnDocumenten__.
+
+- De tweede reden is om naamconflicten te vermijden.  Meerdere bestanden mag je dezelfde naam geven, maar dan moeten deze bestanden zich elk in een andere map bevinden.  Anders uitgedrukt is een map een __ruimte__ (Engels:__space__) om een document of map een (unieke) __naam__ moet aannemen.
+====
+
+Net hetzelfde is van toepassingen bij namespaces en hun onderdelen, bijvoorbeeld klassen.
+
+- Enerzijds kunnen *verschillende klassen met dezelfde naam* (bv `Program`) voorkomen, zolang ze zich maar bevinden *in een andere namespace*.
+
+- Indien we over vele klassen beschikken, kan het helpen deze klassen in namespaces, met eventuele subnamespaces onder te brengen.  Een *hiërarchische structuur* kan zo worden opgebouwd.
+
+Ook bij het voorgedefinieerde is dat het geval, zo kan je bijvoorbeeld in de `IO` subnamespace van de `System` namespace (of dus `System.IO` namespace) alles vinden wat te maken heeft met het __lezen uit__ of __schrijven naar bestanden__.  `System.Drawing` bijvoorbeeld bevat dan het nodig om __grafische vormen te teken__.
+
+Een __namespace__ wordt gedefinieerd aan de hand van een `namespace` statementblok.  Je start met het sleutelwoord `namespace` gevolgd door de naam van deze __rubriek__.  
+
+[source,csharp,linenums]
+----
+namespace MijnRubriek {
+    ...
+}
+----
+
+Alles wat tot de `namespace` behoort wordt tussen accolades gezet.
+
+Een __namespace__ kan __sub-namespaces__ bevatten...
+
+[source,csharp,linenums]
+----
+namespace MijnRubriek {
+    namespace MijnSubRubriek {
+        ...
+    }
+}
+----
+
+Wat ook aan de hand van één statementblok kan, dit door gebruik te maken van een __dot-notation__...
+
+[source,csharp,linenums]
+----
+namespace MijnRubriek.MijnSubRubriek {
+    ...
+}
+----
+
+https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/namespaces/index[Microsoft Docs: Namespaces (C# Programming Guide)]
+
+[discrete]
+==== Qualifying identifier
+
+Om te verwijzen naar een bepaalde namespace, klasse, of zelfs onderdeel van deze klasse kunnen we de __qualifying identifier__ inzetten.  Deze __identifier__ (of __naam__) __kwalificeert__ (__maakt duidelijk__) waaruit het afkomstig is.  
+
+De naam van de klasse of namespace waartoe dit onderdeel behoort, wordt met andere woorden ook vermeldt...
+
+[source,csharp,linenums]
+----
+namespace MijnApplicatie {
+    class Program {
+        static void Main() {
+            MijnRubriek.MijnSubRubriek.MijnCodeblok.MijnMethod();  // <1>     
+        }
+    }
+}
+
+namespace MijnRubriek.MijnSubRubriek
+{
+    class MijnCodeblok { 
+        static void MijnMethod() {
+            ...
+        }
+    }
+}
+----
+<1> Hier wordt een qualifying identifier van de `MijnMethod` gebruikt om duidelijk te maken dat ze is gedefinieerd in de `MijnCodeblok` klasse van de `MijnRubriek.MijnSubRubriek` namespace.
+
+Je gebruikt hiervoor de dot notatie en laat de naam van het onderdeel telkens voorafgaan door de naam van de __container__ waarin het zich bevindt.
+
+[discrete]
+==== Using directives
+
+Om op verkorte wijze gebruik te kunnen maken van bijvoorbeeld de `Sleep` method van de `System.Threading.Thread` klasse, zonder telkens te moeten aangeven dat deze `Thread` gedefinieerd is in de `System.Threading` namespace, kan men gebruik maken van de `using System.Threading` __directive__.
+
+Je kan je broncode document (of een namespace) starten met één of meerder `using` statements.  Daarmee geef je aan iets te gebruiken uit deze namespace...
+
+[source,csharp,linenums]
+----
+using System;            // <4>
+using System.Threading;  // <2>
+
+class Program {
+    static void Main() {
+        Thread.Sleep(1000);                  // <1>
+        Console.WriteLine("Hello World!");   // <3>
+    }
+}
+----
+<1> Gebruik maken van de `Sleep` method uit de `Thread` klasse kan eenvoudigweg met `Thread.Sleep`...
+<2> ...op zijn minst indien met een `using` is aangegeven dat we onderdelen van de `System.Threading` namespace gaan aanspreken.
+<3> Om op deze regel een __qualifying identifier__ als `System.Console` te vermijden...
+<4> ...is een `using` directive nodig waar we verwijzen naar de `System` namespace.  De `Console` klasse is immers in deze namespace gedefinieerd.
+
+Ook om `MijnMethod` aan te roepen hadden we met een `using` kunnen werken...
+
+[source,csharp,linenums]
+----
+namespace MijnApplicatie {
+    using MijnRubriek.MijnSubRubriek.MijnCodeblok;   // <2>
+
+    class Program {
+        static void Main() {
+            MijnMethod();                            // <1>     
+        }
+    }
+}
+
+namespace MijnRubriek.MijnSubRubriek {
+    class MijnCodeblok { 
+        static void MijnMethod() {
+            ...
+        }
+    }
+}
+----
+<1> Bij het aanroepen van de `MijnMethod` verwijzen we enkel naar de naam van deze method.
+<2> Om dat te kunnen doen moeten we bovenaan het broncode document, of op zijn minst in de bevattende namespace (waar we deze code hanteren) een `using` directive opnemen die verwijst naar de `MijnRubriek.MijnSubRubriek.MijnCodeblok` klasse.
+
+NOTE: In het geval dat een `using` statement staat opgenomen in een `namespace`, is ze uiteraard enkel van toepassing binnen die `namespace`.
+
+https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/using-directive[Microsoft Docs: using Directive (C# Reference)]
+
+== Klassen en methods
+
+=== Code onderdelen of klassen
+
+Een klasse (`class`) is een codeblok waarin we onze broncode gaan uitschrijven.  Je kan het ook omschrijven als een verzameling van één of meerdere, doorgaans gerelateerde, functionaliteiten.
+
+De code van een klasse staat steeds tussen accolades.
+`{` geeft het begin aan van deze klasse, `}` het einde.
+Voor de opening-accolade staat het keyword `class` gevolgd door de naam van deze klasse.
+
+[source,csharp,linenums]
+----
+class MijnCodeblok { ... }
+----
+
+=== Hoofdmethod Main
+
+We hebben steeds een klasse nodig om daarin onze functionaliteiten (ook __methods__ genoemd) uit te schrijven.
+Zo meteen een voorbeeld met meerdere methods, maar we hebben minimaal één method, met de naam __Main__, nodig om het programma met dit codeblok, deze klasse, te doen starten.  Dit is dus de __hoofdmethod__.
+
+Ook bij methods is het zo dat deze starten met `{` en het einde markeren met `}`.
+Voor de opening-accolade gaan we, althans bij onze eerste voorbeelden, doorgaans de sleutelwoorden `static void` terugvinden, gevolgd door de naam van deze method.
+
+[source,csharp,linenums]
+----
+static void Main() { ... }
+----
+
+Verderop meer informatie over de betekennis van de sleutelwoorden `static` en `void`.
+
+=== Meerdere methods in een klasse
+
+Verderop hebben we het uitgebreid over klassen met meerdere methods.  Toch kunnen we al eens kijken naar een eenvoudig voorbeeld waarin wordt gewerkt met meerdere klassen en methods.
+Dit om alvast wat inzicht te verwerven in het gebruik van de dot notatie, en het aanroepen van functionaliteiten.
+
+We gaan hier vanuit één klasse (`Program`) functionaliteiten, of dus methods, aanroepen die gedefinieerd zijn in een andere klasse `Portier`.  Zo maken we met de __call__ `Portier.Verwelkom`, duidelijk dat het om de method `Verwelkom` gaat, uit de klasse `Portier`, die we wensen uit te voeren.  Het is net als de call, het aanroepen, van de voor gedefinieerde functionaliteit `Console.WriteLine(...)`.  Ook daar maken we met de dot notatie duidelijk dat we de `WriteLine` method uit de klasse `Console` aanroepen.
+
+De klasse `Portier` verzamelt alle opdrachten, die we aan de __portier__ wensen te geven.
+
+[source,csharp,linenums]
+----
+namespace MeerdereMethods {
+    using System;
+    class Program {
+        static void Main() {
+            Portier.Verwelkom();
+            Console.WriteLine("...enkele uren later...");
+            Portier.ZegTotWederzien();
+        }
+    }
+    class Portier {
+        static public void Verwelkom() {
+            Console.WriteLine("Welkom!");
+        }
+        static public void ZegTotWederzien() {
+            Console.WriteLine("Tot volgende keer.");
+        }
+    }
+}
+----
+
+Indien we het voorbeeld uitvoeren dan krijgen we volgende output...
+
+....
+Welkom!
+...enkele uren later...
+Tot volgende keer.
+....
+Herinner je dat een programma steeds start met de hoofdmethod `Main`.
+
+NOTE: Bemerk dat als een method werd aangeroepen, en zijn code (ook wel __implementatie__ genoemd) werd uitgevoerd, er wordt teruggekeerd naar plaats van aanroep, om daar verder te gaan met de implementatie.
+Nadat de tekst __Welkom!__ op de console kwam, wordt verdergegaan met de uitvoer in de hoofdmethod, __...enkele uren later...__ komt op de console, pas daarna __Tot volgende keer.__
+
+CAUTION: Let op, men gebruikt vele verschillende termen voor wat we tot nu toe __method__ of __functionaliteit__ hebben genoemd.  Men durft ook wel eens spreken over __functie__, __procedure__, __routine__, __boodschap__, __opdracht__, ... .
+Laat je niet in de war brengen door deze synoniemen.
+
+=== Een method publiek of privaat definiëren
+
+Als we buiten de klasse `Portier` gebruik willen maken van de daarin gedefinieerde functionaliteiten, als `Verwelkom` of `ZegTotWederzien`, wat hier uiteraard ook de bedoeling was, dan moeten we deze methods `public` definiëren.
+
+Als een method niet explicit `public` wordt gedefinieerd, is hij `private`.  Wat zoveel betekent als enkel beschikbaar, aanroep baar, binnen de klasse waarin deze is gedefinieerd.
+
+__Access modifiers__ als `public` of `private`, die de vorm van toegang naar deze functionaliteit bepalen, moeten in de signatuur van de method worden opgenomen.
+De __signatuur__ is de eerste regel van de method definitie, waarin onder meer de identifier en access modifier worden uitgekozen.
+
+== Projecten in Visual Studio
+
+=== Zelf een project creëren
+
+In Visual Studio kunnen we verschillende soorten applicaties opzetten.  We starten met het creëren van een __project__.
+
+Bij de opstart van Visual Studio kunnen we meteen een project laten creëren.  Je maakt hiervoor gebruik van de __Create a new project__ tegel...
+
+image::Visual Studio Enterprise 2022 - Open recent.png[Visual Studio Enterprise 2022 - Open recent]
+
+Indien Visual Studio reeds is opgestart kan je in de menu kiezen voor *__menu:File[New > Project...]__*.
+
+image::Visual%20Studio%20-%20Nieuw%20project%20creeren.png[Visual Studio - Nieuw project creeren]
+
+Een volgend venster laat ons een project-template uitkiezen...
+
+image::Visual Studio Enterprise 2022 - Create a new project.png[Visual Studio Enterprise 2022 - Create a new project]
+
+In ons geval kiezen we voor *__Console App__*.   Bij iets oudere versies van __Visual Studio__ werd deze template nog __"Console Application"__ of __"Console App (.NET Core)"__ genoemd.  
+
+Let er ook op dat je voor de __C#__ template kiest.  Om dat te vereenvoudigen kan je eventueel de taal aanpassen door op de __Language__ uitvallijst te klikken en te kiezen voor __C#__.
+
+image::Visual Studio Enterprise 2022 - Recent project templates.png[Visual Studio Enterprise 2022 - Recent project templates]
+
+Aan de linker kant van dit venster worden de recent gebruikte project templates getoond.  De volgende keer dat je dergelijk project wil aanmaken, kan je daar dus heel eenvoudig de reeds gebruikte templates terugvinden.
+
+Eens de __C#__ __Console Application__ template is geselecteerd, klikken we op de knop *__Next__*.
+
+Een nieuw venster komt naar voor en vraagt ons naar de project en solution naam en plaats van opslag.
+
+image::Visual%20Studio%20-%20Nieuw%20Project%20creëren%20-%20Projectnaam%20en%20opslaglocatie.png[Visual Studio - Nieuw project creëren - Projectnaam en opslaglocatie]
+
+Je zou het de naam __HelloWorldApp__ kunnen geven.  Klik op de *__Next__* knop om verder te gaan.
+
+Indien er om een __Target Framework__ wordt gevraagd, kies je voor de hoogste versie.  Bijvoorbeeld __.NET 6.0 (Long term support)__.  Klik op de *__Create__* knop om verder te gaan.
+
+__Visual Studio__ gaat aan de slag en creëert alvast een broncode bestand (__Program.cs__), voegt deze toe aan het project, en opent de (__new style template__) broncode in de code editor...
+
+.Program.cs
+[source,csharp,linenums]
+----
+Console.WriteLine("Hello, World!");
+----
+
+Bij aan __.NET 6.0__ voorafgaande __target framework__ keuzes, of indien je bij het selecteren van het target framework __Do not use top-level statement__ aanvinkte, is dit de __old style template__ broncode.  Bijvoorbeeld iets als...
+
+.Program.cs
+[source,csharp,linenums]
+----
+namespace ConsoleApp1 {
+
+    internal class Program {
+    
+        static void Main(string[] args) {
+            Console.WriteLine("Hello, World!");
+        }
+	
+    }
+  
+}
+----
+
+In beide gevallen is de broncode eigenlijk identiek.  Maar bij een eenvoudige applicatie als deze (die de tekst __Hello World!__ zal weergeven op de console) mag de __old style__ setup worden vereenvoudigd in die __new style__ variant (zonder `using`, `namespace`, `class` of `void` taalelementen).  
+
+Later meer informatie over die taalelementen.
+
+=== Meerdere broncodebestanden in één project
+
+Je hoeft niet alle broncode in één broncode document onder te brengen.  Het is aan te raden *voor elk code onderdeel* (bijvoorbeeld voor elke klasse) *een eigen broncode document* te creëren.
+
+Kies in de menu voor *__menu:Project[Add New Item...]__*.
+
+image::Visual%20Studio%20-%20Broncode%20document%20toevoegen.png[Visual Studio - Broncode document toevoegen]
+
+Selecteer de *template __Class__* en voer een gepaste bestandsnaam in, bijvoorbeeld *__OtherProgram.cs__*.  Klik op de *__Add__* knop om verder te gaan...
+
+image::Visual%20Studio%20-%20Add%20New%20Item.png[Visual Studio - Add New Item]
+
+Meerdere broncodebestanden kan je samen op het scherm brengen...
+
+image::Visual Studio - Meerdere broncodebestanden.png[Visual Studio - Meerdere broncodebestanden]
+
+.Hoe breng ik meerdere broncodebestanden samen op het scherm?
+[TIP]
+===============================
+Maak gebruik van een __Vertical__ of __Horizontal Tab Groep__ in Visual Studio om meerdere broncodebestanden naast of onder elkaar te plaatsen.
+
+Rechterklik hiervoor op de naam van het tabblad en kies hiervoor voor opties als __New Horizontal__ of __Vertical Tab Group__.
+===============================
+
+=== Meerdere opstartobjecten in één project
+
+Indien je aan een project een tweede klasse met `Main` method zou toevoegen, kan je dit tweede programma niet zomaar opstarten.  Het project weet immers niet meer waar mee moet worden opgestart.  
+
+Een compilefout __'Program has more than one entry point defined.'__ treedt op.
+Logisch want er zijn immers meerdere __vertrek punten__ van waaruit het programma kan opstarten.
+
+[CAUTION]
+====
+Toegegeven, het is geen normale opzet.  Normaal gezien beschikt een __Console App__ slechts over één klasse met een `static void Main`.  Bij de uitvoer van een applicatie wordt steeds via één __entry point__ (__vertrek punt__) in het programma gestapt.
+
+Tijdens het ontwikkelen, bijvoorbeeld in een overgangsfase van één versie van een programma naar een andere, zou je toch tijdelijk over verschillende van die klassen (die elk een `Main` method hebben) kunnen beschikken.  
+
+Ook voor het snel schakkelen tussen verschillenden testjes of oefeningen zou je bijvoorbeeld in deze situatie kunnen belanden. 
+====
+
+Door in het project aan te geven met welke klasse (het *__startup object__*) wordt gestart, kan je een keuze maken en deze compilefout vermijden.
+
+****
+[.underline]#Laten we het eens uitproberen...#
+
+Voeg een `static void Main` toe aan het ___OtherProgram.cs__ document...
+
+.OtherProgram.cs
+[source,csharp,linenums]
+----
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace HelloWorldApp {
+    class OtherProgram {
+        static void Main() {  // <1>
+            Console.WriteLine("Other program...");
+        }
+    }
+}
+----
+<1> Deze `Main` method wordt toegevoegd.
+
+Ons __project__ beschikt nu over twee klassen met een hoofdmethod (`Main` method), er is immers ook nog het oorspronkelijk gecreëerde document __Program.cs__...
+
+.Program.cs
+[source,csharp,linenums]
+----
+using System;
+
+namespace HelloWorldApp {
+    class Program {
+        static void Main(string[] args) {  // <1>
+            Console.WriteLine("Hello World!");
+        }
+    }
+}
+----
+<1> Ook hier is er een `Main` method aanwezig.
+
+Bij het opstarten van de applicatie (starten van het project), bijvoorbeeld door in de menu te kiezen voor menu:Debug[Start Debugging], komt een compilefout boven...
+
+image:Compilefout - More than one entry point.png[Program has more than one entry point defined.]
+
+Om een keuze te maken, en ons project met `Program` of `OtherProgram` te laten starten, moeten we een projecteigenschap aanpassen.  Kies in de menu voor menu:Project[HelloWorldApp Properties...]
+
+Kiezen we bij de Application > General eigenschappen voor `HelloWorldApp.OtherProgram`, en starten we het project op (menu:Debug[Start Debugging]) dan krijgen we inderdaad de uitvoer van de `Main` method van die `class OtherProgram` te zien...
+
+[source,shell]
+----
+Other program...
+----
+****
+
+== Uitvoeren van app(licatie)s
+
+=== Opdrachtregel-omgeving
+
+__Console applicaties__ worden uitgevoer in een zogenaamde __opdrachtregel uitvoeringsomgeving__.  Visual Studio brengt deze automatisch naar voor bij het opstarten van een programma.  
+
+.Hoe start je de opdrachtregelomgeving op in Windows?
+[TIP]
+===============================
+Deze omgeving is ook apart op te starten door in __Windows__ onder __Start__ (of __Windows-toets__) de opdracht __cmd__ in de voeren en te enteren, laat je toe opdrachtregel-programma's (console applicaties) op te starten, en te gebruiken.
+
+image::Windows%20-%20Start%20-%20Cmd.png[Windows - Start - Cmd]
+===============================
+
+Opdrachtregel-programma's, ook __commandline__- of __commandprompt__-programma's genoemd, hebben eenvoudige user interfaces.
+Ze bestaan louter uit afgedrukte karakters.
+In dergelijk programma kan, user interface-matig, niet veel meer dan tekst afgedrukt of ingelezen.
+
+In volgende schermafbeelding zie je hoe we in de opdrachtregel het programma __ipconfig__ opstarten, dit kan door op de __prompt__ de naam van de applicatie in te voeren en op enter te drukken.
+Deze __ipconfig__ tool geeft ons simpelweg wat informatie over onze netwerkconfiguratie, meer specifiek: info over ip adressen.
+De eindgebruiker heeft hier geen verdere interactie met dit programma.
+
+image::Windows%20-%20Commandline%20-%20Ipconfig%20en%20Time.png[Windows - Commandline - Ipconfig en Time]
+
+Ook werd het __time__ opdrachtregel-programma opgestart, deze geeft de ingestelde systeemtijd weer en staat je zelfs toe als eindgebruiker een nieuwe tijd in te voeren.
+
+In deze schermafbeelding is de __prompt__ blauw gekleurd, deze geeft trouwens het pad van huidige folder weer.
+De ingevoerde opdracht, of dus naam van het programma, is oranje gekleurd.  Na de invoer van de applicatienaam op de prompt, wordt door de gebruiker op enter gedrukt.
+De cursor en de door de eindgebruiker ingetikte tekst is groen gekleurd.
+
+Nogmaals, je ziet dat opdrachtregel-programma's niet veel meer kunnen, user interface-matig, dan tekst afdrukken en inlezen.
+
+== Visual Studio downloaden en installeren
+
+=== Downloaden
+
+==== Versies 
+
+Als ontwikkelomgeving maken we gebruik van __Visual Studio__.  Er bestaan heel wat versies.  Bijvoorbeeld de Visual Studio __Enterprise__, __Professional__, __Community__, __for Mac__, __Code__, ... versies.
+
+We gaan ervan uit dat je beschikt over *__Visual Studio Enterprise 2022__*.  Schermafbeeldingen werden gemaakt op een versie waarop een *Engelstalige language pack* werd geïnstalleerd (dit is de default taal van de Visual Studio interface).
+
+Wie om één of ander reden van deze versie wil afwijken, zal met versies als de Professional, Community, for Mac, ... grotendeels kunnen volgen.  Toch gaan er ondermeer op het vlak van testfaciliteiten, code navigatie-, debug- en refactor-mogelijkheden afwijking zijn (ga je minder mogelijkheden terugvinden)...
+
+https://visualstudio.microsoft.com/vs/compare/[Compare Visual Studio Editions]
+
+==== Vereisten
+
+__Visual Studio Enterprise 2022__ kan je enkel installeren op een 64-bit Windows besturingssysteem (*__Windows 10__* __version 1909__ of hoger / __Window Server 2016__ of hoger)...
+
+https://docs.microsoft.com/en-us/visualstudio/releases/2022/system-requirements#visual-studio-2022-system-requirements[Visual Studio 2022 System Requirements]
+
+Ook wat betreft hardware zijn er enkel minimum vereisten, of aanbevolen minima.  Ga opnieuw kijken bij deze __System Requirements__ voor meer details.
+
+Houd er eventueel nog rekening mee dat bij het installeren van Visual Studio je als Windows gebruiker over administrator rechten moet beschikken.
+
+Ook indien je beschikt over een __Apple__ toestel ga je dus daar een __Windows__ op moeten installeren.  Bijvoorbeeld aan de hand van virtualisatiesoftware als __Parallels__, of via een dual boot (__Boot Camp__).
+
+==== Download
+
+Dowloaden kan je via onderstaande pagina...
+
+https://azureforeducation.microsoft.com/devtools[Azure Dev Tools for Teaching]
+
+Log daar aan met je @student.hogent.be e-mailadres (deze werd voor jouw reeds gekoppeld aan een Microsoft Account).
+
+Klik onder __Learning resources__ op __Software__ voor een overzicht.  Zoek vervolgens op de bekomen pagina naar __Visual Studio Enterprise 2022__.  Typ bijvoorbeeld in het __Search__ vak __2022__, en klik door op de resulterende __Visual Studio Enterprise Edition 2022__ link.
+
+Aan de rechterkant van de resulterende pagina (zie volgende schermafbeelding) verschijnt een paneel waar we zo meteen een registratie sleutel kunnen terugvinden, en waar we de __installer__ kunnen downloaden.
+
+image::Visual Studio Enterprise 2022 - Downloaden.png[Visual Studio Enterprise 2022 - Downloaden]
+
+Haal de __Product key__ (registratie sleutel) op door op de __View Key__ knop te klikken.  Neem nota van deze sleutel.
+(Je kan ook later op dit __Microsoft Azure__ platform herinloggen, om hier opnieuw deze sleutel terug te vinden.)
+
+Na het installeren van onze ontwikkelomgeving, gaan we deze ook registreren door deze sleutel in te voeren.  Zo blijft __Visual Studio__ ook na de vrije test periode (30 tot 90 dagen) beschikbaar.  Een stukje verderop wordt uitgelegd hoe je kan registreren.  Maar eerst moet je de ontwikkelomgeving uiteraard nog installeren.
+
+Ga verder met het downloaden van de software, klik hiervoor op de __Download__ knop.  Een kleine installer wordt zo gedownload (iets als __vs_Enterprise.exe__).  
+Deze zal bij het uitvoeren alle nodig setup bestanden (aantal en volume afhankelijk van de gekozen configuratie) downloaden en installeren.
+
+=== Installeren
+
+==== Privacy statement en license terms
+
+Bij het opstarten van de __installer__ krijg je een link naar de privacy verklaring te zien, en moet je de licentievoorwaarden aanvaarden.  
+
+https://privacy.microsoft.com/en-us/privacystatement[Microsoft Privacy Statement]
+
+https://visualstudio.microsoft.com/license-terms/vs2022-ga-proenterprise/[Microsoft Visual Studio Software License Terms]
+
+image::Visual%20Studio%20Installer%20-%20Visual%20Studio%20Privacy%20Statement%20en%20License%20Terms.png[Visual Studio Installer - Visual Studio Privacy Statement en License Terms]
+
+Als je verdergaat aanvaard je de licentievoorwaarden, lees deze dan ook.
+
+De installatie start vervolgens met het downloaden en installeren van de volledige __Visual Studio Installer__.
+
+image::Visual%20Studio%20Installer%20-%20Fetching%20your%20files.png[Visual Studio Installer - Fetching your files]
+
+image::Visual%20Studio%20Installer%20-%20Unpacking%20and%20installing.png[Visual Studio Installer - Unpacking and installing]
+
+==== Workloads
+
+Het is tijd om onze __workloads__ uit te kiezen.
+
+In ons geval selecteer je op zijn minst de workload __.NET desktop development__.
+
+image::Visual Studio Enterprise 2022 - Workloads.png[Visual Studio Enterprise 2022 - Workloads]
+
+Later kan je de geïnstalleerde workloads nog aanpassen, er toevoegen of verwijderen.  Je start hiervoor eenvoudigweg de __Visual Studio Installer__, bijvoorbeeld te vinden in je __Start__ menu van Windows.
+Ook via __Visual Studio__ zelf kan je met de __Tools > Get Tools and Features...__ optie de __Visual Studio Installer__ opstarten.
+
+De installer staat ook toe dat je een bepaalde __language pack__ activeert.  Hier wordt met de Engelstalige language pack gewerkt.  Dit is ook de default taalinstelling, je hoeft hiervoor zelf niets aan te klikken.
+
+De __Visual Studio Installer__ gaat verder met het downloaden en installeren van onze ontwikkelomgeving.  Eventueel wordt je de mogelijkheid geboden aan een bevraging deel te nemen...
+
+image::Visual Studio Enterprise 2022 - Installatie.png[Visual Studio Enterprise 2022 - Installatie]
+
+Voor je het weet is __Visual Studio__ volledig geïnstalleerd.  
+
+=== Eerste opstart of Sign in
+
+Indien gevraagd wordt opnieuw op te starten (zal niet altijd het geval zijn) dan ga je daar uiteraard op in.  
+
+Als dat niet het geval is start __Visual Studio__ automatisch op.  Je krijgt hierbij de mogelijkheid een nieuw project of een nieuwe solution aan te maken, of een bestaande te openen...
+
+image::Visual Studio Enterprise 2022 - Open recent.png[Visual Studio Enterprise 2022 - Open recent]
+
+Indien de __installer__ nog openstaat, mag je die uiteraard gewoon afsluiten.
+
+Mogelijks (indien je voorafgaand nog nooit eerder in een Visual Studio versie was aangelogd) krijg je nog een welkomscherm te zien.  Deze biedt je de optie in te loggen (knop __Sign In__) of dit inloggen over te slaan (link __Skip this for now.__)
+
+image::Visual%20Studio%20Installer%20-%20Sign%20in.png[Visual Studio Installer - Sign in]
+
+Inloggen is niet noodzakelijk, maar kan interessant zijn om de trial periode te verlengen, of bijvoorbeeld instellingen over verschillende Visual Studio installaties te synchroniseren, of automatisch in te loggen in Azure services.
+
+Inloggen kan met een Microsoft account of je school account.
+
+Momenteel biedt het inloggen nog weinig voordelen en mag je dit overslaan.
+
+=== Development settings
+
+Bij de __Development settings__ kan je kiezen voor __Visual C#__ en je favoriet kleuren thema (kies __Blue__ indien je graag overeenkomst wenst met dit leermateriaal).
+
+=== Registreren
+
+Je kan je versie van Visual Studio __activeren__ of __registeren__ door onder __Help__ te kiezen voor __Register Product__.  Zo blijft __Visual Studio__ ook na de vrije test periode (30 tot 90 dagen) beschikbaar.  
+
+image::Visual Studio Enterprise 2022 - Registreren 1.png[Visual Studio Enterprise 2022 - Help > Register]
+
+Maak gebruik van de __Unlock with a Product Key__ link en voer je persoonlijke __product key__ in.  Bij een succesvolle registratie komt daar nu __License Product key applied__ te staan.  
+
+Een verbinding met het internet is vereist om de registratie uit te voeren.  Na registratie is geen verdere internet verbinding vereist.
+
+=== Doelplatform
+
+__Visual Studio__ kan onder meer gebruikt worden voor het bouwen van applicaties voor typische PC (__Personal Computer__) platformen (met besturingssystemen als __Windows 11__, __10__, ...), mobiele platformen (zoals __Windows 10 Mobile__), server platformen (bijvoorbeeld __Windows Server 2016__, __2019__, __2022__) en overige platformen als embedded devices (ondermeer __Windows Embedded__ of __Windows 10 IoT__), de __HoloLens__ of __Xbox__.
+
+Vooral op het vlak van mobiele platformen, ondersteunt __Visual Studio__ ook (in beperkte mate) ontwikkeling voor niet-Windows besturingssystemen als __Android__ of __iOS__.
+
+__Visual Studio Tools for Unity__ en de __Unreal Engine__ kunnen gebruikt worden voor __Android__ game ontwikkeling.
+Tools als __Xamarin__ en __Apache Cordova__ voor niet-game __Android__ of __iOS__ apps.
+
+Dit cursusmateriaal legt geen focus op specifieke applicatie modellen of presentatie frameworks.  In hoofdzaak wordt de nadruk gelegd op de onderliggende basisconcepten die in elke type programmatie, voor éénder wel toestel of besturingssysteem, van toepassing zijn.
+
+Ter illustratie van de programmatorische basisconcepten wordt in hoofdzaak gebruik gemaakt van (cross-platform) __.NET (Core) Console Apps__ die kunnen worden uitgevoerd op __Windows__, __macOS__ en __Linux__.
+
+=== Tijdelijk alternatief
+
+Zolang je nog niet beschikt over de juist configuratie zou je, om wat code uit te testen, gebruik kunnen maken van een online compiler...
+
+https://dotnet.microsoft.com/platform/try-dotnet[Try .NET - Runnable .NET code on your site]
+
+https://dotnetfiddle.net/[.NET Fiddle]

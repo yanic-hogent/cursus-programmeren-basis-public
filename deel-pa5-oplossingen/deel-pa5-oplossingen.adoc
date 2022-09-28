@@ -1,0 +1,316 @@
+= Programmeren Basis - Deel PA5 - Oplossingen
+Yanic Inghelbrecht
+v2021.11.12.15.00
+:toc: preamble
+:toclevels: 4
+// geen auto section numbering voor oefeningen (handigere titels en toc)
+//:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+ 
+== Oplossing DPA5.metcollecties
+
+De klasse `Persoon` werd niet gewijzigd.
+
+.Persoon.cs
+[source,csharp,linenums]
+----
+public class Persoon {
+
+	public string Voornaam { get; set; }
+	public string Familienaam { get; set; }
+	public bool IsVrouw { get; set; }
+	public string Postcode { get; set; }
+	public string Gemeente { get; set; }
+	public int AantalKinderen { get; set; }
+
+	public Persoon(string voornaam, string familienaam, bool isVrouw, string postcode, string gemeente, int aantalKinderen) {
+		Voornaam = voornaam;
+		Familienaam = familienaam;
+		IsVrouw = isVrouw;
+		Postcode = postcode;
+		Gemeente = gemeente;
+		AantalKinderen = aantalKinderen;
+	}
+}
+----
+
+Er werden enkel wijzigingen doorgevoerd in de `Main` method.
+
+.Program.cs
+[source,csharp,linenums]
+----
+public class Program.cs {
+
+	static void ToonTitel(string titel) {
+		Console.WriteLine(titel);
+
+		string lijntje = new string('-', titel.Length);
+		Console.WriteLine(lijntje);
+	}
+
+	static string VraagStringAntwoord(string vraag) {
+		string result;
+		Console.Write($"{vraag} : ");
+		result = Console.ReadLine().Trim();
+		return result;
+	}
+
+	static string VraagNietLeegStringAntwoord(string vraag) {
+		string result;
+		do {
+			result = VraagStringAntwoord(vraag);
+		} while (result.Length == 0);
+		return result;
+	}
+
+	static string VraagKeuzeMetCase(string vraag, string[] keuzes, bool isCaseInsensitive) {
+		string result;
+		string[] keuzesOmTeChecken;
+
+		if (isCaseInsensitive) {
+			keuzesOmTeChecken = new string[keuzes.Length];
+			for (int i = 0; i < keuzes.Length; i++) {
+				keuzesOmTeChecken[i] = keuzes[i].ToLower();
+			}
+		} else {
+			keuzesOmTeChecken = keuzes;
+		}
+
+		int index;
+		do {
+			string keuzesTekst = string.Join('/', keuzes);
+			Console.Write($"{vraag} ({keuzesTekst}) : ");
+
+			string antwoord = Console.ReadLine().Trim();
+			if (isCaseInsensitive) {
+				antwoord = antwoord.ToLower();
+			}
+
+			index = Array.IndexOf(keuzesOmTeChecken, antwoord);
+		} while (index == -1);
+		result = keuzes[index];
+
+		return result;
+	}
+
+	static string VraagKeuze(string vraag, string[] keuzes) {
+		string result = VraagKeuzeMetCase(vraag, keuzes, true);
+		return result;
+	}
+
+	static int VraagIntAntwoord(string vraag, int min, int max) {
+		int result;
+		bool isCorrectAntwoord;
+		do {
+			Console.Write($"{vraag} : ");
+			string getalAlsTekst = Console.ReadLine().Trim();
+			if (getalAlsTekst.Length > 0) {
+				// gebruiker heeft iets ingetypt, is het een getal in [min, max]?
+				bool isGeldig = int.TryParse(getalAlsTekst, out result);
+				isCorrectAntwoord = isGeldig && (result >= min && result <= max);
+			} else {
+				// gebruiker heeft een lege string ingevoerd
+				isCorrectAntwoord = true;
+				result = int.MinValue; // we gebruiken deze waarde om aan te geven dat er niks werd ingevoerd
+			}
+		} while (!isCorrectAntwoord);
+
+		return result;
+	}
+
+	static int VraagNietLeegIntAntwoord(string vraag, int min, int max) {
+		int result;
+		do {
+			result = VraagIntAntwoord(vraag, min, max);
+		} while (result == int.MinValue);
+
+		return result;
+	}
+
+	static void ToonPersoonDetails(Persoon persoon) {
+		Console.WriteLine("voornaam    : " + persoon.Voornaam);
+		Console.WriteLine("familienaam : " + persoon.Familienaam);
+		Console.WriteLine("geslacht    : " + (persoon.IsVrouw ? "vrouw" : "man"));
+		Console.WriteLine("postcode    : " + persoon.Postcode);
+		Console.WriteLine("gemeente    : " + persoon.Gemeente);
+		Console.WriteLine("kinderen    : " + persoon.AantalKinderen);
+	}
+
+	public static void Main(string[] args) {
+		string[] geslachtKeuzes = { "m", "v" };
+		string[] geslachtLeegKeuzes = { "m", "v", "" };
+		string[] jaNeeKeuzes = { "j", "n" };
+
+		const int keuzeVoegToe = 1;
+		const int keuzeVerwijder = 2;
+		const int keuzeBewerk = 3;
+		const int keuzeToon = 4;
+		const int keuzeStop = 5;
+
+		List<Persoon> personen = new List<Persoon>();
+
+		personen.Add( new Persoon("Jan", "Janssens", false, "8501", "Heule", 2) );
+		personen.Add( new Persoon("Mieke", "Mickelsen", true, "9000", "Gent", 0) );
+
+		int keuze = 0;
+		do {
+			Console.Clear();
+			ToonTitel("Gekende personen");
+			for (int i = 0; i < personen.Count; i++) {
+				Persoon p = personen[i];
+				Console.WriteLine($"{i,2} {p.Voornaam} {p.Familienaam}, {p.Gemeente}");
+			}
+
+			Console.WriteLine();
+			ToonTitel("Hoofdmenu");
+			Console.WriteLine("1) een persoon toevoegen");
+			Console.WriteLine("2) een persoon verwijderen");
+			Console.WriteLine("3) een persoon aanpassen");
+			Console.WriteLine("4) alle details van een persoon zien");
+			Console.WriteLine("5) stoppen");
+			Console.WriteLine();
+
+			keuze = VraagNietLeegIntAntwoord("Wat wil u doen", keuzeVoegToe, keuzeStop);
+			Console.WriteLine();
+
+			if (keuze == keuzeVoegToe) {
+				ToonTitel("Persoon toevoegen");
+
+				string antwoord;
+
+				string voornaam = VraagNietLeegStringAntwoord("Voornaam");
+
+				string familienaam = VraagNietLeegStringAntwoord("Familienaam");
+
+				antwoord = VraagKeuze("Geslacht", geslachtKeuzes);
+				bool isVrouw  = (antwoord == "v");
+
+				string postcode = VraagNietLeegStringAntwoord("Postcode");
+
+				string gemeente = VraagNietLeegStringAntwoord("Gemeente");
+
+				int aantalKinderen = VraagNietLeegIntAntwoord("Aantal kinderen", 0, int.MaxValue);
+
+				Console.WriteLine();
+				ToonTitel("Ingevoerde gegevens");
+				Console.WriteLine("voornaam    : " + voornaam);
+				Console.WriteLine("familienaam : " + familienaam);
+				Console.WriteLine("geslacht    : " + (isVrouw ? "vrouw" : "man"));
+				Console.WriteLine("postcode    : " + postcode);
+				Console.WriteLine("gemeente    : " + gemeente);
+				Console.WriteLine("kinderen    : " + aantalKinderen);
+
+				antwoord = VraagKeuze("Wil u deze gegevens bewaren", jaNeeKeuzes);
+				if (antwoord == "j") {
+					Persoon nieuwePersoon = new Persoon(voornaam, familienaam, isVrouw, postcode, gemeente, aantalKinderen);
+					personen.Add(nieuwePersoon);
+				}
+
+			} else if (keuze == keuzeVerwijder) {
+				ToonTitel("Persoon verwijderen");
+
+				int index = VraagNietLeegIntAntwoord("Welke persoon wil u verwijderen", 0, personen.Count - 1);
+
+				Persoon persoon = personen[index];
+				ToonPersoonDetails(persoon);
+
+				string antwoord = VraagKeuze("Wil u de gegevens van deze persoon daadwerkelijk verwijderen", jaNeeKeuzes);
+				if (antwoord == "j") {
+					personen.RemoveAt(index);
+				}
+			} else if (keuze == keuzeBewerk) {
+				ToonTitel("Persoon bewerken");
+
+				int index = VraagNietLeegIntAntwoord("Welke persoon wil u bewerken", 0, personen.Count - 1);
+				Console.WriteLine("Indien u een gegeven ongewijzigd wil laten, druk dan gewoon op enter.");
+
+				string voornaam = VraagStringAntwoord("Voornaam");
+
+				string familienaam = VraagStringAntwoord("Familienaam");
+
+				string geslacht = VraagKeuze("Geslacht", geslachtLeegKeuzes);
+
+				string postcode = VraagStringAntwoord("Postcode");
+
+				string gemeente = VraagStringAntwoord("Gemeente");
+
+				int aantalKinderen = VraagIntAntwoord("Aantal kinderen", 0, int.MaxValue);
+
+				Console.WriteLine();
+				ToonTitel("Gewijzigde gegevens");
+				if (voornaam != "") {
+					Console.WriteLine("voornaam    : " + voornaam);
+				}
+				if (familienaam != "") {
+					Console.WriteLine("familienaam : " + familienaam);
+				}
+				if (geslacht != "") {
+					Console.WriteLine("geslacht    : " + (geslacht == "v" ? "vrouw" : "man"));
+				}
+				if (postcode != "") {
+					Console.WriteLine("postcode    : " + postcode);
+				}
+				if (gemeente != "") {
+					Console.WriteLine("gemeente    : " + gemeente);
+				}
+				if (aantalKinderen != int.MinValue) {
+					Console.WriteLine("kinderen    : " + aantalKinderen);
+				}
+
+				string antwoord = VraagKeuze("Wil u deze wijziging(en) bewaren", jaNeeKeuzes);
+				if (antwoord == "j") {
+					Persoon persoon = personen[index];
+					if (voornaam != "") {
+						persoon.Voornaam = voornaam;
+					}
+					if (familienaam != "") {
+						persoon.Familienaam = familienaam;
+					}
+					if (geslacht != "") {
+						persoon.IsVrouw = (geslacht == "v");
+					}
+					if (postcode != "") {
+						persoon.Postcode = postcode;
+					}
+					if (gemeente != "") {
+						persoon.Gemeente = gemeente;
+					}
+					if (aantalKinderen != int.MinValue) {
+						persoon.AantalKinderen = aantalKinderen;
+					}
+				}
+			} else if (keuze == keuzeToon) {
+				int index = VraagNietLeegIntAntwoord("Van welke persoon wil u de details zien", 0, personen.Count - 1);
+
+				Persoon persoon = personen[index];
+				ToonPersoonDetails(persoon);
+
+				Console.WriteLine();
+				Console.WriteLine("Druk op enter om terug te keren naar het hoofdmenu");
+				Console.ReadLine();
+			}
+
+		} while (keuze != keuzeStop);
+
+	}
+}
+----

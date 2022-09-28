@@ -1,0 +1,327 @@
+= Programmeren Basis - Deel PA1
+Yanic Inghelbrecht
+v2021.10.28.12.00
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+ 
+== Personen applicatie
+
+We bekijken een wat grotere applicatie waarmee je informatie over personen kunt bijhouden. Deze applicatie combineert verschillende mogelijkheden uit de vorige delen.
+
+In dit deel gaat het er in eerste instantie om, dat je het programma leert kennen : 
+
+* van buitenaf als eindgebruiker (door het programma uit te proberen)
+* van binnenin als programmeur (door inzichtsvragen te beantwoorden)
+
+Later in de cursus zullen we op deze applicatie een aantal technieken toepassen om grotere programma's beter te structureren.
+
+
+=== Startpunt
+
+Kopieer onderstaande code in een `Main` method, bv. in het bestand `Program.cs` dat we al van bij het begin van deze cursus gebruiken.
+
+[source,csharp,linenums]
+----
+const int maxPersonen = 20;
+
+const int keuzeVoegToe = 1;
+const int keuzeVerwijder = 2;
+const int keuzeBewerk = 3;
+const int keuzeToon = 4;
+const int keuzeStop = 5;
+
+string[] voornamen = new string[maxPersonen];
+string[] familienamen = new string[maxPersonen];
+bool[] isVrouwen = new bool[maxPersonen];
+string[] postcodes = new string[maxPersonen];
+string[] gemeenten = new string[maxPersonen];
+int[] aantalKinderen = new int[maxPersonen];
+int aantalPersonen = 0;
+
+voornamen[aantalPersonen] = "Jan";
+familienamen[aantalPersonen] = "Janssens";
+isVrouwen[aantalPersonen] = false;
+postcodes[aantalPersonen] = "8501";
+gemeenten[aantalPersonen] = "Heule";
+aantalKinderen[aantalPersonen] = 2;
+aantalPersonen++;
+
+voornamen[aantalPersonen] = "Mieke";
+familienamen[aantalPersonen] = "Mickelsen";
+isVrouwen[aantalPersonen] = true;
+postcodes[aantalPersonen] = "9000";
+gemeenten[aantalPersonen] = "Gent";
+aantalKinderen[aantalPersonen] = 0;
+aantalPersonen++;
+
+int keuze = 0;
+bool isCorrectAntwoord;
+do {
+	Console.Clear();
+	Console.WriteLine("Gekende personen");
+	Console.WriteLine("----------------");
+	for (int i = 0; i < aantalPersonen; i++) {
+		Console.WriteLine($"{i,2} {voornamen[i]} {familienamen[i]}, {gemeenten[i]}");
+	}
+
+	Console.WriteLine();
+	Console.WriteLine("Hoofdmenu");
+	Console.WriteLine("---------");
+	Console.WriteLine("1) een persoon toevoegen");
+	Console.WriteLine("2) een persoon verwijderen");
+	Console.WriteLine("3) een persoon aanpassen");
+	Console.WriteLine("4) alle details van een persoon zien");
+	Console.WriteLine("5) stoppen");
+	Console.WriteLine();
+
+	do {
+		Console.Write("Wat wil u doen : ");
+		string keuzeAlsTekst = Console.ReadLine().Trim();
+		bool isGeldig = int.TryParse(keuzeAlsTekst, out keuze);
+		isCorrectAntwoord = isGeldig && (keuze >= keuzeVoegToe && keuze <= keuzeStop);
+	} while (!isCorrectAntwoord);
+	Console.WriteLine();
+
+	if (keuze == keuzeVoegToe) {
+		Console.WriteLine("Persoon toevoegen");
+		Console.WriteLine("-----------------");
+
+		string antwoord;
+
+		do {
+			Console.Write("Voornaam : ");
+			antwoord = Console.ReadLine().Trim();
+		} while (antwoord == "");
+		voornamen[aantalPersonen] = antwoord;
+
+		do {
+			Console.Write("Familienaam : ");
+			antwoord = Console.ReadLine().Trim();
+		} while (antwoord == "");
+		familienamen[aantalPersonen] = antwoord;
+
+		do {
+			Console.Write("Geslacht (m/v) : ");
+			antwoord = Console.ReadLine().Trim().ToLower();
+		} while (antwoord != "m" && antwoord != "v");
+		isVrouwen[aantalPersonen] = (antwoord == "v");
+
+		do {
+			Console.Write("Postcode : ");
+			antwoord = Console.ReadLine().Trim();
+		} while (antwoord == "");
+		postcodes[aantalPersonen] = antwoord;
+
+		do {
+			Console.Write("Gemeente : ");
+			antwoord = Console.ReadLine().Trim();
+		} while (antwoord == "");
+		gemeenten[aantalPersonen] = antwoord;
+
+		int aantal;
+		do {
+			Console.Write("Aantal kinderen : ");
+			string aantalKinderenAlsTekst = Console.ReadLine().Trim();
+			bool isGetal = int.TryParse(aantalKinderenAlsTekst, out aantal);
+			isCorrectAntwoord = isGetal && (aantal >= 0);
+		} while (!isCorrectAntwoord);
+		aantalKinderen[aantalPersonen] = aantal;
+
+		Console.WriteLine();
+		Console.WriteLine("Ingevoerde gegevens");
+		Console.WriteLine("-------------------");
+		Console.WriteLine("voornaam    : " + voornamen[aantalPersonen]);
+		Console.WriteLine("familienaam : " + familienamen[aantalPersonen]);
+		Console.WriteLine("geslacht    : " + (isVrouwen[aantalPersonen] ? "vrouw" : "man"));
+		Console.WriteLine("postcode    : " + postcodes[aantalPersonen]);
+		Console.WriteLine("gemeente    : " + gemeenten[aantalPersonen]);
+		Console.WriteLine("kinderen    : " + aantalKinderen[aantalPersonen]);
+		do {
+			Console.Write("Wil u deze gegevens bewaren (j/n) : ");
+			antwoord = Console.ReadLine().Trim().ToLower();
+		} while (antwoord != "j" && antwoord != "n");
+		if (antwoord == "j") {
+			aantalPersonen++;
+		}
+
+	} else if (keuze == keuzeVerwijder) {
+		Console.WriteLine("Persoon verwijderen");
+		Console.WriteLine("-------------------");
+
+		int index;
+		do {
+			Console.Write("Welke persoon wil u verwijderen : ");
+			string indexAlsTekst = Console.ReadLine().Trim();
+			bool isGeldig = int.TryParse(indexAlsTekst, out index);
+			isCorrectAntwoord = isGeldig && (index >= 0 && index < aantalPersonen);
+		} while (!isCorrectAntwoord);
+
+		// toon detail van persoon op positie 'index'
+		Console.WriteLine("voornaam    : " + voornamen[index]);
+		Console.WriteLine("familienaam : " + familienamen[index]);
+		Console.WriteLine("geslacht    : " + (isVrouwen[index] ? "vrouw" : "man"));
+		Console.WriteLine("postcode    : " + postcodes[index]);
+		Console.WriteLine("gemeente    : " + gemeenten[index]);
+		Console.WriteLine("kinderen    : " + aantalKinderen[index]);
+
+		string antwoord;
+		do {
+			Console.Write("Wil u de gegevens van deze persoon daadwerkelijk verwijderen (j/n) : ");
+			antwoord = Console.ReadLine().Trim().ToLower();
+		} while (antwoord != "j" && antwoord != "n");
+		if (antwoord == "j") {
+			// verwijder de persoon op positie 'index'
+			for (int i = index; i < aantalPersonen - 1; i++) {
+				voornamen[i] = voornamen[i + 1];
+				familienamen[i] = familienamen[i + 1];
+				isVrouwen[i] = isVrouwen[i + 1];
+				postcodes[i] = postcodes[i + 1];
+				gemeenten[i] = gemeenten[i + 1];
+				aantalKinderen[i] = aantalKinderen[i + 1];
+			}
+			aantalPersonen--;
+		}
+	} else if (keuze == keuzeBewerk) {
+		Console.WriteLine("Persoon bewerken");
+		Console.WriteLine("----------------");
+
+		int index;
+		do {
+			Console.Write("Welke persoon wil u bewerken : ");
+			string indexAlsTekst = Console.ReadLine().Trim();
+			bool isGeldig = int.TryParse(indexAlsTekst, out index);
+			isCorrectAntwoord = isGeldig && (index >= 0 && index < aantalPersonen);
+		} while (!isCorrectAntwoord);
+
+		Console.WriteLine("Indien u een gegeven ongewijzigd wil laten, druk dan gewoon op enter.");
+
+		Console.Write("Voornaam : ");
+		string voornaam = Console.ReadLine().Trim();
+
+		Console.Write("Familienaam : ");
+		string familienaam = Console.ReadLine().Trim();
+
+		string geslacht;
+		do {
+			Console.Write("Geslacht (m/v) : ");
+			geslacht = Console.ReadLine().Trim().ToLower();
+		} while (geslacht != "" && geslacht != "m" && geslacht != "v");
+
+		Console.Write("Postcode : ");
+		string postcode = Console.ReadLine().Trim();
+
+		Console.Write("Gemeente : ");
+		string gemeente = Console.ReadLine().Trim();
+
+		int aantal = -1;
+		do {
+			Console.Write("Aantal kinderen : ");
+			string aantalKinderenAlsTekst = Console.ReadLine().Trim();
+			if (aantalKinderenAlsTekst == "") {
+				isCorrectAntwoord = true;
+			} else {
+				bool isGeldig = int.TryParse(aantalKinderenAlsTekst, out aantal);
+				isCorrectAntwoord = isGeldig && (aantal >= 0);
+			}
+		} while (!isCorrectAntwoord);
+
+		Console.WriteLine();
+		Console.WriteLine("Gewijzigde gegevens");
+		Console.WriteLine("-------------------");
+		if (voornaam != "") {
+			Console.WriteLine("voornaam    : " + voornaam);
+		}
+		if (familienaam != "") {
+			Console.WriteLine("familienaam : " + familienaam);
+		}
+		if (geslacht != "") {
+			Console.WriteLine("geslacht    : " + (geslacht == "v" ? "vrouw" : "man"));
+		}
+		if (postcode != "") {
+			Console.WriteLine("postcode    : " + postcode);
+		}
+		if (gemeente != "") {
+			Console.WriteLine("gemeente    : " + gemeente);
+		}
+		if (aantal != -1) {
+			Console.WriteLine("kinderen    : " + aantal);
+		}
+
+		string antwoord;
+		do {
+			Console.Write("Wil u deze wijziging(en) bewaren (j/n) : ");
+			antwoord = Console.ReadLine().Trim().ToLower();
+		} while (antwoord != "j" && antwoord != "n");
+		if (antwoord == "j") {
+			if (voornaam!="") {
+				voornamen[index] = voornaam;
+			}
+			if (familienaam != "") {
+				familienamen[index] = familienaam;
+			}
+			if (geslacht != "") {
+				isVrouwen[index] = (geslacht == "v");
+			}
+			if (postcode != "") {
+				postcodes[index] = postcode;
+			}
+			if (gemeente != "") {
+				gemeenten[index] = gemeente;
+			}
+			if (aantal != -1) {
+				aantalKinderen[index] = aantal;
+			}
+		}
+	} else if (keuze == keuzeToon) {
+		int index;
+		do {
+			Console.Write("Van welke persoon wil u de details zien : ");
+			string indexAlsTekst = Console.ReadLine().Trim();
+			bool isGeldig = int.TryParse(indexAlsTekst, out index);
+			isCorrectAntwoord = isGeldig && (index >= 0 && index < aantalPersonen);
+		} while (!isCorrectAntwoord);
+
+		// toon detail van persoon op positie 'index'
+		Console.WriteLine("voornaam    : " + voornamen[index]);
+		Console.WriteLine("familienaam : " + familienamen[index]);
+		Console.WriteLine("geslacht    : " + (isVrouwen[index] ? "vrouw" : "man"));
+		Console.WriteLine("postcode    : " + postcodes[index]);
+		Console.WriteLine("gemeente    : " + gemeenten[index]);
+		Console.WriteLine("kinderen    : " + aantalKinderen[index]);
+		Console.WriteLine();
+		Console.WriteLine("Druk op enter om terug te keren naar het hoofdmenu");
+		Console.ReadLine();
+	}
+
+} while (keuze != keuzeStop);
+
+----
+
+Start nu het programma en probeer alle mogelijkheden *grondig* uit, zodat je goed weet wat de mogelijkheden zijn. 
+
+Probeer hier en daar ook eens foutieve input te geven, zodat je ziet hoe het programma daarop reageert.
+
+Daarna neem je de code erbij in Visual Studio en kun je aan de oefeningen beginnen.
+

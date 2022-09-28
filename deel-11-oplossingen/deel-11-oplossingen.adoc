@@ -1,0 +1,622 @@
+= Programmeren Basis - Deel 11 - Oplossingen
+Yanic Inghelbrecht
+v2022.03.08.12.08
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+// geen auto section numbering voor oefeningen (handigere titels en toc)
+//:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+:deel-01-oplossingen: ../deel-01-oplossingen/deel-01-oplossingen.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+
+== Vooraf
+
+Voordien moest je de code van de oplossingen netjes tussen de accolades van de `Main` method plakken om een volledig en werkend programma te bekomen.
+
+In de oplossingen hieronder worden meerdere methods getoond, die allen samen met een `Main` method in de `class Program` moeten terechtkomen.
+
+De code in je Visual Studio project zal er dus zo moeten uitzien :
+
+[source, csharp, linenums]
+----
+using System;
+
+namespace D11 {
+    class D11letterscore { // <1>
+        static void Main(string[] args) {
+            // dus hier aanvullen
+        }
+    }
+}
+----
+<1> Hier kan je de naam van de oefening hanteren.
+
+== Methods
+
+
+=== Oplossing D11letterscore
+// Y10.07
+
+[source,csharp,linenums]
+----
+static void Main() {
+	Console.Write("Geef de score in % : ");
+	string scoreAlsTekst = Console.ReadLine();
+	int score = int.Parse(scoreAlsTekst);
+
+	string letter = GetLetterCodeForPercentage(score);
+
+	Console.WriteLine($"In Amerika is dat een \"{letter}\"");
+}
+
+static string GetLetterCodeForPercentage(int percentage) {
+	string letter;
+	if (percentage > 82) {
+		letter = "A";
+	} else if (percentage > 67) {
+		letter = "B";
+	} else if (percentage > 52) {
+		letter = "C";
+	} else if (percentage > 37) {
+		letter = "D";
+	} else if (percentage > 22) {
+		letter = "E";
+	} else {
+		letter = "F";
+	}
+	return letter;
+}
+----
+
+
+
+
+=== Oplossing D11kader
+// Y10.03
+
+In deze oplossing wordt gebruik gemaakt van de method `ConcatAantalKeer` uit een vorige oefening.
+
+[source,csharp,linenums]
+----
+static void Main() {
+	ToonInKader("Hallo");
+}
+
+static void ToonInKader(string tekst) {
+	int breedteKader = tekst.Length + 4;
+
+	Console.WriteLine(new string('*', breedteKader));
+	Console.WriteLine($"* {tekst} *");
+	Console.WriteLine(new string('*', breedteKader));
+}
+----	
+
+Je zou `ToonInKader` ook zodanig kunnen schrijven dat de string met sterretjes maar 1x wordt gemaakt :
+
+[source,csharp,linenums]
+----
+static void ToonInKader(string tekst) {
+	int breedteKader = tekst.Length + 4;
+
+	string lijn = new string('*', breedteKader);
+	Console.WriteLine(lijn);
+	Console.WriteLine($"* {tekst} *");
+	Console.WriteLine(lijn);
+}
+----
+
+
+=== Oplossing D11geenscheldwoordenarray
+// Y1.09 (prg2)
+
+[source,csharp,linenums]
+----
+static void Main() {
+	// definieer de 10 ergste scheldwoorden die er zijn
+	string[] scheldwoorden = { "een", "twee", "drie" }; // gecensureerd omwille van redenen
+
+	Console.Write("Geef een tekst : ");
+	string tekst = Console.ReadLine();
+
+	bool isOk = IsAanvaardbaar(tekst);
+
+	if (isOk) {
+		Console.WriteLine("Tekst is aanvaardbaar");
+	} else {
+		Console.WriteLine("Tekst is niet aanvaardbaar");
+	}
+}
+
+static bool IsAanvaardbaar(string tekst) {
+	// definieer de 10 ergste scheldwoorden die er zijn
+	string[] scheldwoorden = { "een", "twee", "drie" }; // gecensureerd omwille van redenen
+
+	string tekstKlein = tekst.ToLower();
+	
+	foreach (string scheldwoord in scheldwoorden) {
+		if (tekstKlein.Contains(scheldwoord)) {
+			return false;
+			// <1>
+		}
+	}
+	return true;
+}
+----
+<1> geen `break` meer nodig natuurlijk, want de `return` beëindigd de method oproep.
+
+Probeer eens de variabele `isOk` te hernoemen naar `IsAanvaardbaar` (dezelfde naam als de method dus). Kijk naar de foutmelding die je krijgt; namen van lokale variabelen en methods mogen blijkbaar niet overlappen!
+
+In theorie is dit geen probleem : variabelen beginnen steeds met een kleine letter en methodnamen beginnen steeds met een hoofdletter, dus een conflict is onmogelijk. Tot zover de theorie...
+
+
+=== Oplossing D11concataantalkeer
+// Y10.02
+
+[source,csharp,linenums]
+----
+static void Main() {
+	string output = ConcatAantalKeer("*-", 4);
+	Console.WriteLine( output );
+}
+
+static string ConcatAantalKeer(string tekst, int aantal) {
+	string result="";
+	for (int i=0;i<aantal;i++) {
+		result = result + tekst;
+	}
+	return result;
+}
+----
+
+
+=== Oplossing D11charcount
+// Y1.03 (prg2)
+
+[source,csharp,linenums]
+----
+static void Main() {
+	Console.Write("Geef een tekst : ");
+	string input = Console.ReadLine();
+
+	Console.Write("Geef een letter : ");
+	string letterAlsTekst = Console.ReadLine();
+	char letter = letterAlsTekst[0];
+
+	int aantal = GetCharCountIn(input, letter);
+
+	Console.WriteLine($"'{letter}' komt {aantal} keer voor");
+}
+
+static int GetCharCountIn(string tekst, char zoekKarakter) {
+	int aantal = 0;
+	string kleineTekst = tekst.ToLower();
+	char kleineZoekKarakter = Char.ToLower(zoekKarakter);
+	foreach (char c in kleineTekst) {
+		if (c == kleineZoekKarakter) {
+			aantal++;
+		}
+	}
+	return aantal;
+}
+----
+
+
+=== Oplossing D11reversetext
+// Y1.05 (prg2)
+
+[source,csharp,linenums]
+----
+static void Main() {
+	Console.WriteLine("Geef een tekst : ");
+	string tekst = Console.ReadLine();
+
+	Console.WriteLine( ReverseText(tekst) );
+}
+
+static string ReverseText(string tekst) {
+	string result = "";
+	foreach(char c in tekst) {
+		result = c + result;
+	}
+	return result;
+}
+----
+
+
+=== Oplossing D11palindroom
+// Y1.04 (prg2)
+
+De method `IsPalinDroom` overloopt de eerste helft van de tekst en vergelijkt elk karakter met een karakter op de gespiegelde positie uit de tweede helft. 
+
+[source,csharp,linenums]
+----
+static void Main() {
+	Console.Write("Geef een tekst : ");
+	string input = Console.ReadLine();
+
+	Console.WriteLine( IsPalindroom(input) );
+}
+
+static bool IsPalindroom(string tekst) {
+	if (tekst.Length==0) {
+		return false;
+	}
+	for (int i = 0;i<tekst.Length/2;i++) {           // <1>
+		if (tekst[i] != tekst[tekst.Length-1 -i]) {
+			return false;
+		}
+	}
+	return true;
+}
+----
+<1> zorg dat je goed doorhebt waarom we maar de helft van de tekst moeten checken!
+
+Een alternatieve oplossing die `ReverseText` uit een vorige oplossing gebruikt :
+
+[source,csharp,linenums]
+----
+static bool IsPalindroom(string tekst) {
+	string reverse = ReverseText(tekst);
+	if (tekst == reverse) { // <1>
+		return true;
+	} else {
+		return false;
+	}
+}
+----
+<1> het resultaat van de vergelijking is al een `bool` waarde, dus waarom nog die simpele if/else schrijven?
+
+We kunnen dit korter (en leesbaarder) noteren als :
+	
+[source,csharp,linenums]
+----
+static bool IsPalindroom(string tekst) {
+	string reverse = ReverseText(tekst);
+	return (tekst == reverse); // <1>
+}
+----
+<1> `bool` waarden, wedden dat je ze al niet meer zo vreemd vindt?
+
+
+=== Oplossing D11clamped
+// Y10.04
+
+[source,csharp,linenums]
+----
+static void Main() {
+	Console.WriteLine("Voorbeeld GetClamped met min=3 en max=6");
+	for (int i=1;i<=8;i++) {
+		int clamped = GetClamped(3, i, 6);
+		Console.WriteLine($"voor {i} geeft dit {clamped}");
+	}
+}
+
+static int GetClamped(int min, int getal, int max) {
+	if (getal < min) {
+		return min;
+	} else if (getal > max) {
+		return max;
+	} else {
+		return getal;
+	}
+}
+----
+
+Een alternatieve oplossing met slechts 1 return opdracht :
+
+[source,csharp,linenums]
+----
+static int GetClamped(int min, int getal, int max) {
+	int result;
+	if (getal < min) {
+		result=min;
+	} else if (getal > max) {
+		result=max;
+	} else {
+		result=getal;
+	}
+	return result;
+}
+----
+
+Een alternatieve oplossing zonder if/elseif/else structuur
+
+[source,csharp,linenums]
+----
+static int GetClamped(int min, int getal, int max) {
+	return Math.Max(Math.Min(max, getal), min);
+}
+----
+
+
+=== Oplossing D11minmax
+// Y10.01
+
+[source,csharp,linenums]
+----
+static void Main() {
+	int[] getallen = { -4, 7, 9, 34, 2, 56, 34, 78 };
+	Console.WriteLine( BepaalMinimum(getallen) );
+	Console.WriteLine( BepaalMaximum(getallen) );
+}	
+
+static int BepaalMinimum(int[] getallen) {
+	int min = Int32.MaxValue; // <1>
+
+	foreach (int getal in getallen) {
+		if (getal < min) {
+			min = getal;
+		}
+	}
+
+	return min;
+}
+
+static int BepaalMaximum(int[] getallen) {
+	int max = Int32.MinValue; // <1>
+
+	foreach (int getal in getallen) {
+		if (getal > max) {
+			max = getal;
+		}
+	}
+
+	return max;
+}
+----
+<1> Speciale waarden, we hebben deze truc al eens gebruikt in een vorig deel.
+
+Een oplossing zonder deze speciale waarden kan natuurlijk ook, bv. door `min` en `max` te initialiseren met het eerste element uit het array.
+
+
+=== Oplossing D11bevatwaarde
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
+
+
+=== Oplossing D11getalinput
+// Y10.08
+[source,csharp,linenums]
+----
+static void Main() {
+    int getal = GetGetal(1,100);
+    Console.WriteLine($"U koos voor {getal}");
+}
+
+static int GetGetal(int min, int max) {
+	bool gelukt;
+	int getal;
+
+	do {
+		Console.Write($"Geef een getal van {min} t.e.m. {max} : ");
+		string input = Console.ReadLine();
+		gelukt = int.TryParse(input, out getal) ;
+	} while (!gelukt || getal < min || getal > max);
+
+	return getal;
+}
+----
+
+
+=== Oplossing D11filter
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
+
+
+=== Oplossing D11expand
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
+
+
+=== Oplossing D11dierenwissenarray
+
+[source,csharp,linenums]
+----
+static void Main() {
+	string[] boerderijDieren = { "kip", "koe", "paard", "geit", "schaap" };
+
+	do {
+		toonDieren(boerderijDieren);
+		wisDierVanGebruiker(boerderijDieren);
+	} while (true);
+}
+
+static void toonDieren(string[] boerderijDieren) {
+	foreach (string dier in boerderijDieren) {
+		if (dier == null) {
+			// toon GEWIST als we een null tegenkomen
+			Console.Write("GEWIST ");
+		} else {
+			Console.Write(dier + " ");
+		}
+	}
+	Console.WriteLine();
+}
+
+static void wisDierVanGebruiker(string[] boerderijDieren) {
+	// vraag om een dier en bepaal de positie
+	Console.Write("Welk dier wil je verwijderen : ");
+	string tewissenDier = Console.ReadLine();
+	
+	int index = Array.IndexOf(boerderijDieren, tewissenDier);
+	
+	if (index != -1) {
+	    // wis dier
+		boerderijDieren[index] = null;
+	}
+}
+----
+
+
+=== Oplossing D11keuzeinput
+// Y10.06
+
+[source,csharp,linenums]
+----
+static void Main() {
+	string[] keuzes = {"Rood", "Groen", "Blauw"};
+	int index = GetKeuze(keuzes);
+	string kleur = keuzes[index];
+	Console.WriteLine($"U koos {kleur}");
+}
+
+static int GetKeuze(string[] keuzes) {
+	int result;
+
+	do {
+		string mogelijkeInputs = String.Join("|", keuzes);
+		Console.Write($"Geef uw keuze ({mogelijkeInputs}) : ");
+		string input = Console.ReadLine();
+		result = GetIndexOfCaseInsensitive(keuzes, input);
+	} while (result==-1);
+
+	return result;
+}
+
+static int GetIndexOfCaseInsensitive(string[] teksten, string zoekTekst) {
+	// we vergelijken de kleine-letter versies
+	string zoekTekstKlein = zoekTekst.ToLower();
+	
+	for (int i=0;i<teksten.Length;i++) {
+		string tekstKlein=teksten[i].ToLower();
+		if (tekstKlein == zoekTekstKlein) {
+		    // gevonden op positie 'i'
+		    return i;
+		}
+	}
+	// niet gevonden
+	return -1; 
+}
+----
+
+
+=== Oplossing D11reversearray
+// Y10.09
+
+[source,csharp,linenums]
+----
+static void Main() {
+	string[] test0 = { }; // duizend bommen en granaten Kuifje, een leeg array!
+	string[] test1 = { "een" };
+	string[] test2 = { "een", "twee" };
+	string[] test3 = { "een", "twee", "drie" };
+	string[] test4 = { "een", "twee", "drie", "vier" };
+	string[] test5 = { "een", "twee", "drie", "vier", "vijf"};
+	
+	string[] woorden = test0; // <1>
+	
+	Console.WriteLine( string.Join(", ", woorden) );
+	Reverse(woorden);
+	Console.WriteLine( string.Join(", ", woorden) );
+}
+
+static void Reverse(string[] array) {
+	// We draaien de volgorde om door de waarden op 2 posities te wisselen
+	// nml. steeds een lage positie en een hoge positie
+	//
+	// bv. voor array met lengte 5 (oneven lengte)
+	// - lage positie 0 wisselen met hoge positie 4
+	// - lage positie 1 wisselen met hoge positie 3
+	// - positie 2 staat netjes in het midden en moet niet gewisseld worden
+	//
+	// bv. voor array met lengte 4 (even lengte)
+	// - lage positie 0 wisselen met hoge positie 3
+	// - lage positie 1 wisselen met hoge positie 2
+
+	int indexLaatsteLagePositie = (array.Length/2)-1; // gehele deling dus klopt zowel voor oneven als even lengte
+
+	for (int i = 0 ; i <= indexLaatsteLagePositie ; i++) {
+		int lagePositie = i;
+		int hogePositie = (array.Length - 1) - i;
+		
+		// wissel de waarden op lage en hoge positie
+		string temp = array[lagePositie];   // <1>
+		array[lagePositie] = array[hogePositie];
+		array[hogePositie] = temp;
+	}
+}
+----
+<1> We gebruiken de `temp` variabele om tijdelijk een waarde te onthouden tijdens de wissel, net zoals we deden in link:{deel-01-oplossingen}#_oplossing_d01_waardesomwisselen[de oplossing van D01waardesomwisselen]! Je herinnert je het vast nog wel, link:https://www.youtube.com/watch?v=Gs069dndIYk["simpelere tijden...", window="_blank"]
+
+
+=== Oplossing D11slice
+
+[source,csharp,linenums]
+----
+static void Main() {
+	int[] getallen = { 0, 1, 2, 3, 4, 5, 6 }; // makkelijke getallen om te testen en te debuggen!
+
+	int[] testHead0 = Slice(getallen, 0, 0);
+	int[] testMiddle0 = Slice(getallen, 3, 0);
+	int[] testTail0 = Slice(getallen, getallen.Length - 1, 0);
+
+	int[] testHead1 = Slice(getallen, 0, 1);
+	int[] testMiddle1 = Slice(getallen, 3, 1);
+	int[] testTail1 = Slice(getallen, getallen.Length - 1, 1);
+
+	int[] testHead2 = Slice(getallen, 0, 2);
+	int[] testMiddle2 = Slice(getallen, 3, 2);
+	int[] testTail2 = Slice(getallen, getallen.Length - 2, 2);
+
+	int[] testComplete = Slice(getallen, 0, getallen.Length);
+
+	int[] array = testHead0; // <1>
+
+	string output = String.Join("-", array);
+	Console.WriteLine(output);
+}
+
+static int[] Slice(int[] values, int startIndex, int length) {
+	// maak een nieuwe int array van de juiste lengte
+	int[] result = new int[length];
+	
+	// vul het met de juiste waarden uit 'values'
+	for (int i=0;i<result.Length;i++) {
+		result[i] = values[startIndex + i];
+	}
+	
+	// retourneer het nieuwe array
+	return result;
+}
+----
+
+
+=== Oplossing D11slicevariant
+
+[source,csharp,linenums]
+----
+static public int[] Slice(int[] values, int startIndex, int endIndex) {
+	int aantalElementen = endIndex - startIndex;
+	int[] result = new int[aantalElementen];
+	for (int i=0;i<aantalElementen;i++) {
+		result[i] = values[startIndex + i];
+	}
+	
+	return result;
+}
+----
+
+
+=== Oplossing D11encrypted
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
+

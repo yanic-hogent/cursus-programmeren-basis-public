@@ -1,0 +1,434 @@
+= Programmeren Basis - Deel 08 - Oefeningen
+Frederiek De Wolf
+v2022.03.08.12.08
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+// geen auto section numbering voor oefeningen (handigere titels en toc)
+//:sectnums:  
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+  
+[NOTE]
+======================================
+Het is een aanrader bij elke oefeningenreeks te starten met eventuele *__inleidende oefeningen__*.
+Naast deze focus je vooral op de *__essentiële oefeningen__*.
+
+Heb je tijd over, dan helpen de *__aanvullende oefeningen__* je de stof nog beter in de vingers te krijgen.
+======================================
+
+== Essentiële oefeningen
+
+=== Array-variabelen en initializers 
+ 
+==== Oefening D08feestdagen
+// D0801
+// C25
+
+Vul de meegegeven code aan met de ontbrekende code.
+
+Je moet een array-variabele declareren, en de array initialiseren.
+
+Kies de lengte zo uit dat de array net voldoende elementen heeft om alle namen van feestdagen te kunnen bewaren.
+
+[source,csharp,linenums]
+----
+// <1>
+
+feestdagen[0] = "Nieuwjaar";
+feestdagen[1] = "Pasen";
+feestdagen[2] = "Paasmaandag";
+feestdagen[3] = "Dag vd Arbeid";
+feestdagen[4] = "OLH Hemelvaart";
+feestdagen[5] = "Pinksteren";
+feestdagen[6] = "Pinkstermaandag";
+feestdagen[7] = "Nationale Feestdag";
+feestdagen[8] = "OLV Hemelvaart";
+feestdagen[9] = "Allerheiligen";
+feestdagen[10] = "Wapenstilstand";
+feestdagen[11] = "Kerstdag";
+
+Console.WriteLine(feestdagen.Length);        
+----
+<1> Vul hier de code aan.
+
+Als je het programma vervolgens uitvoert, krijg je __12__ te zien.
+
+[source,shell]
+----
+12
+----
+
+Gebruik eventueel eens de debugger om na te gaan of de array correct is opgevuld.
+
+==== Oefening D08dagen
+// D0802
+// C30
+
+Vervang in onderstaande module regels __(1)__ tot en met __(8)__ door een declaratieregel met een array-initializer om meteen alle zeven initiële waardes voor de array-elementen op te geven.
+
+[source,csharp,linenums]
+----
+string[] dagen = new string[7]; // <1>
+dagen[0] = "ma";                // <2>
+dagen[1] = "di";                // <3>
+dagen[2] = "wo";                // <4>
+dagen[3] = "do";                // <5>
+dagen[4] = "vr";                // <6>
+dagen[5] = "za";                // <7>
+dagen[6] = "zo";                // <8>
+
+Console.Write($"({dagen.Length} elementen): ");
+for (int index = 0; index < dagen.Length; index++) {
+	Console.Write(dagen[index] + " ");
+}
+----
+
+Uitvoer...
+
+[source,shell]
+----
+(7 elementen): ma di wo do vr za zo
+----
+
+=== Aanspreken van array-elementen
+
+==== Oefening D08dagnummer
+// D0803
+// Y7.01
+
+Schrijf een programma dat de gebruiker om een dagnummer vraagt van 1 t.e.m. 7 en vervolgens toont welke weekdag daarmee overeenkomt (maandag is dag 1).
+
+Indien de gebruiker geen geldig dagnummer intypt toont het programma niks.
+
+Bijvoorbeeld...
+		
+[source,shell]
+----
+Geef een dagnummer : groen
+----	
+	
+Of...
+	
+[source,shell]
+----
+Geef een dagnummer : -3
+----
+
+Of...
+		
+[source,shell]
+----
+Geef een dagnummer : 9
+----
+
+Of...
+		
+[source,shell]
+----
+Geef een dagnummer : 6
+Dagnummer 6 is zaterdag.
+----
+	
+==== Oefening D08twister
+// D0804
+// Y7.10
+
+Schrijf een programma dat elke 5 seconden een willekeurige Twister opdracht genereert. 
+
+Gebruik hiervoor twee arrays...
+
+[source,csharp,linenums]
+----
+string[] kleuren = {"rood", "groen", "blauw", "geel"};
+string[] lichaamsdelen = {"linkerhand", "rechterhand", "linkervoet", "rechtervoet"};
+----
+
+Het programma selecteert een willekeurige kleur en lichaamsdeel en toont de combinatie.
+Bijvoorbeeld...
+
+	linkerhand op groen
+	rechervoet op geel
+	linkervoet op groen
+
+Het programma stopt nooit.
+	
+=== Itereren met for en foreach
+
+==== Oefening D08gemeenten
+// D0805
+// C27
+
+In volgende code is reeds logica opgenomen om een array `gemeenten` op te vullen met enkele gemeentenamen en hun bijhorende postcode.
+
+Vul de code nu zelf aan om met een `for` alle postcodes af te drukken.
+
+Het is de bedoeling om telkens het element twee posities verder te benaderen.
+
+[source,csharp,linenums]
+----
+string[] gemeenten = new string[8];
+
+gemeenten[0] = "Brussel";
+gemeenten[1] = "1000";
+gemeenten[2] = "Antwerpen";
+gemeenten[3] = "2000";
+gemeenten[4] = "Brugge";
+gemeenten[5] = "8000";
+gemeenten[6] = "Gent";
+gemeenten[7] = "9000";
+
+// <1>
+----
+<1> Vul hier aan.
+
+Uitvoer...
+
+[source,shell]
+----
+1000
+2000
+8000
+9000
+----
+
+==== Oefening D08dagentotaal
+// D0806
+// C28
+
+Vul onderstaand voorbeeld aan met de nodige code die elk element uit de `dagen` array gaat benaderen om de waarde van dit element bij het `totaal` op te tellen.
+
+[source,csharp,linenums]
+----
+int[] dagen = new int[12];
+
+dagen[0] = 31;
+dagen[1] = 28;
+dagen[2] = 31;
+dagen[3] = 30;
+dagen[4] = 31;
+dagen[5] = 30;
+dagen[6] = 31;
+dagen[7] = 31;
+dagen[8] = 30;
+dagen[9] = 31;
+dagen[10] = 30;
+dagen[11] = 31;
+
+int totaal = 0;
+// <1>
+
+Console.WriteLine("Totaal: " + totaal);
+----
+<1> Vul hier aan.
+
+Het afgedrukte totaal zou uiteraard __365__ moeten zijn.
+
+==== Oefening D08afdrukkenarray
+// D0807
+// Y7.02
+
+Begin met `int[] a = {5, 3, 1, -1, -3};` en schrijf een programma dat de waarden netjes achtereen op het scherm zet met komma's en spaties ertussen:
+
+	5, 3, 1, -1, -3
+	
+Merk op dat er na de laatste waarde (__-3__) geen komma is opgenomen.
+	
+Gebruik hiervoor een loop die zich aanpast aan de lengte van het array, dus als we array `a` zouden opvullen met meer of minder waarden, dan moet het programma nog steeds correct werken.
+
+==== Oefening D08netto
+// D0808
+
+Pas volgende voorbeeld aan om met een `foreach` (in plaats van de `for`) elke waarde uit de `kortingen` array van het `brutoBedrag` af te trekken.
+
+Controleer of je __920,6__ (__1000 - 10 - 50 - 19.4__) uitkomt.
+
+[source,csharp,linenums]
+----
+double[] kortingen = { 10d, 50d, 19.4d };
+double brutoBedrag = 1000d;
+
+double nettoBedrag = brutoBedrag;
+for (int index = 0; index < kortingen.Length; index++) {
+	nettoBedrag -= kortingen[index];
+}
+
+Console.Write("Netto bedrag: " + nettoBedrag);
+----
+
+=== Opvullen en samenstellen van arrays
+
+==== Oefening D08aansprekingen
+// D0809
+// C33
+
+Vul volgend voorbeeld aan met de nodige code om elke waarde in de `aansprekingen` array aan te passen, en hiervoor de tekst __"Dag "__ te plakken.
+
+Controleer of bij het afdrukken van de arrayinhoud nu effectief blijkt dat de waardes __"Dag Jan"__, __"Dag Piet"__ en __"Dag Pol"__ zijn geworden.
+
+[source,csharp,linenums]
+----
+string[] aansprekingen = { "Jan", "Piet", "Pol" };
+
+// <1>
+
+foreach (string aanspreking in aansprekingen) {
+	Console.WriteLine(aanspreking);
+}
+----
+<1> Hier aanvullen.
+
+==== Oefening D08arrayopvullen
+// D0810
+// C29
+
+Vul onderstaande code aan om de array `getallen` op te vullen met getallen __101__ tot en met __109__.
+
+[source,csharp,linenums]
+----
+int[] getallen = new int[9];
+
+// opvullen
+// <1>
+
+// afdrukken
+for (int index = 0; index < getallen.Length; index++) {
+	Console.Write(getallen[index] + " ");
+}
+----
+<1> Vul hier aan.
+
+Uitvoer...
+
+[source,shell]
+----
+101 102 103 104 105 106 107 108 109
+----
+
+==== Oefening D08omgekeerdevolgorde
+// D0811
+// Y7.06
+
+Schrijf een programma dat de gebruiker om 4 namen vraagt en deze vervolgens in de omgekeerde volgorde toont op de console. 
+
+Bijvoorbeeld bij invoer van __Jan__, __Piet__, __Joris__ en __Corneel__...
+
+[source,shell]
+----
+Geef naam 1 : Jan
+Geef naam 2 : Piet
+Geef naam 3 : Joris
+Geef naam 4 : Corneel
+Corneel
+Joris
+Piet
+Jan
+----
+
+Let op: het moet heel eenvoudig zijn om het programma aan te passen naar bijvoorbeeld 6 namen door slechts op __1 plaats__ in het programma een 4 naar een 6 aan te passen!
+		
+==== Oefening D08omgekeerdevolgordehoeveel
+// D0812
+// Y7.07
+
+Pas het vorige programma aan zodat in het begin aan de gebruiker gevraagd wordt hoeveel namen hij/zij wil ingeven.
+
+Bijvoorbeeld...
+
+[source,shell]
+----
+Hoeveel namen wil je ingeven : 2
+Geef naam 1 : Bassie
+Geef naam 2 : Adriaan
+Adriaan
+Bassie
+----
+		
+==== Oefening D08volgordeomwisselen
+
+Om bij de oefeningen D08omgekeerdevolgorde en D08omgekeerdevolgordehoeveel de waardes in omgekeerde volgorde af te drukken, heb je allicht de waardes in omgekeerde volgorde uitgelezen.  Dit startende op de positie van de laatste waarde, dan op de voorlaatste positie, en zo telkens één positie lager.
+
+Deze keer pas je de oplossing van D08omgekeerdevolgordehoeveel zo aan dat de inhoud van de array ook effectief wordt gespiegeld.  De laatste waarde wissel je om met de eerste waarde, de voorlaatste met de tweede, enzovoort.  Daarna kan je de inhoud van de gespiegelde array eenvoudigweg van voor naar achter afdrukken, om een identiek resultaat te bekomen.
+
+==== Oefening D08fibonacci
+// D0813
+// C34
+
+In volgend voorbeeld is een array `fibonacci` met __10__ elementen aangemaakt.
+
+De eerste twee elementen zijn alvast opgevuld met waarde __1__.
+
+De bedoeling is de array verder op te vullen met de getallen uit de __fibonacci reeks__.
+
+https://nl.wikipedia.org/wiki/Rij_van_Fibonacci[WIKIPEDIA: Rij van Fibonacci]
+
+Vul nu zelf de code aan om het __3de__ tot en met het __10de__ element gelijk te stellen aan de som van de vorige twee elementen.
+
+Zo moet bijvoorbeeld het derde element __2__ worden (__1 plus 1__), het vierde element __3__ worden (__1 plus 2__), enzovoort.
+
+[source,csharp,linenums]
+----
+int[] fibonacci = new int[10];
+
+fibonacci[0] = 1;
+fibonacci[1] = 1;
+
+// overige elementen gelijkstellen aan som van de vorige twee ...
+// <1>
+
+foreach (int getal in fibonacci) {
+	Console.Write(getal + " ");
+}
+----
+<1> Hier aanvullen.
+
+Uitvoer...
+
+[source,shell]
+----
+1 1 2 3 5 8 13 21 34 55
+----
+
+=== Zoeken in arrays
+
+==== Oefening D08positieszoeken
+// D0814
+// Y7.03
+
+Begin met `int[] a = {5, 3, 1, -1, -3, 3, 9, -4};` en schrijf een programma dat de gebruiker om een waarde vraagt en die waarde zoekt in het array. 
+
+Telkens de waarde gevonden wordt, toont het programma de array index (__positie__) waarop dit gebeurde.
+
+Bijvoorbeeld: indien de gebruiker __3__ intypt, toont het programma __1 5__. 
+
+Indien de waarde niet gevonden werd, toont het programma niets.
+
+==== Oefening D08positieszoekenmooier
+// D0815
+// Y7.04
+
+Breid de vorige oefening uit zodat het programma wat meer uitleg toont, bijvoorbeeld...
+
+	__waarde 3 gevonden op positie(s) 1 5__
+	
+Of...
+	
+	__waarde niet gevonden__

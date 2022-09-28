@@ -1,0 +1,824 @@
+= Programmeren Basis - Deel 11 - Oefeningen
+Yanic Inghelbrecht
+v2022.03.08.12.08
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+// geen auto section numbering voor oefeningen (handigere titels en toc)
+//:sectnums:  
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+:deel-04-oplossingen: ../deel-04-oplossingen/deel-04-oplossingen.adoc
+:deel-07-oplossingen: ../deel-07-oplossingen/deel-07-oplossingen.adoc
+:deel-09-oplossingen: ../deel-09-oplossingen/deel-09-oplossingen.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+   
+[NOTE]
+======================================
+Het is een aanrader bij elke oefeningenreeks te starten met eventuele *__inleidende oefeningen__*.
+Naast deze focus je vooral op de *__essentiële oefeningen__*.
+
+Heb je tijd over, dan helpen de *__aanvullende oefeningen__* je de stof nog beter in de vingers te krijgen.
+======================================
+
+== Essentiële oefeningen
+
+=== Methods
+
+
+==== Oefening D11letterscore
+// Y10.07
+
+Herschrijf link:{deel-04-oplossingen}#_oplossing_d04_score[de oplossing van D04score] zodat het programma een method `GetLetterCodeForPercentage` gebruikt. Deze method heeft 1 parameter (het percentage) en retourneert de corresponderende lettercode.
+
+De `Main` method ziet er dan zo uit :
+
+[source,csharp,linenums]
+----
+static void Main() {
+	Console.Write("Geef de score in % : ");
+	string scoreAlsTekst = Console.ReadLine();
+	int score = int.Parse(scoreAlsTekst);
+
+	string letter = GetLetterCodeForPercentage(score); // <1>
+
+	Console.WriteLine($"In Amerika is dat een \"{letter}\"");
+}
+----
+<1> De enige wijziging in de `Main` method.
+
+
+==== Oefening D11kader
+// Y10.03
+
+Schrijf een method `ToonInKader` met 1 string parameter. Deze method toont de meegegeven string tussen sterretjes op de console.
+
+Bijvoorbeeld, 
+[source,csharp,linenums]
+----
+static void Main() {
+    ToonInKader("Hallo");
+}
+----
+
+produceert de volgende output op de console :
+
+[source,shell]
+----
+*********
+* Hallo *
+*********
+----
+
+Je mag ervan uitgaan dat de tekst niet te lang is zodat het netjes (incl. sterretjes aan de zijkanten) in het console venster past.
+
+
+==== Oefening D11geenscheldwoordenarray
+// Y1.09 (prg2)
+
+Herschrijf link:{deel-09-oplossingen}#_oplossing_d09_geenscheldwoorden[de oplossing van D09geenscheldwoorden] zodat het programma een method `IsAanvaardbaar` gebruikt. Deze method heeft 1 parameter (de tekst) en retourneert een `true` of `false` waarde al naargelang of de tekst aanvaardbaar is of niet.
+
+De `Main` method ziet er dan zo uit :
+
+[source,csharp,linenums]
+----
+static void Main() {
+	Console.Write("Geef een tekst : ");
+	string tekst = Console.ReadLine();
+
+	bool isOk = IsAanvaardbaar(tekst); // <1>
+
+	if (isOk) {
+		Console.WriteLine("Tekst is aanvaardbaar");
+	} else {
+		Console.WriteLine("Tekst is niet aanvaardbaar");
+	}
+}
+----
+<1> de method oproep van `IsAanvaardbaar`.
+
+
+==== Oefening D11concataantalkeer
+// Y10.02
+
+Schrijf een method `ConcatAantalKeer` die 2 parameters heeft : een tekst en een aantal. Deze method produceert een string die de meegegeven tekst het gevraagde aantal keren bevat.
+
+Bijvoorbeeld, 
+[source,csharp,linenums]
+----
+static void Main() {
+	string output = ConcatAantalKeer("*-", 4);
+	Console.WriteLine( output );
+}
+----
+
+Produceert de volgende output op de console :
+
+[source,shell]
+----
+*-*-*-*-
+----
+
+
+==== Oefening D11charcount
+// Y1.03 (prg2)
+
+Herschrijf link:{deel-07-oplossingen}#_oplossing_d07_aantalkeere[de oplossing van D07aantalkeere] zodat het programma een method `GetCharCount` gebruikt. Deze method telt hoe vaak een bepaald karakter in een string voorkomt en retourneert dit aantal.
+
+Een klein fragment dat de werking van deze method toont :
+
+[source,csharp,linenums]
+----
+int aantal = GetCharCount("This is a local shop, for local people; there's nothing for you here..", 'o');
+----
+Na afloop zal `aantal` de waarde `8` bevatten.
+
+Er is natuurlijk link:https://www.youtube.com/watch?v=meF7NmfnXZ0[nog een verband tussen deze opgave en die van oefening D0707, window="_blank"].
+	
+
+
+
+
+==== Oefening D11reversetext
+// Y1.05 (prg2)
+
+Schrijf een programma dat de gebruiker om een tekst vraagt en deze achterstevoren op het scherm zet.
+
+Een mogelijke uitvoering waarbij de gebruiker `abcdefg` intypt.
+[source,shell]
+----
+Geef een tekst : abcdefg
+gfedcba
+----
+	
+Schrijf en gebruik hiervoor een method `ReverseText` die je een string parameter en een string return type geeft.
+
+Deze method bouwt een nieuwe string die de achterstevoren versie van de meegegeven tekst voorstelt. Deze nieuwe string is dan de return value van de method.
+
+
+==== Oefening D11palindroom
+// Y1.04 (prg2)
+
+Schrijf een programma dat de gebruiker om een woord vraagt en toont of dit woord een palindroom is. 
+
+Een palindroom is een tekst die identiek is als je hem achterstevoren zet. Om het wat interessanter te maken : een lege tekst is geen palindroom en elke tekst van lengte 1 is wel een palindroom.
+
+Enkele mogelijke uitvoeringen :
+
+[source,shell]
+----
+	Geef een woord : bal
+	False
+----
+[source,shell]
+----
+	Geef een woord : lol
+	True
+----
+[source,shell]
+----
+	Geef een woord : parterretrap
+	True
+----
+[source,shell]
+----
+	Geef een woord :
+	False
+----
+	
+Schrijf en gebruik hiervoor een method `IsPalindroom` met een string parameter en een bool return type. 
+
+Deze method bepaalt of de meegegeven string al dan niet een palindroom is. De return value bevat het resultaat van deze check (`true` betekent wel palindroom, `false` betekent geen palindroom).
+
+
+
+
+
+
+
+==== Oefening D11clamped
+// Y10.04
+
+Schrijf een method `GetClamped` met 3 int parameters : min, getal en max. Het nut van deze method is dat ze altijd een waarde teruggeeft die tussen min en max ligt (grenzen incl.).
+
+Deze method retourneert het volgende resultaat :
+
+* `getal` indien `min \<= getal && getal \<= max`
+** bv. `GetClamped(5, 8, 15)` produceert `8`
+* `min` indien `getal < min`
+** bv. `GetClamped(5, 2, 15)` produceert `5`
+* `max` indien `getal > max`
+** bv. `GetClamped(5, 33, 15)` produceert `15`
+
+Probeer je oplossing uit met deze `Main` method :
+[source,csharp,linenums]
+----
+static void Main() {
+	Console.WriteLine("Voorbeeld GetClamped met min=3 en max=6");
+	for (int i=1;i<=8;i++) {
+		int clamped = GetClamped(3, i, 6);
+		Console.WriteLine($"voor {i} geeft dit {clamped}");
+	}
+}
+----
+
+De output moet dan als volgt zijn :
+
+[source,shell]
+----
+Voorbeeld GetClamped met min=3 en max=6
+voor 1 geeft dit 3
+voor 2 geeft dit 3
+voor 3 geeft dit 3
+voor 4 geeft dit 4
+voor 5 geeft dit 5
+voor 6 geeft dit 6
+voor 7 geeft dit 6
+voor 8 geeft dit 6
+----
+
+Dit __clampen__ komt van pas als je een waarde tot een bepaald gebied wil beperken (bv. een spelerspositie binnen het speelveld houden), maar link:https://www.youtube.com/watch?v=9KL50dk9C54[ook in het dagelijks leven,window="_blank"] kun je er vanalles mee doen.
+
+
+==== Oefening D11minmax
+// Y10.01
+
+Schrijf een programma dat een array met getallen definieert en vervolgens toont wat het kleinste en het grootste getal is in dat array. 
+
+Schrijf hiervoor 2 methods, `BepaalMinimum` en `BepaalMaximum`, die beiden een array met getallen als parameter krijgen en resp het kleinste of grootste getal retourneren uit het meegegeven array.
+
+De `Main` method ziet er zo uit :
+
+[source,csharp,linenums]
+----
+static void Main() {
+	int[] getallen = { -4, 7, 9, 34, 2, 56, 34, 78 };
+	Console.WriteLine( BepaalMinimum(getallen) );
+	Console.WriteLine( BepaalMaximum(getallen) );
+}	
+----
+Je mag er in de beide methods van uitgaan dat het meegegeven array minstens 1 element bevat.
+
+
+==== Oefening D11bevatwaarde
+
+Schrijf een programma dat de gebruiker om 5 unieke gehele getallen vraagt. 
+
+* Het programma geeft met #1, ..., #5 aan om het hoeveelste getal het gaat
+* Alle ongeldige input en dubbels worden genegeerd.
+* Je mag ervan uitgaan dat de gebruiker geen `0` intypt. 
+
+Achteraf toont het programma de 5 unieke getallen van de gebruiker, gescheiden door een komma.
+
+Schrijf (en gebruik!) hierbij een bijkomende method `BevatWaarde` met 2 parameters : 
+
+. een array met getallen
+. een zoekgetal
+
+De `BevatWaarde` method retourneert een true/false waarde, naargelang het zoekgetal wel/niet voorkomt in het array met getallen.
+
+Plaats de unieke getallen van de gebruiker in een array en gebruik deze `BevatWaarde` method om dubbels te voorkomen.
+
+Een mogelijke uitvoering :
+
+[source,shell]
+----
+Geef getal #1 : 4
+Geef getal #2 : hallo <1>
+Geef getal #2 : -5
+Geef getal #3 :       <1>
+Geef getal #3 : 10
+Geef getal #4 : 4     <2>
+Geef getal #4 : -5    <2>
+Geef getal #4 : 99
+Geef getal #5 : 34
+De unieke getallen zijn 4, -5, 10, 99, 34 
+----
+<1> ongeldige input werd genegeerd, de nummering verandert niet.
+<2> dubbels werden genegeerd, de nummering verandert niet.
+
+[IMPORTANT]
+====
+Waarom zou er in deze opgave staan __"Je mag ervan uitgaan dat de gebruiker geen 0 intypt"__? 
+
+Probeer eens uit of je oplossing ook werkt als de gebruiker een `0` ingeeft. Zoniet, wat zou je kunnen veranderen om *alle* getallen toe te laten?
+====
+
+
+==== Oefening D11getalinput
+// Y10.08
+
+Schrijf een method `GetGetal` met 2 parameters `min` en `max` (gehele getallen) die een int waarde oplevert.
+
+Deze method vraagt de gebruiker om een getal tussen `min` en `max` (grenzen inclusief) en retourneert dit getal. 
+
+Indien we te maken hebben met een rebelse gebruiker die geen getal intypt of een getal buiten de grenzen opgeeft (het lef!), dan herhaalt de method stoïcijns de vraag. Dit gaat door totdat de wil van de gebruiker gebroken is en hij braafjes doet wat ons programma hem opdraagt.
+
+Gebruik deze `Main` method :
+[source,csharp,linenums]
+----
+static void Main() {
+    int getal = GetGetal(1,100);
+    Console.WriteLine($"U koos voor {getal}");
+}
+----
+Het programma zou dan de volgende output kunnen produceren :
+[source,shell]
+----
+Geef een getal van 1 t.e.m. 100 : hallo
+Geef een getal van 1 t.e.m. 100 : -1
+Geef een getal van 1 t.e.m. 100 : 0
+Geef een getal van 1 t.e.m. 100 : 103
+Geef een getal van 1 t.e.m. 100 : watch?v=4Lk2KHajp4Y
+Geef een getal van 1 t.e.m. 100 : Laat me toch gaan, rotprogramma!!
+Geef een getal van 1 t.e.m. 100 : aaaargh!
+Geef een getal van 1 t.e.m. 100 : 56
+U koos voor 56, plooier
+----
+	
+	
+==== Oefening D11filter
+
+Hieronder staat een code fragment dat je zult moeten vervolledigen.
+
+[source,csharp,linenums]
+----
+static void Main() {
+	// Het array met waarden dat we als voorbeeld gebruiken
+	int[] meetwaarden = { 3, 6, 10, -1, -23, 0, -6, 7, 10, -15, -4, 10 };
+
+	// Een variabele voor de return value van een Filter method oproep
+	int[] gefilterd;
+
+	// Filter alle meetwaarden die tussen -4 en 7 liggen (grenzen inclusief)
+	gefilterd = Filter(meetwaarden, -4, 7); // <1>
+	
+	Console.WriteLine(String.Join(",", gefilterd));
+	// De output is : 3,6,-1,0,7,-4
+	// Let erop dat de volgorde van de waarden in de output gelijk is aan
+	// hun onderlinge volgorde in het 'meetwaarden' array!
+
+	// Filter alle meetwaarden die tussen 10 en 10 liggen (grenzen inclusief)
+	// (anders gezegd, hou enkel de tienen over).
+	gefilterd = Filter(meetwaarden, 10, 10); // <1>
+	
+	Console.WriteLine(String.Join(",", gefilterd));
+	// De output is : 10,10,10
+	// Let erop dat de waarde 10 drie keer voorkomt omdat ze ook
+	// drie keer voorkwam in het 'meetwaarden' array.
+
+	// Filter alle meetwaarden die tussen 100 en 200 liggen (grenzen inclusief)
+	gefilterd = Filter(meetwaarden, 100, 200); // <1>
+	
+	Console.WriteLine(String.Join(",", gefilterd));
+	// De output is :
+	// Let erop dat de output een lege regel is, er zijn immers geen
+	// waarden tussen 100 en 200 in 'meetwaarden'. De lengte van
+	// array 'gefilterd' is nu dus gelijk aan 0!}
+}
+----
+<1> Op deze plaatsen wordt een `Filter()` method opgeroepen die je zelf zult moeten schrijven.
+
+De `Filter()` method ziet er als volgt uit :
+
+[source,csharp,linenums]
+----
+static int[] Filter(int[] getallen, int min, int max) {
+	// TODO : code aanvullen
+}
+----
+
+Deze method produceert een *nieuw* array en retourneert dit.
+
+* Dit nieuwe array moet alle waarden uit parameter `getallen` bevatten die tussen de grenzen `min` en `max` liggen (grenzen inclusief). 
+* De onderlinge volgorde van de waarden in dit nieuwe array is dezelfde als in het `getallen` array.
+* Indien er geen enkele waarde tussen de grenzen gevonden wordt, dan retourneert de method een leeg array (dit is een array van lengte zero).
+
+Vul de `Filter` method aan met de ontbrekende code, zodat het programma het beschreven gedrag vertoont. De code in de `Main` method dient om te testen, dus daar verander je niks aan.
+
+
+==== Oefening D11expand	
+
+Hieronder staat een code fragment met vier voorbeelden en telkens de verwachte output (in commentaar) :
+
+[source,csharp,linenums]
+----
+static void Main() {
+	// voorbeeld 1 : een reeks één keer dupliceren
+	int[] scores1 = { 2, 3, -5, 6 };
+	int[] expanded1 = Expand(1, scores1); // <1>
+	
+	Console.WriteLine(String.Join(",", expanded1));
+	// output is : 2,3,-5,6
+
+	// voorbeeld 2 : een reeks drie keer dupliceren
+	int[] scores2 = { 2, 3, -5, 6 };
+	int[] expanded2 = Expand(3, scores2); // <1>
+	
+	Console.WriteLine(String.Join(",", expanded2));
+	// de output is : 2,2,2,3,3,3,-5,-5,-5,6,6,6
+
+	// voorbeeld 3 : een reeks nul keer dupliceren
+	int[] scores3 = { };
+	int[] expanded3 = Expand(0, scores3); // <1>
+	
+	Console.WriteLine(String.Join(",", expanded3));
+	// output is : (een lege regel)
+	// (de Expand oproep retourneerde immers een lege array)
+
+	// voorbeeld 4 : een lege reeks 5 keer dupliceren
+	int[] scores4 = { };
+	int[] expanded4 = Expand(5, scores4); // <1>
+	
+	Console.WriteLine(String.Join(",", expanded4));
+	// output is : (een lege regel)
+	// (de Expand oproep retourneerde immers een lege array)
+}
+----
+<1> Op deze plaatsen wordt een `Expand()` method opgeroepen die je zelf zult moeten schrijven.
+
+De `Expand()` method ziet er als volgt uit :
+
+[source,csharp,linenums]
+----
+static int[] Expand(int aantal, int[] getallen) {
+	// TODO : code aanvullen
+}
+----
+
+Deze method produceert een *nieuw* array en retourneert dit.
+
+* Dit nieuwe array moet alle waarden uit parameter `getallen` bevatten, waarbij elke waarde een `aantal` keer gedupliceerd is.
+** Bijvoorbeeld, de reeks 2, 3, -5, 6 via Expand 3x dupliceren geeft :
+** 2, 2, 2, 3, 3, 3, -5, -5, -5, 6, 6, 6 (elk getal werd 3x herhaald)
+* Je mag er van uitgaan dat aantal niet negatief is.
+* De onderlinge volgorde van de waarden in dit nieuwe array is dezelfde als in het `getallen` array (maar ze kunnen dus meermaals voorkomen als `aantal > 1`).
+* Indien `aantal === 0`, wordt een leeg array teruggegeven (dit is een array van lengte zero)
+
+Vul de `Expand` method aan met de ontbrekende code, zodat het programma het beschreven gedrag vertoont. De code in de `Main` method dient om te testen, dus daar verander je niks aan.
+
+
+==== Oefening D11dierenwissenarray
+	
+We hernemen link:{deel-09-oplossingen}#_oplossing_d09_dierenwissen[de oplossing van D09dierenwissen] :
+
+[source,csharp,linenums]
+----
+string[] boerderijDieren = { "kip", "koe", "paard", "geit", "schaap" };
+
+do {
+	// toon alle dieren
+	foreach (string dier in boerderijDieren) {
+		if (dier === null) {
+			// toon GEWIST als we een null tegenkomen
+			Console.Write("GEWIST ");
+		} else {
+			Console.Write(dier + " ");
+		}
+	}
+	Console.WriteLine();
+
+	// vraag om een dier en bepaal de positie
+	Console.Write("Welk dier wil je verwijderen : ");
+	string tewissenDier = Console.ReadLine();
+	int index = Array.IndexOf(boerderijDieren, tewissenDier);
+
+	if (index != -1) {
+		// wis dier
+		boerderijDieren[index] = null;
+	}
+
+} while (true);
+----
+
+Voeg de nodige methods toe zodat de Main method er zo uitziet (en de oplossing nog steeds correct werkt natuurlijk) :
+
+[source,csharp,linenums]
+----
+static void Main() {
+	string[] boerderijDieren = { "kip", "koe", "paard", "geit", "schaap" };
+
+	do {
+		toonDieren(boerderijDieren);
+		wisDierVanGebruiker(boerderijDieren);
+	} while (true);
+}
+----
+
+
+==== Oefening D11keuzeinput
+// Y10.06
+
+Schrijf een method `GetKeuze` die een parameter heeft van type string[]. 
+
+De method vraagt de gebruiker een keuze te maken uit de meegegeven teksten.
+
+De method blijft proberen totdat de gebruiker een geldige keuze maakt (hoofdletterONgevoelig) en retourneert de index van deze keuze.
+
+Gebruik deze `Main` method :
+[source,csharp,linenums]
+----
+static void Main() {
+	string[] keuzes = {"Rood", "Groen", "Blauw"};
+	int index = GetKeuze(keuzes);
+	string kleur = keuzes[index];
+	Console.WriteLine($"U koos {kleur}");
+}
+----
+
+Een mogelijke uitvoering is :
+
+[source,shell]
+----
+Geef uw keuze (Rood|Groen|Blauw) : geel
+Geef uw keuze (Rood|Groen|Blauw) : 45
+Geef uw keuze (Rood|Groen|Blauw) : 
+Geef uw keuze (Rood|Groen|Blauw) : BLAUW
+U koos Blauw
+----
+
+
+==== Oefening D11reversearray
+// Y10.09
+
+Schrijf een method `Reverse` met een string[] parameter die de volgorde van de elementen in het array omkeert.
+
+De `Main` method ziet er zo uit :
+
+[source,csharp,linenums]
+----
+static void Main() {
+	string[] test0 = { }; // Duizend bommen en granaten Kuifje, een leeg array!
+	string[] test1 = { "een" };
+	string[] test2 = { "een", "twee" };
+	string[] test3 = { "een", "twee", "drie" };
+	string[] test4 = { "een", "twee", "drie", "vier" };
+	string[] test5 = { "een", "twee", "drie", "vier", "vijf"};
+	
+	string[] woorden = test0; // <1>
+	
+	Console.WriteLine( string.Join(", ", woorden) );
+	Reverse(woorden);
+	Console.WriteLine( string.Join(", ", woorden) );
+}
+----
+<1> probeer je oplossing uit met de 6 verschillende test arrays!
+
+Als we `test5` gebruiken ziet de output er zo uit :
+[source,shell,linenums]
+----
+een, twee, drie, vier, vijf
+vijf, vier, drie, twee, een
+----	
+
+
+==== Oefening D11slice
+
+Schrijf een method `Slice` met drie parameters :
+
+* `int[] values`
+* `int startIndex`
+* `int length`
+
+Deze method produceert een nieuw int array van lengte `length`, met daarin de waarden uit het originele `values` array vanaf positie `startIndex`.
+
+Je mag ervan uitgaan dat `values` niet `null` is en dat `startIndex` een geldige positie is in dat array. Let op, de `length` parameter mag `0` zijn.
+
+[source,csharp,linenums]
+----
+static void Main() {
+	int[] getallen = { 0, 1, 2, 3, 4, 5, 6 }; // makkelijke getallen om te testen en te debuggen!
+
+	int[] testHead0 = Slice(getallen, 0, 0);
+	int[] testMiddle0 = Slice(getallen, 3, 0);
+	int[] testTail0 = Slice(getallen, getallen.Length - 1, 0);
+
+	int[] testHead1 = Slice(getallen, 0, 1);
+	int[] testMiddle1 = Slice(getallen, 3, 1);
+	int[] testTail1 = Slice(getallen, getallen.Length - 1, 1);
+
+	int[] testHead2 = Slice(getallen, 0, 2);
+	int[] testMiddle2 = Slice(getallen, 3, 2);
+	int[] testTail2 = Slice(getallen, getallen.Length - 2, 2);
+
+	int[] testComplete = Slice(getallen, 0, getallen.Length);
+
+	int[] array = testHead0; // <1>
+
+	string output = String.Join("-", array);
+	Console.WriteLine(output);
+}
+----
+<1> Probeer dit met alle test arrays uit
+
+Het output gedeelte is eigenlijk tijdsverspilling als je alle test arrays wil checken. Zet gewoon een _breakpoint_ op regel <1> en kijk dan met de debugger naar de inhoud van de variabelen `testHead0` t.e.m. `testComplete` :
+image:slice-check-lokale-variabelen.png[slice check lokale variabelen]
+
+image:debug-smart.gif[debug smart]
+
+
+==== Oefening D11slicevariant
+
+Als variant op de vorige oefening, schrijf dit keer een `Slice()` method waarbij de laatste parameter de eind index is i.p.v. de lengte :
+[source,csharp,linenums]
+----
+static int[] Slice(int[] values, int startIndex, int endIndex) {
+    ...
+}
+----
+Deze `Slice` method produceert eveneens een nieuw array dat de getallen uit `values` bevat, maar dit keer vanaf positie `startIndex` tot aan positie `endIndex` (eindgrens niet inbegrepen).
+
+De code van deze `Slice` mag de volgende veronderstellingen maken :
+
+* parameter `values` is nooit `null`
+* `startIndex \<= endindex`
+* `startIndex` en `endIndex` zijn altijd geldige posities in array `values`
+
+Je kan je oplossing uitproberen met de volgende `Main` method :
+[source,csharp,linenums]
+----
+static void Main() {
+	int[] getallen = { 34, 56, -89, 67, 100, -4, 34 };
+
+	int[] kop = Slice(getallen, 0, 4);
+	Console.WriteLine(String.Join("-", kop)); // toont 34, 56, -89, 67
+
+	int[] staart = Slice(getallen, 3, 7);
+	Console.WriteLine(String.Join("-", staart));  // toont 67, 100, -4, 34
+
+	int[] midden = Slice(getallen, 2, 5);
+	Console.WriteLine(String.Join("-", midden)); // toont -89, 67, 100
+
+	int[] eentje = Slice(getallen, 2, 3);
+	Console.WriteLine(String.Join("-", eentje));  // toont -89
+
+	int[] leeg = Slice(getallen, 3, 3);
+	Console.WriteLine(String.Join("-", leeg));  // toont niks
+}
+----
+
+
+==== Oefening D11encrypted
+
+Hieronder staat een code fragment dat demonstreert hoe een `GetEncryptedCodeFor()` method werkt.
+
+De code bevat enkele voorbeelden en toont de verwachte output in commentaar :
+
+[source,csharp,linenums]
+----
+static void Main() {
+	const string codewiel = "0ab1cd2ef3gh4ij5kl6m n7op8qr9st.uv,wx!yz?";
+
+
+	string tekst = "a19z";
+	string code = GetEncryptedCodeFor(tekst, codewiel, 5);
+
+	Console.WriteLine("+ 5 " + tekst + "->" + code);
+	// de output is  : + 5 a19z->2fv1
+
+	tekst = "GROEN";
+	Console.WriteLine("+ 5 " + tekst + "->" + GetEncryptedCodeFor(tekst, codewiel, 5));
+	// de output is  : + 5 GROEN->GROEN
+	
+	tekst = "c# !";
+	Console.WriteLine("+10 " + tekst + "->" + GetEncryptedCodeFor(tekst, codewiel, 10));
+	// de output is  : +10 c# !->j#t2
+
+	Console.WriteLine();
+
+	tekst = "0allo?";
+	Console.WriteLine("+ 1 " + tekst + "->" + GetEncryptedCodeFor(tekst, codewiel, 1));
+	// de output is  : + 1 0allo?->ab66p0
+
+	Console.WriteLine("+40 " + tekst + "->" + GetEncryptedCodeFor(tekst, codewiel, 40));
+	// de output is  : +40 0allo?->?0kk7z
+
+	Console.WriteLine("+41 " + tekst + "->" + GetEncryptedCodeFor(tekst, codewiel, 41));
+	// de output is  : +41 0allo?->0allo?
+
+	Console.WriteLine("- 1 " + tekst + "->" + GetEncryptedCodeFor(tekst, codewiel, -1));
+	// de output is  : - 1 0allo?->?0kk7z
+
+	Console.WriteLine();
+
+	Console.WriteLine("-10 " + tekst + "->" + GetEncryptedCodeFor(tekst, codewiel, -10));
+	// de output is  : -10 0allo?->.ueeit
+
+	Console.WriteLine("-40 " + tekst + "->" + GetEncryptedCodeFor(tekst, codewiel, -40));
+	// de output is  : -40 0allo?->ab66p0
+
+	Console.WriteLine("-41 " + tekst + "->" + GetEncryptedCodeFor(tekst, codewiel, -41));
+	// de output is  : -41 0allo?->0allo?
+
+	Console.WriteLine("-82 " + tekst + "->" + GetEncryptedCodeFor(tekst, codewiel, -82));
+	// de output is  : -82 0allo?->0allo?
+}
+----
+
+Je ziet dat er bij elk voorbeeld, een method `GetEncryptedCodeFor()` wordt opgeroepen die een geheime tekst produceert als resultaat.
+
+Elke oproep krijgt een `tekst` mee die moet omgezet worden naar geheimschrift (op basis van een `codewiel` en een getal dat de verschuiving voorstelt).
+
+De `GetEncryptedCodeFor()` method ziet er als volgt uit :
+
+[source,csharp,linenums]
+----
+        static string GetEncryptedCodeFor(string tekst, string codewiel, int offset) {
+            // TODO : code aanvullen
+        }
+----
+
+Hiervoor wordt een codewiel en een verschuiving gebruikt (de _offset_), je kunt link:https://www.feestideevoorjou.nl/code-kraken[de werkwijze hier nalezen].
+
+In de Main method zie je hoe het codewiel wordt gedefinieerd, het is gewoon een `string` :
+
+[source,csharp,linenums]
+----
+string codewiel="0ab1cd2ef3gh4ij5kl6m n7op8qr9st.uv,wx!yz?"
+----
+
+Stel dat we werken met een offset van +5 (i.e. we schuiven 5 posities naar rechts). Zowel het codewiel als de offset zijn parameters van deze method!
+
+Om een tekst als `a19z` om te zetten naar een geheime code, wordt elk symbool van de originele `tekst` onderzocht :
+
+* indien het symbool *niet* voorkomt in het codewiel,
+** neem dan het symbool integraal over in het resultaat
+* indien het symbool *wel* in het codewiel voorkomt,
+** zoek op welke positie dit symbool in het codewiel staat
+** schuif vervolgens 'offset' posities op naar rechts (of naar links indien `offset` negatief is)
+** neem het symbool dat je op de nieuwe positie vindt en voeg dit toe aan het resultaat
+*** als je bij het schuiven over de rechterkant gaat, keer terug naar het begin en tel dan van daaruit verder naar rechts
+*** als je bij het schuiven over de linkerkant gaat, ga naar het einde en tel dan van daaruit verder naar links
+
+****
+[.underline]#Voorbeeld#
+
+Stel we willen de tekst `a19z` omzetten naar geheimschrift.
+
+In dit voorbeeld gebruiken we codewiel van hierboven :
+
+[source,csharp,linenums]
+----
+string codewiel="0ab1cd2ef3gh4ij5kl6m n7op8qr9st.uv,wx!yz?"
+----
+
+en we passen een verschuiving (= offset) van 5 toe.
+
+We bepalen de geheime tekst als volgt :
+
+* We beginnen met symbool `a`
+** we vinden dit op positie `1` in het codewiel en schuiven `5` posities op naar rechts, waar we het symbool `2` vinden
+** dus `a` wordt `2` in het resultaat
+* We doen verder met symbool `1`
+** we vinden dit op positie `8` in het codewiel, schuiven `5` posities op naar rechts en vinden daar een `f` symbool
+** dus `1` wordt `f` in het resultaat
+* We doen verder met symbool `9`
+** we vinden dit op positie `28` in het codewiel, schuiven `5` posities op naar rechts en vinden daar een `v` symbool
+** dus `9` wordt `v` in het resultaat
+* Tenslotte doen we symbool `z`
+** we vinden dit op positie `39` in het codewiel, schuiven 1 positie naar rechts en komen uit bij de rechterkant.
+** We springen terug naar de linkerkant en schuiven nog 4 posities door naar rechts, waar we een `1` symbool vinden
+** dus `z` wordt `1` in het resultaat
+
+Deze bekomen tekst `2fv1` is dan de return value van de method en dit stelt de geheime code voor van tekst `a19z`.
+****
+
+Denk eraan dat de offset ook negatief kan zijn, dan schuif je gewoon op naar links (en springt evt. terug naar rechts als je de linkerkant bereikt).
+
+Om het makkelijker te maken om je oplossing te checken a.d.h.v. de output, staat hieronder een voorbeeld uitvoering :
+
+[source, shell]
+----
++ 5 a19z->2fv1
++ 5 GROEN->GROEN
++10 c# !->j#t2
+
++ 1 0allo?->ab66p0
++40 0allo?->?0kk7z
++41 0allo?->0allo?
+- 1 0allo?->?0kk7z
+
+-10 0allo?->.ueeit
+-40 0allo?->ab66p0
+-41 0allo?->0allo?
+-82 0allo?->0allo?
+----
+
+

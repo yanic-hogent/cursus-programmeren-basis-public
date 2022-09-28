@@ -1,0 +1,247 @@
+= Programmeren Basis - Deel EBD - Oefeningen
+Yanic Inghelbrecht
+v2021.11.15.12.00
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+// geen auto section numbering voor oefeningen (handigere titels en toc)
+//:sectnums:  
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+ 
+ 
+== Inzicht in de werking verkrijgen
+
+Nu je goed weet wat het programma kan, is het tijd om de code erbij te pakken.
+
+Hieronder staan een aantal inzichtsvragen, je zult de code grondig moeten bestuderen om ze te kunnen beantwoorden.
+
+[TIP]
+====
+Het kan daarbij verhelderend zijn om sommige stukken van het programma met de debugger te doorlopen om te zien wat er precies gebeurt!
+====
+
+**Code lezen en begrijpen is een belangrijke _skill_ als programmeur. En ook hier geldt : van andermans antwoorden leer je niet veel, je moet het echt zelf doen.**
+
+
+== Oefening EBD.code
+
+De *bedoeling van deze oefening* is dat je zo goed mogelijk probeert te begrijpen wat er gebeurt in de broncode van dit spel. Er is dus niet echt een bijbehorende "oplossing".
+
+Dit zal niet gemakkelijk zijn, ondanks dat er allerlei goeie programmeerprincipes toegepast werden :
+
+* goeie namen gebruiken
+* commentaar toevoegen om de bestaansreden van variabelen of het doel van lastige stukjes code uit te leggen
+* lege regels gebruiken zodat er blokken ontstaan van opdrachten die samenhoren
+* const variabelen gebruiken i.p.v. magic values
+* liever een variabele teveel dan ene te weinig
+* niet teveel doen op 1 regel
+* etc.
+
+[IMPORTANT]
+====
+De belangrijke les van deze oefening is : de meeste programma's zijn zo complex dat de 'eenvoudige' goeie programmeerprincipes niet volstaan om een programma overzichtelijk en begrijpbaar te maken.
+====
+
+Terwijl je deze code bestudeert (ja, werkelijk bestudeert!), kun je jezelf de volgende vragen stellen en experimenten uitproberen :
+
+=== Toestand van de auto
+
+Er is een enumeratie die de drie mogelijke toestanden van de auto voorstelt 
+
+* Driving : we zijn aan het rijden
+* Coasting : we zijn aan het uitbollen (benzine op)
+* Stopped : we zijn stilgevallen (benzine op)
+
+Waar staat die enumeratie in de code?
+
+In welke variabele wordt de toestand van de auto bijgehouden?
+
+=== Enkele simpele vragen
+
+* Wat bepaalt dat de maximum snelheid `40` is?
+** Waar in de code wordt verhinderd dat de snelheid groter dan `40` wordt?
+* Wat bepaalt de lengte van de race (qua afstand)?
+** Waar in de code wordt gecheckt of de finish bereikt werd?
+* Wat bepaalt wanneer de benzine op is?
+** Waar in de code wordt gecheckt of er wel/niet nog benzine is?
+
+=== De bouw van het parcours
+
+Wijzig de code zodat het array `roadOffsets` enkel nullen bevat en het array `halfRoadWidths` in alle slots de waarde `basicRoadWidth / 2` heeft.
+
+* Start nu het spel, wat is er veranderd?
+* Wat is de theoretische snelste tijd om de finish te halen?
+
+Zorg ervoor dat `roadOffsets` nog steeds enkel nullen bevat, maar zorg ervoor dat `halfRoadWidths` weer de oorspronkelijke waarden bevat.
+
+* Start nu het spel, wat is er veranderd?
+
+Zorg er nu voor dat `halfRoadWidths` weer vol staat met de waarde `basicRoadWidth / 2` en dat `roadOffsets' terug de originele waarden bevat.
+
+* Start nu het spel, wat is er veranderd?
+
+Wat is je conclusie over de rol van de inhouden van `roadOffsets` en `halfRoadWidths`?
+
+Zet nu de originele code terug zodat deze beide arrays weer hun originele invulling krijgen.
+
+
+
+=== De game loop
+
+Er is een gameloop die meermaals per seconde wordt opgeroepen. Op het einde van een race staat links bovenaan een getal, bv. `29.3 fps`. Dit is het gemiddeld aantal keren dat de gameloop per seconde werd uitgevoerd op je computer. 
+
+Waar begint en eindigt de gameloop?
+
+=== Bijhouden hoe ver we op het parcours zitten
+
+Welke variabele houdt bij hoever we zitten op het parcours? 
+
+Waar wordt die variabele gewijzigd? 
+
+Waarom is het type van deze variabele `double` en niet `int`?
+
+Wat gebeurt er als je per iteratie van de gameloop, deze variabele verhoogt met `5` i.p.v. de berekening?
+
+Heeft de snelheidsindicatie dan nog enige betekenis?
+
+Zet nu de originele berekening terug, zodat er bij de verplaatsing weer rekening gehouden wordt met de verstreken tijd (sinds de vorige update) en de snelheid van de auto.
+
+=== Input afhandeling
+
+Waar in de code wordt de input afgehandeld?
+
+Welke variabele wijzigt als je op een links/rechts pijltjestoets duwt?
+
+Waarom krijgt deze variabele de initiële waarde `-roadOffsets[0]`? Maak daar eens `0` van om te zien wat het effect is.
+
+Zet nu de oorspronkelijke initiële waarde terug.
+
+Waarom wordt in elke iteratie van de game loop de keyboard buffer leeggemaakt? 
+
+Verwijder deze code eens en start het spel. Welk effect treedt erop als je stuurt?
+
+Zet nu de code terug zodat de keyboard buffer weer wordt geleegd.
+
+De framerate heeft gevolgen voor de sturing van de wagen :
+
+* Als speler X het spel aan de bedoelde `30 fps` kan spelen, wat is dan de maximale links/rechts verplaatsing die de wagen per seconde kan maken? (*)
+
+* Speler Y geraakt slechts aan `21 fps`, wat is dan de maximale links/rechts verplaatsing per seconde? (*)
+
+(*) als het besturingssysteem tenminste de toetsdrukken snel genoeg kan aanleveren (zie verderop).
+
+Is er voor deze beide spelers een verschil in moeilijkheid om de finish te bereiken? Waarom wel/niet?
+
+=== Het scherm tekenen
+
+Welke loop is verantwoordelijk voor het tekenen van het ganse scherm?
+
+Voor elke lijn op het scherm wordt er een stukje van het parcours getekend. 
+
+Er is een variabele die voor elke schermlijn, bijhoudt met welk deel van het parcours die lijn overeenkomt. Welke variabele is dit?
+
+Waar wordt voor een schermlijn de roadOffset en halfRoadWidth opgezocht? Waarom staan daar die modulo (%) bewerkingen?
+
+Waarom beweegt de ganse weg als we links/rechts sturen en niet het autootje?
+
+Waar wordt voor een schermlijn het gras aan de linker- en de rechterkant van de weg getekend?
+
+Start het spel en blijft meteen naar rechts sturen : het programma crasht na ongeveer een seconde. 
+
+Waarom crasht het programma als we te ver van de weg afwijken? Geef de exception, op welke regel het foutloopt en waarom het foutloopt? 
+
+Er zijn trouwens 2 manieren waarop het programma zo kan crashen, probeer het ook eens aan de andere kant van de weg ;)
+
+Waarom ziet het gras er aan de overkant van de weg altijd groener uit? M.a.w. waarom ziet het gras er links en rechts niet hetzelfde uit?
+
+Waarom moeten we de cursor niet telkens netjes op kolom `0` zetten (helemaal links) vooraleer we een schermlijn beginnen tekenen?
+
+Bekijk de regel 
+
+`road = new string(' ', spaces / 2) + roadMessage + new string(' ', spaces - spaces / 2);`
+
+Waarom moeten er `spaces-spaces/2` spaties aan de rechterkant naast de `roadMessage` staan en niet gewoon `spaces/2`?
+
+Iets gelijkaardigs gebeurt bij de berekening van variabele `spacesRightSide` verderop in de code bij 'Toon resultaat bericht' als de race is afgelopen.
+
+=== De snelheid van de wagen
+
+Waar in de code wordt bepaald of de auto op de weg staat?
+
+Waarom staat daar iets i.v.m. `Char.IsLetterOrDigit()` en kijken we niet gewoon of het een spatie is?
+
+Op welke 4 plaatsen wordt de snelheid van de wagen aangepast?
+
+Waarom werd het woord `didn't` als `didnt` geschreven bij één van de mogelijke waarden voor `roadMessage`?
+
+Waarom gaan we enkel over naar `Status.Stopped` als `speed < 1` *én* we tegelijkertijd aan het uitbollen zijn? Met de huidige instellingen rijdt de wagen zelfs op het gras nooit trager dan `6`, dus waarom niet enkel checken of `speed < 1`?
+
+=== Frames en wachttijd
+
+Om te zorgen dat het spel bij niemand sneller draait dan +- `30 fps` is er per iteratie van de game loop een wachttijd ingebouwd. Waarop is die wachttijd gebaseerd?
+
+Haal de `Sleep` opdracht eens weg en speel het spel. Stijgt je fps waarde? 
+
+Zet achteraf de `Sleep` opdracht terug.
+
+Speler Z heeft een hele rappe computer (eentje met een Ferrari sticker op!) en speelt het spel aan `30fps` met `Sleep` en aan `50 fps` zonder `Sleep`. Veronderstel dat deze speler in beide gevallen perfect speelt en nooit in het gras terechtkomt, zal zij dan bij `50 fps` sneller de finish bereiken? Waarom wel/niet?
+
+Dit spel is eigenlijk heel eenvoudig qua aantal bewerkingen per seconde. Elke laptop van de laatste 20 jaar zou dit spel aan `30 fps` moeten kunnen spelen. Het probleem zit hem bij de `Console.Write` commando's die nogal traag verlopen op sommige computers (ze waren ook nooit bedoeld om rap te zijn trouwens).
+
+Momenteel doen we ongeveer 3 `Write` opdrachten voor elk van de 25 schermlijnen, dus al 75 `Write` opdrachten per frame. Wat we zouden kunnen doen, is één lange string bouwen die de inhoud van alle schermlijnen bevat en die string in één keer op het scherm zetten met 1 enkel `Write`. Dat zal de framerate zeer waarschijnlijk optrekken naar de bedoelde `30fps`. Het nadeel is dat we dan de kleuren moeten opgeven, die kun je niet in die ene lange string verwerken (tenzij misschien via ansi color codes, maar da's een heel ander verhaal).
+
+De veranderingen die nodig om met 1 lange string te werken zijn relatief eenvoudig. Dus als je aan `21 fps` zit te spelen, zeker eens proberen!
+
+=== Keyboard Properties
+
+Waarom gebruiken we altijd `ReadKey(true)` en niet gewoon `ReadKey()`?
+
+Vermits we met `ReadKey` gebruiken, is het aantal toetsaanslagen afhankelijk van de toetsenbord instellingen van je besturingssysteem. Zoek eens de instellingen 'Repeat delay' en 'Repeat rate' van het besturingssysteem.
+
+Noteer de waarden (zodat je ze achteraf kan terugzetten!) en kijk wat het effect is van een lange 'Repeat delay' en een trage 'Repeat rate' op de sturing van de wagen.
+
+Dat is de reden waarom je geen `ReadKey` zou gebruiken in een echt spel. Echte games leunen voor de input dichter aan bij de hardware (simpelweg : is de toets ingedrukt of niet) en omzeilen de ganse verwerking en buffering van het console venster.
+
+
+=== Hallo, waar zijn de methods?!?
+
+Misschien doe ik wel nog eens een poging om een versie met methods te maken, maar dit was eigenlijk bedoeld om
+
+* jullie interesse te wekken door te tonen wat je al kan doen met de programmeertechnieken die we tot nu toe gezien hebben.
+* als demonstratie van hoe een ingewikkelder programma eruit ziet (maar dit is eerlijk gezegd nog maar klein bier hoor).
+* om jullie eens het gevoel te geven hoe het is, om een onbekend en ingewikkeld stuk code te leren begrijpen. In je latere programmeer carrière zul je dit heel vaak moeten doen.
+
+=== Leuke uitbreidingen
+
+Wie zich geroepen voelt om met de code aan de slag te gaan, een paar ideeën :
+
+* Extra bezine oppikken onderweg
+* Uitbollen na het bereiken van de finish i.p.v. meteen het spel te stoppen
+* Obstakels op de weg plaatsen die de wagen vertragen (dat rijmt!)
+
+=== Waarom heet dit spel 'Eastbound and down'?
+
+Tja, waarom is de wagen zwart en staat er een gouden adelaar op de motorkap?
+
+
+
+

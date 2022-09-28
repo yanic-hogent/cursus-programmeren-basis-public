@@ -1,0 +1,560 @@
+= Programmeren Basis - Deel 05 - Oefeningen
+Frederiek De Wolf
+v2022.02.23.15.06
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+// geen auto section numbering voor oefeningen (handigere titels en toc)
+//:sectnums:  
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+
+[NOTE]
+======================================
+Het is een aanrader bij elke oefeningenreeks te starten met eventuele *__inleidende oefeningen__*.
+Naast deze focus je vooral op de *__essentiële oefeningen__*.
+
+Heb je tijd over, dan helpen de *__aanvullende oefeningen__* je de stof nog beter in de vingers te krijgen.
+======================================
+
+== Essentiële oefeningen
+ 
+=== Oefening D05twintigtotenmettien
+
+//c09
+
+Breng aan de hand van een `do while` statement alle even getallen van __20__ tot en met __10__ op de console.  
+
+Met andere woorden...
+
+[source,shell]
+----
+20
+18
+16
+14
+12
+10
+----
+
+=== Oefening D05tafelsvan7
+
+//c10
+
+Maak een programma dat het resultaat van de vermenigvuldiging van het getal __7__ met de factoren __1__ tot en met __10__ gaat weergeven.
+
+Doe dit aan de hand van een herhalingsstructuur, werk met een `do while` statement.
+
+Zorg voor volgende uitvoer op de console...
+
+[source,shell]
+----
+1 x 7 = 7
+2 x 7 = 14
+3 x 7 = 21
+4 x 7 = 28
+5 x 7 = 35
+6 x 7 = 42
+7 x 7 = 49
+8 x 7 = 56
+9 x 7 = 63
+10 x 7 = 70
+----
+ 
+=== Oefening D05som
+
+//y5.01
+
+Schrijf een programma dat de gebruiker meermaals om een getal vraagt (totdat de gebruiker een __-1__ ingeeft).  Voor de eenvoud gaan we er hier van uit dat de gebruiker netjes getallen invoert, je hoeft hier niet op te controleren.
+
+Na afloop toont het programma wat de SOM is van alle getallen (de ingegeven __-1__ telt niet mee).
+
+=== Oefening D05gemiddelde
+
+//y5.02
+
+Schrijf een programma dat de gebruiker meermaals om een getal vraagt (totdat de gebruiker een __-1__ ingeeft).  Voor de eenvoud gaan we er hier van uit dat de gebruiker netjes getallen invoert, je hoeft hier niet op te controleren.
+
+Na afloop toont het programma wat het GEMIDDELDE is van alle getallen (de ingegeven __-1__ telt niet mee).
+
+=== Oefening D05grootstegetal
+
+//y5.03
+
+Schrijf een programma dat de gebruiker meermaals om een getal vraagt (totdat de gebruiker een __-1__ ingeeft).  Voor de eenvoud gaan we er hier van uit dat de gebruiker netjes getallen invoert, je hoeft hier niet op te controleren.
+
+Na afloop toont het programma wat het GROOTSTE GETAL was van alle getallen (de ingegeven __-1__ telt niet mee).
+
+=== Oefening D05grootstegetalenaantal
+
+//y5.04
+
+Schrijf een programma dat de gebruiker meermaals om een getal vraagt (totdat de gebruiker een __-1__ ingeeft).  Voor de eenvoud gaan we er hier van uit dat de gebruiker netjes getallen invoert, je hoeft hier niet op te controleren.
+
+Na afloop toont het programma wat het GROOTSTE GETAL was van alle getallen (de ingegeven __-1__ telt niet mee) en HOE VAAK dit grootste getal voorkwam.
+ 
+=== Oefening D05rechthoek
+
+Soms worden in herhalingen tellers bijgehouden om te registreren hoe vaak de herhaling werd uitgevoerd.
+
+Stel dat we een programma wensen die op basis van een bepaalde ingevoerde breedte, een lijn van die breedte bestaande uit sterren gaat afprinten...
+
+[source,csharp,linenums]
+----
+Console.Write("Breedte?: ");
+int breedte = int.Parse(Console.ReadLine());
+
+int breedteTeller = 0;
+do {
+	Console.Write("*");
+	breedteTeller = breedteTeller + 1;
+} while (breedteTeller < breedte);
+Console.WriteLine(); //beëindig de lijn met een newline-karakter
+----
+
+Voorbeeld programmaverloop bij invoer van __17__...
+
+[source,shell]
+----
+Breedte?: 17
+*****************
+----
+
+Dan komt een __"teller"__ als `breedteTeller` goed van pas.  Telkens na het drukken van een ster, wordt de teller verhoogd.
+Zolang de teller kleiner blijft dan de gewenste `breedte`, blijven we een ster afdrukken, en de teller verhogen.
+
+Maak een programma dat op basis van een bepaalde ingevoerde hoogte en breedte, een corresponderende rechthoek, bestaande uit sterren gaat afdrukken.
+
+Voorbeeld programmaverloop bij invoer van __3__ en __12__...
+
+[source,shell]
+----
+Hoogte?: 3
+Breedte?: 12
+************
+************
+************
+----
+
+[source,csharp,linenums]
+----
+Console.Write("Hoogte?: ");
+int hoogte = int.Parse(Console.ReadLine());
+
+Console.Write("Breedte?: ");
+int breedte = int.Parse(Console.ReadLine());
+
+// <1> 
+----
+<1> Hier aanvullen...
+ 
+=== Oefening D05vierkant
+
+Maak een programma dat op basis van een bepaalde ingevoerde zijde een corresponderende vierkant, bestaande uit sterren gaat afdrukken.
+
+Voorbeeld programmaverloop bij invoer van __4__...
+
+[source,shell]
+----
+Lengte zijde?: 4
+****
+****
+****
+****
+----
+
+[source,csharp,linenums]
+----
+Console.Write("Zijde?: ");
+int zijde = int.Parse(Console.ReadLine());
+
+// <1>
+----
+<1> Hier aanvullen...
+
+=== Oefening D05double
+
+//c21
+
+Maak een programma dat de gebruiker vraagt naar een `double` waarde.
+
+Voorbeeld programmaverloop bij invoer van __hallo__...
+
+[source,shell]
+----
+Voer een (double) getal in?: hallo
+Einde (wegens geen double getal).
+----
+
+Indien geen naar `double` omzetbare waarde wordt ingevoerd, eindigt het programma met een gepaste melding (__"Einde (wegens geen double getal)."__).
+
+Zolang de gebruiker echter correcte (naar) `double` (om te zetten) waardes invoert, wordt vriendelijk gevraagd opnieuw een getal in te voeren.
+
+Voorbeeld programmaverloop bij invoer van __4__; __6,2__; __8__; __31,5__ en __wereld__...
+
+[source,shell]
+----
+Voer een (double) getal in?: 4
+Dank je voor het (double) getal.
+Gelieve nog een (double) getal in te voeren?: 6,2
+Dank je voor het (double) getal.
+Gelieve nog een (double) getal in te voeren?: 8
+Dank je voor het (double) getal.
+Gelieve nog een (double) getal in te voeren?: 31,5
+Dank je voor het (double) getal.
+Gelieve nog een (double) getal in te voeren?: wereld
+Einde (wegens geen double getal).
+----
+
+=== Oefening D05reeks
+
+//c16
+
+Maak een programma dat de gebruiker vraagt naar twee getallen.
+
+Druk in het programma vervolgens de reeks begrensd door deze twee getallen af.
+De reeks bestaat uit oplopende (van klein naar groot) opeenvolgende gehele getallen.
+
+Voorbeeld programmaverloop bij invoer van __10__ en __20__...
+
+[source,shell]
+----
+Getal 1?: 10
+Getal 2?: 20
+Reeks van klein naar groot: 10 11 12 13 14 15 16 17 18 19 20
+----
+
+We weten niet welke van de twee ingevoerde getallen de kleinste of grootste zal zijn.
+
+Voorbeeld programmaverloop bij invoer van __13__ en __8__...
+
+[source,shell]
+----
+Getal 1?: 13
+Getal 2?: 8
+Reeks van klein naar groot: 8 9 10 11 12 13
+----
+
+[source,csharp,linenums]
+----
+Console.Write("Getal 1?: ");
+int getal1;
+bool invoerOk;
+do {
+    string getalAlsTekst = Console.ReadLine();
+    invoerOk = int.TryParse(getalAlsTekst, out getal1);
+    if (!invoerOk) {
+        Console.Write("Gelieve een geheel getal in te voeren, getal 1?: ");
+    }
+} while (!invoerOk);
+
+Console.Write("Getal 2?: ");
+int getal2;
+do {
+    string getalAlsTekst = Console.ReadLine();
+    invoerOk = int.TryParse(getalAlsTekst, out getal2);
+    if (!invoerOk) {
+        Console.Write("Gelieve een geheel getal in te voeren, getal 2?: ");
+    }
+} while (!invoerOk);
+
+Console.Write("Reeks van klein naar groot: ");
+
+// <1>
+----
+<1> Hier aanvullen...
+
+ 
+=== Oefening D05somofverschil
+
+//c22
+
+Maak een programma om een reeks van gehele getallen op te tellen of af te trekken.
+Het aantal getallen in de berekening is niet vastgelegd.
+
+We gaan er voor de eenvoud vanuit dat steeds netjes getallen en correct operatoren (__"+"__, __"-"__ of __"="__) worden ingevoerd.  Je hoeft hierop dus geen controle toe te passen.
+
+Zorg ervoor dat je oplossing exact verloopt zoals in volgende programmaverlopen wordt gedemonstreerd.  
+Na elk getal en elke symbool die door de gebruiker wordt ingevoerd, zal de gebruiker ook op de kbd:[Enter] toets drukken.
+
+Voorbeeld programmaverloop bij invoer van __1__ en __=__...
+
+[source,shell]
+----
+1
+=
+1
+----
+
+Voorbeeld programmaverloop bij invoer van __1__, __+__, __2__ en __=__...
+
+[source,shell]
+----
+1
++
+2
+=
+3
+----
+
+Voorbeeld programmaverloop bij invoer van __1__, __-__, __-5__ en __=__...
+
+[source,shell]
+----
+1
+-
+-5
+=
+6
+----
+
+Voorbeeld programmaverloop bij invoer van __1__, __+__, __2__, __-__, __3__, __-__, __4__, __+__, __5__ en __=__...
+
+[source,shell]
+----
+1
++
+2
+-
+3
+-
+4
++
+5
+=
+1
+----
+
+== Aanvullende oefeningen
+
+=== Oefening D05aantal
+
+//y5.05
+
+Schrijf een programma dat de gebruiker meermaals om een getal vraagt, totdat de gebruiker twee keer na elkaar hetzelfde getal ingeeft.  Voor de eenvoud gaan we er hier van uit dat de gebruiker netjes getallen invoert, je hoeft hier niet op te controleren.
+
+Na afloop toont het programma het aantal ingegeven getallen (de laatste twee getallen tellen niet mee).
+ 
+  
+=== Oefening D05driehoek
+
+Maak een programma dat op basis van een bepaalde ingevoerde lengte van een rechthoekszijde een corresponderende gelijkbenige driehoek, bestaande uit sterren gaat afdrukken.
+
+Voorbeeld programmaverloop bij invoer van __5__...
+
+[source,shell]
+----
+Rechthoekzijde?: 5
+*****
+****
+***
+**
+*
+----
+
+Vul hiervoor volgende code aan...
+
+[source,csharp,linenums]
+----
+Console.Write("Rechthoekzijde?: ");
+int zijde = int.Parse(Console.ReadLine());
+
+// <1>
+----
+<1> Hier aanvullen...
+
+
+=== Oefening D05playlist
+
+//c13
+
+Maak een programma dat berekent in hoeveel verschillende volgordes je een bepaald aantal (verschillende) liedjes in een playlist kan plaatsen.
+
+Elke volgorde noemt men ook wel de "permutatie".
+
+https://nl.wikipedia.org/wiki/Permutatie[WIKIPEDIA: Permutaties]
+
+Het aantal permutaties kan je berekenen aan de hand van een "faculteit".
+
+Bij een faculteitsberekening wordt elk geheel getal, startende bij 1, vermenigvuldigt met het volgend geheel getal, en dat tot aan het getal waarvan de faculteit wordt bepaald.
+
+Zo is de faculteit van __5__ gelijk aan __1 x 2 x 3 x 4 x 5__ of dus __120__.
+
+Voorbeeld programmaverloop bij invoer van __5__...
+
+[source,shell]
+----
+Aantal liedjes in de playlist?: 5
+5 liedjes kan je in 120 verschillende volgordes in een playlist plaatsen.
+----
+
+Voorbeeld programmaverloop bij invoer van __1__...
+
+[source,shell]
+----
+Aantal liedjes in de playlist?: 1
+1 liedje kan je in 1 verschillende volgorde in een playlist plaatsen.
+----
+
+Vul hiervoor volgende code aan...
+
+[source,csharp,linenums]
+----
+Console.Write("Aantal liedjes in de playlist?: ");
+string aantalLiedjesAlsTekst = Console.ReadLine();
+
+int aantalLiedjes;
+bool invoerOk = int.TryParse(aantalLiedjesAlsTekst, out aantalLiedjes);
+
+if (invoerOk &&	aantalLiedjes >= 1) {
+	int faculteit;
+	
+	// <1>
+
+	string meervoud = "";
+	if (faculteit > 1) { 
+	    meervoud = "s"; 
+	}
+	Console.Write($"{aantalLiedjes} liedje{meervoud} kan je in {faculteit} verschillende volgorde{meervoud} in een playlist plaatsen.");
+}
+----
+<1> Hier aanvullen...
+ 
+=== Oefening D05wildebertram
+
+//c14
+
+Op onze boerderij kweken we __wilde bertram__ (__achillea ptarmica__) om niespoeder uit te produceren.
+
+https://nl.wikipedia.org/wiki/Wilde_bertram[WIKIPEDIA: Wilde Bertram]
+
+Bij deze bloem zal een nieuwe (bron)aftakking twee maanden moeten groeien voor het sterk genoeg is zelf aftakkingen te creëren.   Daarna zal deze (bron)aftakking elke maand verder aftakken.
+
+https://www.geestkunde.net/images/scientias2.jpg[Vertakkingen aan de hand van de Fibonacci Reeks]
+
+Het aantal knooppunten kan je bijgevolg op een wiskundige rij plaatsen als:
+
+	0  1  1  2  3  5  8  13  21  34  55  89  ...
+
+Deze reeks getallen wordt ook wel de __"fibonacci rij"__ genoemd, vernoemd naar de bijnaam van de wiskundige die de reeks beschreef.  In de fibonacci reeks is het eerste getal __0__, het tweede getal __1__ en elke volgend getal de __som__ van de voorgaande twee.
+
+https://nl.wikipedia.org/wiki/Rij_van_Fibonacci[WIKIPEDIA: Rij van Fibonacci]
+
+Maak een programma dat vraagt naar een aantal maanden.
+
+Bereken in het programma hoeveel knooppunten onze bertram plantjes zullen vertonen na dat aantal maanden groei.
+
+- Na 1 maand wensen we als output 1.
+- Na 2 maand wensen we als output 1.
+- Na 3 maand wensen we als output 2.
+- Na 4 maand wensen we als output 3.
+- Na 5 maand wensen we als output 5.
+- Na 6 maand wensen we als output 8.
+- Na 7 maand wensen we als output 13.
+- Na 8 maand wensen we als output 21.
+- Na 9 maand wensen we als output 34.
+- ...
+
+Voorbeeld programmaverloop bij invoer van __8__...
+
+[source,shell]
+----
+Aantal maanden groei?: 8
+Aantal knooppunten: 21
+----
+
+Vul hiervoor volgende code aan...
+
+[source,csharp,linenums]
+----
+int maanden;
+Console.Write("Aantal maanden groei?: ");
+bool invoerOk = int.TryParse(Console.ReadLine(), out maanden);
+
+if (invoerOk &&	maanden >= 1) {
+	int fibo1 = 0;
+	int fibo2 = 1;
+	int fibo3 = fibo1 + fibo2;
+
+	// <1>
+
+	Console.Write($"Aantal knooppunten: {fibo3}");
+}
+----
+<1> Hier aanvullen
+
+=== Oefening D05somvanafstop
+
+Maak een programma dat de gebruiker toelaat meerdere gehele getallen in te voeren, en dit tot de gebruiker __STOP__ invoert.
+Je weet met andere woorden niet hoeveel getallen de gebruiker zal invoeren.
+
+Na de invoer van "STOP" zal het programma de som van de ingevoerde gehele getallen afdrukken.
+
+Voorbeeld programmaverloop bij invoer van __9__, __8__, __7__ en __STOP__...
+
+[source,shell]
+----
+9
++
+8
++
+7
++
+STOP
+=
+24
+----
+
+Na elke invoer drukt de gebruiker op de kbd:[Enter] toets.
+Bij een correcte invoer (van een getal) drukt het programma hierna op de volgende regel een __"+"__ teken af.  Bij de invoer van __STOP__ volgt er een __"="__ symbool en de som.
+
+Bij een niet naar `int` om te zetten ingevoerde tekst zal het programma een foutmelding opleveren.
+Waarna de gebruiker opnieuw de mogelijkheid krijgt een waarde in te voeren.
+
+Voorbeeld programmaverloop bij invoer van __9__, __hallo__, __wereld__, __8__ en __  stoP__...
+
+[source,shell]
+----
+9
++
+hallo
+Gelieve een geheel getal in te voeren (of STOP om te stoppen).
+wereld
+Gelieve een geheel getal in te voeren (of STOP om te stoppen).
+8
++
+  stoP 
+=
+17
+----
+
+Merk op dat ook bij invoer van een tekst als __"  stoP"__ het programma kan beëindigd worden.  Negereer met andere woorden hoofdlettergebruik, of eventuele spaties voorafgaande aan of volgende op dit "stop" woord.
+
+Ook indien meteen "STOP" wordt ingevoerd moet het programma een acceptabel resultaat opleveren.
+
+Voorbeeld programmaverloop bij invoer van __STOP__...
+
+[source,shell]
+----
+STOP
+=
+0
+----

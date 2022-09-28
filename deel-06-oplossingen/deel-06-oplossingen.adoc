@@ -1,0 +1,497 @@
+= Programmeren Basis - Deel 06 - Oplossingen
+Yanic Inghelbrecht
+v2022.02.23.15.06
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+// geen auto section numbering voor oefeningen (handigere titels en toc)
+//:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+ 
+ 
+== De uitvoering van het programma pauzeren
+
+
+=== Oplossing D06twister
+// Y7.10
+[source,csharp,linenums]
+----
+Console.WriteLine("Het spel start over 3 seconden...");
+System.Threading.Thread.Sleep(3000);
+
+Random rnd = new Random();
+while (true) {
+	// Kies een willekeurig lichaamsdeel
+	int lichaamsdeelNummer = rnd.Next(0, 4);
+	string lichaamsdeel;
+	if (lichaamsdeelNummer == 0) {
+		lichaamsdeel = "linkerhand";
+	} else if (lichaamsdeelNummer == 1) {
+		lichaamsdeel = "rechterhand";
+	} else if (lichaamsdeelNummer == 2) {
+		lichaamsdeel = "linkervoet";
+	} else {
+		lichaamsdeel = "rechtervoet";
+	}
+
+	// kies een willekeurige kleur
+	int kleurNummer = rnd.Next(0, 4);
+	string kleur;
+	if (kleurNummer == 0) {
+		kleur = "rood";
+	} else if (kleurNummer == 1) {
+		kleur = "groen";
+	} else if (kleurNummer == 2) {
+		kleur = "blauw";
+	} else {
+		kleur = "geel";
+	}
+
+	// toon de opdracht
+	Console.WriteLine($"{lichaamsdeel} op {kleur}");
+	
+	// wacht 7 seconden
+	System.Threading.Thread.Sleep(7000);
+}
+----
+
+
+== Het console scherm wissen
+
+
+=== Oplossing D06simon
+
+[source,csharp,linenums]
+----
+Random rnd = new Random();
+
+string input;
+string code = "";
+do {
+	int nieuweGetal = rnd.Next(1, 5);
+	code += nieuweGetal;
+
+	Console.Clear();
+	Console.WriteLine("U hebt 2 seconden om deze code te onthouden");
+	Console.Write(code);
+	System.Threading.Thread.Sleep(2000);
+	Console.Clear();
+
+	Console.WriteLine("Geef de code");
+	input = Console.ReadLine();
+} while (input == code);
+
+Console.WriteLine("Helaas, de code was");
+Console.WriteLine(code);
+----
+Merk op dat je kunt valsspelen door de code al in te typen terwijl ze nog getoond wordt! De computer houdt namelijk een input buffer bij met alle ingetypte tekens die nog niet door het programma "geconsumeerd" zijn.
+
+
+== Herhalingen
+
+
+=== Oplossing D06traceerk100
+
+|====
+| Regel | Waarde van `k` | Waarde van `i` | Hoeveelste iteratie | Output
+
+| `1` | `100` | `/` | |
+
+| `2` | | `3` | |
+| `3` | `103` | | eerste |
+| `4` | | | eerste |
+
+| `2` | | `4` | |
+| `3` | `107` | | tweede |
+| `4` | | | tweede |
+
+| `2` | | `5` | |
+| `3` | `112` | | derde |
+| `4` | | | derde |
+
+| `2` | | `6` | |
+| `3` | `118` | | vierde |
+| `4` | | | vierde |
+
+| `2` | | `7` | |
+| `3` | `125` | | vijfde |
+| `4` | | | vijfde |
+
+| `2` | | `8` | |
+| `5` | | `/` | | `125`
+
+|====
+
+
+=== Oplossing D06voorspeloutput
+// Y3.12
+
+Probeer elk fragment uit in Visual Studio en kijk of je voorspelling klopt.
+
+
+=== Oplossing D06weekdagnummer
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
+
+
+=== Oplossing D06getallentussen20en30
+// Y3.07
+
+[source,csharp,linenums]
+----
+for (int i = 21; i < 30; i++) {
+	Console.WriteLine(i);
+}
+----
+
+
+=== Oplossing D06getallenuitrij
+// Y3.08
+
+[source,csharp,linenums]
+----
+for (int i = 10; i >= 2; i--) {
+	Console.WriteLine(i);
+}
+----
+
+of
+
+[source,csharp,linenums]
+----
+for (int i = 10; i > 1; i--) {
+	Console.WriteLine(i);
+}
+----
+
+of (ingewikkelder dan nodig : een oplossing waarbij `i` de teller is om `8` herhalingen te bekomen, en een bijkomende variabele `getal` voor de output) :
+
+[source,csharp,linenums]
+----
+int getal = 10;
+for (int i = 0; i < 9; i++) {
+	Console.WriteLine(getal);
+	getal--;
+}
+----
+
+of (voor de sadomasochisten) :
+
+[source,csharp,linenums]
+----
+for (int i = 120; i > 30; i -= 10) {
+	int k = (i - 20) /10;
+	Console.WriteLine(k);
+}
+----
+
+Heel veel mogelijkheden dus, maar we geven natuurlijk de voorkeur aan het eerste of het tweede fragment.
+
+
+=== Oplossing D06sommeer1tem10
+// Y3.09
+
+We moet dus de volgende berekening maken
+
+`1*1 + 2*2 + 3*3 + 4*4 + 5*5 + ... + 9*9 + 10*10`
+
+De code hiervoor is :
+
+[source,csharp,linenums]
+----
+int som = 0;
+for (int i = 1; i <= 10; i++) {
+	int kwadraat = i * i;
+	som = som + kwadraat; 
+	// of som += kwadraat;
+	// of som += i * i;
+	// of som = som + Convert.ToInt32(Math.Pow(i, 2));
+	// of som += Convert.ToInt32(Math.Pow(i,2));
+}
+Console.WriteLine($"De som van de kwadraten in [1,10] is {som}");
+----
+
+
+=== Oplossing D06traceersom1tem5
+// Y4.01
+
+|====
+| Regel | Waarde van `som` | Waarde van `i` | Hoeveelste iteratie | Output
+
+| `1` | `0` | `/` | |
+| `2` |  | `1` | |
+| `3` |  `2` |  | eerste |
+| `4` | | | eerste |
+
+| `2` | | `2` | |
+| `3` | `6` | | tweede |
+| `4` | | | tweede |
+
+| `2` | | `3` | |
+| `3` | `12` | | derde |
+| `4` | | | derde |
+
+| `2` | | `4` | |
+| `3` | `20` | | vierde |
+| `4` | | | vierde |
+
+| `2` | | `5` | |
+| `3` | `30` | | vijfde |
+| `4` | | | vijfde |
+
+| `2` | | `6` | |
+| `5` | | `/` | | 30 
+|====
+
+
+=== Oplossing D06somtussengrenzen
+// Y3.10
+[source,csharp,linenums]
+----
+Console.Write("Geef de ondergrens : ");
+string ondergrensAlsTekst = Console.ReadLine();
+int ondergrens = int.Parse(ondergrensAlsTekst);
+
+Console.Write("Geef de bovengrens : ");
+string bovengrensAlsTekst = Console.ReadLine();
+int bovengrens = int.Parse(bovengrensAlsTekst);
+
+int som = 0;
+for (int i = ondergrens + 1; i < bovengrens; i++) {
+	som = som + i;
+}
+Console.WriteLine($"De som is {som}.");
+----
+
+
+== Herhalingen (moeilijker)
+
+
+=== Oplossing D06toonsomtussengrenzen
+// Y3.11 en Y4.02
+
+Het verschil met de vorige oplossing is, dat we nu in de for loop ook nog het getal en een `+` teken moeten tonen.
+
+De grootste moeilijkheid hierbij is : vermijden dat we een `+` teveel tonen op het einde, anders krijgen we iets als `6+7+8+9+=30`.
+
+Een mogelijke oplossing is :
+
+[source,csharp,linenums]
+----
+// input gedeelte is identiek aan voorgaande oplossing
+
+int som = 0;
+for (int i = ondergrens + 1; i < bovengrens; i++) {
+	som = som + i;
+
+	Console.Write(i);          // <1>
+	
+	// Toon "+" behalve bij de laatste herhaling		
+	if (i != bovengrens - 1) {
+		Console.Write(" + ");    // <1>
+	}
+}
+Console.WriteLine(" = " + som);
+----
+<1> we tonen eerst het getal en dan de `+`
+
+Een alternatieve oplossing is :
+
+[source,csharp,linenums]
+----
+// input gedeelte is identiek aan voorgaande oplossing
+	
+int som = 0;
+for (int i = ondergrens + 1; i < bovengrens; i++) {
+	som = som + i;
+	
+	// Toon "+" behalve bij de eerste herhaling
+	if (i != ondergrens + 1) {
+		Console.Write(" + ");    // <1>
+	}
+
+	Console.Write(i);          // <1>
+}
+Console.WriteLine(" = " + som);
+----
+<1> we tonen eerst de `+` en dan het getal
+
+
+=== Oplossing D06somevenoneven
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
+
+
+=== Oplossing D06somveelvouden
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
+
+
+=== Oplossing D06rechthoekopmaat
+// Y6.02		
+[source,csharp,linenums]
+----		
+bool gelukt;
+
+// probeer tot er een correcte breedte is ingegeven
+int breedte = 0;
+do {
+	Console.Write("Geef de breedte : ");
+	string breedteAlsTekst = Console.ReadLine();
+	gelukt = int.TryParse(breedteAlsTekst, out breedte);
+} while (!gelukt || breedte < 1);
+
+// probeer tot er een correcte hoogte is ingegeven
+int hoogte = 0;
+do {
+	Console.Write("Geef de hoogte : ");
+	string hoogteAlsTekst = Console.ReadLine();
+	gelukt = int.TryParse(hoogteAlsTekst, out hoogte);
+} while (!gelukt || hoogte < 1);
+
+// bouw een sterretjes lijn van de correcte breedte
+string lijn = "";
+for (int i=0;i<breedte;i++) {
+	lijn += "*";
+}
+
+// toon de lijn 'hoogte' keren op de console
+for (int i = 0; i < hoogte; i++) {
+	Console.WriteLine(lijn);
+}
+----
+
+of een iets complexere oplossing met 2 geneste for loops :
+
+[source,csharp,linenums]
+----
+// input gedeelte is identiek aan hierboven
+
+for (int i = 0; i < hoogte; i++) {
+	// teken een lijn van de gegeven breedte
+    for (int k = 0; k < breedte; k++) {
+	    Console.Write("*");
+    }
+	Console.WriteLine();
+}
+----
+
+
+=== Oplossing D06rechthoekigedriehoeklinks
+// Y6.03
+[source,csharp,linenums]
+----
+     bool gelukt;
+
+     // probeer tot er een correcte hoogte is ingegeven
+     int hoogte = 0;
+     do {
+         Console.Write("Hoogte: ");
+         string hoogteAlsTekst = Console.ReadLine();
+         gelukt = int.TryParse(hoogteAlsTekst, out hoogte);
+     } while (!gelukt || hoogte < 1);
+
+ 1 : for (int aantal = 1; aantal <= hoogte; aantal++) {
+         // teken 1 regel met 'aantal' sterretjes
+ 2 :     for (int k = 0; k < aantal; k++) {
+ 3 :         Console.Write("*");
+         }
+         // zet de cursor op de volgende regel
+ 4 :     Console.WriteLine();
+     }
+----
+
+Maak zelf eens een traceertabel voor een uitvoering waarbij de gebruiker `3` ingeeft als hoogte. 
+
+Toon alleen de regels op die genummerd werden in bovenstaande oplossing, en laat de kolom voor 'hoeveelste iteratie' weg. De waarden van variabelen `hoogte` en `gelukt` hoef je niet te tonen.
+
+De traceertabel ziet er dan zo uit :
+
+(`hoogte` is 3 en `gelukt` is true)
+////
+|====
+| Regel | Waarde van `aantal` | Waarde van `k` | Output | Opmerking
+
+| 1 | 1 | / | | 
+| 2 | | 0 | | 
+| 3 | | | * |
+| 2 | | 1 | | voorwaarde is `false`
+| 4 | | / | newline |
+| 1 | 2 | / | |
+| 2 | | 0 | |
+| 3 | | | * |
+| 2 | | 1 | |
+| 3 | | | * |
+| 2 | | 2 | | voorwaarde is `false`
+| 4 | | / | newline |
+| 1 | 3 | / | |
+| 2 | | 0 | |
+| 3 | | | * |
+| 2 | | 1 | |
+| 3 | | | * |
+| 2 | | 2 | |
+| 3 | | | * |
+| 2 | | 3 | | voorwaarde is `false`
+| 4 | | / | newline |
+| 1 | 4 | / | | voorwaarde is `false`
+|====
+////
+image:traceertabel-met-highlights.png[]
+
+De blauwe highlight toont de uitvoeringen van de _loop body__ van de `aantal` for loop. De groene highlight toont die van de `k` for loop.
+
+In de 'opmerking' kolom kun je aan de kleur zien van welke for loop, de voorwaarde `false` blijkt te zijn.
+
+
+=== Oplossing D06rechthoekigedriehoekrechts
+// Y6.04
+
+[source,csharp,linenums]
+----
+bool gelukt;
+
+// probeer tot er een correcte hoogte is ingegeven
+int hoogte = 0;
+do {
+	Console.Write("Hoogte: ");
+	string hoogteAlsTekst = Console.ReadLine();
+	gelukt = int.TryParse(hoogteAlsTekst, out hoogte);
+} while (!gelukt || hoogte < 1);
+
+for (int aantal = 1; aantal <= hoogte; aantal++) {
+	// plaats eerst de nodige spaties
+	for (int k = 0; k < hoogte - aantal; k++) { // <1>
+		Console.Write("."); // TODO : vervang door spatie <2>
+	}
+
+	// plaats nu 'aantal' sterretjes
+	for (int k = 0; k < aantal; k++) {
+		Console.Write("*");
+	}
+
+	// zet de cursor op de volgende regel
+	Console.WriteLine();
+}
+----
+<1> Let hier op de grenswaarde `hoogte - aantal`.
+<2> Om het debuggen makkelijker te maken gebruiken we `.`, het zou te lastig zijn om visuaal het aantal spaties te herkennen. Eenmaal het programma correct werkt, kunnen we er hier spaties van maken.
+

@@ -1,0 +1,379 @@
+= Programmeren Basis - Deel 17 - Oplossingen
+Yanic Inghelbrecht
+v2022.05.06.10.00
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+// geen auto section numbering voor oefeningen (handigere titels en toc)
+//:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+ 
+ 
+ 
+== Dictionaries
+
+[IMPORTANT]
+====
+In de oplossingen wordt verondersteld dat er `using System.Collections.Generic;` bovenaan het broncode bestand staat!
+====
+
+
+
+=== Oplossing D17scheldwoorden
+// Y7.01
+
+[source,csharp,linenums]
+----
+Dictionary<string, string> scheldwoordNaarUitleg = new Dictionary<string, string> {
+	{"appelflap", "stommeling, sufferd" },
+	{"karhengst", "lomperd, botterik"},
+	{"badgast", "rare kerel, iemand die zich vreemd gedraagt"},
+	{"kloefkapper","lomperik"}
+};
+
+// ter demonstratie voegen we er eentje toe met de [] notatie :
+scheldwoordNaarUitleg["charlatan"] = "(soms charmante) oplichter ('deskundige') gespecialiseerd in bedrog over zijn afkomst, vaardigheden, intenties of prestaties";
+
+while (true) {
+	Console.Write("Geef een scheldwoord : ");
+	string input = Console.ReadLine().ToLower();
+
+	if (scheldwoordNaarUitleg.ContainsKey(input)) {   // <1>
+		string uitleg = scheldwoordNaarUitleg[input]; // <2>
+		Console.WriteLine(uitleg);
+	} else {
+		Console.WriteLine("Geen gekend scheldwoord");
+	}
+}
+----
+<1> Zit het woord in ons Dictionary `scheldwoordNaarUitleg`?
+<2> Zoek de uitleg voor het scheldwoord op.
+
+
+=== Oplossing D17morse
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
+
+
+=== Oplossing D17dobbelsteen
+// Y7.02
+
+[source,csharp,linenums]
+----
+Dictionary<int, int> gooiWaardeNaarFrequentie = new Dictionary<int, int> {
+	{1,0}, 
+	{2,0},
+	{3,0}, // <1>
+	{4,0},
+	{5,0},
+	{6,0}
+};
+
+Random random = new Random();
+
+for (int i=0;i<100;i++) {
+	int gooiWaarde = random.Next(1, 7);
+
+	int frequentie = gooiWaardeNaarFrequentie[gooiWaarde]; // <2>
+	frequentie++;
+	gooiWaardeNaarFrequentie[gooiWaarde] = frequentie;     // <3>
+}
+
+foreach (int gooiWaarde in gooiWaardeNaarFrequentie.Keys) {
+	int frequentie = gooiWaardeNaarFrequentie[gooiWaarde];
+	Console.WriteLine($"{gooiWaarde} kwam {frequentie} keer voor");
+}
+----
+<1> We vullen het Dictionary alvast met de nodige __gooi-waarden__ en frequentie `0`
+<2> Vraag de frequentie (value) op van deze `gooiWaarde` (key)
+<3> Overschrijf de oude frequentie (value) met de nieuwe frequentie (value) voor deze `gooiWaarde` (key)
+
+Doordat we de 6 mogelijke __gooi-waarden__ op voorhand kennen (en het 
+er maar 6 zijn) kunnen we het Dictionary alvast vullen met de nodige keys. Dat spaart ons verderop in de code wat moeite omdat we niet meer moeten checken of een bepaalde key al aanwezig is of niet. 
+
+In het algemeen is dat echter niet zo interessant omdat de keys niet gekend zijn, of omdat er teveel mogelijkheden zijn, of beide.
+
+Dan schrijf je de code beter zo (een *tweede variant*) :
+
+[source,csharp,linenums]
+----
+Dictionary<int, int> gooiWaardeNaarFrequentie = new Dictionary<int, int> ();
+
+Random random = new Random();
+
+for (int i=0;i<100;i++) {
+	int gooiWaarde = random.Next(1, 7);
+
+	int frequentie=0;
+	if ( gooiWaardeNaarFrequentie.ContainsKey(gooiWaarde) ) { // <1>
+		frequentie = gooiWaardeNaarFrequentie[gooiWaarde];    // <2>
+	}
+	frequentie++;
+	gooiWaardeNaarFrequentie[gooiWaarde] = frequentie;        // <3>
+}
+
+foreach (int gooiWaarde in gooiWaardeNaarFrequentie.Keys) {
+	int frequentie = gooiWaardeNaarFrequentie[gooiWaarde];
+	Console.WriteLine($"{gooiWaarde} kwam {frequentie} keer voor");
+}
+----
+<1> Hebben we al een frequentie (value) voor deze `gooiWaarde` (key)?
+<2> Vraag de frequentie (value) op van deze `gooiWaarde` (key)
+<3> Overschrijf de oude frequentie (value) met de nieuwe frequentie (value) voor deze `gooiWaarde` (key), **OF voeg de nieuwe frequentie (value) toe**
+
+[IMPORTANT]
+====
+Merk op dat er een verschil is met de vorige variant als een een bepaalde gooi-waarde X nooit voorkomt.
+
+In de vorige variant verschijnt er `X kwam 0 keer voor` maar bij deze variant verschijnt er gewoon niks voor X : X immers niet als key in het Dictionary!
+====
+
+
+
+=== Oplossing D17frequentie
+// Y7.04
+
+De symbolen zijn `char` waarden en de aantallen zijn `int` waarden, dus we gebruiken een `Dictionary<char, int>` om de telling bij de houden. 
+
+[source,csharp,linenums]
+----
+Console.Write("Geef een tekst : ");
+string tekst = Console.ReadLine();
+
+Dictionary<char, int> symboolNaarFrequentie = new Dictionary<char, int>();
+
+foreach (char symbool in tekst) {
+	// <1>
+	if (symboolNaarFrequentie.ContainsKey(symbool)) {
+		int frequentie = symboolNaarFrequentie[symbool];
+		frequentie++;
+		symboolNaarFrequentie[symbool] = frequentie;
+	} else {
+		symboolNaarFrequentie[symbool] = 1;
+	}
+}
+
+foreach (char symbool in symboolNaarFrequentie.Keys) {
+	int frequentie = symboolNaarFrequentie[symbool];
+	Console.WriteLine($"symbool \'{symbool}\' komt {frequentie} keer voor");
+}
+----
+<1> Merk op dat we in de loop werken zoals in de tweede variant van oplossing D17dobbelsteen maar dat de code er toch iets anders uit ziet (niet noodzakelijk beter of slechter, gewoon eens anders).
+
+
+
+=== Oplossing D17telefoonnummer
+// Y7.05
+
+Om dit probleem op te lossen hebben we een mapping van `char` naar `int` nodig,  zodat we van elke letter makkelijker het corresponderende cijfer kunnen vinden. We gebruiken hiervoor een `Dictionary<char, int>` dat we `letterToDigit` noemen.
+
+We hebben al een mapping van `int` naar `string` (van cijfertoets naar letters) in variabele `digitToLetters`, een `Dictionary<int,string>`. 
+
+Als we nu voor elke cijfertoets (bv. kbd:[2]) de tekst met letters opvragen aan `digitToLetters` (bv. `ABC`) en alle letters uit die tekst overlopen (bv. `A`, `B` en `C`), dan kunnen we makkelijk de omgekeerde _mappings_ (bv. A->2, B->2 en C->2) in `letterToDigit` stoppen.
+
+[source,csharp,linenums]
+----
+Dictionary<int, string> digitToLetters = new Dictionary<int, string> {
+	{2, "ABC"},
+	{3, "DEF"},
+	{4, "GHI"},
+	{5, "JKL"},
+	{6, "MNO"},
+	{7, "PQRS"},
+	{8, "TUV"},
+	{9, "WXYZ"}
+};
+
+// de omgekeerde mapping opbouwen 
+Dictionary<char, int> letterToDigit = new Dictionary<char, int>();
+foreach (int digit in digitToLetters.Keys) {
+	string letters = digitToLetters[digit];
+	foreach (char letter in letters) {
+		letterToDigit.Add(letter, digit);  // <1>
+	}
+}
+
+// vraag de gebruiker om een woord
+Console.Write("Geef een woord : ");
+string woord = Console.ReadLine().Trim().ToUpper(); // <2>
+
+// zoek het telefoonnummer voor dit woord
+string telefoon = "";
+foreach (char c in woord) {
+	int nummer = letterToDigit[c];
+	telefoon += nummer;
+}
+
+Console.WriteLine($"Telefoonnummer is : {telefoon}");
+----
+<1> voor elke `letter` uit `letters` van toets `digit` voegen we `letter`->``digit`` toe aan `letterToDigit`.
+<2> we zetten de tekst om naar hoofdletters omdat `letterToDigit` alleen hoofdletters bevat en geen kleine letters.
+
+
+=== Oplossing D17gecombineerdetellingen
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
+
+
+=== Oplossing D17gemiddeldetellingen
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
+
+
+== Met eigen klassen
+
+[IMPORTANT]
+====
+Alle klassen in deze oplossingen staan in dezelfde namespace `ConsoleApp1`.
+====
+
+
+
+=== Oplossing D17telefoonboek
+// Y7.03
+
+.PhoneDirectory.cs
+[source,csharp,linenums]
+----
+public class PhoneDirectory {
+
+	private Dictionary<string, string> _naamNaarTelefoon;
+
+	public PhoneDirectory() {
+		_naamNaarTelefoon = new Dictionary<string, string>();
+	}
+
+	public void Add(string name, string phoneNumber) {
+		_naamNaarTelefoon[name] = phoneNumber;
+	}
+
+	public string GetPhoneNumberByName(string name) {
+		string result = null;
+		if ( name != null && _naamNaarTelefoon.ContainsKey(name) ) { // <1>
+			result = _naamNaarTelefoon[name];
+		}
+		return result;
+	}
+
+}
+----
+<1> we profiteren hier van de __short-circuit__ werking van de `&&` operator, d.w.z. als de linkerkant `false` oplevert dan wordt de rechterkant niet uitgerekend. En dat is precies wat we hier willen vermijden, want als we `ContainsKey` met een `null` parameter oproepen krijgen we een `ArgumentNullException` fout.
+<2> Vergeet eventueel geen __using directive__ als `using System.Collections.Generic` op te nemen bovenaan je code.
+
+****
+[.underline]#Ontwerpkeuze#
+
+Merk op dat het hier niet zinvol zou zijn om voor het interne `Dictionary<string, string>` object een property te gebruiken. 
+
+We willen immers niet dat code van 'buitenaf' aan dit dictionary prutst, het is net de bedoeling dat de `Add` en `GetPhoneNumberByName` gebruikt worden.
+
+Denk aan de ontwerp principes van inkapseling/data hiding/information hiding.
+****
+
+
+
+=== Oplossing D17telefoonboekbeiderichtingen
+// Y7.06
+
+Deze **eerste variant** gebruikt een tweede dictionary dat de mapping in de omgekeerde richting bijhoudt, dus van telefoonnummer naar naam.
+
+.PhoneDirectory.cs
+[source,csharp,linenums]
+----	
+public class PhoneDirectory {
+
+	private Dictionary<string, string> _naamNaarTelefoon; // <1>
+	private Dictionary<string, string> _telefoonNaarNaam; // <1>
+
+	public PhoneDirectory() {
+		_naamNaarTelefoon = new Dictionary<string, string>();
+		_telefoonNaarNaam = new Dictionary<string, string>();
+	}
+
+	public void Add(string name, string phoneNumber) {
+		_naamNaarTelefoon[name] = phoneNumber; // <2>
+		_telefoonNaarNaam[phoneNumber] = name; // <2>
+	}
+
+	public string GetPhoneNumberByName(string name) {
+		string result = null;
+		if ( name != null && _naamNaarTelefoon.ContainsKey(name) ) {
+			result = _naamNaarTelefoon[name];
+		}
+		return result;
+	}
+
+	public string GetNameByPhoneNumber(string phoneNumber) {
+		string result = null;
+		if ( phoneNumber != null && _telefoonNaarNaam.ContainsKey(phoneNumber) ) {
+			result = _telefoonNaarNaam[phoneNumber];
+		}
+		return result;
+	}
+
+}
+----
+<1> We gebruiken twee dictionaries, eentje voor naam->telefoonnummer en eentje voor telefoonnummer->naam.
+<2> We moeten de data dan ook aan beide dictionaries toevoegen.
+
+
+De **tweede variant** gebruikt geen tweede dictionaty voor de omgekeerde mapping. 
+
+Dit keer overlopen we alle namen (keys) tot we het gezochte telefoonnummer (value) tegenkomen
+
+[source,csharp,linenums]
+----			
+public string GetNameByPhoneNumber(string phoneNumber) {
+	string result = null;
+	foreach (string name in _naamNaarTelefoon.Keys) { // <1>
+		string number = _naamNaarTelefoon[name];      // <2>
+		if (number == phoneNumber) {                  // <3>
+			result = name;
+			break;
+		}
+	}
+	return null;
+}			
+----				
+<1> We overlopen alle namen (keys)
+<2> Van elke naam (key) vragen we het nummer (value) op 
+<3> We vergelijk het nummer met het nummer dat we zoeken
+
+****
+[.underline]#Ontwerpkeuze#
+
+De twee mogelijkheden voor `PhoneDirectory` hebben de volgende voor- en nadelen :
+
+* variant 1 : tweede dictionary voor de omgekeerde richting
+** positief : heel(!) erg snel
+** negatief : verbruikt dubbel zoveel geheugen
+* alle values overlopen tot we de gezochte tegenkomen
+** negatief : relatief traag vanwege de hoeveelheid te scannen data
+** positief : gebruikt geen extra geheugen
+
+Welke je best kiest hangt af van gebruikspatroon dat je verwacht en is een ontwerpkeuze :
+
+* veel opzoekingen van naam->telefoon maar zelden omgekeerd?
+** dan kies je best variant 2
+* evenveel opzoekingen in beide richtingen en snelheid is belangrijk?
+** dan kies je best variant 1
+****

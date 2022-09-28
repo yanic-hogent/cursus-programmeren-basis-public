@@ -1,0 +1,174 @@
+= Programmeren Basis - Deel GFX1 - Oplossingen
+Yanic Inghelbrecht
+v2021.10.18.14.30
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+// geen auto section numbering voor oefeningen (handigere titels en toc)
+//:sectnums:  
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+ 
+== Oplossingen
+
+
+=== Oplossing DGFX1.01
+
+De (x,y) coordinaten zijn als volgt :
+
+* linksboven is (0,0)
+* rechtsboven is (199,0)
+* linksonder is (0,99)
+* rechstonder is (199,99)
+
+
+=== Oplossing DGFX1.02
+
+[source,csharp,linenums]
+----
+Pen pen = ...;
+gfx.DrawLine(pen, x1, y1, x2, y2);
+...
+pen.Dispose();
+----
+
+
+=== Oplossing DGFX1.03
+
+[source,csharp,linenums]
+----
+Pen pen = ...;
+gfx.DrawRectangle(pen, x1, y1, breedte, hoogte);
+Brush brush = ...;
+gfx.FillRectangle(brush, x1, y1, breedte, hoogte);
+...
+pen.Dispose();
+brush.Dispose();
+----	
+
+De variabelen `x1` en `y1` zijn de coordinaten van de linkerbovenhoek van de rechthoek, `breedte` en `hoogte` leggen de afmeting van de rechthoek vast.
+
+Indien `breedte` en `hoogte` gelijk zijn, wordt een vierkant getekend.
+	
+=== Oplossing DGFX1.04
+
+[source,csharp,linenums]
+----
+Pen pen = ...;
+gfx.DrawEllipse(pen, x1, y1, breedte, hoogte);
+Brush brush = ...;
+gfx.FillEllipse(brush, x1, y1, breedte, hoogte);
+...
+pen.Dispose();
+brush.Dispose();
+----
+	
+De variabelen `x1` en `y1` zijn de coordinaten van de linkerbovenhoek van de ovaal, `breedte` en `hoogte` leggen de afmeting van de ovaal vast.
+
+Indien `breedte` en `hoogte` gelijk zijn, wordt een cirkel getekend.
+
+
+=== Oplossing DGFX1.05
+in file ViewControl.cs, in method OnPaint :
+
+[source,csharp,linenums]
+----
+// HIERONDER PLAATS JE JE EIGEN CODE OM TE TEKENEN
+Pen zwartePen = new Pen(Color.Black);
+
+gfx.DrawEllipse(zwartePen, this.Width / 4, this.Height / 4, this.Width / 2, this.Height / 2);
+
+zwartePen.Dispose();
+----
+
+
+=== Oplossing DGFX1.06
+in file ViewControl.cs, in method OnPaint :
+
+[source,csharp,linenums]
+----
+	
+// HIERONDER PLAATS JE JE EIGEN CODE OM TE TEKENEN
+Pen zwartePen = new Pen(Color.Black);
+
+int middelPuntX = this.Width / 2;
+int middelPuntY = this.Height / 2;
+
+for (int i = 0; i < 10; i++) {
+	int straal = 10 + i * 20;
+	int linksBovenX = middelPuntX - straal;
+	int linksBovenY = middelPuntY - straal;
+	gfx.DrawEllipse(zwartePen, linksBovenX, linksBovenY, 2 * straal, 2 * straal);
+}
+
+zwartePen.Dispose();
+----
+
+
+=== Oplossing DGFX1.07
+in file ViewControl.cs, in method OnPaint :
+
+[source,csharp,linenums]
+----
+// HIERONDER PLAATS JE JE EIGEN CODE OM TE TEKENEN
+Pen zwartePen = new Pen(Color.Black);
+
+const int aantal = 10;
+for (int i = 0; i < aantal; i++) {
+	int x = i * this.Width / aantal;
+	int y = i * this.Height / aantal;
+	gfx.DrawLine(zwartePen, 0, y, x, this.Height);
+}
+	
+zwartePen.Dispose();
+----
+
+
+=== Oplossing DGFX1.08
+in file ViewControl.cs, in method OnPaint :
+
+[source,csharp,linenums]
+----
+// HIERONDER PLAATS JE JE EIGEN CODE OM TE TEKENEN
+Random random = new Random();
+for (int i = 0; i < 100; i++) {
+	// Bepaal de rgb waarden van de random kleur
+	// elk ligt normaliter in [0,255] maar we gaan
+	//  niet onder 20 zodat het niet te donker wordt
+	int rood = random.Next(20, 256);
+	int groen = random.Next(20, 256);
+	int blauw = random.Next(20, 256);
+
+	int straal = random.Next(10, 100);
+	int x = random.Next(0, this.Width - straal);
+	int y = random.Next(0, this.Height - straal);
+
+	Color c = Color.FromArgb(rood, groen, blauw);
+
+	Brush brush = new SolidBrush(c);
+
+	gfx.FillEllipse(brush, x, y, straal, straal);
+			
+	brush.Dispose();
+}
+
+
+

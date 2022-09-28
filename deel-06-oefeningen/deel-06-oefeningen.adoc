@@ -1,0 +1,480 @@
+= Programmeren Basis - Deel 06 - Oefeningen
+Yanic Inghelbrecht
+v2022.02.23.15.06
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+// geen auto section numbering voor oefeningen (handigere titels en toc)
+//:sectnums:  
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+:deel-05-oefeningen: ../deel-05-oefeningen/deel-05-oefeningen.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+ 
+[NOTE]
+======================================
+Het is een aanrader bij elke oefeningenreeks te starten met eventuele *__inleidende oefeningen__*.
+Naast deze focus je vooral op de *__essentiële oefeningen__*.
+
+Heb je tijd over, dan helpen de *__aanvullende oefeningen__* je de stof nog beter in de vingers te krijgen.
+======================================
+
+== Inleidende oefeningen
+
+
+=== Herhalingen (traceren of voorspellen)
+
+
+Voor de oefeningen waarin een traceertabel gevraagd wordt :
+
+- Neem ook de regels op die geen enkele variabele veranderen. Op die manier is het duidelijk hoe de regels van de __loop body__ herhaald worden.
+- Voorzie een extra kolom 'Hoeveelste iteratie'. Daarin schrijf je voor de regels van de __loop body__ de hoeveelste herhaling het is (eerste, tweede, derde, etc.).
+- Voorzie een extra kolom 'Output' waarin je bij elke regel schrijft welke output die regel op de console zet.
+
+Bijvoorbeeld, de traceertabel van deze code 
+// Y3.05
+[source,csharp,linenums]
+----
+ 1 : for (int i = 3; i < 6; i++) {
+ 2 :     Console.WriteLine(i);
+ 3 : }
+ 4 : Console.WriteLine("Klaar!");
+----
+
+Ziet er dan zo uit :
+
+|====
+| Regel | Waarde van `i` | Hoeveelste iteratie | Output
+
+| `1` | `3` |  | 
+| `2` | | eerste | `3`
+| `3` | | eerste |
+| `1` | `4` | |
+| `2` | | tweede | `4`
+| `3` | | tweede |
+| `1` | `5` |  |
+| `2` | | derde | `5`
+| `3` | | derde |
+| `1` | `6` | |
+| `4` | / | | `Klaar!`
+|====
+
+
+==== Oefening D06traceersom1tem5
+// Y4.01
+Stel de traceertabel op van onderstaande code. Omdat het hier belangrijk is om te zien wat er herhaald wordt, neem alle regels op in de tabel (ook al veranderen ze niks aan de variabelen).
+
+[source,csharp,linenums]
+----
+ 1 : int som = 0;
+ 2 : for (int i = 1; i <= 5; i++) {
+ 3 : 	som = som + i + i;
+ 4 : }
+ 5 : Console.WriteLine(som);
+----		
+
+
+==== Oefening D06traceerk100
+// Y3.06
+
+Geef de traceertabel van volgend code fragment :
+[source,csharp,linenums]
+----
+ 1 : int k = 100;
+ 2 : for (int i = 3; i < 8; i++) {
+ 3 :     k += i;
+ 4 : }
+ 5 : Console.WriteLine(k);
+----
+
+
+==== Oefening D06voorspeloutput
+// Y3.12
+
+Voorspel welke getallen elk van onderstaande for loops toont, zonder dit uit te proberen in Visual Studio.
+
+[source,csharp,linenums]
+----
+a) for (int i = 3  ; i < 9    ; i++)  { Console.WriteLine(i); }
+
+b) for (int i = 4  ; i >= -3  ; i--)  { Console.WriteLine(i); }
+
+c) for (int i = 7  ; i != 15  ; i++)  { Console.WriteLine(i); }
+
+d) for (int i = 6  ; i != 15  ; i+=2) { Console.WriteLine(i); }
+
+e) for (int i = 7  ; i != 15  ; i--)  { Console.WriteLine(i); }
+
+f) for (int i = 20 ; i < 15   ; i++)  { Console.WriteLine(i); }
+
+g) for (int i = 0  ; i < 16   ; i+=4) { Console.WriteLine(i); }
+
+h) for (int i = 45 ; i < 1000 ; i*=2) { Console.WriteLine(i); }
+
+i) for (int i = -5 ; i < 5    ; i+=3) { Console.WriteLine(i); }
+----	
+
+== Essentiële oefeningen
+
+
+=== Herhalingen
+
+
+==== Oefening D06getallentussen20en30
+// Y3.07
+
+Schrijf een programma dat alle getallen TUSSEN 20 en 30 toont (dus 21, ..., 29).
+
+
+==== Oefening D06getallenuitrij
+// Y3.08
+
+Schrijf een programma dat alle getallen toont uit de rij 10, 9, ..., 2.
+
+
+==== Oefening D06sommeer1tem10
+// Y3.09
+
+Schrijf een programma dat de kwadraten van de getallen in van 1 t.e.m. 10 sommeert en het resultaat toont.
+
+
+
+==== Oefening D06somtussengrenzen
+// Y3.10
+Schrijf een programma dat de som toont van de getallen TUSSEN een onder- en een bovengrens die de gebruiker instelt. Je mag ervan uitgaan dat de input altijd correct is.
+
+Een voorbeeld uitvoering waarin de gebruiker `5` en `10` ingeeft :
+[source,shell]
+----
+Geef de ondergrens: 5
+Geef de bovengrens: 10
+De som is 30. <1>
+----
+<1> de som van de tussenliggende getallen is __6 + 7 + 8 + 9 = 30__
+
+
+=== Herhalingen (moeilijker)
+
+
+==== Oefening D06toonsomtussengrenzen
+// Y3.11 en Y4.02
+Breid de oplossing van de vorige oefening uit zodat het programma op het einde de volledige optelling toont.
+
+Een voorbeeld uitvoering waarin de gebruiker `5` en `10` ingeeft :
+[source,shell]
+----
+Geef de ondergrens: 5
+Geef de bovengrens: 10
+6 + 7 + 8 + 9 = 30
+----
+
+
+==== Oefening D06somevenoneven
+
+Schrijf een programma dat de gebruiker om getallen vraagt totdat deze een negatief getal ingeeft (andere invoer wordt genegeerd).
+
+Het programma toont vervolgens 
+
+* het aantal even getallen
+* het aantal oneven getallen
+* de som van de even getallen
+* de som van de oneven getallen
+
+Het negatieve getal dat gebruikt werd om te stoppen telt hierbij niet mee.
+
+Een voorbeeld uitvoering :
+
+[source, shell]
+----
+Geef een getal (negatief om te stoppen) : 2
+Geef een getal (negatief om te stoppen) : 7
+Geef een getal (negatief om te stoppen) : hallo
+Geef een getal (negatief om te stoppen) : 4
+Geef een getal (negatief om te stoppen) : 6
+Geef een getal (negatief om te stoppen) : 0
+Geef een getal (negatief om te stoppen) : 6
+Geef een getal (negatief om te stoppen) : 9
+Geef een getal (negatief om te stoppen) : -3	
+5 even getallen
+2 oneven getallen
+som van de even getallen is 18
+som van de oneven getallen is 16
+----
+
+
+
+
+==== Oefening D06rechthoekopmaat
+// Y6.02
+
+Breid het vorige programma uit zodat de gebruiker om 2 positieve getallen wordt gevraagd (breedte en hoogte). Het programma toont dan een rechthoek met de gevraagde afmetingen.
+
+Dit is quasi dezelfde opgave als in link:{deel-05-oefeningen}#_oefening_d05_rechthoek[oefening D05rechthoek], maar baseer je oplossing voor het tekenen van de rechthoek op 1 of meerdere for loops.
+
+Een voorbeeld uitvoering :
+
+[source,shell]
+----
+Geef de breedte : 2
+Geef de hoogte : 4
+**
+**
+**
+**
+----
+
+
+==== Oefening D06rechthoekigedriehoeklinks
+// Y6.03
+Vraag de gebruiker om een geheel getal en toon een rechthoekige driehoek (met rechte hoek aan de linkerkant) van de gewenste afmeting.
+
+Een uitvoering waarbij de gebruiker `4` ingeeft :
+[source,shell]
+----
+Geef de hoogte : 4
+*
+**
+***
+****
+----
+
+
+==== Oefening D06rechthoekigedriehoekrechts
+// Y6.04
+
+Schrijf een gelijkaardig programma als in de vorige oefening, maar dit keer is de rechte hoek aan de rechterkant.
+
+Een uitvoering waarbij de gebruiker `4` ingeeft :
+[source,shell]
+----
+Geef de hoogte : 4
+   *
+  **
+ ***
+****
+----
+
+
+== Aanvullende oefeningen
+
+=== De uitvoering van het programma pauzeren
+
+==== Oefening D06twister
+// Y7.10
+Stel, je krijgt voor je 30^e^ verjaardag het spel Twister cadeau van een kennis. __For privacy's sake let's call her Liese M... No, that's too obvious. Uh, let's say L. Mahieu.  link:https://www.youtube.com/embed/5oJS9_UUUWg?start=109&end=117&autoplay=1[klik,window=_blank]__
+
+Mocht je dit spel niet kennen, link:https://www.youtube.com/embed/7A5XO0udmdo?autoplay=1[deze video,window=_blank] toont hoe het moet (let op het aantal schoenen voor de koelkast!)
+
+Je woont echter alleen met je lief en met z'n tweetjes Twister spelen is niet zo handig : er moet immers iemand aan de pijl draaien voor de opdrachten.
+
+Dit is één van de zeldzame keren dat je __mad programming skillz__ in het dagelijks leven redding kunnen brengen : je besluit een programma te schrijven dat de opdrachten voor je genereert!
+
+Het programma moet elke 7 seconden een willekeurige Twister opdracht tonen. Elke opdracht combineert een lichaamsdeel en een kleur :
+
+- lichaamsdeel : linkerhand, rechterhand, linkervoet, rechtervoet
+- kleur : rood, groen, blauw, geel
+
+Het programma begint met een mededeling dat het spel start over 3 seconden (zodat de spelers tijd hebben om zich mentaal voor te bereiden) en eindigt nooit.
+
+[TIP]
+====
+Voor een nooit eindigend programma gebruik je een oneindige lus :
+[source,csharp,linenums]
+----
+while (true) { // <1>
+	code block
+}
+----
+<1> omdat de voorwaarde nooit `false` kan worden, wordt het __code block__ telkens herhaald.
+
+Om een programma met een oneindige lus te stoppen kun je in de menubalk van Visual Studio kiezen voor menu:Debug[Stop Debugging]. Een snellere manier is in de werkbalk op het rode vierkantje te klikken.
+====
+
+Een voorbeeld uitvoering zou er als volgt kunnen uitzien :
+
+[source,shell]
+----
+Het spel start over 3 seconden... <1>
+rechtervoet op blauw
+linkerhand op blauw
+linkerhand op rood
+linkervoet op geel
+rechterhand op groen
+rechterhand op blauw
+rechterhand op geel
+enz..
+----
+<1> hier wordt 3 seconden gewacht en daarna verschijnen de opdrachten met telkens 7 seconden pauze ertussen.
+
+
+=== Het console scherm wissen
+
+
+==== Oefening D06simon
+
+Schrijf een programma waarmee de gebruiker het spel __Simon__ kan spelen. Mocht je dit spel niet kennen, link:https://www.youtube.com/embed/1Yqj76Q4jJ4?autoplay=1[deze video,window="_blank"] toont hoe het moet
+
+In plaats van kleuren, worden er in het programma cijfers gebruikt : `1`, `2`, `3` en `4`.
+
+Het programma begint met een reeks die uit 1 enkel cijfer bestaat. Na elke correcte ingave door de gebruiker, voegt het programma 1 willekeurig cijfer toe aan de reeks.
+
+Bijvoorbeeld, het programma werkt achtereenvolgens met de reeksen
+
+- `2`
+- `23`
+- `231`
+- `2312`
+
+Het programma toont telkens een reeks cijfers en geeft de gebruiker 2 seconden tijd om deze te memoriseren. Daarna wordt het scherm gewist en moet de gebruiker de reeks intypen. 
+
+- Als de gebruiker de reeks correct ingeeft, wordt het scherm gewist en voegt het programma een nieuw cijfer toe aan de reeks. De nieuwe reeks wordt weer gedurende 2 seconden aan de gebruiker getoond.
+
+- Als de gebruiker echter een fout maakt bij het ingeven van de reeks, toont het programma een bericht met de correcte reeks en eindigt het spel.
+
+Het volgende voorbeeld toont een mogelijke uitvoering.
+
+****
+[.underline]#Voorbeeld#
+
+Het programma wist het scherm en toont :
+
+[source,shell]
+----
+U hebt 2 seconden om deze code te onthouden
+2
+----
+
+Na 2 seconden wordt het scherm gewist en verschijnt er `Geef de code`. De gebruiker moet nu de code intypen op de volgende regel :
+
+[source,shell]
+----
+Geef de code
+2 <1>
+----
+<1> input van de gebruiker
+
+Nadat de gebruiker de code intypt en op kbd:[ENTER] drukt, wordt het scherm gewist en verschijnt er :
+
+[source,shell]
+----
+U hebt 2 seconden om deze code te onthouden
+23
+----
+
+Na 2 seconden wordt het scherm gewist en verschijnt er `Geef de code`. De gebruiker typt de code op de volgende regel :
+
+[source,shell]
+----
+Geef de code
+23 <1>
+----
+<1> input van de gebruiker
+
+Nadat de gebruiker de code intypt en op kbd:[ENTER] drukt, wordt het scherm gewist en verschijnt er :
+
+[source,shell]
+----
+U hebt 2 seconden om deze code te onthouden
+231
+----
+
+Na 2 seconden wordt het scherm gewist en verschijnt er `Geef de code`. De gebruiker typt de code op de volgende regel :
+
+[source,shell]
+----
+Geef de code
+231 <1>
+----
+<1> input van de gebruiker
+
+Nadat de gebruiker de code intypt en op kbd:[ENTER] drukt, wordt het scherm gewist en verschijnt er :
+
+[source,shell]
+----
+U hebt 2 seconden om deze code te onthouden
+2312
+----
+
+Na 2 seconden wordt het scherm gewist en verschijnt er `Geef de code`. De gebruiker echter een verkerde code op de volgende regel en het programma eindigt met een mededeling :
+
+[source,shell]
+----
+Geef de code
+2311 <1>
+Helaas, de code was
+2312
+----
+<1> input van de gebruiker
+
+****
+
+[IMPORTANT]
+====
+Tips :
+
+- de nieuwe code begint met dezelfde reeks als de vorige code, met 1 cijfer erachter geplakt. Gebruik hiervoor string concatenatie.
+- Tijdens het debuggen kun je de `Console.Clear()` in commentaar zetten zodat je ten allen tijde de code op het scherm kunt zien
+====
+
+=== Herhalingen
+
+==== Oefening D06weekdagnummer
+
+Schrijf een programma dat de gebruiker om een dagnummer vraagt van 1 t.e.m. 7 en vervolgens toont welke weekdag daarmee overeenkomt (maandag is dag 1).
+
+Indien de gebruiker geen geldig dagnummer intypt toont het programma niks.
+
+Enkel voorbeeld uitvoeringen :
+
+[source, shell]
+----
+Geef een dagnummer : groen
+----
+	
+[source, shell]
+----
+Geef een dagnummer : -3
+----
+	
+[source, shell]
+----
+Geef een dagnummer : 9
+----
+	
+[source, shell]
+----
+Geef een dagnummer : 6
+Dagnummer 6 is zaterdag.	
+----
+
+==== Oefening D06somveelvouden
+
+Schrijf een programma dat de gebruiker om 2 gehele getallen vraagt. Je mag ervan uitgaan dat het eerste getal kleiner (of gelijk) is aan het tweede getal.
+
+Het programma toont vervolgens de som van alle drievouden en vijfvouden vanaf het eerste t.e.m. het tweede getal. Je hoeft geen rekening te houden met verkeerde invoer.
+
+Een voorbeeld uitvoering :
+[source, shell]
+----
+Geef een getal : 6
+Geef een getal : 30
+De som van tussenliggende 3-vouden en 5-vouden is 217 <1>
+----
+<1> de som in dit voorbeeld werd bepaald door 6+9+10+12+15+18+20+21+24+25+27+30 = 217

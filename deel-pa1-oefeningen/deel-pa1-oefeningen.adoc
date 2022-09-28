@@ -1,0 +1,118 @@
+= Programmeren Basis - Deel PA1 - Oefeningen
+Yanic Inghelbrecht
+v2021.10.28.12.00
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+// geen auto section numbering voor oefeningen (handigere titels en toc)
+//:sectnums:  
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+ 
+ 
+== Inzicht in de werking verkrijgen
+
+Nu je goed weet wat het programma kan, is het tijd om de code erbij te pakken.
+
+Hieronder staan een aantal inzichtsvragen, je zult de code grondig moeten bestuderen om ze te kunnen beantwoorden.
+
+[TIP]
+====
+Het kan daarbij verhelderend zijn om sommige stukken van het programma met de debugger te doorlopen om te zien wat er precies gebeurt!
+====
+
+**Code lezen en begrijpen is een belangrijke _skill_ als programmeur. En ook hier geldt : van andermans antwoorden leer je niet veel, je moet het echt zelf doen.**
+
+
+=== Oefening DPA1.menu
+
+Deze oefening gaat over het overkoepelende menu waarin de gebruiker moet kiezen wat hij/zij wil doen.
+
+Ga na hoe het programma het menu toont en de gebruikersinput verwerkt. 
+
+. Waarom eindigt het programma pas als de gebruiker keuze `5` kiest?
+
+. Wat bepaalt dat keuze `4` in het menu de 'alle details van een persoon zien' functionaliteit in gang steekt?
+
+=== Oefening DPA1.details
+
+Deze oefening gaat over de menu keuze "alle details van een persoon zien".
+
+Bekijk aandachtig de code van dit gedeelte en de gebruikte variabelen.
+
+. Het programma gaat pas verder als je een geldige persoon gekozen hebt, waar gebeurt dit?
+. Hoe is de informatie van één persoon over de verschillende arrays verdeeld?
+. Waarvoor dient de variabele `aantalPersonen` in verband met de arrays?
+. Hoe komt de initiële data in het programma terecht (i.e. de info over Jan en Mieke)?
+. Hoe wordt de `true`/`false` waarde voor `isVrouw` omgezet naar `vrouw`/`man` in de output?
+** Zie link:https://wellsb.com/csharp/beginners/csharp-ternary-conditional-operator/[]
+
+=== Oefening DPA1.toevoegen
+
+Deze oefening gaat over de menu keuze "een persoon toevoegen".
+
+Bekijk aandachtig de code van dit gedeelte en de gebruikte variabelen.
+
+. Hoe zorgt het programma ervoor dat lege tekst niet aanvaard wordt als voornaam?
+. Waarom hoeft er bij het geslacht niet op een lege string gecontroleerd te worden?
+. Hoe wordt de `m`/`v` input bij geslacht, omgezet naar een `false`/`true` waarde voor `isVrouw`?
+. Hoe wordt de ingevoerde data onthouden zolang het programma nog geen antwoord heeft op de `Wil u deze gegevens bewaren (j/n)?` vraag?
+. Waarom moet deze onthouden data niet expliciet verwijderd worden als de gebruiker deze vraag met `n` beantwoordt?
+
+=== Oefening DPA1.aanpassen
+
+Deze oefening gaat over de menu keuze "een persoon aanpassen".
+
+Bekijk aandachtig de code van dit gedeelte en de gebruikte variabelen.
+
+. Waarom is lege input bij voornaam dit keer WEL aanvaardbaar (i.t.t. bij het toevoegen)?
+. Hoe wordt er omgegaan met lege input voor het aantal kinderen en waarom is -1 ok in dit geval?
+. Wat zou je doen als ALLE mogelijke `int` waarden geldig zouden zijn om 'lege input' aan te duiden?
+. Hoe weet het programma of de voornaam moet overschreven worden?
+. Hoe weet het programma of het aantal kinderen moet overschreven worden?
+
+=== Oefening DPA1.verwijderen
+
+Deze oefening gaat over de menu keuze "een persoon verwijderen".
+
+Bekijk aandachtig de code van dit gedeelte en de gebruikte variabelen.
+
+. Hoe gaat het verwijderen in z'n werk?
+. Wat doen al die array manipulaties in de loop eigenlijk?
+. Waarom moeten er in de arrays geen waarden op `0`/`false`/`null` gezet worden bij het verwijderen?
+
+=== Oefening DPA1.varia
+
+Tot slot nog enkele losse inzichtsvragen :
+
+. Hoe kun je (als gebruiker) het programma in zo'n toestand krijgen dat de gebruiker onmogelijk nog input kan geven die door het programma aanvaard wordt?
+. Hoe kun je het programma laten crashen met een `IndexOutOfRangeException`?
+. Wat vind je van de scope van de variabele isCorrectAntwoord, is die te ruim of net goed? 
+** Indien te ruim, hoe zou je de scope dan (beperkter) kiezen?
+** Indien net goed, waarom mag de scope niet beperkter zijn?
+. Is de variabele aantalPersonen vermijdbaar? 
+** Indien wel, hoe zou je de code aanpassen zodat deze overbodig wordt? (de aanpak uitleggen, je hoeft het NIET in de code aan te passen)
+** Indien niet, waarom niet?
+. Kan het verwijderen van een persoon gerealiseerd worden zonder al die array verschuivingen?
+** Indien wel, hoe zou je de code aanpassen zodat deze overbodig wordt? (de aanpak uitleggen, je hoeft het NIET in de code aan te passen)
+** Indien niet, waarom niet?
+
+

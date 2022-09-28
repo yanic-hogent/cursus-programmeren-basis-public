@@ -1,0 +1,223 @@
+= Programmeren Basis - Deel 03 - Oefeningen
+Yanic Inghelbrecht
+v2022.02.23.15.06
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+// geen auto section numbering voor oefeningen (handigere titels en toc)
+//:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// paden
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+:deel-02-oplossingen: ../deel-02-oplossingen/deel-02-oplossingen.adoc
+:deel-03-oplossingen: ../deel-03-oplossingen/deel-03-oplossingen.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+
+[NOTE]
+======================================
+Het is een aanrader bij elke oefeningenreeks te starten met eventuele *__inleidende oefeningen__*.
+Naast deze focus je vooral op de *__essentiële oefeningen__*.
+
+Heb je tijd over, dan helpen de *__aanvullende oefeningen__* je de stof nog beter in de vingers te krijgen.
+======================================
+
+== Inleidende oefening
+
+=== Traceertabellen
+
+==== Oefening D03traceergetalontleden
+//Y3.03
+Neem link:{deel-02-oplossingen}#_oplossing_d02_getalontleden[de oplossing van D02getalontleden] erbij en nummer de regels in de broncode.
+
+Maak een traceertabel voor de uitvoering waarbij de gebruiker `123` ingeeft.
+
+== Essentiële oefeningen
+ 
+=== String interpolatie
+
+==== Oefening D03sominterpolatie
+
+Herwerk link:{deel-02-oplossingen}#_oplossing_d02_som[de oplossing van D02som] zodat string interpolatie gebruikt wordt.
+
+
+=== Werken met getallen
+
+
+==== Oefening D03getalraden
+
+Schrijf een programma dat een random getal bepaalt tussen 0 en 10 en de gebruiker 1 kans geeft om het te raden. Het programma toont of de gok van de gebruiker juist of fout was.
+
+Een mogelijke uitvoering waarbij het random getal 4 is en de gebruiker 8 gokt :
+
+[source,shell]
+----
+De computer denkt aan een getal tussen 0 en 10.
+Welk getal denkt u dat het is : 8
+Helaas, het getal was 4!
+----
+
+Een mogelijke uitvoering waarbij het random getal 4 is en de gebruiker correct gokt :
+[source,shell]
+----
+De computer denkt aan een getal tussen 0 en 10.
+Welk getal denkt u dat het is : 4
+Proficiat, u heeft goed geraden!
+----
+
+
+==== Oefening D03kleinermetif
+
+Schrijf een programma dat de gebruiker om twee gehele getallen vraagt en toont welk getal het kleinste is. Gebruik hiervoor - bij wijze van oefening - eens een if/else structuur en niet `Math.Min()`!
+
+Een mogelijke uitvoering :
+
+[source,shell]
+----
+Geef een getal : 12
+Geef een ander getal : 56
+12 is kleiner.
+----
+
+
+==== Oefening D03kleinermetmathmin
+
+Herschrijf het programma uit de vorige oefening zodat dit keer wél `Math.Min()` gebruikt wordt.
+
+
+==== Oefening D03cirkel
+// Y2.06
+Schrijf een programma dat de gebruiker om de straal van een cirkel (een kommagetal!) vraagt en vervolgens zowel de omtrek als de oppervlakte van de cirkel toont.
+
+Voor een cirkel geldt
+
+* de omtrek is 2 keer Pi keer de straal
+* de oppervlakte is Pi maal het kwadraat van de straal
+
+
+==== Oefening D03pythagoras
+
+Schrijf een programma dat de lengte van de schuine zijde berekent van een rechthoekige driehoek.
+
+Het programma vraagt de gebruiker om de basis en de hoogte van de driehoek (beiden kommagetallen) en toont dan de lengte van de schuine zijde.
+
+De lengte van die schuine zijde kun je berekenen met de __stelling van Pythagoras__, je kunt link:https://www.calculat.org/nl/oppervlakte-omtrek/stelling-van-pythagoras.html[hier] een voorbeeld uitproberen.
+
+Een uitvoering met basis 3 en hoogte 4 :
+[source,shell]
+----
+Geef de basis : 3
+Geef de hoogte : 4
+De lengte van de schuine zijde is 5
+----
+
+
+
+=== Variabelen en scope
+
+==== Oefening D03imperial
+//Y2.08
+
+Dit programma vraagt de gebruiker om een afstand in feet en inches, en toont dan de equivalente afstand in centimeter.
+
+[source,csharp,linenums]
+----
+Console.Write("Geef het aantal feet : ");
+string aantalFeetAlsTekst = Console.ReadLine();
+double aantalFeet = double.Parse(aantalFeetAlsTekst);
+
+Console.Write("Geef het aantal inches : ");
+string aantalInchesAlsTekst = Console.ReadLine();
+double aantalInches = double.Parse(aantalInchesAlsTekst);
+
+double aantalFeetInCm = aantalFeet * 30.48;
+double aantalInchesInCm = aantalInches * 2.54;
+
+double totaalInCm = aantalFeetInCm + aantalInchesInCm;
+
+Console.WriteLine($"Dat is {totaalInCm}cm.");
+----
+
+Vervang de __magic values__ in dit programma door const variabelen.
+
+
+
+
+
+== Aanvullende oefeningen
+ 
+=== String interpolatie
+
+==== Oefening D03frietjesinterpolatie
+
+Herwerk link:{deel-02-oplossingen}#_oplossing_d02_frietjes[de oplossing van D02frietjes] zodat string interpolatie gebruikt wordt.
+
+
+==== Oefening D03leeftijdinterpolatie
+
+Herwerk link:{deel-02-oplossingen}#_oplossing_d02_leeftijd[de oplossing D02leeftijd] zodat string interpolatie gebruikt wordt.
+
+=== Werken met getallen
+
+==== Oefening D03absolutewaarde
+
+Herwerk link:{deel-02-oplossingen}#_oplossing_d02_absolutewaarde[de oplossing van D02absolutewaarde] en pas toe wat je in dit deel bijgeleerd hebt.
+
+
+=== Variabelen en scope
+
+==== Oefening D03persecondewijzer
+// Y2.09
+Schrijf een programma dat de gebruiker om een geheel aantal seconden vraagt en toont hoeveel uren, minuten en seconden dit is.
+
+Tip : maak eerst voor jezelf drie voorbeelden op papier, nml. 
+
+- 8587 seconden
+- 307 seconden
+- 57 seconden
+
+=== Traceertabellen
+
+
+==== Opdracht D03traceeralfabetsoep
+// Y3.01
+Stel een traceertabel op van de uitvoering van onderstaand programma.
+[source,csharp,linenums]
+----
+ 1 : int a = 5;
+ 2 : int b = 10;
+ 3 : int c = a / b;
+ 4 : c = b % a;
+ 5 : c = 4;
+ 6 : c -= 20;
+ 7 : b--;
+ 8 : c = b % a;
+ 9 : double e = 3.3;
+10 : double f = a / b * e;
+11 : double g = e * a / b;
+12 : double h = 0.3;
+13 : h *= 11;
+14 : bool t = (a < 8);
+15 : bool u = (a != b);
+16 : bool v = (e === h);
+----
+
+
+==== Opdracht D03traceerpersecondewijzer
+// Y3.02
+Maak de traceertabel voor link:{deel-03-oplossingen}#_oplossing_d03_persecondewijzer[de oplossing van D03persecondewijzer] hierboven, als de gebruiker `8587` ingeeft voor het aantal seconden.

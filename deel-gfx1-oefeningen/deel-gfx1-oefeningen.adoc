@@ -1,0 +1,34 @@
+= Programmeren Basis - Deel GFX1 - Oefeningen
+Yanic Inghelbrecht
+v2021.10.18.14.30
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+// geen auto section numbering voor oefeningen (handigere titels en toc)
+//:sectnums:  
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+ 
+== Uitleg en oefeningen
+
+De uitleg over dit deel en de oefeningen vind je in link:attachments/deel-gfx1-overzicht-en-oefeningen.pdf[dit pdf document].
+
+Je zult daarbij ook de zip file link:attachments/deel-gfx1-playground-code.zip[**'deel-gfx1-playground-code.zip'**] met gegeven broncode nodig hebben.

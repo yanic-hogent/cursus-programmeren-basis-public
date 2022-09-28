@@ -1,0 +1,785 @@
+= Programmeren Basis - Deel 12 - Oplossingen
+Yanic Inghelbrecht
+v2022.03.30.11.00
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+// geen auto section numbering voor oefeningen (handigere titels en toc)
+//:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+:deel-12-oplossingen: ../deel-12-oplossingen/deel-12-oplossingen.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+ 
+
+ 
+== Documentatie
+
+
+ 
+=== Oplossing D12documentatie
+
+De officiële documentatie vind je op
+
+* De `Sleep()` method waarmee we ons programma konden laten wachten
+** link:https://docs.microsoft.com/en-us/dotnet/api/system.threading.thread.sleep[]
+* De `ReadKey()` method met een `bool` parameter
+** link:https://docs.microsoft.com/en-us/dotnet/api/system.console.readkey#System_Console_ReadKey_System_Boolean_[]
+
+
+== Debugging
+
+=== Oplossing D12palindroom
+
+[cols="3,1", options="header"]
+|===
+|Call Stack|Overige variabelen op het activatie record
+|`ReverseText(string tekst = "hallo")` gebroken op __regel 19__|`string result = "ollah"`
+|`IsPalindroom(string tekst = "hallo")` invoceert op __regel 9__ bovenstaande activatie|`string reverse = null`
+|`Main()` invoceert op __regel 5__ bovenstaande activatie|`string input = "hallo"`
+|===
+
+Op het activatierecord voor de call naar `IsPalindroom` staat variabele `reverse` nog op `null`.  
+
+Zoals je je misschien herinnert is dit de __defaultwaarde__ van het `string` datatype.  Op het moment dat de uitvoer gepauzeerd werd is aan `reverse` immers nog geen waarde toegekend.
+
+De fout zat in de `ReverseText` method...
+
+[source, csharp, linenums]
+----
+static string ReverseText(string tekst) {
+ 	string result = "";
+ 	foreach(char c in tekst) {
+ 		result = c + result;  // <1>
+ 	}
+ 	return result;
+}
+----
+<1> Hier zat de fout.
+
+
+
+== Kommagetallen en afronden
+
+
+
+=== Oplossing D12soortenafrondingen
+
+[%autowidth, cols="^,^,^,^,^"]
+|===
+| `g` | `Math.Ceiling(g)` | `Math.Floor(g)` | `Math.Round(g)` | `Math.Round(g, MidpointRounding.AwayFromZero)`
+
+| `7.4` | 8 | 7 | 7 | 7
+| `7.5` | 8 | 7 | 8 | 8
+| `7.6` | 8 | 7 | 8 | 8
+| `-7.4` | -7 | -8 | -7 | -7
+| `-7.5` | -7 | -8 | -8 | -8
+| `-7.6` | -7 | -8 | -8 | -8
+|===
+
+De broncode die de resultaten berekent :
+
+[source,csharp,linenums]
+----
+decimal[] waarden = { 7.4m, 7.5m, 7.6m, -7.4m, -7.5m, -7.6m };
+
+foreach(decimal g in waarden) {
+	decimal mc = Math.Ceiling(g);
+	decimal mf = Math.Floor(g);
+	decimal mr = Math.Round(g);
+	decimal mrafz = Math.Round(g,MidpointRounding.AwayFromZero);
+
+	Console.WriteLine($"{mc} | {mf} | {mr} | {mrafz}");
+}
+----
+
+
+=== Oplossing D12gasmaatschappij
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
+
+
+=== Oplossing D12kapitaalnietafgerond
+// Y2.12
+
+[source,csharp,linenums]
+----
+Console.Write("Geef een bedrag : ");
+string bedragAlsTekst = Console.ReadLine();
+decimal bedrag = decimal.Parse(bedragAlsTekst);
+
+Console.Write("Geef de intrestvoet (in %) : ");
+string intrestvoetAlsTekst = Console.ReadLine();
+decimal intrestvoet = decimal.Parse(intrestvoetAlsTekst);
+
+decimal intrestFactor = 1 + intrestvoet / 100;
+
+decimal kapitaal = bedrag;
+for (int jaar = 0; jaar <= 20; jaar++) {
+	Console.WriteLine($"jaar {jaar} : {kapitaal,0:f2}");
+	kapitaal *= intrestFactor; // <1>
+}
+----			
+<1> hier wordt de intrest bij het kapitaal geteld (via een vermenigvuldiging).
+
+Als we `intrestFactor = intrestvoet / 100` hadden genomen, dan zou de intrest bij het kapitaal geteld worden met `kapitaal += kapitaal*intrestFactor`.
+
+Beide berekeningswijzen komen op hetzelfde neer.
+
+
+=== Oplossing D12kapitaalwelafgerond
+// Y2.12
+
+[source,csharp,linenums]
+----
+Console.Write("Geef een bedrag : ");
+string bedragAlsTekst = Console.ReadLine();
+decimal bedrag = decimal.Parse(bedragAlsTekst);
+
+Console.Write("Geef de intrestvoet (in %) : ");
+string intrestvoetAlsTekst = Console.ReadLine();
+decimal intrestvoet = decimal.Parse(intrestvoetAlsTekst);
+
+decimal intrestFactor = 1 + intrestvoet / 100;
+
+decimal kapitaal = Math.Round(bedrag, 2); // <1>
+for (int jaar = 0; jaar <= 20; jaar++) {
+	Console.WriteLine($"jaar {jaar} : {kapitaal,0:f2}"); // <2>
+	kapitaal *= intrestFactor;
+	kapitaal = Math.Round(kapitaal, 2);   // <1>
+}
+----	
+<1> dit zijn de enige regels die anders zijn dan in de vorige oplossing.
+<2> merk op dat we nog steeds in de output afronden (*)
+
+(*) Zijn we eigenlijk zeker dat de __afgerond getoonde bedragen__ (met `0:f2`), overeenkomen met de afgeronde bedragen waarmee we verder rekenen?
+
+Merk vooreerst op dat het __afgerond getoond bedrag__ (op regel <2>) steeds het resultaat is van een voorgaande `Math.Round()` afronding (regels <1>).
+
+Het antwoord is ja : een getal een tweede keer afronden op 2 cijfers na de komma blijft hetzelfde. 
+
+Bijvoorbeeld `123.4567` afronden op 2 cijfers na de komma geeft `123.4600000`. Als we dit dan nogmaals afronden tot 2 cijfers na de komma in de output, tonen we `123.46`.
+
+
+
+=== Oplossing D12kortingplusbtw
+// Y2.13
+
+[source,csharp,linenums]
+----
+Console.Write("Geef een bedrag excl. BTW (2 cijfers na de komma) : ");
+string bedragExclusiefBTWAlsTekst = Console.ReadLine();
+decimal bedragExclusiefBTW = decimal.Parse(bedragExclusiefBTWAlsTekst);
+
+Console.Write("Geef de korting (in %) : ");
+string kortingsPercentageAlsTekst = Console.ReadLine();
+decimal kortingsPercentage = decimal.Parse(kortingsPercentageAlsTekst);
+
+Console.Write("Geef het BTW-tarief (in %) : ");
+string btwPercentageAlsTekst = Console.ReadLine();
+decimal btwPercentage = decimal.Parse(btwPercentageAlsTekst);
+
+decimal kortingNietAfgerond = bedragExclusiefBTW * (kortingsPercentage / 100);
+decimal korting = Math.Round(kortingNietAfgerond, 2, MidpointRounding.AwayFromZero);
+
+decimal belastbaarBedrag = bedragExclusiefBTW - korting; // zal automatisch ook 2 cijfers na de komma hebben
+decimal btwNietAfgerond = belastbaarBedrag * (btwPercentage / 100);
+decimal btw = Math.Round(btwNietAfgerond, 2);
+
+decimal bedragInclusiefBTW = belastbaarBedrag + btw;
+
+Console.WriteLine();
+Console.WriteLine($"excl. BTW : {bedragExclusiefBTW,8:f2}");
+Console.WriteLine($"  korting : {korting,8:f2}");
+Console.WriteLine($"      BTW : {btw,8:f2}");
+Console.WriteLine($"incl. BTW : {bedragInclusiefBTW,8:f2}");
+----
+
+
+
+== DateTime
+
+
+
+=== Oplossing D12tonenmetonderdelen
+// Y2.01
+[source,csharp,linenums]
+----
+DateTime nu = DateTime.Now;
+
+int dag = nu.Day;
+int maand = nu.Month;
+int jaar = nu.Year;
+int uren = nu.Hour;
+int minuten = nu.Minute;
+
+Console.WriteLine($"De datum van vandaag is {dag,2:D2}/{maand,2:D2}/{jaar,4:D4} en het is nu {uren,2:D2}u{minuten,2:D2}"); // <1>
+----
+<1>	de toevoegsels `,2:D2` en `,4:D4` zorgen ervoor dat resp. `9` als `09` wordt getoond en `57` als `0057` (*)
+
+(*) het jaar waarin Venutius in opstand kwam tegen zijn vrouw Cartimandua! link:https://en.wikipedia.org/wiki/AD_57[Blijkbaar..,window="_target"]
+
+
+
+=== Oplossing D12tonenmetformaatstring
+// Y2.01
+[source,csharp,linenums]
+----
+DateTime nu = DateTime.Now;
+
+string datumTekst = nu.ToString("dd/MM/yyyy");
+string tijdTekst = nu.ToString("HHumm"); // <1>
+
+Console.WriteLine($"De datum van vandaag is {datumTekst} en het is nu {tijdTekst}");
+----
+<1> Gelukkig heeft 'u' geen speciale betekenis qua formattering of we hadden een probleem!
+
+
+
+=== Oplossing D12seizoen
+// Y2.06
+
+[source,csharp,linenums]
+----
+int jaartal = DateTime.Now.Year;
+DateTime startLente = new DateTime(jaartal, 03, 01);
+DateTime startZomer = new DateTime(jaartal, 06, 01);
+DateTime startHerfst = new DateTime(jaartal, 09, 01);
+DateTime startWinter = new DateTime(jaartal, 12, 01);
+
+Console.Write("Geef een datum : ");
+string datumAlsTekst = Console.ReadLine();
+
+System.Globalization.CultureInfo nlBe = new System.Globalization.CultureInfo("nl-BE");
+DateTime datum;
+bool gelukt = DateTime.TryParseExact(datumAlsTekst, "dd/MM", nlBe, System.Globalization.DateTimeStyles.None, out datum);
+
+// Merk op dat datum altijd in het huidige jaartal zit en
+// onze start datums ook. Dus het is 'winter' zowel in het begin
+// als op het einde van het jaar.
+if (datum < startLente || datum >= startWinter) {
+	Console.WriteLine("Winter");
+} else if (datum < startZomer) {
+	Console.WriteLine("Lente");
+} else if (datum < startHerfst) {
+	Console.WriteLine("Zomer");
+} else if (datum < startWinter) {
+	Console.WriteLine("Herfst");
+}
+----
+
+Merk op dat de formaat string `dd/MM` geen jaartal bevat. De `DateTime` waarde _moet_ echter altijd een jaargedeelte hebben. In dit geval zal het huidig jaartal gebruikt worden. 
+
+Dit kan soms problemen geven als je datums in een bepaald jaar vergelijkt met een datum die op basis van bv. `dd/MM` met `TryParseExact()` werd bekomen! Afhankelijk van het jaar waarin je het programma uitvoert kunnen de datums wel/niet in verschillende jaren liggen.
+
+
+
+=== Oplossing D12verjaardagen
+// Y2.03
+
+[source,csharp,linenums]
+----
+System.Globalization.CultureInfo nlBe = new System.Globalization.CultureInfo("nl-BE");
+const int aantalData = 10;
+
+int[] aantalPerMaand = new int[12];
+for (int i=0;i<aantalData;i++) {
+	// vraag de gebruiker om een datum
+	Console.Write("Geef een geboortedatum : ");
+	string datumAlsTekst = Console.ReadLine();
+
+	// bouw een DateTime waarde voor de ingevoerde tekst
+	DateTime datum;
+	bool gelukt = DateTime.TryParseExact(datumAlsTekst, "dd/MM/yyyy", nlBe, System.Globalization.DateTimeStyles.None, out datum);
+
+	// achterhaal de maand en tel eentje bij voor die maand
+	int maandNummer = datum.Month;
+	int index = maandNummer - 1; // <1>
+	aantalPerMaand[index]=aantalPerMaand[index]+1;
+	// of korter : aantalPerMaand[index]++;
+}
+
+// toon de resultaten
+for(int index=0;index<aantalPerMaand.Length;index++) {
+	int maandNummer = index + 1; // <1>
+	int aantal = aantalPerMaand[index];
+	if (aantal > 0) {
+		Console.WriteLine($"In maand {maandNummer}, {aantal} verjaardag(en)");
+	}
+}
+----
+<1> Aah, de geneugten van het mengen van __tellen vanaf 0__ en __tellen vanaf 1__.
+
+
+
+=== Oplossing D12bertbeverzondertimespan
+// Y2.04
+
+[source,csharp,linenums]
+----
+const int ticksPerMilliseconde = 10000;
+Console.WriteLine("Druk 2x na elkaar op dezelfde toets, zo snel mogelijk..");
+
+char c1 = Console.ReadKey(true).KeyChar;
+long ticks1 = DateTime.Now.Ticks;
+
+char c2 = Console.ReadKey(true).KeyChar;
+long ticks2 = DateTime.Now.Ticks;
+
+if (c1 == c2) {
+	long ticksDelta = ticks2 - ticks1;
+	long millisDelta = ticksDelta / ticksPerMilliseconde;
+	Console.WriteLine($"De tijd ertussen bedroeg {millisDelta}ms");
+} else {
+	Console.WriteLine("Dat waren 2 verschillende toetsen!");
+}
+----
+
+
+
+=== Oplossing D12feestdagen
+// Y2.05
+
+Er is een potentieel probleem wegens de manier waarop `TryParseExact()` werkt als er geen jaartal wordt opgegeven. Dan wordt blijkbaar het huidige jaartal gebruikt.
+
+De programmeur die `TryParseExact()` schreef moest _iets_ kiezen voor het jaar gedeelte en dan is het huidige jaar geen slechte keuze.
+
+Ons programma zal enkel de feestdagen bevatten voor een specifiek jaar. Als we het programma in het verkeerde jaar uitvoeren, zal het datums uit verschillende jaren vergelijken en geen enkele feestdag detecteren.
+
+We zullen dus de `DateTime` waarde nog moeten corrigeren als het programma in het verkeerde jaar wordt uitgevoerd. 
+
+Geen paniek als je deze correctie niet voorzien had, aan dit soort kronkels denkt niemand de eerste keer. Alhoewel, er was de waarschuwing in link:{deel-12-oplossingen}#_oplossing_d12_seizoen[de oplossing van D12seizoen] ;)
+
+Ongeacht de context (C#, databanken, javascript, web applicaties met aparte software in de browser en op de server), correct omgaan met datum en tijd waarden is _altijd_ moeilijker dan je zou willen/denken/hopen.
+
+Dit is de oplossing met feestdagen voor 2019.
+
+[source,csharp,linenums]
+----
+const int jaartal = 2019;
+
+DateTime[] feestDatums = {
+	new DateTime(2019,1,1),
+	new DateTime(2019, 4, 22),
+	new DateTime(2019, 5, 1),
+	new DateTime(2019, 5, 30),
+	new DateTime(2019, 6, 10),
+	new DateTime(2019, 7, 21),
+	new DateTime(2019, 8, 15),
+	new DateTime(2019, 11, 1),
+	new DateTime(2019, 11, 11),
+	new DateTime(2019, 12, 25)
+};
+
+string[] feestNamen = {
+	"Nieuwjaar",
+	"Paasmaandag",
+	"Dag van de Arbeid",
+	"O.H.Hemelvaart",
+	"Pinkstermaandag",
+	"Nationale feestdag",
+	"O.L.V.hemelvaart",
+	"Allerheiligen",
+	"Wapenstilstand",
+	"Kerstmis"
+};
+
+Console.Write($"Geef een datum in {jaartal} : ");
+string datumAlsTekst = Console.ReadLine();
+
+System.Globalization.CultureInfo nlBe = new System.Globalization.CultureInfo("nl-BE");
+DateTime datum;                                        // <1>
+bool gelukt = DateTime.TryParseExact(datumAlsTekst, "dd/MM", nlBe, System.Globalization.DateTimeStyles.None, out datum);
+
+if (gelukt) {
+	// corrigeer indien we het programma niet in het juiste jaar uitvoeren
+	if (datum.Year != jaartal) { // <2>
+		datum = new DateTime(jaartal, datum.Month, datum.Day);
+	}
+
+	bool gevonden = false;
+	for (int i = 0; i < feestDatums.Length; i++) {
+		DateTime feestDatum = feestDatums[i];
+		if (datum == feestDatum) { // <3>
+			Console.WriteLine($"Dat is \"{feestNamen[i]}\" in {jaartal}");
+			gevonden = true;
+			break;
+		}
+	}
+	if (!gevonden) {
+		Console.WriteLine($"Dat is geen feestdag in {jaartal}");
+	}
+} else {
+	Console.WriteLine($"Ongeldige datum voor {jaartal}");
+}
+----
+<1> Let op het gebruik van `dd/MM` als formaat string
+<2> `TryParseExact` neemt het huidige jaartal indien er in de formaat string geen jaartal voorkomt, dus we misschien moeten we dit corrigeren.
+<3> Vergelijking van twee `DateTime` waarden
+
+En mocht je het je afvragen : `DateTime` waarden gedragen zich netjes zodat we ook `Array.IndexOf` kunnen gebruiken :
+
+[source,csharp,linenums]
+----
+if (gelukt) {
+	// corrigeer indien we het programma niet in het juiste jaar uitvoeren
+	if (datum.Year != jaartal) {
+		datum = new DateTime(jaartal, datum.Month, datum.Day);
+	}
+
+	int i = Array.IndexOf(feestDatums, datum); // <1>
+	if (i != -1) {
+		Console.WriteLine($"Dat is \"{feestNamen[i]}\" in {jaartal}");
+	} else {
+		Console.WriteLine($"Dat is geen feestdag in {jaartal}");
+	}
+} else {
+	Console.WriteLine($"Ongeldige datum voor {jaartal}");
+}
+----
+<1> Gebruik van `Array.IndexOf()` op een array met `DateTime` waarden
+
+
+
+=== Oplossing D12leeftijdinjaren
+// Y2.07
+
+We kunnen de leeftijd bekomen door de jaartallen van de huidige datum en de geboortedatum van elkaar af te trekken.
+
+We moet er dan echter wel rekening mee houden dat de gebruiker dit jaar misschien nog niet verjaard is.
+
+[source,csharp,linenums]
+----
+System.Globalization.CultureInfo nlBe = new System.Globalization.CultureInfo("nl-BE");
+
+Console.Write("Geef uw geboortedatum (dd/mm/jjjj) : ");
+string input = Console.ReadLine();
+
+DateTime geboorteDatum;
+bool gelukt = DateTime.TryParseExact(input, "dd/MM/yyyy", nlBe, System.Globalization.DateTimeStyles.None, out geboorteDatum);
+
+DateTime vandaag = DateTime.Today; // geen tijdstip nodig noch wenselijk
+
+int leeftijd = vandaag.Year - geboorteDatum.Year;
+
+// corrigeer indien de gebruiker dit jaar nog niet verjaard is
+DateTime verjaardagDitJaar = new DateTime(vandaag.Year, geboorteDatum.Month, geboorteDatum.Day);
+if (verjaardagDitJaar > vandaag) {
+	leeftijd--;
+}
+
+string vandaagAlsString = vandaag.ToString("dd/MM/yyy");
+Console.WriteLine($"Vandaag is het {vandaagAlsString}, dus u bent {leeftijd} jaar oud");
+----
+
+Het is best mogelijk dat deze code nog moet aangepast worden om rekening te houden met personen die op 29/2 geboren werden in combinatie met of het vandaag wel/niet een schrikkeldag is. Maar we gaan het hier niet te ingewikkeld maken.
+
+
+
+== TimeSpan
+
+
+=== Oplossing D12bertbevermettimespan
+// Y2.04
+
+Nu we `TimeSpan` gebruiken is de oplossing iets eenvoudiger en overzichtelijker geworden.
+
+[source,csharp,linenums]
+----
+Console.WriteLine("Druk 2x na elkaar op dezelfde toets, zo snel mogelijk..");
+
+char c1 = Console.ReadKey(true).KeyChar;
+DateTime dt1 = DateTime.Now;
+
+char c2 = Console.ReadKey(true).KeyChar;
+DateTime dt2 = DateTime.Now;
+
+if (c1 == c2) {
+	TimeSpan ts = dt2-dt1;
+	Console.WriteLine($"De tijd ertussen bedroeg {ts.TotalMilliseconds}ms");
+} else {
+	Console.WriteLine("Dat waren 2 verschillende toetsen!");
+}
+----
+
+
+
+=== Oplossing D12leeftijdindagen
+
+[source,csharp,linenums]
+----
+System.Globalization.CultureInfo nlBe = new System.Globalization.CultureInfo("nl-BE");
+
+Console.Write("Geef uw geboortedatum (dd/mm/jjjj) : ");
+string input = Console.ReadLine();
+
+DateTime geboorteDatum;
+bool gelukt = DateTime.TryParseExact(input, "dd/MM/yyyy", nlBe, System.Globalization.DateTimeStyles.None, out geboorteDatum);
+
+DateTime vandaag = DateTime.Today; // geen tijdstip nodig noch wenselijk
+
+TimeSpan levenstijd = vandaag - geboorteDatum;
+Console.WriteLine($"U bent {levenstijd.TotalDays} dagen oud");
+----
+
+== Arrays en methods
+
+=== Oplossing D12doorsnede
+
+[source, csharp, linenums]
+----
+class Program {
+    static void Main() {
+        double[] temperaturenMeetpunt1 = { 10.1, 20.2, 15.5, 12.3, 28.7 };
+        double[] temperaturenMeetpunt2 = { 9.0, 10.0, 20.2, 15.6, 12.3, 28.8, 11.1 };
+
+        double[] doorsnede = Doorsnede(temperaturenMeetpunt1, temperaturenMeetpunt2);
+        ToonDoorsnede(doorsnede);                       // toont de tekst "Doorsnede: 20,2 | 12,3"
+
+        double[] getallen1 = { 1.23, 2.34, 3.45 };
+        double[] getallen2 = { 1.99, 2.34 };
+        ToonDoorsnede(Doorsnede(getallen1, getallen2)); // toont de tekst "Doorsnede: 2,34"
+
+        double[] getallen3 = { 1.99, 2.99, 3.99 };
+        ToonDoorsnede(Doorsnede(getallen1, getallen3)); // toont de tekst "geen doorsnede"
+    }
+
+    static void ToonDoorsnede(double[] doorsnede) {
+        if (doorsnede.Length >= 1) {
+            Console.WriteLine($"Doorsnede: {string.Join(", ", doorsnede)}");
+        } else {
+            Console.WriteLine("geen doorsnede");
+        }
+    }
+
+    static double[] Doorsnede(double[] getallen1, double[] getallen2) {
+        // Bepaal welke de korste en langste array is:
+        double[] kortsteArray = getallen1;
+        double[] langsteArray = getallen2;
+        if (kortsteArray.Length > getallen2.Length) { 
+            kortsteArray = getallen2;
+            langsteArray = getallen1;
+        }
+
+        // Tel het aantal waardes die in de doorsnede moeten terechtkomen:
+        int aantalInDoorsnede = 0;
+        for (int i = 0; i < kortsteArray.Length; i++) {
+            for (int j = 0; j < langsteArray.Length; j++) {
+                if (kortsteArray[i] == langsteArray[j]) {
+                    aantalInDoorsnede++;
+                }
+            }
+        }
+
+        // Maak de array aan voor de doorsnede:
+        double[] doorsnede = new double[aantalInDoorsnede];
+
+        // Ga nogmaals door de twee arrays om de vereist waardes over te nemen in de doorsnede:
+        int k = 0;
+        for (int i = 0; i < kortsteArray.Length; i++) {
+            for (int j = 0; j < langsteArray.Length; j++) {
+                if (kortsteArray[i] == langsteArray[j]) {
+                    doorsnede[k] = kortsteArray[i];
+                    k++;
+                }
+            }
+        }
+
+        // Lever de doorsnede array op:
+        return doorsnede;
+    }
+}
+----
+
+=== Oplossing D12frequenties
+
+[source, csharp, linenums]
+----
+class Program {
+    static void Main() {
+        const int aantal = 10;
+
+        // Invoer opvangen in een array getallen:
+        int[] getallen = new int[aantal];
+        int som = 0;
+        for (int teller = 1; teller <= aantal; teller++) {
+            int getal;
+            bool invoerOk;
+            do {
+                Console.Write($"Getal {teller}?: ");
+                invoerOk = int.TryParse(Console.ReadLine(), out getal);
+            } while (!invoerOk);
+            getallen[teller - 1] = getal;
+            som += getal;
+        }
+
+        Console.WriteLine();
+        Console.WriteLine($"Som: {som}");
+        Console.WriteLine($"Gemiddelde: {som / aantal}");
+
+        int[] frequenties = new int[aantal];
+        // In de (parallelle) frequenties array stoppen we het aantal-keer-voorkomen
+        // bij het eerste voorkomen van dat getal.
+        frequenties[0] = 1;
+        for (int i = 1; i < getallen.Length; i++) {
+            // Ga naar het eerste voorkomen van dat getal, en verhoog daar met 1...
+            for (int j = 0; j <= i; j++) {
+                if (getallen[j] == getallen[i]) {
+                    frequenties[j]++;
+                    break;
+                }
+            }
+        }
+
+        // Afdrukken:
+        Console.WriteLine("Frequenties:");
+        for (int i = 0; i < getallen.Length; i++) {
+            if (frequenties[i] > 0) { 
+                Console.WriteLine($"  {getallen[i]} komt {frequenties[i]} voor");
+            }
+        }
+    }
+}
+----
+
+=== Oplossing D12gemeenteraad
+
+[source, csharp, linenums]
+----
+static int Raadsleden(int inwoners) {
+    int[] inwonersAantallen = { 1000, 2000, 3000, 4000, 5000, 7000, 9000, 12000, 15000,
+                    20000, 25000, 30000, 35000, 40000, 50000, 60000, 70000,
+                    80000, 90000, 100000, 150000, 200000, 250000, 300000 };
+    int[] raadsledenAantallen = { 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35,
+                        37, 39, 41, 43, 45, 47, 49, 51, 53, 55 };
+
+    int raadsleden = 7;
+    int index = 0;
+    while (index < inwonersAantallen.Length &&
+            inwoners >= inwonersAantallen[index]) {
+        raadsleden = raadsledenAantallen[index];
+        index++;
+    }
+
+    return raadsleden;
+}
+
+static int[] Zetels(int raadsleden, string[] lijsten, int[] stemcijfers) {
+    // Maak een array aan om per lijst het aantal zetels bij te houden...
+    int[] zetels = new int[lijsten.Length];
+
+    // Maak arrays aan om per lijst over een huidige deler en huidig stemquotient te beschikken...
+    double[] delers = new double[lijsten.Length];
+    double[] quotienten = new double[lijsten.Length];
+    // Vul de tabellen alvast op met deler 1 en het eerste stemquotient...
+    for (int i = 0; i < lijsten.Length; i++) {
+        delers[i] = 1;
+        quotienten[i] = stemcijfers[i]; // of dus eigenlijk stemcijfers[i] / delers[i];
+    }
+
+    // Zolang nog niet alle zetels verdeeld zijn: verhogen we het aantal zetels voor de lijst met het hoogste stemquotient...
+    int verdeeldeZetels = 0;
+    // Maak een tabel aan om per lijst het aantal zetels bij te houden...
+    do {
+        // Zoek de positie (index) van het hoogste stemquotient...
+        int indexHoogsteQuotient = 0;
+        for (int i = 1; i < quotienten.Length; i++) {
+            if ((quotienten[i] > quotienten[indexHoogsteQuotient]) ||
+                (quotienten[i] == quotienten[indexHoogsteQuotient] && stemcijfers[i] > stemcijfers[indexHoogsteQuotient])) {
+                // indien zelf het stemcijfer gelijk is, wordt hier impliciet gekeken naar het lijstnummer
+                indexHoogsteQuotient = i;
+            }
+        }
+
+        // Verhoog voor die lijst (op die positie) het aantal zetels met 1...
+        zetels[indexHoogsteQuotient] += 1;
+        // Verhoog voor die lijst (op die positie) de deler met 1...
+        delers[indexHoogsteQuotient] += 1;
+        // Bereken voor die lijst (op die positie) het volgende quotient...
+        quotienten[indexHoogsteQuotient] = stemcijfers[indexHoogsteQuotient] / delers[indexHoogsteQuotient];
+
+        // Verhoog het aantal verdeelde zetels met 1...
+        verdeeldeZetels++;
+    } while (verdeeldeZetels < raadsleden);
+
+    // Lever de zetels tabel op...
+    return zetels;
+}
+----
+
+== Console invoer en methods
+
+=== Oplossing D12morsebeep
+
+[source, csharp, linenums]
+----
+class Program {
+    static void Main() {
+        Console.WriteLine("MORSE VERTALER:\n");
+        Console.WriteLine("Voer één of meerdere karakter in (karakters van A t.e.m. Z worden aanvaard)...");
+
+        while (true) {
+            if (Console.KeyAvailable) {
+                ConsoleKeyInfo cki = Console.ReadKey();
+                if (cki.Key >= ConsoleKey.A && cki.Key <= ConsoleKey.Z) {
+                    char letter = cki.KeyChar;
+                    string morse = Morse(letter);
+                    System.Diagnostics.Debug.Print($"Toets voor letter {letter} ingedrukt => {morse}");
+
+                    PlayBeep(morse);
+                    System.Threading.Thread.Sleep(750);
+                }
+            }
+        }
+    }
+
+    static string Morse(char letter) {
+        string[] morse = { ".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--.." };
+        char[] letters = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
+
+        for (int i = 0; i < letters.Length; i++) {
+            if (letters[i] == letter) {
+                return morse[i];
+            }
+        }
+        return null;
+    }
+
+    static void PlayBeep(string morse) {
+        const int frequentie = 750;
+        const int kort = 500;        // halve seconde
+        const int lang = kort * 2;   // 1 seconde
+        const int pauze = 250;       // kwart seconde
+
+        foreach (char teken in morse) {
+            int duur = 0;
+            if (teken == '.') {
+                duur = kort;
+                System.Diagnostics.Debug.Print("kort");
+            } else if (teken == '-') {
+                duur = lang;
+                System.Diagnostics.Debug.Print("lang");
+            }
+            Console.Beep(frequentie, duur);
+            System.Threading.Thread.Sleep(pauze);
+        }
+    }
+}
+----

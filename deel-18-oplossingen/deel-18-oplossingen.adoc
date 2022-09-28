@@ -1,0 +1,726 @@
+= Programmeren Basis - Deel 18 - Oplossingen
+Yanic Inghelbrecht
+v2022.05.06.10.00
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+// geen auto section numbering voor oefeningen (handigere titels en toc)
+//:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+
+
+ 
+== Vooraf
+
+Alle klassen in deze oefeningen staan in een namespace `D18` en de `Main` method staat in een klasse `Program`.
+
+
+
+== Eenvoudig
+
+
+
+=== Oplossing D18persoonopleeftijd
+
+.Persoon.cs
+[source,csharp,linenums]
+----
+public class Persoon {
+
+    public string Naam { get; set; }
+    public int Leeftijd { get; set; }
+
+    public Persoon(string naam, int leeftijd) {
+        this.Naam = naam;
+        this.Leeftijd = leeftijd;
+    }
+
+}
+----
+
+.PersoonLeeftijdComparer.cs
+[source,csharp,linenums]
+----
+class PersoonLeeftijdComparer : IComparer<Persoon> {
+
+    public int Compare(Persoon x, Persoon y) {
+        return x.Leeftijd.CompareTo(y.Leeftijd);
+    }
+
+}
+----
+
+.Program.cs
+[source,csharp,linenums]
+----
+public class Program {
+
+	static void PrintPersonenMetTitel(string titel, List<Persoon> personen) {
+		Console.WriteLine($"--- {titel} ---");
+
+		// Toon alle personen op de console
+		foreach (Persoon p in personen) {
+            Console.WriteLine($"{p.Naam}, {p.Leeftijd} jaar");
+        }
+    }
+
+	static void Main(string[] args) {
+		List<Persoon> personen = new List<Persoon>();
+		personen.Add(new Persoon("Jan", 23));
+		personen.Add(new Persoon("Miet", 45));
+		personen.Add(new Persoon("Joris", 34));
+		personen.Add(new Persoon("Corneel", 12));
+		personen.Add(new Persoon("Phara", 34));
+			
+		PrintPersonenMetTitel("ongesorteerd", personen);
+
+		PersoonLeeftijdComparer plc = new PersoonLeeftijdComparer();
+		personen.Sort(plc);
+			
+		PrintPersonenMetTitel("gesorteerd op leeftijd", personen);
+	}
+
+}
+----
+
+
+
+=== Oplossing D18persoonopnaam
+
+De inhoud van `Persoon.cs` is identiek aan oplossing D18persoonopleeftijd :
+
+.Persoon.cs
+[source,csharp,linenums]
+----
+public class Persoon {
+
+    public string Naam { get; set; }
+    public int Leeftijd { get; set; }
+
+    public Persoon(string naam, int leeftijd) {
+        this.Naam = naam;
+        this.Leeftijd = leeftijd;
+    }
+
+}
+----
+
+Een eenvoudige comparer op basis van de `Naam` property :
+
+.PersoonNaamComparer.cs
+[source,csharp,linenums]
+----
+class PersoonNaamComparer : IComparer<Persoon> {
+
+    public int Compare(Persoon x, Persoon y) {
+        return x.Naam.CompareTo(y.Naam);
+    }
+
+}
+----
+
+De `Main` method heeft onderaan een paar bijkomende regels waarin de nieuwe comparer gebruikt wordt :
+
+.Program.cs
+[source,csharp,linenums]
+----
+public class Program {
+
+	static void PrintPersonenMetTitel(string titel, List<Persoon> personen) {
+		Console.WriteLine($"--- {titel} ---");
+
+		foreach (Persoon p in personen) {
+            Console.WriteLine($"{p.Naam}, {p.Leeftijd} jaar");
+        }
+    }
+
+	static void Main(string[] args) {
+		List<Persoon> personen = new List<Persoon>();
+		personen.Add(new Persoon("Jan", 23));
+		personen.Add(new Persoon("Miet", 45));
+		personen.Add(new Persoon("Joris", 34));
+		personen.Add(new Persoon("Corneel", 12));
+		personen.Add(new Persoon("Phara", 34));
+			
+		PrintPersonenMetTitel("ongesorteerd", personen);
+
+		PersoonLeeftijdComparer plc = new PersoonLeeftijdComparer();
+		personen.Sort(plc);
+			
+		PrintPersonenMetTitel("gesorteerd op leeftijd", personen);
+
+		PersoonNaamComparer pnc = new PersoonNaamComparer();	// <1>
+		personen.Sort(pnc);										// <1>
+
+		PrintPersonenMetTitel("gesorteerd op naam", personen);	// <1>
+	}
+
+}
+----
+<1> regels die werden toegevoegd
+
+
+=== Oplossing D18persoonopnaamomgekeerd
+
+Bij deze oplossing is het belangrijk je te realiseren dat 
+
+* de return values van `Compare` methods bij sorteren a->z versus z->a zijn elkaars tegengestelde 
+
+Deze tabel toont alle mogelijkheden van `Compare` voor de `x` en `y` parameters en de return value :
+
+[%autowidth]
+|====
+^a| alfabetische volgorde ^| return value van `Compare` bij a -> z ^| return value van `Compare` bij z->a
+
+| `x` komt voor `y` ^| `< 0` ^| `> 0`
+| `x` is hetzelfde als `y` ^| `== 0` ^| `== 0`
+| `x` komt na `y` ^| `> 0` ^| `< 0`
+|====
+
+Bijvoorbeeld, indien `x` het woord "aap" is en `y` het woord `zebra`, dan moet de `Compare` method 
+
+* bij sorteren a->z een return value < 0 produceren, want "aap" komt dan voor "zebra"
+* bij sorteren z->a een return value > 0 produceren,want "zebra" komt dan voor "aap"
+
+Een oplossing waarin we de code van PersoonNaamComparer aanpassen door gewoon een `-` voor de return value plaatsen :
+
+.PersoonNaamComparer.cs
+[source,csharp,linenums]
+----
+class PersoonNaamComparer : IComparer<Persoon> {
+
+    public int Compare(Persoon x, Persoon y) {
+        return - x.Naam.CompareTo(y.Naam); // <1>
+    }
+
+}
+----
+<1> enkel deze regel werd aangepast (let op het `-` teken vooraan)
+
+Een oplossing waarin we de code van PersoonNaamComparer aanpassen door `x` en `y` om te wisselen in de `CompareTo` opdracht.
+
+.PersoonNaamComparer.cs
+[source,csharp,linenums]
+----
+class PersoonNaamComparer : IComparer<Persoon> {
+
+    public int Compare(Persoon x, Persoon y) {
+        return y.Naam.CompareTo(x.Naam); // <1>
+    }
+
+}
+----
+<1> enkel deze regel werd aangepast (let op de posities van `x` en `y`)
+
+
+
+== Iets ingewikkelder
+
+
+
+=== Oplossing D18persooncomparertelling
+
+.PersoonLeeftijdComparer.cs
+[source,csharp,linenums]
+----
+class PersoonLeeftijdComparer : IComparer<Persoon> {
+
+    public int Compare(Persoon x, Persoon y) {
+		System.Console.WriteLine($"   {x.Naam} en {y.Naam} worden vergeleken"); // <1>
+        return x.Leeftijd.CompareTo(y.Leeftijd);
+    }
+
+}
+----
+<1> output opdracht toegevoegd.
+
+.PersoonNaamComparer.cs
+[source,csharp,linenums]
+----
+class PersoonNaamComparer : IComparer<Persoon> {
+
+    public int Compare(Persoon x, Persoon y) {
+		System.Console.WriteLine($"   {x.Naam} en {y.Naam} worden vergeleken"); // <1>
+        return x.Naam.CompareTo(y.Naam);
+    }
+
+}
+----
+<1> output opdracht toegevoegd.
+
+[source,csharp,linenums]
+----
+public class Program {
+
+	static void PrintPersonenMetTitel(string titel, List<Persoon> personen) {
+		Console.WriteLine($"--- {titel} ---");
+
+		foreach (Persoon p in personen) {
+            Console.WriteLine($"{p.Naam}, {p.Leeftijd} jaar");
+        }
+    }
+
+	static void Main(string[] args) {
+		List<Persoon> personen = new List<Persoon>();
+		personen.Add(new Persoon("Jan", 23));
+		personen.Add(new Persoon("Miet", 45));
+		personen.Add(new Persoon("Joris", 34));
+		personen.Add(new Persoon("Corneel", 12));
+		personen.Add(new Persoon("Phara", 34));
+			
+		PrintPersonenMetTitel("ongesorteerd", personen);
+
+		PersoonLeeftijdComparer plc = new PersoonLeeftijdComparer();
+		personen.Sort(plc);
+			
+		PrintPersonenMetTitel("gesorteerd op leeftijd", personen);
+
+		PersoonNaamComparer pnc = new PersoonNaamComparer();
+		personen.Sort(pnc);
+
+		PrintPersonenMetTitel("gesorteerd op naam", personen);
+
+		personen.Sort(pnc);												// <1>
+			
+		PrintPersonenMetTitel("nogmaals gesorteerd op naam", personen);	// <1>
+	}
+
+}
+----
+<1> regels die werden toegevoegd om de lijst *nogmaals* op naam te sorteren.
+
+
+
+=== Oplossing D18persoonopleeftijddanopnaam
+
+
+
+[source,csharp,linenums]
+----
+class PersoonLeeftijdDanNaamComparer : IComparer<Persoon> {
+
+    public int Compare(Persoon x, Persoon y) {
+        int result = x.Leeftijd.CompareTo(y.Leeftijd); // <1>
+        
+		if (result == 0) { 
+			// gelijke leeftijd, dus vergelijk Naam
+            result = x.Naam.CompareTo(y.Naam);         // <2>
+        }
+			
+        return result;
+    }
+
+}
+----
+<1> vergelijk de leeftijden
+<2> i.g.v. gelijke leeftijden, vergelijk de namen
+
+.Program.cs
+[source,csharp,linenums]
+----
+public class Program {
+
+    static void PrintPersonenMetTitel(string titel, List<Persoon> personen) {
+        Console.WriteLine($"--- {titel} ---");
+
+        foreach (Persoon p in personen) {
+            Console.WriteLine($"{p.Naam}, {p.Leeftijd} jaar");
+        }
+    }
+
+    static void Main(string[] args) {
+
+        List<Persoon> personen = new List<Persoon>();
+        personen.Add(new Persoon("Mietje", 12));
+        personen.Add(new Persoon("Jantje", 12));
+        personen.Add(new Persoon("Phara", 34));
+        personen.Add(new Persoon("Corneel", 12));
+        personen.Add(new Persoon("Joris", 34));
+
+        PrintPersonenMetTitel("ongesorteerd", personen);
+
+        PersoonLeeftijdDanNaamComparer plc = new PersoonLeeftijdDanNaamComparer();
+        personen.Sort(plc);
+
+        PrintPersonenMetTitel("gesorteerd op leeftijd dan naam", personen);
+    }
+}
+----
+
+Om stabiel te sorteren i.g.v. een onstabiel algoritme, zou je een comparer ook informatie kunnen meegeven over de posities van alle elementen, bv. de ganse `List<Persoon>`.
+
+Bij "gelijke" personen zou de comparer dan kunnen kijken naar de onderlinge positie van de elementen, bv.
+
+.PersoonNaamComparerStable.cs
+[source,csharp,linenums]
+----
+public class PersoonNaamComparerStable : IComparer<Persoon> {
+
+	private List<Persoon> _list;
+
+	public PersoonNameComparerStable(List<Persoon> personen) {
+		this._list = personen;
+	}
+
+    public int Compare(Persoon x, Persoon y) {
+		int result = x.Naam.CompareTo(y.Naam);
+		if (result == 0) { // <1>
+			int indexX = this._list.IndexOf(x);
+			int indexY = this._list.IndexOf(y);
+			result = indexX.CompareTo(indexY);
+		}
+		return result;
+	}
+
+}
+----
+<1> i.g.v. een gelijke naam, worden de posities in de lijst vergeleken.
+
+[WARNING]
+====
+Dit lijkt een goed idee, maar bedenk dat de `IndexOf` method om de posities op te zoeken niet erg efficiënt werkt in een lijst. Dit zal de efficiëntie van het sorteer algoritme volledig onderuit halen.
+====
+
+Niet erg praktisch dus, maar het is eens een mooie demonstratie dat comparers volwaardige objecten zijn en soms ook wat 'intelligentie' kunnen bevatten. 
+
+[TIP]
+====
+Comparers zijn dus niet altijd quasi lege klassen met enkel een `Compare` implementatie!
+====
+
+
+
+=== Oplossing D18persoonopnaamslim
+
+De klasse `PersoonNaamComparerSlim` houdt in een `bool` dataveld `_isNormaleVolgorde` bij wat de gewenste volgorde is :
+
+.PersoonNaamComparerSlim.cs
+[source,csharp,linenums]
+----
+class PersoonNaamComparerSlim : IComparer<Persoon> {
+
+    private bool _isNormaleVolgorde; // normaal = sorteren van a->z
+
+    public PersoonNaamComparerSlim(bool isNormaleVolgorde) {
+        this._isNormaleVolgorde = isNormaleVolgorde;
+    }
+
+    public int Compare(Persoon x, Persoon y) {
+        int result;
+        if (this._isNormaleVolgorde) { // <1>
+            // sorteren van a->z
+            result = x.Naam.CompareTo(y.Naam); // <2>
+        } else {
+            // sorteren van z->a
+            result = y.Naam.CompareTo(x.Naam); // <2>
+        }
+        return result;
+    }
+
+}
+----
+<1> de waarde van `this._isNormaleVolgorde` bepaalt hoe we de elementen vergelijken.
+<2> merk op dat `x` en `y` in deze beide regels van plaats verwisseld werden
+
+.Program.cs
+[source,csharp,linenums]
+----
+public class Program {
+
+    static void PrintPersonenMetTitel(string titel, List<Persoon> personen) {
+        Console.WriteLine($"--- {titel} ---");
+
+        foreach (Persoon p in personen) {
+            Console.WriteLine($"{p.Naam}, {p.Leeftijd} jaar");
+        }
+    }
+
+    static void Main(string[] args) {
+
+        List<Persoon> personen = new List<Persoon>();
+        personen.Add(new Persoon("Jan", 23));
+        personen.Add(new Persoon("Miet", 45));
+        personen.Add(new Persoon("Joris", 34));
+        personen.Add(new Persoon("Corneel", 12));
+        personen.Add(new Persoon("Phara", 34));
+        PrintPersonenMetTitel("ongesorteerd", personen);
+
+        PersoonNaamComparerSlim pncs1 = new PersoonNaamComparerSlim(true);  // <1>
+        personen.Sort(pncs1);
+        PrintPersonenMetTitel("gesorteerd op naam a->z", personen);
+
+        PersoonNaamComparerSlim pncs2 = new PersoonNaamComparerSlim(false); // <2>
+        personen.Sort(pncs2);
+        PrintPersonenMetTitel("gesorteerd op naam z->a", personen);
+    }
+}
+----
+<1> een naam comparer voor a->z volgorde
+<2> een naam comparer voor z->a volgorde
+
+
+=== Oplossing D18factuur
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
+
+
+=== Oplossing D18interval
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
+
+
+=== Oplossing D18afspraak
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
+
+
+== Strings
+
+
+=== Oplossing D18stringznaara
+
+.StringComparerOmgekeerd.cs
+[source,csharp,linenums]
+----
+class StringComparerOmgekeerd : IComparer<string> {
+
+    public int Compare(string x,  string y) {
+        return -x.CompareTo(y);
+    }
+
+}
+----
+
+.Program.cs
+[source,csharp,linenums]
+----
+class Program {
+	
+    static void Main(string[] args) {
+        List<string> woorden = new List<string> { "kAT", "Aap", "kat", "HOND", "varken", "zebra", "hondshaai", "aap", "grinch", "varkenshaasje", "hond"};
+			
+		// Sorteer alfabetisch, van a->z
+        woorden.Sort(); // <1>
+        Console.WriteLine(String.Join(", ", woorden));
+
+		// Sorteer van z->a
+        woorden.Sort(new StringComparerOmgekeerd());
+        Console.WriteLine(String.Join(", ", woorden));
+    }
+
+}
+----
+<1> Merk op dat er hier geen comparer voor nodig hebben!
+
+
+
+=== Oplossing D18reversedstringcomparer
+
+.ReversedStringComparer.cs
+[source,csharp,linenums]
+----
+class ReversedStringComparer : IComparer<string> {
+	
+    static private string ReverseText(String text) {
+        string result = "";
+        foreach (char c in text) {
+            result = c + result;
+        }
+        return result;
+    }
+
+    public int Compare(string x, string y) {
+        string reverseX = ReverseText(x);
+        string reverseY = ReverseText(y);
+        return reverseX.CompareTo(reverseY); // <1>
+    }
+
+}
+----
+<1> we gebruiken de achterstevoren versie van `x` en `y`.
+
+.Program.cs
+[source,csharp,linenums]
+----
+class Program {
+	
+    static void Main(string[] args) {
+
+        List<string> woorden = new List<string> { "kAT", "Aap", "kat", "HOND", "varken", "zebra", "hondshaai", "aap", "grinch", "varkenshaasje", "hond", "rothond"};
+
+		// Sorteer alfabetisch, van a->z
+        woorden.Sort();
+        Console.WriteLine(String.Join(", ", woorden));
+
+		// Sorteer achterstevoren versies
+        woorden.Sort(new ReversedStringComparer());
+        Console.WriteLine(String.Join(", ", woorden));
+    }
+
+}
+----
+
+
+
+=== Oplossing D18stringoplengte
+
+.StringLengteComparer.cs
+[source,csharp,linenums]
+----
+class StringLengteComparer : IComparer<string> {
+
+    public int Compare(string x, string y) {
+        // Vergelijk de lengte van x en y
+        int result = x.Length.CompareTo(y.Length);
+        if (result==0) {
+            // beide strings zijn even lang, vergelijk ze alfabetisch
+            result = x.CompareTo(y);
+        }
+        return result;
+    }
+
+}
+----
+
+Program.cs
+[source,csharp,linenums]
+----
+class Program {
+
+    static void Main(string[] args) {
+
+        List<string> woorden = new List<string> { "grinch", "hond", "kat", "zebra", "aap", "musti" };
+
+		// Sorteer alfabetisch, van a->z
+        woorden.Sort();
+        Console.WriteLine(String.Join(", ", woorden));
+
+		// Sorteer op lengte
+        woorden.Sort(new StringLengteComparer());
+        Console.WriteLine(String.Join(", ", woorden));
+    }
+    
+}
+----
+
+
+
+== Eigen interface
+
+
+
+=== Oplossing D18printmetopmaak
+
+
+.IStyle.cs
+[source,csharp,linenums]
+----
+namespace D18.D18printmetopmaak {
+
+    interface IStyle {
+    
+        public string GetStyledTextFor(string text); // <1>
+
+    }
+
+}
+----
+<1> dit kon je afleiden uit de `PrintStyled` method in klasse `Program`.
+
+
+.AllCapsStyle.cs
+[source,csharp,linenums]
+----
+namespace D18.D18printmetopmaak {
+
+    class AllCapsStyle : IStyle {
+
+        public string GetStyledTextFor(string text) {
+            string result = text.ToUpper();
+            return result;
+        }
+
+    }
+
+}
+----
+
+.ExclamationStyle.cs
+[source,csharp,linenums]
+----
+namespace D18.D18printmetopmaak {
+
+    class ExclamationStyle : IStyle {
+
+        public string GetStyledTextFor(string text) {
+            string result = text.Replace('.', '!'); // <1>
+            return result;
+        }
+
+    }
+
+}
+----
+<1> je kon natuurlijk ook een foreach loop schrijven en zelf elke punt vervangen door een uitroepteken, maar `Replace` is bondiger en minder werk.
+
+De klasse `CapitalCasingStyle` is minder evident. Het is belangrijk in te zien dat je, terwijl je de tekst overloopt, steeds moet bijhouden of de volgende letter die je ziet een hoofdletter moet worden.
+
+We gebruiken daarvoor de lokale variabele `isHoofdletterNodig`.
+
+.CapitalCasingStyle.cs
+[source,csharp,linenums]
+----
+namespace D18.D18printmetopmaak {
+
+    class CapitalCasingStyle : IStyle {
+
+        public string GetStyledTextFor(string text) {
+            string result = "";
+            // de variabele 'isHoofdletterNodig' houdt bij
+            // of volgende letter die we tegenkomen,
+            // een hoofdletter moet worden.
+            bool isHoofdletterNodig = true; // de eerste letter moet een hoofdletter worden
+            foreach (char c in text) {
+                if (!Char.IsLetter(c)) { // <1>
+                    // we hebben een niet-letter te pakken, 
+                    // de volgende letter moet een hoofdletter worden
+                    isHoofdletterNodig = true;
+                    result += c;
+                } else {
+                    if (isHoofdletterNodig) {
+                        result += Char.ToUpper(c);
+						// de volgende letter moet klein zijn
+                        isHoofdletterNodig = false; // <2>
+                    } else {
+                        result += Char.ToLower(c);
+                    }
+                }
+            }
+            return result;
+        }
+
+    }
+
+}
+----
+<1> Telkens je een niet-letter symbool tegenkomt, zit je duidelijk niet *in* een woord en zal de volgende *letter* die je tegenkomt het begin van een woord zijn. Dit moet dus een hoofdletter worden.
+<2> Eenmaal je in een woord zit, moeten er enkel kleine letters gebruikt worden.

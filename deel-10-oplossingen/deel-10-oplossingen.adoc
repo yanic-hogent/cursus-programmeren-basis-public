@@ -1,0 +1,485 @@
+= Programmeren Basis - Deel 10 - Oplossingen
+Frederiek De Wolf
+v2022.05.06.10.00
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+// geen auto section numbering voor oefeningen (handigere titels en toc)
+//:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// folders
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
+//preamble
+[.text-right]
+versie {revnumber}
+
+== Vooraf
+
+Voordien moest je de code van de oplossingen netjes tussen de accolades van de `Main` method plakken om een volledig en werkend programma te bekomen.
+
+In de oefeningen hieronder worden meerdere methods gebruikt, die allen samen met de `Main` method in de `class Program` moeten terechtkomen.
+
+De code voor de volgende oefening zou er dus zo kunnen uitzien...
+
+[source, csharp, linenums]
+----
+using System;
+
+namespace D10 {
+
+    class D10toonvierkant {
+
+		// Main method
+		// ...
+		
+		// Extra method(s)
+		// ...
+	
+	}
+
+}
+----
+
+== Methods 
+
+=== Oplossing D10toonvierkant
+//D1001
+//Y9.04
+
+[source,csharp,linenums]
+----
+static void Main() {
+	ToonVierkant();
+}
+
+static void ToonVierkant() {
+	for (int i = 0; i < 5; i++) {
+		for (int k = 0; k < 5; k++) {
+			Console.Write("*");
+		}
+		// zet de cursor op de volgende regel
+		Console.WriteLine();
+	}
+}
+----
+
+== Methods met een parameter
+
+=== Oplossing D10toonvierkantparameters
+
+//D1002
+
+//Y9.05
+
+[source,csharp,linenums]
+----
+static void Main() {
+	// een loop om het wat interessanter te maken
+	for (int i = 1; i <= 3; i++) {
+		ToonVierkant(i);
+		Console.WriteLine();
+	}
+}
+
+static void ToonVierkant(int zijde) {
+	for (int i = 0; i < zijde; i++) {
+		for (int k = 0; k < zijde; k++) {
+			Console.Write("*");
+		}
+		Console.WriteLine();
+	}
+}
+----
+
+== Methods met meerdere parameters
+
+=== Oplossing D10toonrechthoek
+//D1003
+
+//Y9.06
+
+[source,csharp,linenums]
+----
+static void Main() {
+	bool gelukt;
+
+	// probeer tot er een correcte breedte is ingegeven
+	int breedte = 0;
+	do {
+		Console.Write("Geef de breedte: ");
+		string breedteAlsTekst = Console.ReadLine();
+		gelukt = int.TryParse(breedteAlsTekst, out breedte);
+	} while (!gelukt || breedte < 1);
+
+	// probeer tot er een correcte hoogte is ingegeven
+	int hoogte = 0;
+	do {
+		Console.Write("Geef de hoogte: ");
+		string hoogteAlsTekst = Console.ReadLine();
+		gelukt = int.TryParse(hoogteAlsTekst, out hoogte);
+	} while (!gelukt || hoogte < 1);
+	
+	Console.WriteLine();
+
+	ToonRechthoek(breedte, hoogte);
+}
+
+static void ToonRechthoek(int breedte, int hoogte) {
+	for (int i = 0; i < hoogte; i++) {
+		// teken 1 regel van 'breedte' sterretjes
+		for (int k = 0; k < breedte; k++) {
+			Console.Write("*");
+		}
+		Console.WriteLine();
+	}
+}
+----
+
+
+=== Oplossing D10toonsomtussen
+//D1004
+
+//Y9.07
+	
+[source,csharp,linenums]
+----
+static void Main() {
+	int laag = 5;
+	int hoog = 10;
+	ToonSomTussen(laag, hoog);
+}
+
+static void ToonSomTussen(int min, int max) {
+	int som = 0;
+	for (int i = min; i <= max; i++) {
+		som += i;
+	}
+	Console.WriteLine($"De som van de getallen van {min} t.e.m. {max} is {som}");
+}
+----
+
+Merk op dat de method `ToonSomTussen` ook de output moest doen en niet enkel de berekening, daarom ook het stukje __Toon__ in de naam van de method.
+
+Een oplossing waarin de method enkel de berekening doet zou er zo kunnen uitzien:
+	
+[source,csharp,linenums]
+----
+static void Main() {
+	int laag = 5;
+	int hoog = 10;
+	int som = BerekenSomTussen(laag, hoog);
+	Console.WriteLine($"De som van de getallen van {laag} t.e.m. {hoog} is {som}");
+}
+
+static int BerekenSomTussen(int min, int max) {
+	int som = 0;
+	for (int i = min; i <= max; i++) {
+		som += i;
+	}
+	return som;
+}
+----
+
+Merk op dat de naam van de method veranderd werd naar __Bereken...__ omdat dit beter de lading dekt.
+
+=== Oplossing D10printreeks
+//D1005
+
+Er ontbreekt één method, namelijk `PrintReeks`...
+
+[source,csharp,linenums]
+----
+static void PrintReeks(int min, int max) {
+	if (max < min) {
+		PrintReeks(max, min); // <1>
+	} else {
+		int getal = min;
+		while (getal < max) {
+			Console.Write(getal + " > ");
+			getal++;
+		}
+		Console.WriteLine(getal);
+	}
+}
+----
+<1> `PrintReeks` roept zichzelf aan. 
+
+Bemerk dat met een __recursieve call__ `min` en `max` van waardes worden omgewisseld.  
+
+.Recursie
+[NOTE]
+====
+In een recursieve call roept een method zichzelf aan.  Een techniek die je zou kunnen gebruiken om parameterwaardes van rol te laten wisselen.
+====
+
+Exact wat we hier willen doen op het moment dat blijkt dat `max > min`.  
+
+****
+[.underline]#Analyseren met de debugger en het Call Stack toolvenster...#
+
+. Plaats een __breakpoint__ op de instructieregel `PrintReeks(max, min);` met de recursieve call:  __Rechterklik op deze regel en kies voor menu:Breakpoint[Insert Breakpoint]__
+. Voer de code uit tot op dat breakpoint: image:Start.png[Start] (__Start Debugging__)
+. Stap ook de recursieve call binnen: image:Step Into.png[Start] (__Step Into__)
+
+De call stack ziet er nu zo uit...
+
+image:Oplossing D1005.png[Oplossing D1005]
+****
+
+De eerste activatie (de __laagste__ op de callstack) van `PrintReeks` (__min = 8, max = 3__), roept op zijn beurt opnieuw `PrintReeks` op.  Dit zorgt voor een tweede activatie van `PrintReeks` (__min = 3, max = 8__).  
+
+De oorspronkelijke `min` (__= 8) voor de eerste activatie, wordt als nieuwe `max` gebruikt voor de tweede activatie.  De oorspronkelijke `max` (__= 3) voor de eerste activatie, wordt als nieuwe `min` gebruikt voor de tweede activatie.  Zo worden beide omgewisseld.
+
+Om `min` en `max` van waardes om te wisselen, kan je natuurlijk ook een klassiek __omwissel algoritme__ gebruiken...
+
+[source,csharp,linenums]
+----
+int temp = min;
+min = max;
+max = temp;
+----
+
+
+== Methods en arrays
+
+=== Oplossing D10toongetallen
+//D1006
+
+//Y9.08
+
+[source,csharp,linenums]
+----
+static void Main() {
+	int[] getallen = { 5, 3, 1, -1, -3 };
+	ToonGetallen(getallen);
+}
+
+static void ToonGetallen(int[] getalletjes) {
+	for (int i = 0; i < getalletjes.Length; i++) {
+		int getal = getalletjes[i];
+		Console.Write(getal);
+		bool isLaatsteGetal = (i == getalletjes.Length - 1);
+		if (!isLaatsteGetal) {
+			Console.Write(", ");
+		}
+	}
+}
+----
+
+== Methods als query
+
+=== Oplossing D10vraaggebruikerompositiefgetal
+//D1007
+
+//Y9.09
+
+[source,csharp,linenums]
+----
+static void Main() {
+	int breedte = VraagGebruikerOmPositiefGetal("Geef de breedte : ");
+	int hoogte = VraagGebruikerOmPositiefGetal("Geef de hoogte : ");
+
+	Console.WriteLine();
+
+	ToonRechthoek(breedte, hoogte);
+}
+
+static int VraagGebruikerOmPositiefGetal(string vraag) {
+	bool gelukt;
+	int getal;
+	do {
+		Console.Write(vraag);
+		string breedteAlsTekst = Console.ReadLine();
+		gelukt = int.TryParse(breedteAlsTekst, out getal);
+	} while (!gelukt || getal < 1);
+
+	return getal;
+}
+
+static void ToonRechthoek(int b, int h) {
+	for (int i = 0; i < h; i++) {
+		// teken 1 regel van 'breedte' sterretjes
+		for (int k = 0; k < b; k++) {
+			Console.Write("*");
+		}
+		Console.WriteLine();
+	}
+}
+----
+
+=== Oplossing D10bevat
+//D1008
+
+//Y9.10
+
+[source,csharp,linenums]
+----
+static void Main() {
+	string[] boerderijDieren = { "kip", "koe", "paard", "geit", "schaap" };
+
+	Console.Write("Geef een dier : ");
+	string input = Console.ReadLine();
+
+	bool gevonden = Bevat(boerderijDieren, input);
+
+	if (gevonden) {
+		Console.WriteLine("Dat is een boerderijdier");
+	} else {
+		Console.WriteLine("Dat is geen boerderijdier");
+	}
+}
+
+static bool Bevat(string[] woorden, string zoekwoord) {
+	bool gevonden = false;
+	foreach (string woord in woorden) {
+		if (zoekwoord.ToLower() == woord.ToLower()) {
+			gevonden = true;
+			break;
+		}
+	}
+	return gevonden;
+}
+----
+
+
+=== Oplossing D10faculteit
+//D1009
+
+//Y9.12
+
+[source,csharp,linenums]
+----
+static void Main() {
+	Console.Write("Geef een getal : ");
+	string getalAlsTekst = Console.ReadLine();
+	int getal = int.Parse(getalAlsTekst);
+
+	int faculteitGetal = GetFaculteit(getal);
+
+	Console.WriteLine($"{getal}! is {faculteitGetal}");
+}
+
+static int GetFaculteit(int getal) {
+	int result = 1;
+	for (int i=2;i<=getal;i++) {
+		result = result * i;
+	}
+	return result;
+}
+----
+
+
+=== Oplossing D10temperatuur
+//D1010
+
+//Y9.13
+
+[source,csharp,linenums]
+----
+static void Main() {
+	Console.Write("Geef de temperatuur in graden Fahrenheit : ");
+	string fahrenheitAlsTekst = Console.ReadLine();
+	double fahrenheit = double.Parse(fahrenheitAlsTekst);
+
+	double celsius = ConvertFahrenheitToCelsius(fahrenheit);
+
+	Console.WriteLine($"De temperatuur is {celsius} graden Celsius.");
+}
+
+static double ConvertFahrenheitToCelsius(double fahrenheit) {
+	// let op, een berekening wordt van links naar rechts uitgewerkt (tenzij je haakjes gebruikt)
+	// dus als je begint met 5/9 ipv 5.0/9 dan ziet de compiler int gedeeld door int en zal er
+	// een gehele deling uitgevoerd worden en dat levert 0 op!
+	double celsius = 5.0 / 9 * (fahrenheit - 32);
+	return celsius;
+}
+----
+
+
+
+=== Oplossing D10dagenfebruari
+D1011
+
+//C43
+
+[source,csharp,linenums]
+----
+static void Main()
+{
+	do
+	{
+		Console.Write("Jaar?: ");
+		int jaar = int.Parse(Console.ReadLine());
+		Console.WriteLine($"In februari van {jaar} zijn er {DagenFebruari(jaar)} dagen.");
+		Console.WriteLine();
+	} while (true);
+}
+
+static int DagenFebruari(int jaartal)
+{
+	int dagenFebruari = 28;
+	if (IsSchrikkeljaar(jaartal)) dagenFebruari++;
+	return dagenFebruari;
+}
+
+static bool IsSchrikkeljaar(int jaartal)
+{
+	return (jaartal % 400 == 0 || jaartal % 4 == 0 && jaartal % 100 != 0);
+}
+----
+
+
+=== Oplossing D10dagen
+//D1012
+
+//C44
+
+[source,csharp,linenums]
+----
+static void Main()
+{
+	string[] maanden = {"januari", "februari", "maart", "april", "mei", "juni", "juli",
+					"augustus", "september", "oktober", "november", "december"};
+	do
+	{
+		Console.Write("Maand?: ");
+		int maand = int.Parse(Console.ReadLine());
+		Console.Write("Jaar?: ");
+		int jaar = int.Parse(Console.ReadLine());
+		Console.WriteLine($"In {maanden[maand - 1]} van {jaar} zijn er {Dagen(maand, jaar)} dagen.");
+		Console.WriteLine();
+	} while (true);
+}
+
+static int Dagen(int maand, int jaartal)
+{
+	int[] dagen = { 31, DagenFebruari(jaartal), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+	return dagen[maand - 1];
+}
+
+static int DagenFebruari(int jaartal)
+{
+	int dagenFebruari = 28;
+	if (IsSchrikkeljaar(jaartal)) dagenFebruari++;
+	return dagenFebruari;
+}
+
+static bool IsSchrikkeljaar(int jaartal)
+{
+	return (jaartal % 400 == 0 || jaartal % 4 == 0 && jaartal % 100 != 0);
+}
+----
