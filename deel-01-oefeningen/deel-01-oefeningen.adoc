@@ -185,7 +185,7 @@ int gewichtInKg = 72;
 
 Console.WriteLine(bmi);
 ----
-<1> bereken het bmi, maak eventueel gebruik van extra variabelen, en zorg ervoor dat de bmi waarde in de juist variabele terechtkomt
+<1> bereken het bmi, maak eventueel gebruik van extra variabelen, en zorg ervoor dat de bmi waarde in de juiste variabele terechtkomt
 
 De uitvoer van het programma zou moeten zijn...
 

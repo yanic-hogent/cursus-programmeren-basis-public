@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 09
 Yanic Inghelbrecht
-v2022.03.08.12.08
+v2022.10.04.09.47
 // toc and section numbering
 :toc: preamble
 :toclevels: 4
@@ -843,7 +843,7 @@ Het array `woorden` zal na afloop 5 entries bevatten, namelijk de 5 woorden tuss
 | 0 | `appel`
 | 1 | `peer`
 | 2 | `tomaat`
-| 3 | `kiwki`
+| 3 | `kiwi`
 | 4 | `druif`
 |====
 

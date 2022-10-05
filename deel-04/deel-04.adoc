@@ -623,6 +623,7 @@ Indien we bijkomend moeten verifiëren of de `ondergrens` effectief wel __onder_
 ----
 if (ondergrens <= bovengrens && getal >= ondergrens && getal <= bovengrens) {
 	...
+}
 ----
 
 Hier hebben we drie voorwaardes die steeds met __and__ logica worden gecombineerd.
@@ -823,12 +824,14 @@ Console.Write("Temperatuur?: ");
 int temperatuur = int.Parse(Console.ReadLine());
 
 bool hetVriest = (temperatuur <= 0);
-if (hetVriest)
+if (hetVriest) {
 	Console.WriteLine("Bij deze temperatuur vriest het.");
+}
 
 Console.Write("Dank je voor het invoeren van de ");
-if (!hetVriest) // <1>
+if (!hetVriest) { // <1>
 	Console.Write("warme ");
+}
 Console.Write("temperatuur.");
 ----
 <1> Of althans een geïnverteerde versie ervan als je niet wil doen wanneer het niet vriest.
@@ -984,6 +987,7 @@ Rekening houden met al die mogelijkheden is op zijn minst gesteld omslachtig...
 ----
 if (input == "ja" || input == "Ja" || input == "JA" || ...) {
 	...
+}
 ----
 ****
 

@@ -768,7 +768,7 @@ Vrijwel elke moderne programmeertaal bevat alleszins deze drie soorten controles
 
 * *sequentie* : opdrachten uitvoeren in de volgorde waarin ze in de broncode staan
 * *selectie* : stukken code wel of niet uitvoeren (op basis van één of andere voorwaarde)
-* *iteratie* : stukken herhalen (weerom afhankelijk van een voorwaarde)
+* *iteratie* : stukken herhalen (wederom afhankelijk van een voorwaarde)
 
 Van elke soort zijn er doorgaans meerdere varianten aanwezig in een programmeertaal. Verderop in dit deel behandelen we een eerste soort selectie structuur : *if/else*!
 
@@ -868,7 +868,7 @@ Dit komt je wellicht bekend voor uit een wiskunde les van lang geleden.
 ====
 Let erop dat `==` een vergelijking voorstelt en dat je dus niet `=` mag gebruiken.
 
-Het `=` symbolen gebruiken we immers al om een waarde toe te kennen aan een variabele!
+Het `=` symbool gebruiken we immers al om een waarde toe te kennen aan een variabele!
 ====
 
 Merk op dat er ook tegengestelden zijn :

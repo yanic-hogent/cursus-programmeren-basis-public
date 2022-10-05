@@ -41,11 +41,11 @@ versie {revnumber}
 ** link:deel-03-oefeningen/deel-03-oefeningen.adoc[Oefeningen]
 ** link:deel-03-oplossingen/deel-03-oplossingen.adoc[Oplossingen]
  
-* link:deel-04/deel-04.adoc[Deel 04]: Debuggen, else if, logische operatoren & TryParse.
+* link:deel-04/deel-04.adoc[Deel 04]: Debuggen, else if, logische operatoren & robuuste input.
 ** link:deel-04-oefeningen/deel-04-oefeningen.adoc[Oefeningen]
 ** link:deel-04-oplossingen/deel-04-oplossingen.adoc[Oplossingen]
 
-* link:deel-05/deel-05.adoc[Deel 05]: Herhalingen met (do) while.
+* link:deel-05/deel-05.adoc[Deel 05]: TryParse, Herhalingen met (do) while
 ** link:deel-05-oefeningen/deel-05-oefeningen.adoc[Oefeningen]
 ** link:deel-05-oplossingen/deel-05-oplossingen.adoc[Oplossingen]
  

@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 03
 Yanic Inghelbrecht
-v2022.02.23.15.06
+v2022.10.05.22.47
 // toc and section numbering
 :toc: preamble
 :toclevels: 4
@@ -343,12 +343,12 @@ string deeltalAlsTekst, deler_als_tekst;
 double getal1, Getal2, x;
 
 Console.Write("Deeltal?: ");
-deler_als_tekst = Console.ReadLine();
-getal1 = double.Parse(deler_als_tekst);
+deeltalAlsTekst = Console.ReadLine();
+getal1 = double.Parse(deeltalAlsTekst);
 
 Console.Write("Deler?: ");
-delerAlsTekst = Console.ReadLine();
-Getal2 = double.Parse(delerAlsTekst);
+deler_als_tekst = Console.ReadLine();
+Getal2 = double.Parse(deler_als_tekst);
 
 if (Getal2 != 0) {
 	x = getal1 / Getal2;
@@ -614,6 +614,8 @@ Het is voor een programmeur belangrijk om snel in te zien hoe een programma vari
 
 Een *traceertabel* is een tabel die weergeeft hoe de waarden van een variabelen evolueren doorheen de uitvoering van het programma. De tabel is dus gebaseerd op een specifieke uitvoering van het programma.
 
+We gebruiken ze als leermiddel om de werking van een programma te volgen. Als programmeur zul je deze tabellen later nooit opstellen, maar bij het leren programmeren komen ze goed van pas.
+
 De tabel toont voor elke (interessante) variabele een kolom en meestal voorzien we ook een kolom voor de console output.
  
 Elke rij stelt een (interessant) moment voor tijdens de uitvoering, overeenkomstig met een regel in de broncode.
@@ -652,10 +654,10 @@ De bedoeling is om in de tabel weer te geven wat de waarde van elke variabele is
 Na de uitvoering van regel 1 heeft `a` de waarde `5`, de variabelen `b` en `temp` zijn __out of scope__ :
 
 |====
-|Regel | waarde van `a` | waarde van `b` | waarde van `temp` | Output
-
 | 1 | 5 | / | / |
 |====
+
+Per uitgevoerde programmaregel, voegen we een rij aan de tabel toe.
 
 Na de uitvoering van regel 2 is `a` ongewijzigd, maar `b` kreeg de waarde 13. Variabele `temp` is nog steeds __out of scope__ :
 
@@ -724,7 +726,8 @@ Zodra we een if/else gebruiken zullen er regels overgeslaan worden. Als we verde
 
 We kunnen zo'n traceertabel aanzienlijk vereenvoudigen als we de volgende afspraken maken :
 
-- we laten oninteressante regels weg die aan geen enkele variabele een waarde toekennen (bv. regels 3, 7 ,8 en 9)
+- we laten oninteressante regels weg die aan geen enkele variabele een waarde toekennen (bv. regels 3 en 7)
+- we laten eventueel de console output weg als die niet belangrijk is
 - we vullen enkel een cel in als de variabele door die regel een waarde kreeg toegekend (bv. op regel 6 vullen we enkel de kolom voor `b` in)
 - in de eerste rij vullen we een `/` in bij elke variabele die __out of scope__ is op die regel in de broncode.
 
