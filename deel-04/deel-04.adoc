@@ -686,7 +686,7 @@ if (getal >= ondergrens) {
 }
 ----
 
-Ook in onze eerste aanpak, met __and__ operator, kan dergelijke logica worden geïntegreerd.  Het zal echter meer vereisen dan louter een `else` block voorzien voor onze `if (getal >= ondergrens && getal <= bovengrens)`.  Als niet voldaan was aan de combinatie van voorwaardes moet het programma immers nog steeds uitzoeken welke specifieke foutmelding wordt weergegeven.
+Ook in onze eerste aanpak, met __and__ operator, kan dergelijke logica worden geïntegreerd.  Het zal echter meer vereisen dan louter een `else` block voorzien voor onze `if (getal >= ondergrens && getal \<= bovengrens)`.  Als niet voldaan was aan de combinatie van voorwaardes moet het programma immers nog steeds uitzoeken welke specifieke foutmelding wordt weergegeven.
 ****
 
 === Or 
@@ -1064,15 +1064,21 @@ string begroeting = " Hello World!   ".Trim();
 
 Console.Write($"[{begroeting}]");  // <1>
 ----
-<1> Levert de tekst __[Hello World!]__ op. 
+<1> De tekst `[Hello World!]` verschijnt op de console (en NIET  ``[ Hello World! `` `` ```]`!)
+
+Je ziet aan de output dat `.Trim()` de spaties daadwerkelijk verwijderd heeft : de tekst in variabele `begroeting` bevatte geen spaties aan het begin of einde.
 ****
 
-Ook bij het verwerken van invoer (van een gebruiker) kan `Trim()` nuttig zijn.
+
+
+`Trim()` komt ook goed van pas bij het verwerken van tekst die de gebruiker intypt. Denk bv. aan een stukje informatie dat mensen doorgaans copy&pasten i.p.v intypen, bv. de tracking code van een poststuk, daar durft wel eens (per ongeluk) een spatie voor of achter meegekopieerd worden.
 
 ****	
 [.underline]#Voorbeeld van spaties wegknippen in invoer#
 
-Voor de punt (__dot__) verwijs je (met een `string` expressie, naar de tekst waarvan een variant in kleine letters of hoofdletters wordt opgeleverd.
+Links van de `.Trim()` verwijs je met een `string` expressie naar de tekst waarvan de begin- en eindspaties moeten verwijderd worden. Het resultaat is een nieuwe tekst, inhoudelijk gelijk aan de begintekst maar zonder begin- en eindspaties.
+
+Zo'n string expressie kan bv. een string _literal_ zijn, een string variabele of het string resultaat van een andere bewerking. In het voorbeeld hieronder laten we `.Trim()` werken met het resultaat van `input.ToLower()`.
 
 [source,csharp,linenums]
 ----

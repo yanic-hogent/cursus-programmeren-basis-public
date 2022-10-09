@@ -273,6 +273,21 @@ Console.WriteLine($"Dat is {totaalInCm}cm.");
 <1> gehele deling!
 
 
+Een alternatieve oplossing op basis van modulo (%) is ook mogelijk. Het stukje met de berekeningen wordt dan :
+
+[source,csharp,linenums]
+----
+...
+const int minutenPerUur = 60;
+
+int totaalMinuten = totaalSeconden / secondenPerMinuut; // <1>
+int seconden = totaalSeconden % secondenPerMinuut; 
+int uren = totaalMinuten / minutenPerUur;               // <1>
+int minuten = totaalMinuten % minutenPerUur; 
+...
+----
+<1> gehele deling!
+
 == Traceertabellen
 
 === Oplossing D03traceergetalontleden

@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 03 - Oefeningen
 Yanic Inghelbrecht
-v2022.02.23.15.06
+v2022.10.09.22.46
 // toc and section numbering
 :toc: preamble
 :toclevels: 4
@@ -20,6 +20,7 @@ v2022.02.23.15.06
 // paden
 :imagesdir: images
 :url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+:extra-icon: ★
 :deel-02-oplossingen: ../deel-02-oplossingen/deel-02-oplossingen.adoc
 :deel-03-oplossingen: ../deel-03-oplossingen/deel-03-oplossingen.adoc
 // experimental voor kdb: en btn: macro's van AsciiDoctor
@@ -31,30 +32,34 @@ versie {revnumber}
 
 [NOTE]
 ======================================
-Het is een aanrader bij elke oefeningenreeks te starten met eventuele *__inleidende oefeningen__*.
-Naast deze focus je vooral op de *__essentiële oefeningen__*.
+We raden je aan om zoveel mogelijk oefeningen te maken, dat is de beste voorbereiding.
 
-Heb je tijd over, dan helpen de *__aanvullende oefeningen__* je de stof nog beter in de vingers te krijgen.
+Als je te ver achterop raakt bij het volgen van deze cursus, dan zul je daar wellicht niet de tijd voor vinden want het zijn er behoorlijk veel.
+
+* Indien je tijd tekort komt : concentreer je dan op de *__essentiële oefeningen__* (*zonder* {extra-icon}).
+
+* Heb je wat tijd over : dan helpen de *__aanvullende oefeningen__* (*mét* {extra-icon}) om deze topics nog beter in de vingers te krijgen.
 ======================================
 
-== Inleidende oefening
 
-=== Traceertabellen
-
-==== Oefening D03traceergetalontleden
-//Y3.03
-Neem link:{deel-02-oplossingen}#_oplossing_d02_getalontleden[de oplossing van D02getalontleden] erbij en nummer de regels in de broncode.
-
-Maak een traceertabel voor de uitvoering waarbij de gebruiker `123` ingeeft.
-
-== Essentiële oefeningen
- 
 === String interpolatie
+
+
+==== {extra-icon} Oefening D03frietjesinterpolatie 
+
+Herwerk link:{deel-02-oplossingen}#_oplossing_d02_frietjes[de oplossing van D02frietjes] zodat string interpolatie gebruikt wordt.
+
+
+==== {extra-icon} Oefening D03leeftijdinterpolatie
+
+Herwerk link:{deel-02-oplossingen}#_oplossing_d02_leeftijd[de oplossing D02leeftijd] zodat string interpolatie gebruikt wordt.
+
 
 ==== Oefening D03sominterpolatie
 
 Herwerk link:{deel-02-oplossingen}#_oplossing_d02_som[de oplossing van D02som] zodat string interpolatie gebruikt wordt.
 
+ 
 
 === Werken met getallen
 
@@ -127,6 +132,11 @@ De lengte van de schuine zijde is 5
 ----
 
 
+==== {extra-icon} Oefening D03absolutewaarde
+
+Herwerk link:{deel-02-oplossingen}#_oplossing_d02_absolutewaarde[de oplossing van D02absolutewaarde] en pas toe wat je in dit deel bijgeleerd hebt.
+
+
 
 === Variabelen en scope
 
@@ -156,32 +166,7 @@ Console.WriteLine($"Dat is {totaalInCm}cm.");
 Vervang de __magic values__ in dit programma door const variabelen.
 
 
-
-
-
-== Aanvullende oefeningen
- 
-=== String interpolatie
-
-==== Oefening D03frietjesinterpolatie
-
-Herwerk link:{deel-02-oplossingen}#_oplossing_d02_frietjes[de oplossing van D02frietjes] zodat string interpolatie gebruikt wordt.
-
-
-==== Oefening D03leeftijdinterpolatie
-
-Herwerk link:{deel-02-oplossingen}#_oplossing_d02_leeftijd[de oplossing D02leeftijd] zodat string interpolatie gebruikt wordt.
-
-=== Werken met getallen
-
-==== Oefening D03absolutewaarde
-
-Herwerk link:{deel-02-oplossingen}#_oplossing_d02_absolutewaarde[de oplossing van D02absolutewaarde] en pas toe wat je in dit deel bijgeleerd hebt.
-
-
-=== Variabelen en scope
-
-==== Oefening D03persecondewijzer
+==== {extra-icon} Oefening D03persecondewijzer
 // Y2.09
 Schrijf een programma dat de gebruiker om een geheel aantal seconden vraagt en toont hoeveel uren, minuten en seconden dit is.
 
@@ -191,10 +176,19 @@ Tip : maak eerst voor jezelf drie voorbeelden op papier, nml.
 - 307 seconden
 - 57 seconden
 
+
+
 === Traceertabellen
 
 
-==== Opdracht D03traceeralfabetsoep
+==== Oefening D03traceergetalontleden
+//Y3.03
+Neem link:{deel-02-oplossingen}#_oplossing_d02_getalontleden[de oplossing van D02getalontleden] erbij en nummer de regels in de broncode.
+
+Maak een traceertabel voor de uitvoering waarbij de gebruiker `123` ingeeft.
+
+
+==== {extra-icon} Oefening D03traceeralfabetsoep 
 // Y3.01
 Stel een traceertabel op van de uitvoering van onderstaand programma.
 [source,csharp,linenums]
@@ -218,6 +212,6 @@ Stel een traceertabel op van de uitvoering van onderstaand programma.
 ----
 
 
-==== Opdracht D03traceerpersecondewijzer
+==== {extra-icon} Oefening D03traceerpersecondewijzer
 // Y3.02
 Maak de traceertabel voor link:{deel-03-oplossingen}#_oplossing_d03_persecondewijzer[de oplossing van D03persecondewijzer] hierboven, als de gebruiker `8587` ingeeft voor het aantal seconden.
