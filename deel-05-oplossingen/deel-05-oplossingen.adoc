@@ -469,12 +469,63 @@ string symbool = Console.ReadLine();
 
 while (symbool != "=") {
 	int getal = int.Parse(Console.ReadLine());
+	
 	if (symbool == "+") {
 		resultaat = resultaat + getal;
 	} else if (symbool == "-") {
 		resultaat = resultaat - getal;
 	}
+	
 	symbool = Console.ReadLine();
 }
 Console.Write(resultaat);
 ----
+
+Een (ietwat) andere oplossing :
+[source,csharp,linenums]
+----
+int resultaat = 0;
+string symbool = "+"; // <1>
+
+do {
+	int getal = int.Parse(Console.ReadLine());
+
+	if (symbool == "+")	{
+		resultaat += getal;
+	} else if (symbool == "-")	{
+		resultaat -= getal;
+	}
+
+	symbool = Console.ReadLine();
+} while (symbool != "=");
+
+Console.WriteLine(resultaat);
+----
+<1> Deze startwaarde `"+"` moet er staan zodat `resultaat` de waarde krijgt van het eerste ingevoerde getal in de eerste herhaling van de do..while loop.
+
+Het verschil tussen deze twee oplossingen is hoe het eerste getal & symbool worden afgehandeld (*voor* vs. *in* de loop). Er werd ook overgegaan van een while naar een do..while loop.
+
+Een derde mogelijke oplossing :
+
+[source,csharp,linenums]
+----
+int resultaat = int.Parse(Console.ReadLine());
+string symbool;
+
+do  {
+	symbool = Console.ReadLine();
+	if (symbool != "=") { // <1>
+		int getal = int.Parse(Console.ReadLine());
+		if (symbool == "+") {
+			resultaat += getal;
+		} else if (symbool == "-") {
+			resultaat -= getal;
+		}
+	}
+} while (symbool != "=");
+
+Console.WriteLine(resultaat);
+----
+<1> Deze `if` is erbij gekomen om alle bewerkingen over te slaan indien de gebruiker een `=` symbool ingaf.
+
+Het verschil tussen deze derde oplossing en de twee voorgaande, is dat er in de loop eerst het symbool wordt opgevraagd en dan het getal. In de andere twee oplossingen werd eerste het getal gevraagd en dan pas het symbool.
