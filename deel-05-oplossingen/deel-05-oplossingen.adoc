@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 05 - Oplossingen
 Frederiek De Wolf
-v2022.02.23.15.06
+v2022.10.11.14.00
 // toc and section numbering
 :toc: preamble
 :toclevels: 4
@@ -26,8 +26,10 @@ v2022.02.23.15.06
 //preamble
 [.text-right]
 versie {revnumber}
- 
-== Oplossing D05twintigtotenmettien
+
+== Gemengde oefeningen op herhalingen
+
+=== Oplossing D05twintigtotenmettien
 
 [source,csharp,linenums]
 ----
@@ -38,7 +40,7 @@ do {
 } while (getal >= 10);
 ----
  
-== Oplossing D05tafelsvan7
+=== Oplossing D05tafelsvan7
 
 [source,csharp,linenums]
 ----
@@ -52,7 +54,12 @@ do {
 } while (factor <= 10);
 ----
  
-== Oplossing D05som
+=== Oplossing D05tekstherhalen
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
+
+ 
+=== Oplossing D05som
 
 [source,csharp,linenums]
 ----
@@ -71,7 +78,7 @@ som -= getal;
 Console.WriteLine($"De som is {som}");
 ----
 
-== Oplossing D05gemiddelde
+=== Oplossing D05gemiddelde
 
 [source,csharp,linenums]
 ----
@@ -100,7 +107,7 @@ if (aantal > 0) {
 
 Let erop dat we geen gemiddelde kunnen berekenen voor 0 getallen (deling door 0!)
 	
-== Oplossing D05grootstegetal
+=== Oplossing D05grootstegetal
 
 [source,csharp,linenums]
 ----
@@ -163,7 +170,7 @@ Deze oplossing is misschien wel TE clever, we besparen een variabele maar maken 
 Don't be too clever ;)
 ====
 
-== Oplossing D05grootstegetalenaantal
+=== Oplossing D05grootstegetalenaantal
 
 [source,csharp,linenums]
 ----
@@ -195,7 +202,7 @@ if (teller != 0) {
 }
 ----
 
-== Oplossing D05aantal
+=== Oplossing D05aantal
 
 We moeten steeds het ingelezen getal bijhouden UIT DE VORIGE HERHALING, in variabele `vorigGetal`, en vergelijken met het nieuw ingelezen getal.
 
@@ -246,7 +253,7 @@ Console.WriteLine($"Aantal getallen ingevoerd: {teller}");
 Let erop dat `vorigGetal = getal` nu aan het begin van de herhaling staat!
 Dit is essentieel, anders kunnen we immers geen `getal != vorigGetal` in de herhalingsvoorwaarde vermelden.
  
-== Oplossing D05rechthoek
+=== Oplossing D05rechthoek
 
 [source,csharp,linenums]
 ----
@@ -268,7 +275,7 @@ do {
 } while (hoogteTeller < hoogte);
 ----
  
-== Oplossing D05vierkant
+=== Oplossing D05vierkant
 
 [source,csharp,linenums]
 ----
@@ -288,7 +295,7 @@ do {
 } while (hoogteTeller < zijde);
 ----
  
-== Oplossing D05driehoek
+=== Oplossing D05driehoek
 
 [source,csharp,linenums]
 ----
@@ -310,7 +317,7 @@ do {
 } while (hoogteTeller < zijde);
 ----
  
-== Oplossing D05double
+=== Oplossing D05double
 
 [source,csharp,linenums]
 ----
@@ -333,7 +340,7 @@ while (getalIngevoerd) {
 Console.WriteLine("Einde (wegens geen double getal).");
 ----
  
-== Oplossing D05reeks
+=== Oplossing D05reeks
 
 [source,csharp,linenums]
 ----
@@ -377,7 +384,7 @@ while (getalInReeks <= grootste) {
 }
 ----
  
-== Oplossing D05playlist
+=== Oplossing D05playlist
 
 [source,csharp,linenums]
 ----
@@ -405,7 +412,7 @@ if (invoerOk && aantalLiedjes >= 1) {
 }
 ----
  
-== Oplossing D05wildebertram
+=== Oplossing D05wildebertram
 
 [source,csharp,linenums]
 ----
@@ -432,7 +439,7 @@ if (invoerOk && maanden >= 1) {
 }
 ----
  
-== Oplossing D05somvanafstop
+=== Oplossing D05somvanafstop
 
 [source,csharp,linenums]
 ----
@@ -453,7 +460,7 @@ do {
 Console.Write($"=\n{som}");
 ----
  
-== Oplossing D05somofverschil
+=== Oplossing D05somofverschil
 
 [source,csharp,linenums]
 ----

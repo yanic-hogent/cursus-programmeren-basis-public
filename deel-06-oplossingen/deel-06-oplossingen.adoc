@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 06 - Oplossingen
 Yanic Inghelbrecht
-v2022.02.23.15.06
+v2022.10.11.14.00
 // toc and section numbering
 :toc: preamble
 :toclevels: 4
@@ -106,7 +106,39 @@ Console.WriteLine(code);
 Merk op dat je kunt valsspelen door de code al in te typen terwijl ze nog getoond wordt! De computer houdt namelijk een input buffer bij met alle ingetypte tekens die nog niet door het programma "geconsumeerd" zijn.
 
 
-== Herhalingen
+== Herhalingen (traceren of voorspellen)
+
+
+=== Oplossing D06traceersom1tem5
+// Y4.01
+
+|====
+| Regel | Waarde van `som` | Waarde van `i` | Hoeveelste iteratie | Output
+
+| `1` | `0` | `/` | |
+| `2` |  | `1` | |
+| `3` |  `2` |  | eerste |
+| `4` | | | eerste |
+
+| `2` | | `2` | |
+| `3` | `6` | | tweede |
+| `4` | | | tweede |
+
+| `2` | | `3` | |
+| `3` | `12` | | derde |
+| `4` | | | derde |
+
+| `2` | | `4` | |
+| `3` | `20` | | vierde |
+| `4` | | | vierde |
+
+| `2` | | `5` | |
+| `3` | `30` | | vijfde |
+| `4` | | | vijfde |
+
+| `2` | | `6` | |
+| `5` | | `/` | | 30 
+|====
 
 
 === Oplossing D06traceerk100
@@ -146,6 +178,9 @@ Merk op dat je kunt valsspelen door de code al in te typen terwijl ze nog getoon
 // Y3.12
 
 Probeer elk fragment uit in Visual Studio en kijk of je voorspelling klopt.
+
+
+== Herhalingen
 
 
 === Oplossing D06weekdagnummer
@@ -229,38 +264,6 @@ for (int i = 1; i <= 10; i++) {
 }
 Console.WriteLine($"De som van de kwadraten in [1,10] is {som}");
 ----
-
-
-=== Oplossing D06traceersom1tem5
-// Y4.01
-
-|====
-| Regel | Waarde van `som` | Waarde van `i` | Hoeveelste iteratie | Output
-
-| `1` | `0` | `/` | |
-| `2` |  | `1` | |
-| `3` |  `2` |  | eerste |
-| `4` | | | eerste |
-
-| `2` | | `2` | |
-| `3` | `6` | | tweede |
-| `4` | | | tweede |
-
-| `2` | | `3` | |
-| `3` | `12` | | derde |
-| `4` | | | derde |
-
-| `2` | | `4` | |
-| `3` | `20` | | vierde |
-| `4` | | | vierde |
-
-| `2` | | `5` | |
-| `3` | `30` | | vijfde |
-| `4` | | | vijfde |
-
-| `2` | | `6` | |
-| `5` | | `/` | | 30 
-|====
 
 
 === Oplossing D06somtussengrenzen

@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 04 - Oplossingen
 Frederiek De Wolf
-v2022.02.23.15.06
+v2022.10.11.14.00
 // toc and section numbering
 :toc: preamble
 :toclevels: 4
@@ -262,6 +262,12 @@ if (score > 82) {
 }
 Console.WriteLine($"In Amerika is dat een \"{letter}\"");
 ----
+
+
+=== Oplossing D04patreonsponsor
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
+
 
 === Oplossing D04inkomprijs
 // Y4.05

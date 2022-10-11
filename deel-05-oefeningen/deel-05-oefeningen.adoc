@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 05 - Oefeningen
 Frederiek De Wolf
-v2022.02.23.15.06
+v2022.10.11.14.00
 // toc and section numbering
 :toc: preamble
 :toclevels: 4
@@ -17,11 +17,12 @@ v2022.02.23.15.06
 // inject css for highlights using docinfo
 :docinfodir: ../common
 :docinfo: shared-head
-// folders
+// paden
 :imagesdir: images
 :url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
 // experimental voor kdb: en btn: macro's van AsciiDoctor
 :experimental:
+:extra-icon: ★
 
 //preamble
 [.text-right]
@@ -29,13 +30,17 @@ versie {revnumber}
 
 [NOTE]
 ======================================
-Het is een aanrader bij elke oefeningenreeks te starten met eventuele *__inleidende oefeningen__*.
-Naast deze focus je vooral op de *__essentiële oefeningen__*.
+We raden je aan om zoveel mogelijk oefeningen te maken, dat is de beste voorbereiding.
 
-Heb je tijd over, dan helpen de *__aanvullende oefeningen__* je de stof nog beter in de vingers te krijgen.
+Als je te ver achterop raakt bij het volgen van deze cursus, dan zul je daar wellicht niet de tijd voor vinden want het zijn er behoorlijk veel.
+
+* Indien je tijd tekort komt : concentreer je dan op de *__essentiële oefeningen__* (*zonder* {extra-icon}).
+
+* Heb je wat tijd over : dan helpen de *__aanvullende oefeningen__* (*mét* {extra-icon}) om deze topics nog beter in de vingers te krijgen.
 ======================================
 
-== Essentiële oefeningen
+
+== Gemengde oefeningen op herhalingen
  
 === Oefening D05twintigtotenmettien
 
@@ -54,6 +59,7 @@ Met andere woorden...
 12
 10
 ----
+
 
 === Oefening D05tafelsvan7
 
@@ -79,6 +85,27 @@ Zorg voor volgende uitvoer op de console...
 10 x 7 = 70
 ----
  
+
+=== {extra-icon} Oefening D05tekstherhalen
+
+Schrijf een programma dat de gebruiker om een tekst vraagt en een aantal, vervolgens daarmee een nieuwe tekst bouwt en deze op de console toont.
+
+Deze nieuwe tekst bestaat uit het gewenste aantal herhalingen van de ingegeven tekst. Bij de laatste herhaling moet de ingegeven tekst in hoofdletters verschijnen (zie voorbeeld hieronder).
+
+Je mag ervan uitgaan dat de gebruiker altijd een aantal ingeeft dat groter is dan nul.
+
+Een voorbeeld uitvoering zou kunnen zijn :
+
+[source,shell]
+----
+Geef een tekst : woef
+Geef een aantal : 4
+woefwoefwoefWOEF <1>
+----
+<1> Let erop dat de tekst vier keer herhaald werd en de laatste woef in hoofdletters staat.
+
+
+
 === Oefening D05som
 
 //y5.01
@@ -86,6 +113,7 @@ Zorg voor volgende uitvoer op de console...
 Schrijf een programma dat de gebruiker meermaals om een getal vraagt (totdat de gebruiker een __-1__ ingeeft).  Voor de eenvoud gaan we er hier van uit dat de gebruiker netjes getallen invoert, je hoeft hier niet op te controleren.
 
 Na afloop toont het programma wat de SOM is van alle getallen (de ingegeven __-1__ telt niet mee).
+
 
 === Oefening D05gemiddelde
 
@@ -95,6 +123,7 @@ Schrijf een programma dat de gebruiker meermaals om een getal vraagt (totdat de 
 
 Na afloop toont het programma wat het GEMIDDELDE is van alle getallen (de ingegeven __-1__ telt niet mee).
 
+
 === Oefening D05grootstegetal
 
 //y5.03
@@ -103,6 +132,7 @@ Schrijf een programma dat de gebruiker meermaals om een getal vraagt (totdat de 
 
 Na afloop toont het programma wat het GROOTSTE GETAL was van alle getallen (de ingegeven __-1__ telt niet mee).
 
+
 === Oefening D05grootstegetalenaantal
 
 //y5.04
@@ -110,7 +140,17 @@ Na afloop toont het programma wat het GROOTSTE GETAL was van alle getallen (de i
 Schrijf een programma dat de gebruiker meermaals om een getal vraagt (totdat de gebruiker een __-1__ ingeeft).  Voor de eenvoud gaan we er hier van uit dat de gebruiker netjes getallen invoert, je hoeft hier niet op te controleren.
 
 Na afloop toont het programma wat het GROOTSTE GETAL was van alle getallen (de ingegeven __-1__ telt niet mee) en HOE VAAK dit grootste getal voorkwam.
- 
+
+
+=== {extra-icon} Oefening D05aantal
+
+//y5.05
+
+Schrijf een programma dat de gebruiker meermaals om een getal vraagt, totdat de gebruiker twee keer na elkaar hetzelfde getal ingeeft.  Voor de eenvoud gaan we er hier van uit dat de gebruiker netjes getallen invoert, je hoeft hier niet op te controleren.
+
+Na afloop toont het programma het aantal ingegeven getallen (de laatste twee getallen tellen niet mee).
+   
+
 === Oefening D05rechthoek
 
 Soms worden in herhalingen tellers bijgehouden om te registreren hoe vaak de herhaling werd uitgevoerd.
@@ -166,6 +206,7 @@ int breedte = int.Parse(Console.ReadLine());
 ----
 <1> Hier aanvullen...
  
+ 
 === Oefening D05vierkant
 
 Maak een programma dat op basis van een bepaalde ingevoerde zijde een corresponderende vierkant, bestaande uit sterren gaat afdrukken.
@@ -189,6 +230,35 @@ int zijde = int.Parse(Console.ReadLine());
 // <1>
 ----
 <1> Hier aanvullen...
+
+
+=== {extra-icon} Oefening D05driehoek
+
+Maak een programma dat op basis van een bepaalde ingevoerde lengte van een rechthoekszijde een corresponderende gelijkbenige driehoek, bestaande uit sterren gaat afdrukken.
+
+Voorbeeld programmaverloop bij invoer van __5__...
+
+[source,shell]
+----
+Rechthoekzijde?: 5
+*****
+****
+***
+**
+*
+----
+
+Vul hiervoor volgende code aan...
+
+[source,csharp,linenums]
+----
+Console.Write("Rechthoekzijde?: ");
+int zijde = int.Parse(Console.ReadLine());
+
+// <1>
+----
+<1> Hier aanvullen...
+
 
 === Oefening D05double
 
@@ -282,107 +352,8 @@ Console.Write("Reeks van klein naar groot: ");
 ----
 <1> Hier aanvullen...
 
- 
-=== Oefening D05somofverschil
 
-//c22
-
-Maak een programma om een reeks van gehele getallen op te tellen of af te trekken.
-Het aantal getallen in de berekening is niet vastgelegd.
-
-We gaan er voor de eenvoud vanuit dat steeds netjes getallen en correct operatoren (__"+"__, __"-"__ of __"="__) worden ingevoerd.  Je hoeft hierop dus geen controle toe te passen.
-
-Zorg ervoor dat je oplossing exact verloopt zoals in volgende programmaverlopen wordt gedemonstreerd.  
-Na elk getal en elke symbool die door de gebruiker wordt ingevoerd, zal de gebruiker ook op de kbd:[Enter] toets drukken.
-
-Voorbeeld programmaverloop bij invoer van __1__ en __=__...
-
-[source,shell]
-----
-1
-=
-1
-----
-
-Voorbeeld programmaverloop bij invoer van __1__, __+__, __2__ en __=__...
-
-[source,shell]
-----
-1
-+
-2
-=
-3
-----
-
-Voorbeeld programmaverloop bij invoer van __1__, __-__, __-5__ en __=__...
-
-[source,shell]
-----
-1
--
--5
-=
-6
-----
-
-Voorbeeld programmaverloop bij invoer van __1__, __+__, __2__, __-__, __3__, __-__, __4__, __+__, __5__ en __=__...
-
-[source,shell]
-----
-1
-+
-2
--
-3
--
-4
-+
-5
-=
-1
-----
-
-== Aanvullende oefeningen
-
-=== Oefening D05aantal
-
-//y5.05
-
-Schrijf een programma dat de gebruiker meermaals om een getal vraagt, totdat de gebruiker twee keer na elkaar hetzelfde getal ingeeft.  Voor de eenvoud gaan we er hier van uit dat de gebruiker netjes getallen invoert, je hoeft hier niet op te controleren.
-
-Na afloop toont het programma het aantal ingegeven getallen (de laatste twee getallen tellen niet mee).
- 
-  
-=== Oefening D05driehoek
-
-Maak een programma dat op basis van een bepaalde ingevoerde lengte van een rechthoekszijde een corresponderende gelijkbenige driehoek, bestaande uit sterren gaat afdrukken.
-
-Voorbeeld programmaverloop bij invoer van __5__...
-
-[source,shell]
-----
-Rechthoekzijde?: 5
-*****
-****
-***
-**
-*
-----
-
-Vul hiervoor volgende code aan...
-
-[source,csharp,linenums]
-----
-Console.Write("Rechthoekzijde?: ");
-int zijde = int.Parse(Console.ReadLine());
-
-// <1>
-----
-<1> Hier aanvullen...
-
-
-=== Oefening D05playlist
+=== {extra-icon} Oefening D05playlist
 
 //c13
 
@@ -438,7 +409,8 @@ if (invoerOk &&	aantalLiedjes >= 1) {
 ----
 <1> Hier aanvullen...
  
-=== Oefening D05wildebertram
+ 
+=== {extra-icon} Oefening D05wildebertram
 
 //c14
 
@@ -501,7 +473,7 @@ if (invoerOk &&	maanden >= 1) {
 ----
 <1> Hier aanvullen
 
-=== Oefening D05somvanafstop
+=== {extra-icon} Oefening D05somvanafstop
 
 Maak een programma dat de gebruiker toelaat meerdere gehele getallen in te voeren, en dit tot de gebruiker __STOP__ invoert.
 Je weet met andere woorden niet hoeveel getallen de gebruiker zal invoeren.
@@ -558,3 +530,65 @@ STOP
 =
 0
 ----
+
+
+=== Oefening D05somofverschil
+
+//c22
+
+Maak een programma om een reeks van gehele getallen op te tellen of af te trekken.
+Het aantal getallen in de berekening is niet vastgelegd.
+
+We gaan er voor de eenvoud vanuit dat steeds netjes getallen en correct operatoren (__"+"__, __"-"__ of __"="__) worden ingevoerd.  Je hoeft hierop dus geen controle toe te passen.
+
+Zorg ervoor dat je oplossing exact verloopt zoals in volgende programmaverlopen wordt gedemonstreerd.  
+Na elk getal en elke symbool die door de gebruiker wordt ingevoerd, zal de gebruiker ook op de kbd:[Enter] toets drukken.
+
+Voorbeeld programmaverloop bij invoer van __1__ en __=__...
+
+[source,shell]
+----
+1
+=
+1
+----
+
+Voorbeeld programmaverloop bij invoer van __1__, __+__, __2__ en __=__...
+
+[source,shell]
+----
+1
++
+2
+=
+3
+----
+
+Voorbeeld programmaverloop bij invoer van __1__, __-__, __-5__ en __=__...
+
+[source,shell]
+----
+1
+-
+-5
+=
+6
+----
+
+Voorbeeld programmaverloop bij invoer van __1__, __+__, __2__, __-__, __3__, __-__, __4__, __+__, __5__ en __=__...
+
+[source,shell]
+----
+1
++
+2
+-
+3
+-
+4
++
+5
+=
+1
+----
+

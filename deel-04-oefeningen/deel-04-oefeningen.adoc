@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 04 - Oefeningen
 Frederiek De Wolf
-v2022.02.23.15.06
+v2022.10.11.14.00
 // toc and section numbering
 :toc: preamble
 :toclevels: 4
@@ -16,11 +16,12 @@ v2022.02.23.15.06
 // inject css for highlights using docinfo
 :docinfodir: ../common
 :docinfo: shared-head
-// folders
+// paden
 :imagesdir: images
 :url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
 // experimental voor kdb: en btn: macro's van AsciiDoctor
 :experimental:
+:extra-icon: ★
 
 //preamble
 [.text-right]
@@ -28,17 +29,18 @@ versie {revnumber}
 
 [NOTE]
 ======================================
-Het is een aanrader bij elke oefeningenreeks te starten met eventuele *__inleidende oefeningen__*.
-Naast deze focus je vooral op de *__essentiële oefeningen__*.
+We raden je aan om zoveel mogelijk oefeningen te maken, dat is de beste voorbereiding.
 
-Heb je tijd over, dan helpen de *__aanvullende oefeningen__* je de stof nog beter in de vingers te krijgen.
+Als je te ver achterop raakt bij het volgen van deze cursus, dan zul je daar wellicht niet de tijd voor vinden want het zijn er behoorlijk veel.
+
+* Indien je tijd tekort komt : concentreer je dan op de *__essentiële oefeningen__* (*zonder* {extra-icon}).
+
+* Heb je wat tijd over : dan helpen de *__aanvullende oefeningen__* (*mét* {extra-icon}) om deze topics nog beter in de vingers te krijgen.
 ======================================
 
-== Inleidende oefening
- 
-=== Debugging 
+== Debugging 
 
-==== Oefening D04muntstukken
+=== Oefening D04muntstukken
 
 Momenteel loopt er één en ander fout in een bepaald stuk code, de code levert een foutief programmaverloop, of op zijn minst foutieve uitvoer op.
 
@@ -93,16 +95,13 @@ Het totaal zou effectief __15,5__ moeten zijn, en in de formule moeten we __4 x 
 
 Maak gebruik van de debugger om in te schatten waar het foutloopt, en wat er foutloopt.  Corrigeer dan ook de code op gepaste wijze.
 
-== Essentiële oefeningen
+== If ... else if ... else ... en logische bewerkingen
 
-
-=== If ... else if ... else ... en logische bewerkingen
-
-==== Oefening D04groterofgelijk
+=== Oefening D04groterofgelijk
 // Y04.03
 Schrijf een programma dat de gebruiker om twee getallen en naargelang de situatie "het eerste is groter", "het tweede is groter" en "ze zijn gelijk" afbeeldt.
 
-==== Oefening D04bmi
+=== Oefening D04bmi
 
 Maak een programma om onderstaand programmaverloop te bekomen... .  (In het getoonde scenario werd __153__ en __84__ ingevoerd.
 
@@ -124,7 +123,7 @@ Niet allen het bmi maar ook de bijhorende omschrijving (__ondergewicht__, __norm
 - Vanaf 30 en minder dan 40: __zwaarlijvigheid__.
 - Vanaf 40: __ernstige zwaarlijvigheid__.
 
-==== Oefening D04prijsappels
+=== Oefening D04prijsappels
 
 Schrijf een programma dat de gebruiker vraagt hoeveel kilo appels hij wenst aan te kopen.  Druk vervolgens de prijs af.  De prijs bedraagt 3 euro per kilo, of 2,5 euro indien minstens 10 kilo wordt afgenomen, 2 euro bij een minimum aankoop van 20 kilo.
 
@@ -136,7 +135,73 @@ Aantal kilo aan te kopen appels?: 17
 Prijs: 42,5
 ----
 
-==== Oefening D04toelage
+
+=== {extra-icon} Oefening D04ohm
+
+Maak een programma dat vraagt aan de gebruiker wat zij/hij wenst te berekenen: __Spanning__, __Weerstand__ of __Stroomsterkte__. 
+  
+Vraag vervolgens de twee andere waarden (indien de gebruiker "Spanning" kiest vraag je aan de gebruiker de stroomsterkte en de weerstand) en bereken de gewenste waarde.
+
+Hier kunnen we de 'wet van Ohm' gebruiken.  U = I x R.
+
+Hierin staat de letter U voor spanning, de I staat voor de stroomsterkte, en de R staat voor de weerstand.  
+Of met ander woorden: Spanning = Stroomsterkte x Weerstand
+
+=== Oefening D04score
+// Y04.04
+Schrijf een programma dat de gebruiker om een score vraagt (in procent) en vervolgens de Amerikaanse lettercode weergeeft.
+
+	A indien score > 82%
+	B indien score > 67% en <=82%
+	C indien score > 52% en <=67%
+	D indien score > 37% en <=52%
+	E indien score > 22% en <=37%
+	F indien score <= 22%
+
+
+=== {extra-icon} Oefening D04patreonsponsor
+
+Het youtube kanaal "Adrian's digital basement" kan gesponsord worden via Patreon, met de volgende sponsor niveaus :
+
+	vanaf 1    Eur : It's a binary buck
+	vanaf 2    Eur : Two's Complement
+	vanaf 3.5  Eur : Nibble-Size
+	vanaf 7    Eur : Glorious 8-bit simplicity
+	vanaf 14   Eur : 16-bit is the future
+	vanaf 28   Eur : Cooking with 32-bits
+	vanaf 55.5 Eur : Commodore 64
+
+Elke sponsor komt in het niveau terecht dat het beste past bij het gedoneerde bedrag. Wie bv. 10Eur doneert, wordt een "Glorious 8-bit simplicity" sponsor.
+
+Let op : minder dan 1 Eur doneren is niet mogelijk!
+
+Schrijf een programma dat de gebruiker om een geldbedrag vraagt en vervolgens het bereikte sponsor niveau (tussen aanhalingstekens!) weergeeft. Gebruik hiervoor interval checking​​ zoals uitgelegd in de cursus.
+
+Een voorbeeld uitvoering :
+
+[source, shell]
+----
+Hoeveel euro wil je uitgeven : 10
+Dan word je een "Glorious 8-bit simplicity" sponsor.  <1>
+----
+<1> Let op de aanhalingstekens rond het sponsor niveau.
+
+Een andere voorbeeld uitvoering :
+[source, shell]
+----
+Hoeveel euro wil je uitgeven : 0.5
+Helaas, voor dat bedrag kun je niet sponsoren.
+----
+
+=== {extra-icon} Oefening D04inkomprijs
+// Y4.05
+Op de afterparty van de premiere van de nieuwe kabouter Plop film kost de inkom 10Eur. Wie echter kleiner is dan 160cm en ouder is dan 20jaar mag binnen aan halve prijs!
+
+Schijf een programma dat de gebruiker om de lengte en leeftijd vraagt en vervolgens de inkomprijs toont.
+
+
+
+=== Oefening D04toelage
 // Y4.06
 Een bepaalde instantie voorziet in een toelage bovenop het inkomen van grote minderbedeelde gezinnen. De toelage
 	- bedraagt 3% van het jaarinkomen
@@ -144,13 +209,36 @@ Een bepaalde instantie voorziet in een toelage bovenop het inkomen van grote min
 	
 Schrijf een programma dat de gebruiker om het jaarinkomen en aantal kinderen vraagt, en vervolgens de toelage voor dat gezin toont.
 
-==== Oefening D04schrikkeljaar
+
+=== {extra-icon} Oefening D04dagnummer
+// Y4.07
+Vraag de gebruiker om een dagnummer in het jaar (i.e. van 1 t.e.m. 365, dus geen schrikkeljaar). Het programma toont vervolgens in welke maand (als tekst) die dag zich bevindt. 
+
+Bv. als de gebruiker 100 ingeeft, toont het programma "April".
+
+
+=== {extra-icon} Oefening D04geslaagd
+// Y04.10
+Een openbaar examen bestaat uit drie delen die elk met een cijfer op 10 beoordeeld worden. Om te slagen moet men :
+
+- ofwel minstens 5/10 behalen voor elk deel
+- ofwel in totaal minstens 18/30 zonder een cijfer < 4
+
+Schrijf een programma dat de gebruiker om drie scores op 10  vraagt en vervolgens "geslaagd" of "niet geslaagd" toont.
+
+
+=== {extra-icon} Oefening D04grootste
+// Y04.11
+Schrijf een programma dat 3 getallen van de gebruiker inleest en achteraf meldt wat het grootste getal is van de drie. Bv. Als de gebruiker 2 8 en 4 ingeeft toont het programma "Het grootste getal van 2, 8 en 4 is 8".
+
+
+=== Oefening D04schrikkeljaar
 
 Maak een programma dat van een ingevoerd jaartal op de console brengt of het gaat om een schrikkeljaar of niet.
 
 Een schrikkeljaar is een jaar dat deelbaar is door 4 en niet door 100, of deelbaar is door 400.
 
-==== Oefening D04weer
+=== Oefening D04weer
 
 Maak een programma om een bepaald weerbeeld af te drukken, we hebben vier mogelijkheden:
 
@@ -188,68 +276,16 @@ Regent het (ja/nee)?: ja
 Regenboog.
 ----
 
-==== Oefening D04weerzonderlogischeoperatoren
+=== Oefening D04weerzonderlogischeoperatoren
 
 Maak oefening D04weer opnieuw, maar vermijd voor deze oefening het gebruik van de `&&` of `||` operatoren.
 
-=== Invoer robuust opvangen
+== Invoer robuust opvangen
 
-==== Oefening D04weermetrobuusteinvoer
+=== Oefening D04weermetrobuusteinvoer
 
 Maak oefening D04weerzonderlogischeoperatoren opnieuw, maar houd deze keer rekening met 
 
 - de mogelijkheid dat de gebruiker hoofdletters of kleine letters gebruikt (bv. "JA", "Ja" of "ja")
 - de mogelijkheid dat voor de ingevoerde tekst, of na de ingevoerde tekst, nietszeggende spaties werden opgenomen
 
-== Aanvullende oefeningen
-
-=== If ... else if ... else ... en logische bewerkingen
-
-==== Oefening D04ohm
-
-Maak een programma dat vraagt aan de gebruiker wat zij/hij wenst te berekenen: __Spanning__, __Weerstand__ of __Stroomsterkte__. 
-  
-Vraag vervolgens de twee andere waarden (indien de gebruiker "Spanning" kiest vraag je aan de gebruiker de stroomsterkte en de weerstand) en bereken de gewenste waarde.
-
-Hier kunnen we de 'wet van Ohm' gebruiken.  U = I x R.
-
-Hierin staat de letter U voor spanning, de I staat voor de stroomsterkte, en de R staat voor de weerstand.  
-Of met ander woorden: Spanning = Stroomsterkte x Weerstand
-
-
-
-==== Oefening D04score
-// Y04.04
-Schrijf een programma dat de gebruiker om een score vraagt (in procent) en vervolgens de Amerikaanse lettercode weergeeft.
-
-	A indien score > 82%
-	B indien score > 67% en <=82%
-	C indien score > 52% en <=67%
-	D indien score > 37% en <=52%
-	E indien score > 22% en <=37%
-	F indien score <= 22%
-
-==== Oefening D04inkomprijs
-// Y4.05
-Op de afterparty van de premiere van de nieuwe kabouter Plop film kost de inkom 10Eur. Wie echter kleiner is dan 160cm en ouder is dan 20jaar mag binnen aan halve prijs!
-
-Schijf een programma dat de gebruiker om de lengte en leeftijd vraagt en vervolgens de inkomprijs toont.
-
-==== Oefening D04dagnummer
-// Y4.07
-Vraag de gebruiker om een dagnummer in het jaar (i.e. van 1 t.e.m. 365, dus geen schrikkeljaar). Het programma toont vervolgens in welke maand (als tekst) die dag zich bevindt. 
-
-Bv. als de gebruiker 100 ingeeft, toont het programma "April".
-
-==== Oefening D04geslaagd
-// Y04.10
-Een openbaar examen bestaat uit drie delen die elk met een cijfer op 10 beoordeeld worden. Om te slagen moet men :
-
-- ofwel minstens 5/10 behalen voor elk deel
-- ofwel in totaal minstens 18/30 zonder een cijfer < 4
-
-Schrijf een programma dat de gebruiker om drie scores op 10  vraagt en vervolgens "geslaagd" of "niet geslaagd" toont.
-
-==== Oefening D04grootste
-// Y04.11
-Schrijf een programma dat 3 getallen van de gebruiker inleest en achteraf meldt wat het grootste getal is van de drie. Bv. Als de gebruiker 2 8 en 4 ingeeft toont het programma "Het grootste getal van 2, 8 en 4 is 8".

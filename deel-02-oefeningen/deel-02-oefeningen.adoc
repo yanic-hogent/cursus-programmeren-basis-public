@@ -1,6 +1,6 @@
 ﻿= Programmeren Basis - Deel 02 - Oefeningen
 Yanic Inghelbrecht
-v2022.02.23.15.06
+v2022.10.11.14.00
 // toc and section numbering
 :toc: preamble
 :toclevels: 4
@@ -17,11 +17,12 @@ v2022.02.23.15.06
 // inject css for highlights using docinfo
 :docinfodir: ../common
 :docinfo: shared-head
-// folders
+// paden
 :imagesdir: images
 :url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
 // experimental voor kdb: en btn: macro's van AsciiDoctor
 :experimental:
+:extra-icon: ★
 
 //preamble
 [.text-right]
@@ -29,18 +30,35 @@ versie {revnumber}
 
 [NOTE]
 ======================================
-Het is een aanrader bij elke oefeningenreeks te starten met eventuele *__inleidende oefeningen__*.
-Naast deze focus je vooral op de *__essentiële oefeningen__*.
+We raden je aan om zoveel mogelijk oefeningen te maken, dat is de beste voorbereiding.
 
-Heb je tijd over, dan helpen de *__aanvullende oefeningen__* je de stof nog beter in de vingers te krijgen.
+Als je te ver achterop raakt bij het volgen van deze cursus, dan zul je daar wellicht niet de tijd voor vinden want het zijn er behoorlijk veel.
+
+* Indien je tijd tekort komt : concentreer je dan op de *__essentiële oefeningen__* (*zonder* {extra-icon}).
+
+* Heb je wat tijd over : dan helpen de *__aanvullende oefeningen__* (*mét* {extra-icon}) om deze topics nog beter in de vingers te krijgen.
 ======================================
- 
-== Essentiële oefeningen
 
-=== String concatenatie en input/output
  
+== String concatenatie en input/output
 
-==== Oefening D02leeftijd
+ 
+=== {extra-icon} Oefening D02frietjes
+// Y2.01
+Schrijf een programma dat de gebruiker om 2 namen (bv. Jan en Mieke) alsook een gerecht (bv. frietjes) vraagt en vervolgens `Jan en Mieke eten graag frietjes.` op de console zet.
+
+Een uitvoering van het programma ziet er zo uit :
+
+[source,shell]
+----
+Geef een naam : Jan
+Geef nog een naam : Mieke
+Geef een gerecht : frietjes
+Jan en Mieke eten graag frietjes.
+----
+
+
+=== Oefening D02leeftijd
 // Y2.03
 Schrijf een programma dat de gebruiker om zijn/haar naam (bv. Jan) en leeftijd (bv. 34) vraagt en volgende zinnetje op de console zet :
 
@@ -55,10 +73,11 @@ Geef je leeftijd : 34
 Goeiedag Jan, je bent dus 34 jaar oud!
 ----
 
-=== Conversie
+
+== Conversie
  
  
-==== Oefening D02leeftijdvolgendjaar
+=== Oefening D02leeftijdvolgendjaar
 // Y2.04
 Schrijf een programma dat de gebruiker om zijn/haar naam (bv. Jan) en leeftijd (bv. 34), er een jaartje bijtelt en het volgende zinnetje toont :
 
@@ -74,14 +93,14 @@ Oei oei Jan, volgend jaar ben je al 35 jaar oud!
 ----
 
 
-==== Oefening D02som
+=== Oefening D02som
 // Y2.02
 Schrijf een programma dat de gebruiker om 2 gehele getallen vraagt (bv. 5 en 6) en hun som op de console zet :
 
 `5 plus 6 is 11.`
 
 
-==== Oefening D02totalebedrag
+=== Oefening D02totalebedrag
 // C03
 Maak een programma dat de gebruiker vraagt hoeveel muntstukken van 2 en 1 euro hij heeft en vervolgens het totale bedrag toont. 
 
@@ -95,12 +114,12 @@ Het totale bedrag is 11 Euro.
 ----
 
 
-==== Oefening D02gemiddelde
+=== Oefening D02gemiddelde
 // Y2.05
 Schrijf een programma dat de gebruiker om drie kommagetallen vraagt en hun gemiddelde toont.
 
 			
-==== Oefening D02temperatuur
+=== Oefening D02temperatuur
 // Y2.07
 Schrijf een programma dat de gebruiker om een temperatuur in graden Fahrenheit (een kommagetal) vraagt en dan de corresponderende de temperatuur in graden Celsius (een kommagetal) toont.
 
@@ -112,25 +131,50 @@ C = 5/9 * (F-32)
 Tip : pas op met gehele delingen, i.e. delingen van gehele getallen!
 
 
+=== {extra-icon} Oefening D02getalontleden
+// Y2.10
+Schrijf een programma dat de gebruiker om een geheel getal in [0,1000[ vraagt (dus van 0 t.e.m. 999) en vervolgens toont uit hoeveel honderdtallen, tientallen en eenheden dit bestaat. 
+
+Tip : gebruik deling en modulo.
+
+Een uitvoering met 123 als input ziet er zo uit :
+[source,shell]
+----
+Geef een getal : 123
+Het getal 123 bestaat uit
+1 x 100
+2 x  10
+3 x   1
+----
 
 
+=== {extra-icon} Oefening D02hetmaandieet
+Op de maan weegt alles (ongeveer) 6 keer minder dan op de aarde. Schrijf een programma dat de gebruiker om een gewicht in kilogram vraagt (een geheel getal) en dan op de console toont hoeveel het op de maan zou wegen (een kommagetal).
 
-=== Controlestructuren if en if/else
+Een voorbeeld uitvoering :
+[source,shell]
+----
+Geef je gewicht in kg : 83
+Op de maan zou je ongeveer 13.833333333333334 kg wegen.
+----
 
 
-==== Oefening D02volwassen
+== Controlestructuren if en if/else
+
+
+=== Oefening D02volwassen
 // Y2.14
 Schrijf een programma dat de gebruiker om zijn/haar leeftijd vraagt en toont `Je bent wel volwassen.` of `Je bent niet volwassen.`. Volwassen betekent 18 jaar of ouder. 
 
 Gebruik in je code enkel de voorwaarde `leeftijd >= 18`.
 
 
-==== Oefening D02gelijk
+=== Oefening D02gelijk
 // Y2.15
 Schrijf een programma dat de gebruiker om 2 gehele getallen vraagt en ofwel meldt `Ze zijn gelijk.` ofwel `Ze zijn verschillend.`.
 
 		
-==== Oefening D02quotient
+=== Oefening D02quotient
 // C05
 Maak een programma dat de gebruiker om een deeltal en een deler vraagt en vervolgens het quotient op de console toont.
 
@@ -154,52 +198,14 @@ Deling door nul wordt niet toegelaten.
 ----
 
 
-==== Oefening D02even
+=== Oefening D02even
 // Y2.16
 Schrijf een programma dat de gebruiker om een geheel getal vraagt en ofwel meldt of het getal even dan wel oneven is.
 
 Tip : denk aan modulo 2!
 
 
-== Aanvullende oefeningen
-
-=== String concatenatie en input/output
- 
-==== Oefening D02frietjes
-// Y2.01
-Schrijf een programma dat de gebruiker om 2 namen (bv. Jan en Mieke) alsook een gerecht (bv. frietjes) vraagt en vervolgens `Jan en Mieke eten graag frietjes.` op de console zet.
-
-Een uitvoering van het programma ziet er zo uit :
-
-[source,shell]
-----
-Geef een naam : Jan
-Geef nog een naam : Mieke
-Geef een gerecht : frietjes
-Jan en Mieke eten graag frietjes.
-----
-
-=== Conversie
-
-==== Oefening D02getalontleden
-// Y2.10
-Schrijf een programma dat de gebruiker om een geheel getal in [0,1000[ vraagt (dus van 0 t.e.m. 999) en vervolgens toont uit hoeveel honderdtallen, tientallen en eenheden dit bestaat. 
-
-Tip : gebruik deling en modulo.
-
-Een uitvoering met 123 als input ziet er zo uit :
-[source,shell]
-----
-Geef een getal : 123
-Het getal 123 bestaat uit
-1 x 100
-2 x  10
-3 x   1
-----
-
-=== Controlestructuren if en if/else
-
-==== Oefening D02absolutewaarde
+=== {extra-icon} Oefening D02absolutewaarde
 // Y2.17
 Schrijf een programma dat de gebruiker om een getal vraagt en de absolute waarde van dit getal toont.
 

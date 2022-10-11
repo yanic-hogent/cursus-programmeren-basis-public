@@ -1,6 +1,6 @@
 ﻿= Programmeren Basis - Deel 01 - Oefeningen
 Frederiek De Wolf
-v2022.02.23.15.06
+v2022.10.11.14.00
 // toc and section numbering
 :toc: preamble
 :toclevels: 4
@@ -16,11 +16,12 @@ v2022.02.23.15.06
 // inject css for highlights using docinfo
 :docinfodir: ../common
 :docinfo: shared-head
-// folders
+// paden
 :imagesdir: images
 :url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
 // experimental voor kdb: en btn: macro's van AsciiDoctor
 :experimental:
+:extra-icon: ★
 
 //preamble
 [.text-right]
@@ -28,15 +29,16 @@ versie {revnumber}
 
 [NOTE]
 ======================================
-Het is een aanrader bij elke oefeningenreeks te starten met eventuele *__inleidende oefeningen__*.
-Naast deze focus je vooral op de *__essentiële oefeningen__*.
+We raden je aan om zoveel mogelijk oefeningen te maken, dat is de beste voorbereiding.
 
-Heb je tijd over, dan helpen de *__aanvullende oefeningen__* je de stof nog beter in de vingers te krijgen.
+Als je te ver achterop raakt bij het volgen van deze cursus, dan zul je daar wellicht niet de tijd voor vinden want het zijn er behoorlijk veel.
+
+* Indien je tijd tekort komt : concentreer je dan op de *__essentiële oefeningen__* (*zonder* {extra-icon}).
+
+* Heb je wat tijd over : dan helpen de *__aanvullende oefeningen__* (*mét* {extra-icon}) om deze topics nog beter in de vingers te krijgen.
 ======================================
 
-== Inleidende oefening
-
-=== Oefening D01codepositioneren
+== Oefening D01codepositioneren
 
 In de cursus wordt aangegeven waar je code moet plaatsen om ze uit te voeren.  Probeer het eens uit met volgende code... . 
 
@@ -83,9 +85,7 @@ Zelfs zonder dat we al die onderwerpen hebben behandeld, kan je allicht inschatt
 Broncode, of althans grote stukken ervan, is veel programmeertalen vrij goed leesbaar, ook in C# is dat het geval.  De set aan gebruikte symbolen is echter indrukwekkend, `=`, (`, `)`, `;`, `,`, `"`, `{`, `}`, `<`, `>`, `!`, ... .  Laat je hierdoor niet intimideren, van elk zal snel duidelijk worden wat hun betekennis is.
 ==============================
 
-== Essentiële oefeningen
-
-=== Oefening D01centimetersnaarmeters
+== Oefening D01centimetersnaarmeters
 
 Vul volgend programma aan met de ontbrekende code.  
 
@@ -132,7 +132,7 @@ m en
 cm
 ----
 
-=== Oefening D01totalebedrag
+== Oefening D01totalebedrag
 
 Vul volgend programma aan met de ontbrekende code.  
 
@@ -163,7 +163,7 @@ De uitvoer van het programma zou moeten zijn...
 
 Aan de meegegeven code pas je niets aan.  Maar uiteraard zou je een ander getal te zien krijgen indien je de waardes __7__, __6__, __5__, __4__ of __3__ zou wijzigen.
 
-=== Oefening D01bmi
+== Oefening D01bmi
 
 Vul volgend programma aan met de ontbrekende code.  
 
@@ -196,7 +196,7 @@ De uitvoer van het programma zou moeten zijn...
 
 Aan de meegegeven code pas je niets aan.  Maar uiteraard zou je een ander getal te zien krijgen indien je de waardes __182__ of __72__ zou wijzigen.
 
-=== Oefening D01waardesomwisselen
+== Oefening D01waardesomwisselen
 
 Vul volgend programma aan met de ontbrekende code.  
 
@@ -226,7 +226,7 @@ TIP: Maak eventueel gebruik van extra variabelen.
 
 Aan de meegegeven code pas je niets aan.  Maar uiteraard zou je een ander getal te zien krijgen indien je de waardes __5__ of __13__ zou wijzigen.
 
-=== Oefening D01euronaarpound
+== Oefening D01euronaarpound
 
 Vul volgend programma aan met de ontbrekende code.
 

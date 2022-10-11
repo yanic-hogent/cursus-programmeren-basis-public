@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 02 - Oplossingen
 Yanic Inghelbrecht
-v2022.02.23.15.06
+v2022.10.11.14.00
 // toc and section numbering
 :toc: preamble
 :toclevels: 4
@@ -231,6 +231,12 @@ rest = rest % 10;
 int eenheden = rest / 1;
 ...
 ----
+
+
+=== Oplossing D02hetmaandieet
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
+
 
 
 == Controlestructuren if en if/else

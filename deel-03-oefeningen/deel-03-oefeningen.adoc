@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 03 - Oefeningen
 Yanic Inghelbrecht
-v2022.10.09.22.46
+v2022.10.11.14.00
 // toc and section numbering
 :toc: preamble
 :toclevels: 4
@@ -20,11 +20,11 @@ v2022.10.09.22.46
 // paden
 :imagesdir: images
 :url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
-:extra-icon: ★
 :deel-02-oplossingen: ../deel-02-oplossingen/deel-02-oplossingen.adoc
 :deel-03-oplossingen: ../deel-03-oplossingen/deel-03-oplossingen.adoc
 // experimental voor kdb: en btn: macro's van AsciiDoctor
 :experimental:
+:extra-icon: ★
 
 //preamble
 [.text-right]
