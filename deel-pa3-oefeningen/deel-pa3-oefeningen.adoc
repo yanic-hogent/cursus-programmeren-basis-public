@@ -31,7 +31,7 @@ versie {revnumber}
  
 == Oefening DPA3.metfileio
 
-Herwerk link:{deel-pa2-oplossingen}#_oplossing_dpa2_metmethods[de oplossing DPA2.metmethods] zodat de persoonsgegevens in een bestand worden bewaard (en ingeladen bij de start).
+Herwerk link:{deel-pa2-oplossingen}#_oplossing_dpa2metmethods[de oplossing DPA2.metmethods] zodat de persoonsgegevens in een bestand worden bewaard (en ingeladen bij de start).
 
 We kiezen ervoor om een tekstbestand te gebruiken met naam `personen.csv`, waarin de waarden gescheiden worden door het tab-symbool i.p.v. komma's.
 

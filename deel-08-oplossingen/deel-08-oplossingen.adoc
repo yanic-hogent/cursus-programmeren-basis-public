@@ -100,18 +100,28 @@ if (gelukt && dagNummer >= 1 && dagNummer <= 7) {
 string[] kleuren = { "rood", "groen", "blauw", "geel" };
 string[] lichaamsdelen = { "linkerhand", "rechterhand", "linkervoet", "rechtervoet" };
 
+Console.WriteLine("Het spel start over 3 seconden...");
+System.Threading.Thread.Sleep(3000);
+
 Random rnd = new Random();
 while (true) {
-	int randomIndex = rnd.Next(0, 4);
-	string kleur = kleuren[randomIndex];
-	
+	// Kies een willekeurig lichaamsdeel
 	randomIndex = rnd.Next(0, 4);
-	string lichaamsdeel = lichaamsdelen[randomIndex];
+	string lichaamsdeel = lichaamsdelen[randomIndex]; // <1>
 
+	// kies een willekeurige kleur
+	int randomIndex = rnd.Next(0, 4);
+	string kleur = kleuren[randomIndex];              // <1>
+
+	// toon de opdracht
 	Console.WriteLine($"{lichaamsdeel} op {kleur}");
-	System.Threading.Thread.Sleep(5000);
+	
+	// wacht 7 seconden
+	System.Threading.Thread.Sleep(7000);
 }
 ----
+<1> Dit is nu veel eenvoudiger geworden, we hebben geen ingewikkelde __if-elseif__ structuur meer nodig om de kleur te bepalen die overeenkomt met het random getal.
+
 
 == Itereren met for en foreach
 

@@ -1,6 +1,6 @@
 ﻿= Programmeren Basis - Deel 07 - Oefeningen
 Yanic Inghelbrecht
-v2022.05.06.10.00
+v2022.10.18.10.10
 // toc and section numbering
 :toc: preamble
 :toclevels: 4
@@ -23,6 +23,7 @@ v2022.05.06.10.00
 :deel-03-oplossingen: ../deel-03-oplossingen/deel-03-oplossingen.adoc
 // experimental voor kdb: en btn: macro's van AsciiDoctor
 :experimental:
+:extra-icon: ★
 
 //preamble
 [.text-right]
@@ -30,17 +31,19 @@ versie {revnumber}
  
 [NOTE]
 ======================================
-Het is een aanrader bij elke oefeningenreeks te starten met eventuele *__inleidende oefeningen__*.
-Naast deze focus je vooral op de *__essentiële oefeningen__*.
+We raden je aan om zoveel mogelijk oefeningen te maken, dat is de beste voorbereiding.
 
-Heb je tijd over, dan helpen de *__aanvullende oefeningen__* je de stof nog beter in de vingers te krijgen.
+Als je te ver achterop raakt bij het volgen van deze cursus, dan zul je daar wellicht niet de tijd voor vinden want het zijn er behoorlijk veel.
+
+* Indien je tijd tekort komt : concentreer je dan op de *__essentiële oefeningen__* (*zonder* {extra-icon}).
+
+* Heb je wat tijd over : dan helpen de *__aanvullende oefeningen__* (*mét* {extra-icon}) om deze topics nog beter in de vingers te krijgen.
 ======================================
 
-== Inleidende oefeningen
 
-=== Visual Studio project en opstartobject
+== Visual Studio project en opstartobject
 
-==== Oefening D07opstartobject
+=== Oefening D07opstartobject
 
 Maak voor de oefeningen __Deel 07__ in __Visual Studio__ een *nieuw __Console App (.NET Core)__ project* met de naam *__D07__*.
 
@@ -100,13 +103,12 @@ namespace D07 {
 
 Pas bij de project eigenschappen het opstartobject aan om `D07veelvoudenvan9` uit te voeren.  Controleer of effectief __"Dit is de uitvoer van D07veelvoudenvan9..."__ wordt afgedrukt.
 
-== Essentiële oefeningen
 
-=== String bewerkingen en char datatype
+== String bewerkingen en char datatype
  
-==== Een getal omzetten naar een geformatteerde string
+=== Een getal omzetten naar een geformatteerde string
 
-===== Oefening D07veelvoudenvan9
+==== Oefening D07veelvoudenvan9
 
 Schrijf een programma dat onderstaande output produceert.
 
@@ -125,9 +127,9 @@ Gebruik een for loop om voor elke regel het resultaat te berekenen en formatteer
 ----
 
 
-===== Oefening D07cirkel
+==== Oefening D07cirkel
 
-Herschrijf link:{deel-03-oplossingen}#_oplossing_d03_cirkel[de oplossing van D03cirkel] zodat de omtrek en oppervlakte van de cirkel getoond worden tot op 3 cijfers na de komma.
+Herschrijf link:{deel-03-oplossingen}#_oplossing_d03cirkel[de oplossing van D03cirkel] zodat de omtrek en oppervlakte van de cirkel getoond worden tot op 3 cijfers na de komma.
 
 Een uitvoering waarbij de gebruiker 2.7 invult als straal ziet er zo uit :
 
@@ -139,10 +141,10 @@ De oppervlakte is 22.902.
 ----
 
 
-==== String bewerkingen
+=== String bewerkingen
 
 
-===== Oefening D07dotdotdot
+==== Oefening D07dotdotdot
 Schrijf een programma dat de gebruiker om een tekst vraagt en vervolgens de tekst herhaalt maar een `.` achter elk karakter zet.
 
 [source,shell]
@@ -152,7 +154,7 @@ h.a.l.l.o.!.
 ----
 
 
-===== Oefening D07karakterperpositie
+==== Oefening D07karakterperpositie
 // Y1.01
 Schrijf een programma dat de gebruiker om tekst vraagt en voor elke positie toont welk karakter op die positie staat.
 
@@ -174,7 +176,7 @@ Geef een tekst : programmeren
 ----
 
 
-===== Oefening D07achterstevoren
+==== Oefening D07achterstevoren
 
 Schrijf een programma dat de gebruiker om tekst vraagt en vervolgens die tekst achterstevoren weergeeft.
 
@@ -185,7 +187,7 @@ neremmargorp
 ----
 
 
-===== Oefening D07bevatleesteken
+==== Oefening D07bevatleesteken
 
 Schrijf een programma dat de gebruiker om tekst vraagt en dat weergeeft of die tekst minstens 1 leesteken bevat.
 
@@ -205,7 +207,7 @@ Geef een tekst : Zeg 'ns AAA!
 De tekst bevat minstens 1 leesteken.
 ----
 
-===== Oefening D07begintmethoofdletter
+==== Oefening D07begintmethoofdletter
 
 Schrijf een programma dat de gebruiker om tekst vraagt en dat weergeeft of die tekst start met een hoofdletter of kleine letter.
 
@@ -223,7 +225,7 @@ Geef een tekst : Zeg 'ns AAA!
 De tekst start met een hoofdletter.
 ----
 
-===== Oefening D07aantalkeere
+==== Oefening D07aantalkeere
 //Y1.02
 Schrijf een programma dat de gebruiker om tekst vraagt en toont hoeveel keer de letter 'e' voorkomt (hoofdletterongevoelig).
 
@@ -235,7 +237,7 @@ Geef een tekst : Edward: "Hello, hello. What's going on? What's all this shoutin
 ----
 
 
-===== Oefening D07beginmethoofdletters
+==== Oefening D07beginmethoofdletters
 
 Schrijf een programma dat de gebruiker om een tekst vraagt en de karakters op de eerste 5 posities omzet naar hoofdletters. Het resultaat wordt op de console getoond.
 
@@ -257,10 +259,10 @@ PROGRammeren
 ----	
 
 
-==== String bewerkingen (moeilijker)
+=== String bewerkingen (moeilijker)
 
 
-===== Oefening D07klinkersenmedeklinkers
+==== Oefening D07klinkersenmedeklinkers
 // Y1.08
 
 Schrijf een programma dat de gebruiker om een tekst vraagt en het aantal klinkers en medeklinkers weergeeft. 
@@ -284,7 +286,7 @@ string medeklinkers = "bcdfghjklmnpqrstvwxyz";
 en voor elk karakter na te gaan of het in deze strings voorkomt.
 
 
-===== Oefening D07tussenaccolades
+==== Oefening D07tussenaccolades
 // Y1.10
 
 Schrijf een programma dat de gebruiker om een tekst vraagt en het deel ervan toont dat tussen accolades staat. 
@@ -325,7 +327,7 @@ gevonden : vliegen {laag
 
 
 
-===== Oefening D07zoeken
+==== Oefening D07zoeken
 // Y1.11
 
 Schrijf een programma dat de gebruiker om een tekst en een zoekwoord vraagt. Het programma toont hoe vaak het zoekwoord in de tekst voorkomt (hoofdletterongevoelig).
@@ -371,7 +373,7 @@ Probeer dit laatste voorbeeld eens uit in een paar verschillende editoren (notep
 Hiervoor moet je in de editor een nieuw document maken waarin je enkel de tekst `aaaaaa` stopt. Open vervolgens via de menubalk van de editor het zoekvenster. Laat nu de editor zoeken naar `aa` tot het einde van het document bereikt is en tel hoe vaak de tekst gevonden wordt.
 
 
-===== Oefening D07zoekennavorige
+==== Oefening D07zoekennavorige
 
 Pas nu je oplossing aan om bij het zoeken naar `aa` in `aaaaaa` toch `3` te bekomen (in plaats van `5` zoals je oplossing van de vorige oefening).
 

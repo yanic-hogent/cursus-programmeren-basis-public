@@ -479,7 +479,7 @@ Geef een variabele steeds een zo klein mogelijke scope, onderzoek wijst uit dat 
 ****
 [.underline]#Voorbeeld met een beperkte scope#
 
-Hernemen we eens link:{deel-02-oplossingen}#_oplossing_d02_quotient[de oplossing van D02quotient] en kijken naar de variabele `quotient` :
+Hernemen we eens link:{deel-02-oplossingen}#_oplossing_d02quotient[de oplossing van D02quotient] en kijken naar de variabele `quotient` :
 
 [source,csharp,linenums]
 ----

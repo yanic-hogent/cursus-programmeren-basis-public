@@ -541,7 +541,7 @@ om te zien waar je zoal rekening mee had kunnen/moeten houden ;)
 
 ==== Oefening D12bertbevermettimespan
 
-Neem link:{deel-12-oplossingen}#_oplossing_d12_bertbeverzondertimespan[de oplossing van D12bertbeverzondertimespan] erbij. Dit was de oefening waarin de tijd gemeten werd tussen twee toetsdrukken van de gebruiker.
+Neem link:{deel-12-oplossingen}#_oplossing_d12bertbeverzondertimespan[de oplossing van D12bertbeverzondertimespan] erbij. Dit was de oefening waarin de tijd gemeten werd tussen twee toetsdrukken van de gebruiker.
 
 Herwerk de oplossing en probeer de `TimeSpan` mogelijkheden optimaal te benutten.
 
@@ -551,7 +551,7 @@ Herwerk de oplossing en probeer de `TimeSpan` mogelijkheden optimaal te benutten
 
 Schrijf een programma dat de geboortedatum van de gebruiker vraagt en toont hoeveel dagen oud de gebruiker is.
 
-Je kan het eerste gedeelte van link:{deel-12-oplossingen}#_oplossing_d12_leeftijdinjaren[de oplossing van D12leeftijdinjaren] overnemen, zodat je enkel nog de berekening moet schrijven. Gebruik hierbij een `TimeSpan` waarde.
+Je kan het eerste gedeelte van link:{deel-12-oplossingen}#_oplossing_d12leeftijdinjaren[de oplossing van D12leeftijdinjaren] overnemen, zodat je enkel nog de berekening moet schrijven. Gebruik hierbij een `TimeSpan` waarde.
 
 De uitvoering op 14/11/2020 als de gebruiker `23/11/2000` invoert :
 

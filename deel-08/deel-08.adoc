@@ -335,11 +335,11 @@ Omdat we op voorhand niet weten of het om __28__ of __29__ dagen gaat, verwijzen
 
 Een stukje code als...
 
-`string[] namen = new int[*3*]{ "Jan", "Piet", "Rita" };`
+`string[] namen = new string[*3*]{ "Jan", "Piet", "Rita" };`
 
 ...kan ook als...
 
-`string[] namen = *new int[]*{ "Jan", "Piet", "Rita" };`
+`string[] namen = *new string[]*{ "Jan", "Piet", "Rita" };`
 
 Het aantal elementen (de __3__) is alvast weggelaten.  Op basis van het aantal waardes, opgelijst tussen accolades, is immers duidelijk hoeveel slots worden voorzien.
 

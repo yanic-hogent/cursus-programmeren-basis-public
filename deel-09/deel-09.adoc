@@ -60,7 +60,7 @@ Ons programma zal efficiënter omgaan met de __CPU cycles__ als we niet onnodig 
 ****
 [.underline]#Voorbeeld#
 
-Hernemen we eens link:{deel-07-oefeningen}#_oefening_d07_bevatleesteken[de oefening van D07bevatleesteken, window="_blank"], waar de gebruiker een tekst kon invoeren en het programma dan toonde of de tekst wel/niet een leesteken bevat.
+Hernemen we eens link:{deel-07-oefeningen}#_oefening_d07bevatleesteken[de oefening van D07bevatleesteken, window="_blank"], waar de gebruiker een tekst kon invoeren en het programma dan toonde of de tekst wel/niet een leesteken bevat.
 
 De oplossing zag er zo uit :
 
@@ -126,7 +126,7 @@ Je zou natuurlijk een __while loop__ of __do while loop__ kunnen gebruiken, bv. 
 ****
 [.underline]#Voorbeeld#
 
-We kunnen eens link:{deel-07-oplossingen}#_oplossing_d07_bevatleesteken[oplossing D07bevatleesteken, window="_blank"] herschrijven met een while loop en de loop vroegtijdig beëindigen.
+We kunnen eens link:{deel-07-oplossingen}#_oplossing_d07bevatleesteken[oplossing D07bevatleesteken, window="_blank"] herschrijven met een while loop en de loop vroegtijdig beëindigen.
 
 We krijgen dan :
 
@@ -256,7 +256,7 @@ Dit simpele voorbeeld was enigszins geforceerd, tijd voor een realistischere toe
 ****
 [.underline]#Voorbeeld#
 
-We zullen eens link:{deel-07-oplossingen}#_oplossing_d07_bevatleesteken[oplossing D07bevatleesteken, window="_blank"] herschrijven en de __foreach loop__ vroegtijdig stoppen met `break`.
+We zullen eens link:{deel-07-oplossingen}#_oplossing_d07bevatleesteken[oplossing D07bevatleesteken, window="_blank"] herschrijven en de __foreach loop__ vroegtijdig stoppen met `break`.
 
 We krijgen dan :
 

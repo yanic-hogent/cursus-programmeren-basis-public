@@ -555,7 +555,7 @@ static void Reverse(string[] array) {
 	}
 }
 ----
-<1> We gebruiken de `temp` variabele om tijdelijk een waarde te onthouden tijdens de wissel, net zoals we deden in link:{deel-01-oplossingen}#_oplossing_d01_waardesomwisselen[de oplossing van D01waardesomwisselen]! Je herinnert je het vast nog wel, link:https://www.youtube.com/watch?v=Gs069dndIYk["simpelere tijden...", window="_blank"]
+<1> We gebruiken de `temp` variabele om tijdelijk een waarde te onthouden tijdens de wissel, net zoals we deden in link:{deel-01-oplossingen}#_oplossing_d01waardesomwisselen[de oplossing van D01waardesomwisselen]! Je herinnert je het vast nog wel, link:https://www.youtube.com/watch?v=Gs069dndIYk["simpelere tijden...", window="_blank"]
 
 
 === Oplossing D11slice

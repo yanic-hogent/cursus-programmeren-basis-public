@@ -33,7 +33,7 @@ versie {revnumber}
 
 Je zou een eerste breakpoint kunnen opnemen nadat alle waardes door de gebruiker werden ingevoerd.  Voer je de code uit (voor waardes __5__, __4__ en __3__) en visualiseer je het __Locals__ toolvenster, dan bekomen we bruikbare informatie...
 
-image::Oefening%20D0401%20-%20Breakpoint%201.png[Plaats een breakpoint, en voor uit tot daar in de code.]
+image::Oefening%20D04.01%20-%20Breakpoint%201.png[Plaats een breakpoint, en voor uit tot daar in de code.]
 
 De inhoud van onze `muntstukkenVan1Euro` is niet correct.  We hadden nochtans __4__ ingevoerd.  Bekijken we eens aandachtig wat er met de ingevoerde waarde gebeurt dan begrijpen we natuurlijk al snel waar het foutliep...
 

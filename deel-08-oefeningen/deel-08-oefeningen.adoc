@@ -20,6 +20,7 @@ v2022.03.08.12.08
 // folders
 :imagesdir: images
 :url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+:deel-06-oplossingen: ../deel-06-oplossingen/deel-06-oplossingen.adoc
 // experimental voor kdb: en btn: macro's van AsciiDoctor
 :experimental:
 
@@ -152,9 +153,7 @@ Dagnummer 6 is zaterdag.
 // D0804
 // Y7.10
 
-Schrijf een programma dat elke 5 seconden een willekeurige Twister opdracht genereert. 
-
-Gebruik hiervoor twee arrays...
+Herschrijf link:{deel-06-oplossingen}#_oplossing_d06twister[de oplossing van D06twister] zodat er twee arrays gebruikt worden :
 
 [source,csharp,linenums]
 ----
@@ -162,14 +161,8 @@ string[] kleuren = {"rood", "groen", "blauw", "geel"};
 string[] lichaamsdelen = {"linkerhand", "rechterhand", "linkervoet", "rechtervoet"};
 ----
 
-Het programma selecteert een willekeurige kleur en lichaamsdeel en toont de combinatie.
-Bijvoorbeeld...
+Om een willekeurige kleur te bekomen, zal het programma een willekeurige positie in het `kleuren` array bepalen en dan de kleur op die positie gebruiken. Bijvoorbeeld, indien het random getal `2` is zal de kleur `blauw` op positie `2` gekozen worden. Voor een willekeurig lichaamsdeel wordt dezelfde aanpak gebruikt.
 
-	linkerhand op groen
-	rechervoet op geel
-	linkervoet op groen
-
-Het programma stopt nooit.
 	
 === Itereren met for en foreach
 
@@ -263,8 +256,8 @@ Controleer of je __920,6__ (__1000 - 10 - 50 - 19.4__) uitkomt.
 
 [source,csharp,linenums]
 ----
-double[] kortingen = { 10d, 50d, 19.4d };
-double brutoBedrag = 1000d;
+double[] kortingen = { 10, 50, 19.4 };
+double brutoBedrag = 1000;
 
 double nettoBedrag = brutoBedrag;
 for (int index = 0; index < kortingen.Length; index++) {

@@ -343,7 +343,7 @@ Schrijf een programma dat alle getallen toont uit de rij 10, 9, ..., 2.
 === Oefening D06sommeer1tem10
 // Y3.09
 
-Schrijf een programma dat de kwadraten van de getallen in van 1 t.e.m. 10 sommeert en het resultaat toont.
+Schrijf een programma dat de kwadraten van de getallen van 1 t.e.m. 10 sommeert en het resultaat toont.
 
 
 
@@ -431,7 +431,7 @@ De som van tussenliggende 3-vouden en 5-vouden is 217 <1>
 
 Breid het vorige programma uit zodat de gebruiker om 2 positieve getallen wordt gevraagd (breedte en hoogte). Het programma toont dan een rechthoek met de gevraagde afmetingen.
 
-Dit is quasi dezelfde opgave als in link:{deel-05-oefeningen}#_oefening_d05_rechthoek[oefening D05rechthoek], maar baseer je oplossing voor het tekenen van de rechthoek op 1 of meerdere for loops.
+Dit is quasi dezelfde opgave als in link:{deel-05-oefeningen}#_oefening_d05rechthoek[oefening D05rechthoek], maar baseer je oplossing voor het tekenen van de rechthoek op 1 of meerdere for loops.
 
 Een voorbeeld uitvoering :
 

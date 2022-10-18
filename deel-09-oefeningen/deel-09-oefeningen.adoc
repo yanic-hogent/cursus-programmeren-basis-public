@@ -168,7 +168,7 @@ Indien je een bepaalde Morse code niet terugvindt in array `morse` mag je ervan 
 
 ==== Oefening D09dagnummernaarmaand
 
-Deze oefening is gebaseerd op link:{deel-04-oefeningen}#_oefening_d04_dagnummer[oefening D04dagnummer].
+Deze oefening is gebaseerd op link:{deel-04-oefeningen}#_oefening_d04dagnummer[oefening D04dagnummer].
 
 Schrijf een programma dat de gebruiker vraagt om een dagnummer in het jaar (i.e. van 1 t.e.m. 365, dus geen schrikkeljaar). Het toont vervolgens in welke maand (als tekst) die dag zich bevindt.
 

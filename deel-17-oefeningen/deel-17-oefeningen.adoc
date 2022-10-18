@@ -62,7 +62,7 @@ Geef een scheldwoord :
 
 === Oefening D17morse
 
-In link:{deel-09-oefeningen}#_oefening_d09_morse[oefening D09morse] gebruikten we twee parallelle arrays om de __mapping__ bij te houden tussen letters `A-Z` en hun corresponderende Morse code (in beide richtingen!).
+In link:{deel-09-oefeningen}#_oefening_d09morse[oefening D09morse] gebruikten we twee parallelle arrays om de __mapping__ bij te houden tussen letters `A-Z` en hun corresponderende Morse code (in beide richtingen!).
 
 In deze oefening gebruiken we een dictionary om bij te houden wat de Morse code is van elke letter. Voor de eenvoud beschouwen we enkel de letters `A-F`.
 

@@ -35,7 +35,7 @@ versie {revnumber}
 
 
 
-Herwerk link:{deel-pa2-oplossingen}#_oplossing_dpa2_metmethods[de oplossing van DPA2.metmethods] zodat alle gegevens van één (fysieke) persoon in één (digitaal) persoon object wordt bijgehouden.
+Herwerk link:{deel-pa2-oplossingen}#_oplossing_dpa2metmethods[de oplossing van DPA2.metmethods] zodat alle gegevens van één (fysieke) persoon in één (digitaal) persoon object wordt bijgehouden.
 
 In plaats van de gegevens van een persoon losjes te verdelen over 6 parallelle arrays, bundelen we ze in `Persoon` objecten en houden al die objecten bij in één `Persoon[]` (i.e. een array van verwijzingen naar `Persoon` objecten). 
 

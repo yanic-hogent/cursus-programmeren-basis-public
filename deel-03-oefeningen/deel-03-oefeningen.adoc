@@ -47,17 +47,17 @@ Als je te ver achterop raakt bij het volgen van deze cursus, dan zul je daar wel
 
 ==== {extra-icon} Oefening D03frietjesinterpolatie 
 
-Herwerk link:{deel-02-oplossingen}#_oplossing_d02_frietjes[de oplossing van D02frietjes] zodat string interpolatie gebruikt wordt.
+Herwerk link:{deel-02-oplossingen}#_oplossing_d02frietjes[de oplossing van D02frietjes] zodat string interpolatie gebruikt wordt.
 
 
 ==== {extra-icon} Oefening D03leeftijdinterpolatie
 
-Herwerk link:{deel-02-oplossingen}#_oplossing_d02_leeftijd[de oplossing D02leeftijd] zodat string interpolatie gebruikt wordt.
+Herwerk link:{deel-02-oplossingen}#_oplossing_d02leeftijd[de oplossing D02leeftijd] zodat string interpolatie gebruikt wordt.
 
 
 ==== Oefening D03sominterpolatie
 
-Herwerk link:{deel-02-oplossingen}#_oplossing_d02_som[de oplossing van D02som] zodat string interpolatie gebruikt wordt.
+Herwerk link:{deel-02-oplossingen}#_oplossing_d02som[de oplossing van D02som] zodat string interpolatie gebruikt wordt.
 
  
 
@@ -134,7 +134,7 @@ De lengte van de schuine zijde is 5
 
 ==== {extra-icon} Oefening D03absolutewaarde
 
-Herwerk link:{deel-02-oplossingen}#_oplossing_d02_absolutewaarde[de oplossing van D02absolutewaarde] en pas toe wat je in dit deel bijgeleerd hebt.
+Herwerk link:{deel-02-oplossingen}#_oplossing_d02absolutewaarde[de oplossing van D02absolutewaarde] en pas toe wat je in dit deel bijgeleerd hebt.
 
 
 
@@ -183,7 +183,7 @@ Tip : maak eerst voor jezelf drie voorbeelden op papier, nml.
 
 ==== Oefening D03traceergetalontleden
 //Y3.03
-Neem link:{deel-02-oplossingen}#_oplossing_d02_getalontleden[de oplossing van D02getalontleden] erbij en nummer de regels in de broncode.
+Neem link:{deel-02-oplossingen}#_oplossing_d02getalontleden[de oplossing van D02getalontleden] erbij en nummer de regels in de broncode.
 
 Maak een traceertabel voor de uitvoering waarbij de gebruiker `123` ingeeft.
 
@@ -208,10 +208,10 @@ Stel een traceertabel op van de uitvoering van onderstaand programma.
 13 : h *= 11;
 14 : bool t = (a < 8);
 15 : bool u = (a != b);
-16 : bool v = (e === h);
+16 : bool v = (e == h);
 ----
 
 
 ==== {extra-icon} Oefening D03traceerpersecondewijzer
 // Y3.02
-Maak de traceertabel voor link:{deel-03-oplossingen}#_oplossing_d03_persecondewijzer[de oplossing van D03persecondewijzer] hierboven, als de gebruiker `8587` ingeeft voor het aantal seconden.
+Maak de traceertabel voor link:{deel-03-oplossingen}#_oplossing_d03persecondewijzer[de oplossing van D03persecondewijzer] hierboven, als de gebruiker `8587` ingeeft voor het aantal seconden.

@@ -46,7 +46,7 @@ Je kunt er natuurlijk overal `//` voor typen, maar er bestaat een betere manier 
 ****
 [.underline]#Voorbeeld waarom je regels in commentaar zou willen zetten#
 
-Hernemen we link:{deel-04-oplossingen}#_oplossing_d04_geslaagd[de oplossing van D04geslaagd] :
+Hernemen we link:{deel-04-oplossingen}#_oplossing_d04geslaagd[de oplossing van D04geslaagd] :
 
 [source,csharp,linenums]
 ----
@@ -146,7 +146,7 @@ Console.WriteLine($"U kunt weer ademhalen, er zijn {aantalSeconden} seconden ver
 ----
 ****
 
-Merk op dat de cursor zichtbaar is tijdens het wachten met `Sleep()`! Normaliter verschijnt deze enkel bij het wachten op input via `Console.ReadLine()`, dus dit kan wat verwarrend zijn voor de gebruiker.
+Merk op dat de cursor zichtbaar is tijdens het wachten met `Sleep()`! Normaliter verschijnt deze enkel bij het wachten op input via `Console.ReadLine()`, dus dit kan wat verwarrend zijn voor de gebruiker. Via `Console.CursorVisible` kun je evt. de cursor tijdelijk onzichtbaar maken.
 
 
 == Het console scherm wissen
@@ -194,7 +194,7 @@ Zo'n herhalingsstructuur noemt men ook wel een *__loop__*, het __code block__ he
 
 === Controlestructuur : for loop
 
-Heel vaak zul je een _loop_ moeten programmeren waarvan het aantal herhalingen eigenlijk al vastligt op het moment dat de loop begint __tijdens de uitvoering__. Let op : we bedoelen niet 'op het moment dat je de code schrijft', al is dat ook een mogelijkheid natuurlijk.
+Heel vaak zul je een _loop_ moeten programmeren waarvan het aantal herhalingen eigenlijk al vastligt op het moment dat de loop begint __tijdens de uitvoering__. Bijvoorbeeld, we zullen later met lijsten werken en als je een lijst met 14 waarden wil overlopen om per waarde iets te doen, dan weet je bij de aanvang van de eerste herhaling al dat er wellicht 14 herhalingen nodig zullen zijn. Let op : we bedoelen niet dat dit aantal gekend is __op het moment dat je de code schrijft__, al is dat ook een mogelijkheid natuurlijk.
 
 Het is typisch dat er in zo'n situatie een *tellervariabele* gebruikt wordt. De teller start met beginwaarde en krijgt na elke herhaling een iets grotere (of kleinere) waarde. De _loop_ voorwaarde vergelijkt de teller met een of andere grenswaarde. Op die manier stuurt de teller dus de herhalingen.
 
@@ -573,8 +573,18 @@ for (double d = 0 ; d < 1.0 ; d += 0.1) {
 }
 ----
 
-Hoeveel keer wordt de loop nu uitgevoerd? Probeer dit beslist eens uit!
+Hoeveel keer wordt de loop nu uitgevoerd? Probeer dit beslist eens uit! Je zult zien dat de loop een keer teveel wordt herhaald, door afrondingsfouten.
 
+Als je toch een simpele teller herhaling wil én met die teller ook kommagetallen wil berekenen, gebruik dan een `int` teller en zet om naar een `double` op het moment dat je gaat rekenen :
+
+[source, csharp, linenums]
+----
+for (int i = 0 ; i < 10 ; i+=1) {
+	double d = Convert.ToDouble(i) / 10; // <1>
+    Console.WriteLine(d);
+}
+----
+<1> de omzetting van de `int` teller naar een kommagetal bij de berekening.
 ****
 
 Denk eraan,
@@ -650,7 +660,7 @@ Wanneer moet je nu welk soort _loop_ gebruiken?
 Gebruik een for loop indien 
 
 - de loop een teller heeft waarvan de stapgrootte gelijk blijft tijdens de loop
-- het aantal herhalingen al vast staat bij de aanvang van de eerste iteratie
+- het aantal (potentiële) herhalingen al vast staat **bij de aanvang van de eerste iteratie**
 
 In alle andere gevallen gebruik je beter een while of do-while loop. Je kiest hiertussen op basis van het minimum aantal herhalingen :
 
@@ -713,9 +723,13 @@ do {
 	getal = int.Parse(Console.ReadLine());
 	aantal++;
 } while (getal != -1);
-aantal--;	// GEWIJZIGD
+
+// corrigeer aantal achteraf voor de teveel getelde -1 invoer
+aantal--;	// <1>
+
 Console.WriteLine($"u gaf {aantal} getallen in");
 ----	
+<1> Het verduidelijkende commentaar is hier echt wel nodig om uit te leggen waarom we plots `aantal` verlagen.
 		
 [start=2]
 . compenseer vooraf voor wat we teveel zullen tellen : begin met `aantal` gelijk aan `-1` i.p.v. `0`
@@ -723,14 +737,19 @@ Console.WriteLine($"u gaf {aantal} getallen in");
 [source,csharp,linenums]
 ----
 int getal = 0;
-int aantal = -1; // GEWIJZIGD
+
+// corrigeer aantal op voorhand al voor de -1 invoer die we straks ten onrechte zullen meetellen.
+int aantal = -1; // <1>
+
 do {
 	Console.Write("Geef het volgende getal (-1 om te stoppen) : ");
 	getal = int.Parse(Console.ReadLine());
 	aantal++;
 } while (getal != -1);
+
 Console.WriteLine($"u gaf {aantal} getallen in");
 ----
+<1> Het verduidelijkende commentaar is echt wel nodig om deze vreemde `-1` startwaarde te verklaren.
 
 [start=3]
 . tel correct : verhoog `aantal` enkel indien de input niet `-1` is
@@ -742,10 +761,16 @@ int aantal = 0;
 do {
 	Console.Write("Geef het volgende getal (-1 om te stoppen) : ");
 	getal = int.Parse(Console.ReadLine());
-	if (getal != -1) { // GEWIJZIGD
+	if (getal != -1) { // <1>
 		aantal++;
 	}
 } while (getal != -1);
 Console.WriteLine($"u gaf {aantal} getallen in");	
 ----
+<1> Een extra `if` zodat de `-1`*niet* meegeteld wordt.
+
+Deze laatste oplossing is duidelijker dan de vorige twee : het staat expliciet in de code dat er iets speciaals aan de hand is met die `-1` invoer en de telling. In de vorige twee fragmenten was dit impliciet en moest het verduidelijkt worden met commentaar.
+
+Het derde fragment is weliswaar duidelijker, maar tegelijk ook iets complexer (door die extra `if`) en ook een ietsiepietsie minder efficiënt. **Toch is het de betere oplossing, gewoon omdat ze duidelijker is!**
+
 ****

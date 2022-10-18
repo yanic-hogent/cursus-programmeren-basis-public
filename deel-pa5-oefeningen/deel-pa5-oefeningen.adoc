@@ -33,7 +33,7 @@ versie {revnumber}
 
 **Om deze oefening te kunnen oplossen moet je het stuk over de collectieklassen `List`, `LinkedList` en `HashSet` al doorgenomen hebben.**
 
-Herwerk link:{deel-pa4-oplossingen}#_oplossing_dpa4_metpersoonklasse[de oplossing DPA4.metpersoonklasse] zodat de `Persoon` objecten in een collectie worden bijgehouden i.p.v. in een `Persoon` array. 
+Herwerk link:{deel-pa4-oplossingen}#_oplossing_dpa4metpersoonklasse[de oplossing DPA4.metpersoonklasse] zodat de `Persoon` objecten in een collectie worden bijgehouden i.p.v. in een `Persoon` array. 
 
 Gebruik de mogelijkheden van de collectieklasse zo goed mogelijk!
 

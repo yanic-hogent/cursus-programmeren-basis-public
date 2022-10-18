@@ -46,7 +46,7 @@ Heb je tijd over, dan helpen de *__aanvullende oefeningen__* je de stof nog bete
 ==== Oefening D11letterscore
 // Y10.07
 
-Herschrijf link:{deel-04-oplossingen}#_oplossing_d04_score[de oplossing van D04score] zodat het programma een method `GetLetterCodeForPercentage` gebruikt. Deze method heeft 1 parameter (het percentage) en retourneert de corresponderende lettercode.
+Herschrijf link:{deel-04-oplossingen}#_oplossing_d04score[de oplossing van D04score] zodat het programma een method `GetLetterCodeForPercentage` gebruikt. Deze method heeft 1 parameter (het percentage) en retourneert de corresponderende lettercode.
 
 De `Main` method ziet er dan zo uit :
 
@@ -93,7 +93,7 @@ Je mag ervan uitgaan dat de tekst niet te lang is zodat het netjes (incl. sterre
 ==== Oefening D11geenscheldwoordenarray
 // Y1.09 (prg2)
 
-Herschrijf link:{deel-09-oplossingen}#_oplossing_d09_geenscheldwoorden[de oplossing van D09geenscheldwoorden] zodat het programma een method `IsAanvaardbaar` gebruikt. Deze method heeft 1 parameter (de tekst) en retourneert een `true` of `false` waarde al naargelang of de tekst aanvaardbaar is of niet.
+Herschrijf link:{deel-09-oplossingen}#_oplossing_d09geenscheldwoorden[de oplossing van D09geenscheldwoorden] zodat het programma een method `IsAanvaardbaar` gebruikt. Deze method heeft 1 parameter (de tekst) en retourneert een `true` of `false` waarde al naargelang of de tekst aanvaardbaar is of niet.
 
 De `Main` method ziet er dan zo uit :
 
@@ -140,7 +140,7 @@ Produceert de volgende output op de console :
 ==== Oefening D11charcount
 // Y1.03 (prg2)
 
-Herschrijf link:{deel-07-oplossingen}#_oplossing_d07_aantalkeere[de oplossing van D07aantalkeere] zodat het programma een method `GetCharCount` gebruikt. Deze method telt hoe vaak een bepaald karakter in een string voorkomt en retourneert dit aantal.
+Herschrijf link:{deel-07-oplossingen}#_oplossing_d07aantalkeere[de oplossing van D07aantalkeere] zodat het programma een method `GetCharCount` gebruikt. Deze method telt hoe vaak een bepaald karakter in een string voorkomt en retourneert dit aantal.
 
 Een klein fragment dat de werking van deze method toont :
 
@@ -470,14 +470,14 @@ Deze method produceert een *nieuw* array en retourneert dit.
 ** 2, 2, 2, 3, 3, 3, -5, -5, -5, 6, 6, 6 (elk getal werd 3x herhaald)
 * Je mag er van uitgaan dat aantal niet negatief is.
 * De onderlinge volgorde van de waarden in dit nieuwe array is dezelfde als in het `getallen` array (maar ze kunnen dus meermaals voorkomen als `aantal > 1`).
-* Indien `aantal === 0`, wordt een leeg array teruggegeven (dit is een array van lengte zero)
+* Indien `aantal == 0`, wordt een leeg array teruggegeven (dit is een array van lengte zero)
 
 Vul de `Expand` method aan met de ontbrekende code, zodat het programma het beschreven gedrag vertoont. De code in de `Main` method dient om te testen, dus daar verander je niks aan.
 
 
 ==== Oefening D11dierenwissenarray
 	
-We hernemen link:{deel-09-oplossingen}#_oplossing_d09_dierenwissen[de oplossing van D09dierenwissen] :
+We hernemen link:{deel-09-oplossingen}#_oplossing_d09dierenwissen[de oplossing van D09dierenwissen] :
 
 [source,csharp,linenums]
 ----
@@ -486,7 +486,7 @@ string[] boerderijDieren = { "kip", "koe", "paard", "geit", "schaap" };
 do {
 	// toon alle dieren
 	foreach (string dier in boerderijDieren) {
-		if (dier === null) {
+		if (dier == null) {
 			// toon GEWIST als we een null tegenkomen
 			Console.Write("GEWIST ");
 		} else {

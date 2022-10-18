@@ -319,7 +319,7 @@ static void Main()
 
 static bool IsSchrikkeljaar(int jaartal)
 {
-	return (jaartal % 400 === 0 || jaartal % 4 === 0 && jaartal % 100 != 0);
+	return (jaartal % 400 == 0 || jaartal % 4 == 0 && jaartal % 100 != 0);
 }
 ----
 <1> Vervang de `...` door de nodige method call.
@@ -381,7 +381,7 @@ static void Main()
 
 static bool IsSchrikkeljaar(int jaartal)
 {
-	return (jaartal % 400 === 0 || jaartal % 4 === 0 && jaartal % 100 != 0);
+	return (jaartal % 400 == 0 || jaartal % 4 == 0 && jaartal % 100 != 0);
 }
 ----
 <1> Vervang de `...` door de nodige method call.

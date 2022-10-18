@@ -237,7 +237,7 @@ Exact wat we hier willen doen op het moment dat blijkt dat `max > min`.
 
 De call stack ziet er nu zo uit...
 
-image:Oplossing D1005.png[Oplossing D1005]
+image:Oplossing D10printreeks.png[Oplossing D10printreeks]
 ****
 
 De eerste activatie (de __laagste__ op de callstack) van `PrintReeks` (__min = 8, max = 3__), roept op zijn beurt opnieuw `PrintReeks` op.  Dit zorgt voor een tweede activatie van `PrintReeks` (__min = 3, max = 8__).  
@@ -412,7 +412,7 @@ static double ConvertFahrenheitToCelsius(double fahrenheit) {
 
 
 === Oplossing D10dagenfebruari
-D1011
+//D1011
 
 //C43
 
@@ -432,7 +432,10 @@ static void Main()
 static int DagenFebruari(int jaartal)
 {
 	int dagenFebruari = 28;
-	if (IsSchrikkeljaar(jaartal)) dagenFebruari++;
+	if (IsSchrikkeljaar(jaartal))
+	{
+		dagenFebruari++;
+	}
 	return dagenFebruari;
 }
 
@@ -474,7 +477,10 @@ static int Dagen(int maand, int jaartal)
 static int DagenFebruari(int jaartal)
 {
 	int dagenFebruari = 28;
-	if (IsSchrikkeljaar(jaartal)) dagenFebruari++;
+	if (IsSchrikkeljaar(jaartal))
+	{
+		dagenFebruari++;
+	}
 	return dagenFebruari;
 }
 

@@ -365,7 +365,7 @@ Ons programma zal enkel de feestdagen bevatten voor een specifiek jaar. Als we h
 
 We zullen dus de `DateTime` waarde nog moeten corrigeren als het programma in het verkeerde jaar wordt uitgevoerd. 
 
-Geen paniek als je deze correctie niet voorzien had, aan dit soort kronkels denkt niemand de eerste keer. Alhoewel, er was de waarschuwing in link:{deel-12-oplossingen}#_oplossing_d12_seizoen[de oplossing van D12seizoen] ;)
+Geen paniek als je deze correctie niet voorzien had, aan dit soort kronkels denkt niemand de eerste keer. Alhoewel, er was de waarschuwing in link:{deel-12-oplossingen}#_oplossing_d12seizoen[de oplossing van D12seizoen] ;)
 
 Ongeacht de context (C#, databanken, javascript, web applicaties met aparte software in de browser en op de server), correct omgaan met datum en tijd waarden is _altijd_ moeilijker dan je zou willen/denken/hopen.
 
