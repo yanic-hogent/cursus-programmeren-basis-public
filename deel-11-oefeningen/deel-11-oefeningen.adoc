@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 11 - Oefeningen
 Yanic Inghelbrecht
-v2022.03.08.12.08
+v2022.10.18.14.30
 // toc and section numbering
 :toc: preamble
 :toclevels: 4
@@ -30,20 +30,24 @@ v2022.03.08.12.08
 [.text-right]
 versie {revnumber}
    
+ 
 [NOTE]
 ======================================
-Het is een aanrader bij elke oefeningenreeks te starten met eventuele *__inleidende oefeningen__*.
-Naast deze focus je vooral op de *__essentiële oefeningen__*.
+We raden je aan om zoveel mogelijk oefeningen te maken, dat is de beste voorbereiding.
 
-Heb je tijd over, dan helpen de *__aanvullende oefeningen__* je de stof nog beter in de vingers te krijgen.
+Als je te ver achterop raakt bij het volgen van deze cursus, dan zul je daar wellicht niet de tijd voor vinden want het zijn er behoorlijk veel.
+
+* Indien je tijd tekort komt : concentreer je dan op de *__essentiële oefeningen__* (*zonder* {extra-icon}).
+
+* Heb je wat tijd over : dan helpen de *__aanvullende oefeningen__* (*mét* {extra-icon}) om deze topics nog beter in de vingers te krijgen.
 ======================================
 
-== Essentiële oefeningen
-
-=== Methods
 
 
-==== Oefening D11letterscore
+== Methods
+
+
+=== Oefening D11letterscore
 // Y10.07
 
 Herschrijf link:{deel-04-oplossingen}#_oplossing_d04score[de oplossing van D04score] zodat het programma een method `GetLetterCodeForPercentage` gebruikt. Deze method heeft 1 parameter (het percentage) en retourneert de corresponderende lettercode.
@@ -65,7 +69,7 @@ static void Main() {
 <1> De enige wijziging in de `Main` method.
 
 
-==== Oefening D11kader
+=== Oefening D11kader
 // Y10.03
 
 Schrijf een method `ToonInKader` met 1 string parameter. Deze method toont de meegegeven string tussen sterretjes op de console.
@@ -90,7 +94,7 @@ produceert de volgende output op de console :
 Je mag ervan uitgaan dat de tekst niet te lang is zodat het netjes (incl. sterretjes aan de zijkanten) in het console venster past.
 
 
-==== Oefening D11geenscheldwoordenarray
+=== Oefening D11geenscheldwoordenarray
 // Y1.09 (prg2)
 
 Herschrijf link:{deel-09-oplossingen}#_oplossing_d09geenscheldwoorden[de oplossing van D09geenscheldwoorden] zodat het programma een method `IsAanvaardbaar` gebruikt. Deze method heeft 1 parameter (de tekst) en retourneert een `true` of `false` waarde al naargelang of de tekst aanvaardbaar is of niet.
@@ -115,7 +119,7 @@ static void Main() {
 <1> de method oproep van `IsAanvaardbaar`.
 
 
-==== Oefening D11concataantalkeer
+=== Oefening D11concataantalkeer
 // Y10.02
 
 Schrijf een method `ConcatAantalKeer` die 2 parameters heeft : een tekst en een aantal. Deze method produceert een string die de meegegeven tekst het gevraagde aantal keren bevat.
@@ -137,7 +141,7 @@ Produceert de volgende output op de console :
 ----
 
 
-==== Oefening D11charcount
+=== Oefening D11charcount
 // Y1.03 (prg2)
 
 Herschrijf link:{deel-07-oplossingen}#_oplossing_d07aantalkeere[de oplossing van D07aantalkeere] zodat het programma een method `GetCharCount` gebruikt. Deze method telt hoe vaak een bepaald karakter in een string voorkomt en retourneert dit aantal.
@@ -156,7 +160,7 @@ Er is natuurlijk link:https://www.youtube.com/watch?v=meF7NmfnXZ0[nog een verban
 
 
 
-==== Oefening D11reversetext
+=== Oefening D11reversetext
 // Y1.05 (prg2)
 
 Schrijf een programma dat de gebruiker om een tekst vraagt en deze achterstevoren op het scherm zet.
@@ -173,7 +177,7 @@ Schrijf en gebruik hiervoor een method `ReverseText` die je een string parameter
 Deze method bouwt een nieuwe string die de achterstevoren versie van de meegegeven tekst voorstelt. Deze nieuwe string is dan de return value van de method.
 
 
-==== Oefening D11palindroom
+=== Oefening D11palindroom
 // Y1.04 (prg2)
 
 Schrijf een programma dat de gebruiker om een woord vraagt en toont of dit woord een palindroom is. 
@@ -213,7 +217,7 @@ Deze method bepaalt of de meegegeven string al dan niet een palindroom is. De re
 
 
 
-==== Oefening D11clamped
+=== Oefening D11clamped
 // Y10.04
 
 Schrijf een method `GetClamped` met 3 int parameters : min, getal en max. Het nut van deze method is dat ze altijd een waarde teruggeeft die tussen min en max ligt (grenzen incl.).
@@ -257,7 +261,7 @@ voor 8 geeft dit 6
 Dit __clampen__ komt van pas als je een waarde tot een bepaald gebied wil beperken (bv. een spelerspositie binnen het speelveld houden), maar link:https://www.youtube.com/watch?v=9KL50dk9C54[ook in het dagelijks leven,window="_blank"] kun je er vanalles mee doen.
 
 
-==== Oefening D11minmax
+=== Oefening D11minmax
 // Y10.01
 
 Schrijf een programma dat een array met getallen definieert en vervolgens toont wat het kleinste en het grootste getal is in dat array. 
@@ -277,7 +281,7 @@ static void Main() {
 Je mag er in de beide methods van uitgaan dat het meegegeven array minstens 1 element bevat.
 
 
-==== Oefening D11bevatwaarde
+=== Oefening D11bevatwaarde
 
 Schrijf een programma dat de gebruiker om 5 unieke gehele getallen vraagt. 
 
@@ -322,7 +326,7 @@ Probeer eens uit of je oplossing ook werkt als de gebruiker een `0` ingeeft. Zon
 ====
 
 
-==== Oefening D11getalinput
+=== Oefening D11getalinput
 // Y10.08
 
 Schrijf een method `GetGetal` met 2 parameters `min` en `max` (gehele getallen) die een int waarde oplevert.
@@ -354,7 +358,7 @@ U koos voor 56, plooier
 ----
 	
 	
-==== Oefening D11filter
+=== Oefening D11filter
 
 Hieronder staat een code fragment dat je zult moeten vervolledigen.
 
@@ -414,7 +418,7 @@ Deze method produceert een *nieuw* array en retourneert dit.
 Vul de `Filter` method aan met de ontbrekende code, zodat het programma het beschreven gedrag vertoont. De code in de `Main` method dient om te testen, dus daar verander je niks aan.
 
 
-==== Oefening D11expand	
+=== Oefening D11expand	
 
 Hieronder staat een code fragment met vier voorbeelden en telkens de verwachte output (in commentaar) :
 
@@ -475,7 +479,7 @@ Deze method produceert een *nieuw* array en retourneert dit.
 Vul de `Expand` method aan met de ontbrekende code, zodat het programma het beschreven gedrag vertoont. De code in de `Main` method dient om te testen, dus daar verander je niks aan.
 
 
-==== Oefening D11dierenwissenarray
+=== Oefening D11dierenwissenarray
 	
 We hernemen link:{deel-09-oplossingen}#_oplossing_d09dierenwissen[de oplossing van D09dierenwissen] :
 
@@ -523,7 +527,7 @@ static void Main() {
 ----
 
 
-==== Oefening D11keuzeinput
+=== Oefening D11keuzeinput
 // Y10.06
 
 Schrijf een method `GetKeuze` die een parameter heeft van type string[]. 
@@ -555,7 +559,7 @@ U koos Blauw
 ----
 
 
-==== Oefening D11reversearray
+=== Oefening D11reversearray
 // Y10.09
 
 Schrijf een method `Reverse` met een string[] parameter die de volgorde van de elementen in het array omkeert.
@@ -589,7 +593,7 @@ vijf, vier, drie, twee, een
 ----	
 
 
-==== Oefening D11slice
+=== Oefening D11slice
 
 Schrijf een method `Slice` met drie parameters :
 
@@ -634,7 +638,7 @@ image:slice-check-lokale-variabelen.png[slice check lokale variabelen]
 image:debug-smart.gif[debug smart]
 
 
-==== Oefening D11slicevariant
+=== Oefening D11slicevariant
 
 Als variant op de vorige oefening, schrijf dit keer een `Slice()` method waarbij de laatste parameter de eind index is i.p.v. de lengte :
 [source,csharp,linenums]
@@ -675,7 +679,7 @@ static void Main() {
 ----
 
 
-==== Oefening D11encrypted
+=== Oefening D11encrypted
 
 Hieronder staat een code fragment dat demonstreert hoe een `GetEncryptedCodeFor()` method werkt.
 

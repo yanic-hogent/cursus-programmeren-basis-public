@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 06 - Oplossingen
 Yanic Inghelbrecht
-v2022.10.11.14.00
+v2022.10.19.17.00
 // toc and section numbering
 :toc: preamble
 :toclevels: 4
@@ -22,6 +22,7 @@ v2022.10.11.14.00
 :url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
 // experimental voor kdb: en btn: macro's van AsciiDoctor
 :experimental:
+:missing-icon: ☒
 
 //preamble
 [.text-right]
@@ -183,7 +184,7 @@ Probeer elk fragment uit in Visual Studio en kijk of je voorspelling klopt.
 == Herhalingen
 
 
-=== Oplossing D06weekdagnummer
+=== Oplossing D06weekdagnummer {missing-icon}
 
 Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
 
@@ -339,12 +340,12 @@ Console.WriteLine(" = " + som);
 <1> we tonen eerst de `+` en dan het getal
 
 
-=== Oplossing D06somevenoneven
+=== Oplossing D06somevenoneven {missing-icon}
 
 Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
 
 
-=== Oplossing D06somveelvouden
+=== Oplossing D06somveelvouden {missing-icon}
 
 Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
 

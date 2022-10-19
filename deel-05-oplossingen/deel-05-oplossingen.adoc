@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 05 - Oplossingen
 Frederiek De Wolf
-v2022.10.11.14.00
+v2022.10.19.17.00
 // toc and section numbering
 :toc: preamble
 :toclevels: 4
@@ -22,6 +22,7 @@ v2022.10.11.14.00
 :url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
 // experimental voor kdb: en btn: macro's van AsciiDoctor
 :experimental:
+:missing-icon: ☒
 
 //preamble
 [.text-right]
@@ -54,10 +55,40 @@ do {
 } while (factor <= 10);
 ----
  
-=== Oplossing D05tekstherhalen
+=== Oplossing D05tekstherhalen {missing-icon}
 
 Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
 
+ 
+=== Oplossing D05getalradengebruiker
+
+[source,csharp,linenums]
+----
+Random r = new Random();
+int getal = r.Next(1, 101);
+int gok = 0;
+Console.WriteLine("De computer denkt aan een getal van 1 tem 100, kun je raden welk?");
+
+do
+{
+	Console.Write("Wat gok je?: ");
+	string input = Console.ReadLine();
+	gok = int.Parse(input);
+	if (gok < getal)
+	{
+		Console.WriteLine("Hoger!");
+	}
+	else if (gok > getal)
+	{
+		Console.WriteLine("Lager!");
+	}
+	else
+	{
+		Console.WriteLine("Disco!");
+	}
+} while (gok != getal);
+---- 
+ 
  
 === Oplossing D05som
 
@@ -459,7 +490,44 @@ do {
 
 Console.Write($"=\n{som}");
 ----
- 
+
+Je ziet dat de declaratie van de variabele `getal` niet echt opvalt en een beetje verstopt zit op het einde van de `TryParse()` opdracht. Dat is het nadeel van de declaratie daar te zetten ipv op een aparte regel.
+
+De oplossing bevat 2x de vergelijking `getalOfStop.ToUpper().Trim() != "STOP"`, dit kan vermeden worden door een bijkomende `bool` variabele zoals in onderstaande alternatieve oplossing :
+
+[source,csharp,linenums]
+----
+int getal;
+int som = 0;
+string getalAlsTekst;
+bool geenStopIngetypt; // <1>
+do
+{
+	getalAlsTekst = Console.ReadLine();
+
+	geenStopIngetypt = (getalAlsTekst.Trim().ToUpper() != "STOP"); // <1>
+
+	bool invoerOk = int.TryParse(getalAlsTekst, out getal);
+	if (invoerOk)
+	{
+		// gebruiker een getal heeft ingetypt
+		som += getal;
+		Console.WriteLine("+");
+	}
+	else if (geenStopIngetypt) // <1>
+	{
+		// andere tekst ingetypt
+		Console.WriteLine("Gelieve een geheel getal in te voeren (of STOP om te stoppen).");
+
+	}
+} while (geenStopIngetypt); // <1>
+
+Console.WriteLine("=");
+Console.WriteLine(som);
+----
+<1> De nieuwe variabele `geenStopIngetypt`
+
+
 === Oplossing D05somofverschil
 
 [source,csharp,linenums]
@@ -529,3 +597,8 @@ Console.WriteLine(resultaat);
 <1> Deze `if` is erbij gekomen om alle bewerkingen over te slaan indien de gebruiker een `=` symbool ingaf.
 
 Het verschil tussen deze derde oplossing en de twee voorgaande, is dat er in de loop eerst het symbool wordt opgevraagd en dan het getal. In de andere twee oplossingen werd eerste het getal gevraagd en dan pas het symbool.
+
+ 
+=== Oplossing D05getalradencomputer {missing-icon}
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.

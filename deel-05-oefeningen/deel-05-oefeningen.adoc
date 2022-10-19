@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 05 - Oefeningen
 Frederiek De Wolf
-v2022.10.11.14.00
+v2022.10.18.14.00
 // toc and section numbering
 :toc: preamble
 :toclevels: 4
@@ -104,6 +104,29 @@ woefwoefwoefWOEF <1>
 ----
 <1> Let erop dat de tekst vier keer herhaald werd en de laatste woef in hoofdletters staat.
 
+
+
+=== Oefening D05getalradengebruiker
+
+Schrijf een programma waarbij de gebruiker een getal moet raden (van 1 t.e.m. 100) dat de computer willekeurig gekozen heeft.
+
+De gebruiker geeft telkens een getal in en het programma toont of het gezochte getal "Hoger!" dan wel "Lager" is dan de gok. Indien de gebruiker correct gokt, toont het programma "Disco!"
+
+Een voorbeeld uitvoering waarbij het programma willekeurig voor 74 koos en de gebruiker achtereenvolgens 50, 75, 67, 72 en 74 gokt :
+
+[source,shell]
+----
+Wat gok je?:50
+Hoger!
+Wat gok je?:75
+Lager!
+Wat gok je?:67
+Hoger!
+Wat gok je?:72
+Hoger!
+Wat gok je?:74
+Disco!
+----
 
 
 === Oefening D05som
@@ -591,4 +614,33 @@ Voorbeeld programmaverloop bij invoer van __1__, __+__, __2__, __-__, __3__, __-
 =
 1
 ----
+
+
+=== {extra-icon} Oefening D05getalradencomputer
+
+Schrijf een programma dat het getal (van 1 t.e.m. 100) probeert te raden waar de gebruiker aan denkt.
+
+Telkens het programma een gok doet, moet de gebruiker aangeven of het gezochte getal HOGER dan wel LAGER is dan de gok.
+
+De gebruiker kan "hoger", "lager" of "juist" invoeren (hoofdletterongevoelig). Indien de gebruiker iets anders ingeeft wordt de vraag herhaald. Na afloop toont het programma hoeveel gokken er nodig waren om het getal te raden.
+
+
+Een voorbeeld uitvoering waarbij de gebruiker aan het getal 74 denkt :
+[source,shell]
+----
+De computer gokt 50, is dit hoger/lager/juist?
+Hoger
+De computer gokt 75, is dit hoger/lager/juist?
+LAGer
+De computer gokt 67, is dit hoger/lager/juist?
+hoooooooooger
+De computer gokt 67, is dit hoger/lager/juist? <1>
+hogER
+De computer gokt 72, is dit hoger/lager/juist?
+hoger
+De computer gokt 74, is dit hoger/lager/juist?
+juist
+Het programma raadde je getal in 5 gokken
+----
+<1> de vraag werd herhaald omdat de gebruiker geen geschikt antwoord ingaf.
 

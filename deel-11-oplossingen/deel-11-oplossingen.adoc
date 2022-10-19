@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 11 - Oplossingen
 Yanic Inghelbrecht
-v2022.03.08.12.08
+v2022.10.19.17.00
 // toc and section numbering
 :toc: preamble
 :toclevels: 4
@@ -23,6 +23,7 @@ v2022.03.08.12.08
 :deel-01-oplossingen: ../deel-01-oplossingen/deel-01-oplossingen.adoc
 // experimental voor kdb: en btn: macro's van AsciiDoctor
 :experimental:
+:missing-icon: ☒
 
 //preamble
 [.text-right]
@@ -388,7 +389,7 @@ static int BepaalMaximum(int[] getallen) {
 Een oplossing zonder deze speciale waarden kan natuurlijk ook, bv. door `min` en `max` te initialiseren met het eerste element uit het array.
 
 
-=== Oplossing D11bevatwaarde
+=== Oplossing D11bevatwaarde ☒
 
 Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
 
@@ -417,12 +418,12 @@ static int GetGetal(int min, int max) {
 ----
 
 
-=== Oplossing D11filter
+=== Oplossing D11filter {missing-icon}
 
 Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
 
 
-=== Oplossing D11expand
+=== Oplossing D11expand {missing-icon}
 
 Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
 
@@ -616,7 +617,7 @@ static public int[] Slice(int[] values, int startIndex, int endIndex) {
 ----
 
 
-=== Oplossing D11encrypted
+=== Oplossing D11encrypted {missing-icon}
 
 Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
 

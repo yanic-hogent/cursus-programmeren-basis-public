@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 04 - Oplossingen
 Frederiek De Wolf
-v2022.10.11.14.00
+v2022.10.19.17.00
 // toc and section numbering
 :toc: preamble
 :toclevels: 4
@@ -21,6 +21,7 @@ v2022.10.11.14.00
 :url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
 // experimental voor kdb: en btn: macro's van AsciiDoctor
 :experimental:
+:missing-icon: ☒
 
 //preamble
 [.text-right]
@@ -264,7 +265,7 @@ Console.WriteLine($"In Amerika is dat een \"{letter}\"");
 ----
 
 
-=== Oplossing D04patreonsponsor
+=== Oplossing D04patreonsponsor {missing-icon}
 
 Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
 

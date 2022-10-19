@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 08 - Oefeningen
 Frederiek De Wolf
-v2022.03.08.12.08
+v2022.10.18.15.15
 // toc and section numbering
 :toc: preamble
 :toclevels: 4
@@ -28,19 +28,22 @@ v2022.03.08.12.08
 [.text-right]
 versie {revnumber}
   
+ 
 [NOTE]
 ======================================
-Het is een aanrader bij elke oefeningenreeks te starten met eventuele *__inleidende oefeningen__*.
-Naast deze focus je vooral op de *__essentiële oefeningen__*.
+We raden je aan om zoveel mogelijk oefeningen te maken, dat is de beste voorbereiding.
 
-Heb je tijd over, dan helpen de *__aanvullende oefeningen__* je de stof nog beter in de vingers te krijgen.
+Als je te ver achterop raakt bij het volgen van deze cursus, dan zul je daar wellicht niet de tijd voor vinden want het zijn er behoorlijk veel.
+
+* Indien je tijd tekort komt : concentreer je dan op de *__essentiële oefeningen__* (*zonder* {extra-icon}).
+
+* Heb je wat tijd over : dan helpen de *__aanvullende oefeningen__* (*mét* {extra-icon}) om deze topics nog beter in de vingers te krijgen.
 ======================================
 
-== Essentiële oefeningen
 
-=== Array-variabelen en initializers 
+== Array-variabelen en initializers 
  
-==== Oefening D08feestdagen
+=== Oefening D08feestdagen
 // D0801
 // C25
 
@@ -80,7 +83,7 @@ Als je het programma vervolgens uitvoert, krijg je __12__ te zien.
 
 Gebruik eventueel eens de debugger om na te gaan of de array correct is opgevuld.
 
-==== Oefening D08dagen
+=== Oefening D08dagen
 // D0802
 // C30
 
@@ -110,9 +113,9 @@ Uitvoer...
 (7 elementen): ma di wo do vr za zo
 ----
 
-=== Aanspreken van array-elementen
+== Aanspreken van array-elementen
 
-==== Oefening D08dagnummer
+=== Oefening D08dagnummer
 // D0803
 // Y7.01
 
@@ -149,7 +152,7 @@ Geef een dagnummer : 6
 Dagnummer 6 is zaterdag.
 ----
 	
-==== Oefening D08twister
+=== Oefening D08twister
 // D0804
 // Y7.10
 
@@ -164,9 +167,9 @@ string[] lichaamsdelen = {"linkerhand", "rechterhand", "linkervoet", "rechtervoe
 Om een willekeurige kleur te bekomen, zal het programma een willekeurige positie in het `kleuren` array bepalen en dan de kleur op die positie gebruiken. Bijvoorbeeld, indien het random getal `2` is zal de kleur `blauw` op positie `2` gekozen worden. Voor een willekeurig lichaamsdeel wordt dezelfde aanpak gebruikt.
 
 	
-=== Itereren met for en foreach
+== Itereren met for en foreach
 
-==== Oefening D08gemeenten
+=== Oefening D08gemeenten
 // D0805
 // C27
 
@@ -203,7 +206,7 @@ Uitvoer...
 9000
 ----
 
-==== Oefening D08dagentotaal
+=== Oefening D08dagentotaal
 // D0806
 // C28
 
@@ -235,7 +238,7 @@ Console.WriteLine("Totaal: " + totaal);
 
 Het afgedrukte totaal zou uiteraard __365__ moeten zijn.
 
-==== Oefening D08afdrukkenarray
+=== Oefening D08toongetallen
 // D0807
 // Y7.02
 
@@ -247,7 +250,7 @@ Merk op dat er na de laatste waarde (__-3__) geen komma is opgenomen.
 	
 Gebruik hiervoor een loop die zich aanpast aan de lengte van het array, dus als we array `a` zouden opvullen met meer of minder waarden, dan moet het programma nog steeds correct werken.
 
-==== Oefening D08netto
+=== Oefening D08netto
 // D0808
 
 Pas volgende voorbeeld aan om met een `foreach` (in plaats van de `for`) elke waarde uit de `kortingen` array van het `brutoBedrag` af te trekken.
@@ -267,9 +270,9 @@ for (int index = 0; index < kortingen.Length; index++) {
 Console.Write("Netto bedrag: " + nettoBedrag);
 ----
 
-=== Opvullen en samenstellen van arrays
+== Opvullen en samenstellen van arrays
 
-==== Oefening D08aansprekingen
+=== Oefening D08aansprekingen
 // D0809
 // C33
 
@@ -289,7 +292,7 @@ foreach (string aanspreking in aansprekingen) {
 ----
 <1> Hier aanvullen.
 
-==== Oefening D08arrayopvullen
+=== Oefening D08arrayopvullen
 // D0810
 // C29
 
@@ -316,7 +319,7 @@ Uitvoer...
 101 102 103 104 105 106 107 108 109
 ----
 
-==== Oefening D08omgekeerdevolgorde
+=== Oefening D08omgekeerdevolgorde
 // D0811
 // Y7.06
 
@@ -338,7 +341,7 @@ Jan
 
 Let op: het moet heel eenvoudig zijn om het programma aan te passen naar bijvoorbeeld 6 namen door slechts op __1 plaats__ in het programma een 4 naar een 6 aan te passen!
 		
-==== Oefening D08omgekeerdevolgordehoeveel
+=== Oefening D08omgekeerdevolgordehoeveel
 // D0812
 // Y7.07
 
@@ -355,13 +358,13 @@ Adriaan
 Bassie
 ----
 		
-==== Oefening D08volgordeomwisselen
+=== Oefening D08volgordeomwisselen
 
 Om bij de oefeningen D08omgekeerdevolgorde en D08omgekeerdevolgordehoeveel de waardes in omgekeerde volgorde af te drukken, heb je allicht de waardes in omgekeerde volgorde uitgelezen.  Dit startende op de positie van de laatste waarde, dan op de voorlaatste positie, en zo telkens één positie lager.
 
 Deze keer pas je de oplossing van D08omgekeerdevolgordehoeveel zo aan dat de inhoud van de array ook effectief wordt gespiegeld.  De laatste waarde wissel je om met de eerste waarde, de voorlaatste met de tweede, enzovoort.  Daarna kan je de inhoud van de gespiegelde array eenvoudigweg van voor naar achter afdrukken, om een identiek resultaat te bekomen.
 
-==== Oefening D08fibonacci
+=== Oefening D08fibonacci
 // D0813
 // C34
 
@@ -400,9 +403,9 @@ Uitvoer...
 1 1 2 3 5 8 13 21 34 55
 ----
 
-=== Zoeken in arrays
+== Zoeken in arrays
 
-==== Oefening D08positieszoeken
+=== Oefening D08positieszoeken
 // D0814
 // Y7.03
 
@@ -414,7 +417,7 @@ Bijvoorbeeld: indien de gebruiker __3__ intypt, toont het programma __1 5__.
 
 Indien de waarde niet gevonden werd, toont het programma niets.
 
-==== Oefening D08positieszoekenmooier
+=== Oefening D08positieszoekenmooier
 // D0815
 // Y7.04
 

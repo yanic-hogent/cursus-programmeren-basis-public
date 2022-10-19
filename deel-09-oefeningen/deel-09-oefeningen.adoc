@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 09 - Oefeningen
 Yanic Inghelbrecht
-v2022.03.08.12.08
+v2022.10.18.15.15
 // toc and section numbering
 :toc: preamble
 :toclevels: 4
@@ -21,6 +21,7 @@ v2022.03.08.12.08
 :imagesdir: images
 :url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
 :deel-04-oefeningen: ../deel-04-oefeningen/deel-04-oefeningen.adoc
+:deel-08-oefeningen: ../deel-08-oefeningen/deel-08-oefeningen.adoc
 
 // experimental voor kdb: en btn: macro's van AsciiDoctor
 :experimental:
@@ -29,20 +30,23 @@ v2022.03.08.12.08
 [.text-right]
 versie {revnumber}
    
+ 
 [NOTE]
 ======================================
-Het is een aanrader bij elke oefeningenreeks te starten met eventuele *__inleidende oefeningen__*.
-Naast deze focus je vooral op de *__essentiële oefeningen__*.
+We raden je aan om zoveel mogelijk oefeningen te maken, dat is de beste voorbereiding.
 
-Heb je tijd over, dan helpen de *__aanvullende oefeningen__* je de stof nog beter in de vingers te krijgen.
+Als je te ver achterop raakt bij het volgen van deze cursus, dan zul je daar wellicht niet de tijd voor vinden want het zijn er behoorlijk veel.
+
+* Indien je tijd tekort komt : concentreer je dan op de *__essentiële oefeningen__* (*zonder* {extra-icon}).
+
+* Heb je wat tijd over : dan helpen de *__aanvullende oefeningen__* (*mét* {extra-icon}) om deze topics nog beter in de vingers te krijgen.
 ======================================
 
-== Essentiële oefeningen
 
-=== Vroegtijdig een loop beëindigen
+== Vroegtijdig een loop beëindigen
 
 
-==== Oefening D09zoekdier
+=== Oefening D09zoekdier
 // Y8.02
 
 Begin een programma met
@@ -55,7 +59,7 @@ string[] boerderijDieren={"kip", "koe", "paard", "geit", "schaap"};
 en schrijf de rest van de code zodat het de gebruiker om een dier vraagt. Het programma meldt vervolgens of het wel of niet om een boerderijdier gaat. Dit programma is hoofdletterONgevoelig.
 
 
-==== Oefening D09herkansing
+=== Oefening D09herkansing
 
 Schrijf een programma dat op basis van een puntenlijst meldt of er al dan niet een herkansing moet ingericht worden. Indien er minstens 1 student een onvoldoende behaalde (`score<10`) moet er een herkansing worden ingericht.
 
@@ -67,10 +71,10 @@ int[] puntenlijst = { 13, 16, 13, 18, 8, 12, 15, 3, 4, 11, 17, 18 };
 ----
 
 
-=== Parallelle arrays
+== Parallelle arrays
 
-	
-==== Oefening D09buisvakken
+
+=== Oefening D09buisvakken
 // Y7.05
 
 Begin een programma met de volgende twee arrays :
@@ -86,7 +90,7 @@ De punten voor een vak staan steeds op de overeenkomstige positie in het `punten
 Schrijf een programma dat toont voor welke vakken de student een onvoldoende behaalde.
 
 
-==== Oefening D09toonscore
+=== Oefening D09toonscore
 // Y7.09
 
 Begin weer met dezelfde twee arrays als in de vorige oefening :
@@ -115,7 +119,7 @@ Geen score bekend
 ----
 
 
-==== Oefening D09morse
+=== Oefening D09morse
 
 Toen de communicatie over lange afstanden nog per telegraaf verliep, gebruikte men link:https://nl.wikipedia.org/wiki/Morse[Morse code, window="_blank"] om teksten om te zetten naar een opeenvolging van lange en korte elektrische signalen. Die lange en korte signalen noteren we hieronder met streepjes en stipjes. 
 
@@ -164,9 +168,9 @@ Opgebouwde tekst tot nu toe : bal
 Indien je een bepaalde Morse code niet terugvindt in array `morse` mag je ervan uitgaan dat het een ongeldige code is en moet deze genegeerd worden.
 
 
-=== Verdere oefeningen op arrays
+== Verdere oefeningen op arrays
 
-==== Oefening D09dagnummernaarmaand
+=== Oefening D09dagnummernaarmaand
 
 Deze oefening is gebaseerd op link:{deel-04-oefeningen}#_oefening_d04dagnummer[oefening D04dagnummer].
 
@@ -208,7 +212,7 @@ De maand is onbepaald
 ----
 
 
-==== Oefening D09maximumtemperatuur
+=== Oefening D09maximumtemperatuur
 
 Schrijf een programma dat de minimum en maximumtemperatuur van een bepaalde dag weergeeft, gebaseerd op een lijst van meetwaarden van die dag.
 
@@ -233,7 +237,7 @@ double[] meetwaarden = { }; // Duizend bommen en granaten Kuifje, een leeg array
 double[] meetwaarden = { -9999.0, -9999.0 };
 ----
 
-==== Oefening D09speelkaarten
+=== Oefening D09speelkaarten
 
 Schrijf een programma dat alle 52 speelkaarten op het scherm weergeeft.
 
@@ -262,7 +266,7 @@ ruiten aas
 ----
 
 
-==== Oefening D09durstenfeld
+=== Oefening D09durstenfeld
 
 Breid de vorige oefening uit zodat het array met kaarten dooreengeschud wordt en toon dan pas alle kaarten in hun willekeurige volgorde.
 
@@ -279,7 +283,7 @@ h|Index|0|1|2|3|4|5|6|7
 |====
 
 
-==== Oefening D09getalfrequentie
+=== Oefening D09getalfrequentie
 // Y8.05
 
 Schrijf een programma dat de gebruiker om getallen vraag tussen 0 en 10 (grenzen inclusief) totdat de gebruiker 'stop' intypt (hoofdletterongevoelig).
@@ -302,7 +306,7 @@ Geef een getal in [0,10] : StOP
 ----		
 	
 
-==== Oefening D09zoekhistoriek
+=== Oefening D09zoekhistoriek
 // Y8.01 en C36
 
 Een programma houdt de 5 laatst ingetypte zoektermen bij, in een zoekhistoriek.
@@ -342,10 +346,27 @@ Nieuwe zoekterm :
 ----
 
 
-=== Strings
+== Strings
 
 
-==== Oefening D09geenscheldwoorden
+=== Oefening D09toongetallenmetjoin
+Schrijf een programma dat de getallen in een `int[]` netjes gescheiden door komma's op de console zet, dit is een variatie op link:{deel-08-oefeningen}#_oefening_d08toongetallen[oefening D08toongetallen]
+
+Probeer dit uit met het volgende array :
+
+[source,csharp,linenums]
+----
+int[] getallen = { 4, 7, 9, 34, 2, 56, 34, 78 };
+----
+
+Het programma toont...
+
+[source,shell]
+----
+4, 7, 9, 34, 2, 56, 34, 78
+----
+
+=== Oefening D09geenscheldwoorden
 // Y1.09
 
 Schrijf een programma dat de gebruiker om een tekst vraagt en vervolgens toont of deze tekst al dan niet aanvaardbaar is. De tekst wordt enkel aanvaard indien er geen scheldwoorden in voorkomen (op basis van een lijst). De zoektocht naar scheldwoorden is hoofdletter**on**gevoelig.
@@ -354,7 +375,7 @@ Kies zelf je 10 favoriete scheldwoorden op
 https://nl.wiktionary.org/wiki/Categorie:Scheldwoord_in_het_Nederlands
 
 
-==== Oefening D09censuur
+=== Oefening D09censuur
 
 Schrijf een programma dat de gebruiker om een tekst vraagt en vervolgens diezelfde tekst gecensureerd weergeeft. Elk scheldwoord (uit een voorgedefiniëerde lijst) wordt vervangen door een even lange rij sterretjes, bv. `druiloor` wordt vervangen door `+++********+++`. De zoektocht naar scheldwoorden is hoofdletter**on**gevoelig.
 
@@ -367,7 +388,7 @@ Let op :
 - de gecensureerde versie moet gelijk zijn aan het origineel qua hoofdletters en kleine letters van de rest van de tekst.
 
 
-==== Oefening D09langstewoord
+=== Oefening D09langstewoord
 // Y1.12
 
 Schrijf een programma dat de gebruiker om een tekst vraagt en vervolgens toont hoeveel woorden erin voorkomen en wat het langste woord is. Indien er meerdere woorden zijn van die lengte, toon dan het eerste.
@@ -381,7 +402,7 @@ langste woord : kinderen
 ----
 
 
-==== Oefening D09dierenwissen
+=== Oefening D09dierenwissen
 // Y8.08
 
 Begin een programma met

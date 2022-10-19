@@ -1,6 +1,6 @@
 ﻿= Programmeren Basis - Deel 10 - Oefeningen
 Frederiek De Wolf
-v2022.05.06.10.00
+v2022.10.18.15.15
 // toc and section numbering
 :toc: preamble
 :toclevels: 4
@@ -20,6 +20,7 @@ v2022.05.06.10.00
 // folders
 :imagesdir: images
 :url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+:deel-09-oefeningen: ../deel-09-oefeningen/deel-09-oefeningen.adoc
 // experimental voor kdb: en btn: macro's van AsciiDoctor
 :experimental:
 
@@ -57,15 +58,17 @@ versie {revnumber}
   
 [NOTE]
 ======================================
-Het is een aanrader bij elke oefeningenreeks te starten met eventuele *__inleidende oefeningen__*.
-Naast deze focus je vooral op de *__essentiële oefeningen__*.
+We raden je aan om zoveel mogelijk oefeningen te maken, dat is de beste voorbereiding.
 
-Heb je tijd over, dan helpen de *__aanvullende oefeningen__* je de stof nog beter in de vingers te krijgen.
+Als je te ver achterop raakt bij het volgen van deze cursus, dan zul je daar wellicht niet de tijd voor vinden want het zijn er behoorlijk veel.
+
+* Indien je tijd tekort komt : concentreer je dan op de *__essentiële oefeningen__* (*zonder* {extra-icon}).
+
+* Heb je wat tijd over : dan helpen de *__aanvullende oefeningen__* (*mét* {extra-icon}) om deze topics nog beter in de vingers te krijgen.
 ======================================
 
-== Essentiële oefeningen
 
-=== Vooraf
+== Vooraf
 
 Voordien moest je de code van de oplossingen netjes tussen de accolades van de `Main` method plakken om een volledig en werkend programma te bekomen.
 
@@ -90,9 +93,9 @@ namespace D10 {
 }
 ----
 
-=== Methods 
+== Methods 
 
-==== Oefening D10toonvierkant
+=== Oefening D10toonvierkant
 
 //D1001
 
@@ -111,9 +114,9 @@ Deze laatste print op het console scherm een vierkant van __5 op 5__ sterretjes 
 *****
 ----
 
-=== Methods met een parameter
+== Methods met een parameter
 
-==== Oefening D10toonvierkantparameters
+=== Oefening D10toonvierkantparameters
 
 //D1002
 
@@ -121,9 +124,9 @@ Deze laatste print op het console scherm een vierkant van __5 op 5__ sterretjes 
 
 Pas de method `ToonVierkant` aan zodat een parameter `zijde` wordt meegegeven die de afmetingen van het vierkant bepaalt.
 
-=== Methods met meerdere parameters
+== Methods met meerdere parameters
 
-==== Oefening D10toonrechthoek
+=== Oefening D10toonrechthoek
 //D1003
 //Y9.06
 
@@ -144,7 +147,7 @@ Geef de hoogte: 3
 ----
 
 
-==== Oefening D10toonsomtussen
+=== Oefening D10toonsomtussen
 //D1004
 
 //Y9.07
@@ -152,7 +155,7 @@ Geef de hoogte: 3
 Schrijf een method `ToonSomTussen` met 2 parameters `min` en `max` die de som toont van alle getallen tussen `min` en `max` (grenzen inclusief).
 
 
-==== Oefening D10printreeks
+=== Oefening D10printreeks
 //D1005
 
 [source,csharp,linenums]
@@ -178,14 +181,15 @@ De uitvoer zou moeten opleveren...
 4
 ----
 
-=== Methods en arrays
+== Methods en arrays
 
-==== Oefening D10toongetallen
+=== Oefening D10toongetallenmetmethod
 //D1006
 
 //Y9.08
 
-Schrijf een method `ToonGetallen` die een `int[]` als parameter heeft en de inhoud van deze array op de console zet.
+Schrijf een method `ToonGetallen` die een `int[]` als parameter heeft en de inhoud van deze array op de console zet. Dit is een variatie op link:{deel-09-oefeningen}#_oefening_d09toongetallenmetjoin[oefening D09toongetallenmetjoin].
+
 
 Probeer dit uit met volgende code in de `Main` method...
 
@@ -202,9 +206,9 @@ Het programma toont...
 4, 7, 9, 34, 2, 56, 34, 78
 ----
 
-=== Methods als query
+== Methods als query
 
-==== Oefening D10vraaggebruikerompositiefgetal
+=== Oefening D10vraaggebruikerompositiefgetal
 //D1007
 
 //Y9.09
@@ -231,7 +235,7 @@ Geef de hoogte : 3
 **********
 ----
 
-==== Oefening D10bevat
+=== Oefening D10bevat
 //D1008
 
 //Y9.10
@@ -253,7 +257,7 @@ Console.WriteLine(Bevat(dieren, "olifant"));  // <2>
 Herschrijf de oplossing van oefening D09zoekdier zodat deze `Bevat` method gebruikt wordt.
 
 
-==== Oefening D10faculteit
+=== Oefening D10faculteit
 //D1009
 
 //Y9.12
@@ -285,7 +289,7 @@ Ter info : de faculteit van __3__ is __(1 * 2 * 3)__ en die van __5__ is __(1 * 
 Voorzie in het programma een method `GetFaculteit` met een parameter van type `int` die een `int` waarde produceert.
 
 
-==== Oefening D10temperatuur
+=== Oefening D10temperatuur
 //D1010
 
 //Y9.13
@@ -295,7 +299,7 @@ Herschrijf oplossing D02temperatuur (__input Fahrenheit, output Celsius__) zodat
 Deze method heeft een parameter voor de temperatuur in __Fahrenheit__ en produceert de temperatuur in __Celsius__.
 
 
-==== Oefening D10dagenfebruari
+=== Oefening D10dagenfebruari
 D1011
 
 //C43
@@ -349,7 +353,7 @@ Jaar?: 2100
 In februari van 2100 zijn er 28 dagen.
 ----
 
-==== Oefening D10dagen
+=== Oefening D10dagen
 //D1012
 
 //C44

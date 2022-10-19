@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 09 - Oplossingen
 Yanic Inghelbrecht
-v2022.03.08.12.08
+v2022.10.19.17.00
 // toc and section numbering
 :toc: preamble
 :toclevels: 4
@@ -20,8 +20,10 @@ v2022.03.08.12.08
 // folders
 :imagesdir: images
 :url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+:deel-08-oplossingen: ../deel-08-oplossingen/deel-08-oplossingen.adoc
 // experimental voor kdb: en btn: macro's van AsciiDoctor
 :experimental:
+:missing-icon: ☒
 
 //preamble
 [.text-right]
@@ -157,7 +159,7 @@ if (score != -1) {
 ----
 
 
-=== Oplossing D09morse
+=== Oplossing D09morse {missing-icon}
 
 Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
 
@@ -499,6 +501,16 @@ Bijvoorbeeld als de zoekterm `d` nog eens wordt ingegeven, verandert de historie
 
 == Strings
 
+
+=== Oplossing D09toongetallenmetjoin
+
+[source,csharp,linenums]
+----
+int[] getallen = { 4, 7, 9, 34, 2, 56, 34, 78 };
+
+Console.WriteLine(String.Join(',', getallen));
+----
+Je ziet dat deze oplossing heel wat eenvoudiger is dan link:{deel-08-oplossingen}#_oplossing_d08toongetallen[de oplossing van D08toongetallen]!
 
 === Oplossing D09geenscheldwoorden
 // Y1.09
