@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 08 - Oefeningen
 Frederiek De Wolf
-v2022.10.18.15.15
+v2022.10.21.11.45
 // toc and section numbering
 :toc: preamble
 :toclevels: 4
@@ -21,6 +21,7 @@ v2022.10.18.15.15
 :imagesdir: images
 :url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
 :deel-06-oplossingen: ../deel-06-oplossingen/deel-06-oplossingen.adoc
+:deel-08-oplossingen: ../deel-08-oplossingen/deel-08-oplossingen.adoc
 // experimental voor kdb: en btn: macro's van AsciiDoctor
 :experimental:
 
@@ -319,6 +320,37 @@ Uitvoer...
 101 102 103 104 105 106 107 108 109
 ----
 
+=== Oefening D08inhoudwisselen
+
+Gegeven is onderstaand programma met twee arrays `a` en `b`. 
+
+Voeg op de plek van het commentaar de juiste code toe om de inhoud van beide arrays om te wisselen.
+
+[source,csharp,linenums]
+----
+int[] a = { 12, 34, 56, 78, 90 };
+int[] b = { 31, 42, 53, 64, 75 };
+
+Console.Write("De inhoud van a voor de wissel : ");
+Console.WriteLine( String.Join(a, ',') );
+
+// SCHRIJF HIER JE CODE OM DE ARRAY INHOUDEN OM TE WISSELEN
+
+Console.Write("De inhoud van a na de wissel : ");
+Console.WriteLine( String.Join(a, ',') );
+----
+
+De uitvoering van dit programma is als volgt :
+
+[source, shell]
+----
+De inhoud van a voor de wissel : 12,34,56,78,90
+De inhoud van a na de wissel : 31,42,53,64,75
+----
+
+
+
+
 === Oefening D08omgekeerdevolgorde
 // D0811
 // Y7.06
@@ -360,9 +392,9 @@ Bassie
 		
 === Oefening D08volgordeomwisselen
 
-Om bij de oefeningen D08omgekeerdevolgorde en D08omgekeerdevolgordehoeveel de waardes in omgekeerde volgorde af te drukken, heb je allicht de waardes in omgekeerde volgorde uitgelezen.  Dit startende op de positie van de laatste waarde, dan op de voorlaatste positie, en zo telkens één positie lager.
+Om bij de oefeningen link:#_oefening_d08omgekeerdevolgorde[D08omgekeerdevolgorde] en link:#_oefening_d08omgekeerdevolgordehoeveel[D08omgekeerdevolgordehoeveel] de waardes in omgekeerde volgorde af te drukken, heb je allicht de waardes in omgekeerde volgorde uitgelezen.  Dit startende op de positie van de laatste waarde, dan op de voorlaatste positie, en zo telkens één positie lager.
 
-Deze keer pas je de oplossing van D08omgekeerdevolgordehoeveel zo aan dat de inhoud van de array ook effectief wordt gespiegeld.  De laatste waarde wissel je om met de eerste waarde, de voorlaatste met de tweede, enzovoort.  Daarna kan je de inhoud van de gespiegelde array eenvoudigweg van voor naar achter afdrukken, om een identiek resultaat te bekomen.
+Deze keer pas je link:{deel-08-oplossingen}#_oplossing_d08omgekeerdevolgordehoeveel[de oplossing van D08omgekeerdevolgordehoeveel, window=_blank] zo aan dat de inhoud van de array ook effectief wordt gespiegeld.  De laatste waarde wissel je om met de eerste waarde, de voorlaatste met de tweede, enzovoort.  Daarna kan je de inhoud van de gespiegelde array eenvoudigweg van voor naar achter afdrukken, om een identiek resultaat te bekomen.
 
 === Oefening D08fibonacci
 // D0813
@@ -413,7 +445,7 @@ Begin met `int[] a = {5, 3, 1, -1, -3, 3, 9, -4};` en schrijf een programma dat 
 
 Telkens de waarde gevonden wordt, toont het programma de array index (__positie__) waarop dit gebeurde.
 
-Bijvoorbeeld: indien de gebruiker __3__ intypt, toont het programma __1 5__. 
+Bijvoorbeeld: indien de gebruiker `3` intypt, toont het programma `1 5`. 
 
 Indien de waarde niet gevonden werd, toont het programma niets.
 
@@ -421,10 +453,4 @@ Indien de waarde niet gevonden werd, toont het programma niets.
 // D0815
 // Y7.04
 
-Breid de vorige oefening uit zodat het programma wat meer uitleg toont, bijvoorbeeld...
-
-	__waarde 3 gevonden op positie(s) 1 5__
-	
-Of...
-	
-	__waarde niet gevonden__
+Breid de vorige oefening uit zodat het programma wat meer uitleg toont : `waarde 3 gevonden op positie(s) 1 5` of `waarde niet gevonden`.

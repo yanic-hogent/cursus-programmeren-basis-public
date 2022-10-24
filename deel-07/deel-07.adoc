@@ -1043,7 +1043,7 @@ Een opdracht om een string te bouwen die `aantal` keer hetzelfde `symbool` bevat
 ----
 string kimberleyVlaeminck = new string( '*' , 56 ); // <1>
 ----
-<1> `kimberleyVlaeminck` link:https://www.youtube.com/watch?v=TXd7SxSB5Jw[krijgt 56 sterretjes, window="_blank"]
+<1> `kimberleyVlaeminck` link:https://www.youtube.com/watch?v=CHkPL36Torc[krijgt 56 sterretjes, window="_blank"]
 
 Bij het zoeken naar een tekst hebben we hierboven twee `.IndexOf()` varianten gebruikt. Er bestaan echter ook twee gelijkaardige `.LastIndexOf()` varianten die de zoektocht van achter naar voren uitvoeren.
 

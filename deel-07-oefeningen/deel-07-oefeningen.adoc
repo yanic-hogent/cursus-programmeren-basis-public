@@ -393,4 +393,4 @@ Geef de zoektekst : ana
 De zoektekst komt 1 keer voor
 ----
 
-Je weet niet op voorhand niet hoe groot je zoektekst zal zijn.  Maar de lengte van deze zoektekst is wel wat je in rekening moet brengen om te bepalen waar je gaat verder zoeken.
+Je weet niet op voorhand hoe groot je zoektekst zal zijn.  Maar de lengte van deze zoektekst is wel wat je in rekening moet brengen om te bepalen waar je gaat verder zoeken.

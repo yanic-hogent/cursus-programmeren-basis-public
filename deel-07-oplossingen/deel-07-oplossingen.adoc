@@ -155,7 +155,7 @@ while (!leestekenGevonden && index < input.Length) {
 }
 ----
 
-==== Oefening D07begintmethoofdletter {missing-icon}
+==== Oplossing D07begintmethoofdletter {missing-icon}
 
 Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
 
@@ -233,7 +233,7 @@ for (int i = 0 ; i < input.Length; i++) {
 	Console.Write(c);
 }
 ----
-<1> de omzetting is enkel nodig voor de eerste vijf posities (nl. posities `0` t.e.m. `4`).
+<1> de omzetting is enkel nodig voor de eerste vijf symbolen (nl. posities `0` t.e.m. `4`).
 
 We gebruiken geen forach loop omdat we sowieso een teller nodig hebben om bij te houden op welke positie we aangekomen zijn in de tekst.
 

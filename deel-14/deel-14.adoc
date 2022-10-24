@@ -631,7 +631,7 @@ Het gebruik ervan kan echter geen kwaad.  Je benadrukt ermee dat je gebruik maak
 ==== Underscore voor datavelden
 
 Het gebruik van `this` is niet verplicht, al zeker niet indien er geen verwarring mogelijk is!
-Had het dataveld echter `naam` genoemd, zonder __undersocre__, dan kan je je allicht inbeelden dat er bepaalde onduidelijkheid is.
+Had het dataveld echter `naam` genoemd, zonder __underscore__, dan kan je je allicht inbeelden dat er bepaalde onduidelijkheid is.
 
 [source,csharp,linenums]
 ----

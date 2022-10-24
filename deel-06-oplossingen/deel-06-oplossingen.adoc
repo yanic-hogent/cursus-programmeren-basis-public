@@ -497,5 +497,5 @@ for (int aantal = 1; aantal <= hoogte; aantal++) {
 }
 ----
 <1> Let hier op de grenswaarde `hoogte - aantal`.
-<2> Om het debuggen makkelijker te maken gebruiken we `.`, het zou te lastig zijn om visuaal het aantal spaties te herkennen. Eenmaal het programma correct werkt, kunnen we er hier spaties van maken.
+<2> Om het debuggen makkelijker te maken gebruiken we `.`, het zou te lastig zijn om visueel het aantal spaties te herkennen. Eenmaal het programma correct werkt, kunnen we er hier spaties van maken.
 

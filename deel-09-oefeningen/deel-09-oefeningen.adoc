@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 09 - Oefeningen
 Yanic Inghelbrecht
-v2022.10.18.15.15
+v2022.10.21.11.45
 // toc and section numbering
 :toc: preamble
 :toclevels: 4
@@ -22,6 +22,7 @@ v2022.10.18.15.15
 :url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
 :deel-04-oefeningen: ../deel-04-oefeningen/deel-04-oefeningen.adoc
 :deel-08-oefeningen: ../deel-08-oefeningen/deel-08-oefeningen.adoc
+:deel-09-oplossingen: ../deel-09-oplossingen/deel-09-oplossingen.adoc
 
 // experimental voor kdb: en btn: macro's van AsciiDoctor
 :experimental:
@@ -118,7 +119,6 @@ Geef de naam van een vak : Hoelahoepen
 Geen score bekend
 ----
 
-
 === Oefening D09morse
 
 Toen de communicatie over lange afstanden nog per telegraaf verliep, gebruikte men link:https://nl.wikipedia.org/wiki/Morse[Morse code, window="_blank"] om teksten om te zetten naar een opeenvolging van lange en korte elektrische signalen. Die lange en korte signalen noteren we hieronder met streepjes en stipjes. 
@@ -166,6 +166,24 @@ Opgebouwde tekst tot nu toe : bal
 <1> de ongeldige Morse code `-..--.` wordt genegeerd
 
 Indien je een bepaalde Morse code niet terugvindt in array `morse` mag je ervan uitgaan dat het een ongeldige code is en moet deze genegeerd worden.
+
+
+=== Oefening D09scrabble
+
+Schrijf een programma dat de gebruiker vraagt om een woord in te typen en vervolgens de Scrabble woordscore toont.
+
+Je mag ervan uitgaan dat de gebruiker steeds exact 1 woord ingeeft, dus alle symbolen zullen letters zijn (geen cijfers, geen leestekens).
+
+Elke letter van het alfabet heeft een score die op de overeenkomstige blokjes staat, je kunt deze opzoeken op link:https://nl.wikipedia.org/wiki/Scrabble[de Wikipedia pagina voor Scrabble, window=_blank]. De _IJ_ en blanco blokjes zijn voor ons niet relevant.
+
+Daar zie je bv. dat een `A` 1 punt waard is, een `B` 3 punten, een `C` 5 punten, enz. Hoofdletters en kleine letters krijgen dezelfde score.
+
+Een voorbeeld uitvoering :
+[source,shell]
+----
+Geef een woord : HoNd
+Dat woord is 4+1+1+2=8 punten waard.
+----
 
 
 == Verdere oefeningen op arrays
@@ -386,6 +404,17 @@ Let op :
 - een scheldwoord kan meermaals voorkomen
 - een scheldwoord kan op vele manieren geschreven worden met hoofdletters en kleine letters, die moeten allemaal gecensureerd worden
 - de gecensureerde versie moet gelijk zijn aan het origineel qua hoofdletters en kleine letters van de rest van de tekst.
+
+
+=== Oefening D09censuuruitbreiding
+
+Pas link:{deel-09-oplossingen}#_oplossing_d09censuur[de oplossing van D09censuur] aan zodat de eerste en laatste letters van het scheldwoord NIET worden vervangen door een sterretje.
+
+Bijvoorbeeld, `De grootste druiloor van Gent` wordt `De grootste d******r van Gent`.
+
+Let erop dat ook hier hoodletter / kleine letters bewaard moeten blijven!
+
+Dus bv. `De grootste DruilooR van Gent` wordt `De grootste D******R van Gent`.
 
 
 === Oefening D09langstewoord

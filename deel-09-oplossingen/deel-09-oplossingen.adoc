@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 09 - Oplossingen
 Yanic Inghelbrecht
-v2022.10.19.17.00
+v2022.10.21.11.45
 // toc and section numbering
 :toc: preamble
 :toclevels: 4
@@ -160,6 +160,11 @@ if (score != -1) {
 
 
 === Oplossing D09morse {missing-icon}
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
+
+
+=== Oplossing D09scrabble {missing-icon}
 
 Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
 
@@ -579,7 +584,11 @@ De while loop is nodig omdat een scheldwoord meermaals in de tekst kan voorkomen
 
 Je zou misschien een oplossing verwachten op basis van `.Replace()`, maar dat werkt niet : je weet immers niet met welke combinaties van hoofdletters en kleine letters het scheldwoord in de tekst voorkomt.
 
-**Een interessante uitbreiding** is de eerste en laatste letter van het scheldwoord niet te vervangen door een sterretje, bv. `Druiloor` wordt `++++D******r+++`. Let erop dat ook hier hoodletter / kleine letters bewaard moeten blijven.
+
+=== Oplossing D09censuuruitbreiding {missing-icon}
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
+
 
 === Oplossing D09langstewoord
 // Y1.12

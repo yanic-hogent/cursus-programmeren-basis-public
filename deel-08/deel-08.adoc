@@ -37,7 +37,7 @@ Typisch gaan veel programma's...
 
 - Waardes *toevoegen* aan, of *verwijderen* uit een verzameling.  __Nieuwe werknemers worden bijvoorbeeld aanvaard of ontslaan.__
 - Waardes *wijzigen* binnen een verzameling.  __Het adres van werknemer moet bijvoorbeeld worden aangepast indien zij/hij verhuist.__
-- Waardes in een verzameling *opzoeken*.  __Werknemers moeten bijvoorbeeld worden opgezocht om ze te kunnen wijzigen of verwijderen.__
+- Waardes in een verzameling *opzoeken*.  __Werknemers moeten bijvoorbeeld op basis van hun naam worden opgezocht, om daarna bv. hun informatie te wijzigen.__
 - De volgorde van de waardes in de verzameling aanpassen (*ordenen*).  __Bij het tonen van overzichtelijke lijsten helpt het bijvoorbeeld om onze werknemers op naam, adres, ... te kunnen sorteren.__
 
 Zowel voor het bijhouden van de verzameling waardes, als het voorzien in handelingen als toevoegen, verwijderen, wijzigen, opzoeken, ordenen, ..., kan je aan de slag met *__arrays__*.   
@@ -108,7 +108,7 @@ Alle overige aspecten uit voorgaand voorbeeld, het werken met array-variabelen, 
 
 [NOTE]
 ====
-We spreken in onze uitleg zowel over *__de__* __ array__ als *__het__* __array__.  Beide mogelijkheden worden in taalreferenties vermeld, en we slaagden er zelf ook niet in een keuze te maken ;).
+We spreken in onze uitleg zowel over *__de__* __ array__ als *__het__* __array__.  Beide mogelijkheden worden in taalreferenties vermeld, en we slaagden er zelf ook niet in een keuze te maken 😉.
 ====
 
 == Array variabelen
@@ -183,7 +183,7 @@ De defaultwaardes van de datatypes die we tot dus ver hebben gebruikt zijn:
 - `*0*` voor `int`, `double` en alle overige numerieke datatypes
 - `*false*` voor `bool`
 - `*null*` voor `string`
-- `*' '*` (__een spatie__) voor `char`
+- `*'\0'*` (__een speciaal null symbool__) voor `char`
 - `*null*` voor __array datatypes__
 
 Een variabele van voorvermeld datatype zal tijdens uitvoer, nog voor je er een waarde aan zou toekennen, deze defaultwaarde bevatten.
@@ -411,7 +411,7 @@ Had je echter gewerkt met `werkdagen.Length - 1`, dan hoefde er niets te verande
 ====
 ****
 
-Om het eerste element te benaderen maak je gebruik van de laagste index (ook wel *__lowerbound__* genoemd).  Deze is steeds `0`.  __Resistance is futile ;)__
+Om het eerste element te benaderen maak je gebruik van de laagste index (ook wel *__lowerbound__* genoemd).  Deze is steeds `0`.  __Resistance is futile!__ 😉
 
 
 De hoogste index (ook wel *__upperbound__* genoemd) is één minder dan het aantal elementen.
@@ -455,11 +455,14 @@ Console.WriteLine(labels[1]);  // <2>
 ****
 
 
-=== Vergelijking met het benaderen van karakters van een 'string'
+=== Gelijkenis met het opvragen van karakters uit een 'string'
 
 Het werken met __indices__ bij arrays doet je allicht denken aan het werken met een __index__ bij het benaderen van een karakter (`char`) van een `string`.  
 
 Ook daar was het zo dat het eerste element, het eerste karakter in dat geval, te bereiken  via __index 0__.
+
+[WARNING]
+Een string lijkt in sommige opzichten op een `char[]` maar ze zijn niet hetzelfde want er zijn ook belangrijke verschillen!
 
 ****
 [.underline]#Voorbeeld van arrays vs strings#
@@ -513,7 +516,6 @@ Aanpassen van het tweede karakter van de string kan niet!"
 
 Zoals reeds eerder aangehaald is het `string` datatype __immutable__.
 ****
-
 
 === IndexOutOfRange exceptions
 
@@ -618,7 +620,8 @@ string[] werkdagen = { "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag" 
 Console.Write("Positie van de werkdag?: ");
 int positie = int.Parse(Console.ReadLine());
 
-if (positie >= 1 && positie < werkdagen.Length) {
+if (positie >= 1 && positie < werkdagen.Length) 
+{
 	int index = positie - 1;
 	string werkdag = werkdagen[index];
 	Console.WriteLine($"Werkdag {positie} is {werkdag}.");
@@ -655,7 +658,8 @@ zenders[1] = "Eén";
 zenders[2] = "Canvas/Ketnet";
 zenders[3] = "VTM";
 
-for (int index = 0; index < zenders.Length; index++) {
+for (int index = 0; index < zenders.Length; index++) 
+{
 	Console.WriteLine(zenders[index]);
 }
 ----
@@ -677,7 +681,8 @@ Het kan ook met een `do while` of `while`...
 [source,csharp,linenums]
 ----
 int index = 0;
-while (index < zenders.Length) {
+while (index < zenders.Length) 
+{
 	Console.WriteLine(zenders[index]);
 	index++;
 }
@@ -709,13 +714,15 @@ int[] veelvouden = new int[10];
 int veelvoud = 5;
 
 // opvullen:
-for (int index = 0; index < veelvouden.Length; index++) {
+for (int index = 0; index < veelvouden.Length; index++) 
+{
 	veelvouden[index] = veelvoud;
 	veelvoud += 5;
 }
 
 // afdrukken:
-for (int index = 0; index < veelvouden.Length; index++) {
+for (int index = 0; index < veelvouden.Length; index++) 
+{
 	Console.Write(veelvouden[index] + " ");
 }
 ----
@@ -736,12 +743,14 @@ De waarde voor onze array-elementen kan hier immers worden gebaseerd op de posit
 int[] veelvouden = new int[10];
 
 // opvullen:
-for (int index = 0; index < veelvouden.Length; index++) {
+for (int index = 0; index < veelvouden.Length; index++) 
+{
 	veelvouden[index] = 5 * (index + 1);
 }
 
 // afdrukken:
-for (int index = 0; index < veelvouden.Length; index++) {
+for (int index = 0; index < veelvouden.Length; index++) 
+{
 	Console.Write(veelvouden[index] + " ");
 }
 ----
@@ -765,7 +774,8 @@ In dit voorbeeld gaan we alle elementen van de array `woorden` benaderen, en elk
 ----
 string[] woorden = { "dit", "is", "een", "test" };
 
-foreach (string woord in woorden) {
+foreach (string woord in woorden) 
+{
 	Console.Write(woord + " ");
 }
 ----
@@ -782,7 +792,8 @@ Deze `foreach` is een verkorte notatie voor...
 
 [source,csharp,linenums]
 ----
-for (int index = 0; index < woorden.Length; index++) {
+for (int index = 0; index < woorden.Length; index++) 
+{
     string woord = woorden[index];
     Console.Write(woord + " ");
 }
@@ -824,7 +835,8 @@ Indien je een poging onderneemt om aan de __elementvariabele__ een waarde toe te
 int[] getallen = { 1, 2, 3, 4, 5 };
 
 // aanpassen
-foreach (int getal in getallen) {
+foreach (int getal in getallen) 
+{
     getal = getal * 2;  // <1>
 }
 ----
@@ -840,12 +852,14 @@ Uiteraard zou je met een gewone `for` wel kunnen...
 int[] getallen = { 1, 2, 3, 4, 5 };
 
 // aanpassen
-for (int index = 0; index < getallen.Length; index++) {
+for (int index = 0; index < getallen.Length; index++) 
+{
 	getallen[index] = getallen[index] * 2;
 }
 
 // afdrukken	
-foreach (int getal in getallen) {
+foreach (int getal in getallen) 
+{
 	Console.Write(getal + " ");
 }
 ----
@@ -869,11 +883,13 @@ Het voorgaande element is het element op een index die __1__ kleiner is dan de _
 int[] machten = new int[10];
 
 machten[0] = 2;
-for (int doelIndex = 1; doelIndex < machten.Length; doelIndex++) {
+for (int doelIndex = 1; doelIndex < machten.Length; doelIndex++) 
+{
 	machten[doelIndex] = machten[doelIndex - 1] * 2;
 }
 
-foreach (int macht in machten) {
+foreach (int macht in machten) 
+{
 	Console.Write(macht + " ");
 }
 ----
@@ -911,19 +927,22 @@ int eind = int.Parse(Console.ReadLine());
 
 int aantalGetallen = eind - start + 1;        // <1>
 
-if (aantalGetallen > 0) {
+if (aantalGetallen > 0) 
+{
 	// aanmaken
 	int[] getallen = new int[aantalGetallen]; // <2>
 
 	// opvullen
 	int getal = start;
-	for (int index = 0; index < getallen.Length; index++) {
+	for (int index = 0; index < getallen.Length; index++) 
+	{
 		getallen[index] = getal;
 		getal++;
 	}
 
 	// afdrukken
-	foreach (int element in getallen) {
+	foreach (int element in getallen) 
+	{
 		Console.Write($"{element} ");
 	}
 }
@@ -963,25 +982,33 @@ Stel dat je in een verzameling `steden` wil nagaan of een bepaalde `opTeZoekenSt
 string[] steden = { "Brussel", "Antwerpen", "Hasselt", 
 					"Brugge", "Kortrijk", "Gent" };
 
-do {
+do 
+{
 	Console.Write("Stad?: ");
 	string opTeZoekenStad = Console.ReadLine();
 
 	int index = 0;                               // <2>
 	bool gevonden = false;
-	while (!gevonden && index < steden.Length) {
-		if (steden[index].ToLower() == opTeZoekenStad.ToLower()) {
+	while (!gevonden && index < steden.Length) 
+	{
+		if (steden[index].ToLower() == opTeZoekenStad.ToLower()) 
+		{
 			gevonden = true;
-		} else {
+		} 
+		else 
+		{
 			index++;                             // <1>
 		}
 	}
 
-	if (gevonden)
+	if (gevonden) 
+	{
 		Console.WriteLine("De stad werd teruggevonden.");
-	else
+	} 
+	else 
+	{
 		Console.WriteLine("De stad werd niet gevonden.");
-
+	}
 	Console.WriteLine();
 } while (true);
 ----
@@ -1052,16 +1079,22 @@ Ons voorgaand voorbeeld was daar eigenlijk reeds op voorzien.  Eens de __zoekwaa
 ----
 int index = 0; 
 bool gevonden = false;
-while (!gevonden && index < steden.Length) {
-	if (steden[index].ToLower() == opTeZoekenStad.ToLower()) {
+while (!gevonden && index < steden.Length)
+{
+	if (steden[index].ToLower() == opTeZoekenStad.ToLower()) 
+	{
 		gevonden = true;
-	} else {
+	} 
+	else 
+	{
 		index++;
 	}
 }
 
 if (gevonden)
+{
 	Console.WriteLine($"De stad werd teruggevonden op index {index}."); // <1>
+}
 ...
 ----
 <1> `index` levert ons de positie op
@@ -1083,7 +1116,9 @@ int index = Array.IndexOf(steden, opTeZoekenStad);
 bool gevonden = (index >= 0);
 
 if (gevonden)
+{
 	Console.WriteLine($"De stad werd teruggevonden op index {index}.");
+}
 ...
 ----
 ****

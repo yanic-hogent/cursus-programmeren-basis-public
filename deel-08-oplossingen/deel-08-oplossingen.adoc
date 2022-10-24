@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 08 - Oplossingen
 Frederiek De Wolf
-v2022.10.19.17.00
+v2022.10.21.11.45
 // toc and section numbering
 :toc: preamble
 :toclevels: 4
@@ -319,6 +319,12 @@ for (int index = 0; index < getallen.Length; index++) {
 	Console.Write(getallen[index] + " ");
 }
 ----
+
+
+=== Oplossing D08inhoudwisselen {missing-icon}
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
+
 
 === Oplossing D08omgekeerdevolgorde
 // D0811

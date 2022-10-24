@@ -219,10 +219,11 @@ Factuur f1 = new Factuur();  // <1>
 
 [NOTE]
 ====
-Indien je zelf geen constructoren (met of zonder parameters) in je klasse definieert, zal de compiler voor ons een default constructor toevoegen (we zien dit niet).  
-Deze op de achtergrond toegevoegde constructor is dus `public` en parameterloos.  Het bevat ook geen specifieke implementatie (__het doet niets__).
+Indien je zelf geen enkele constructor in je klasse definieert, dan zal de compiler automatisch een default constructor toevoegen. Dit gebeurt achter de schermen, we zien dit niet expliciet in de code opduiken). 
 
-De aanwezigheid van een default constructor in elke klasse die wordt gedefinieerd is best handig.  Vanaf je een klasse gaat definiëren, bijvoorbeeld `class Gebouw { ... }`, kan je die bijgevolg meteen ook (zonder parameterwaardes) instantiëren, bijvoorbeeld: `new Gebouw()`.
+Deze 'impliciete' default constructor is dus `public` en parameterloos en bevat ook geen specifieke implementatie (__het doet niets__).
+
+De aanwezigheid van een default constructor is best handig in quasi elke klasse die we maken.  Zodra je een klasse gaat definiëren, bijvoorbeeld `class Gebouw { ... }`, kan je die bijgevolg meteen ook (zonder parameterwaardes) instantiëren, bijvoorbeeld: `new Gebouw()`.
 
 Indien je zelf een constructor in een klasse definieert (met of zonder parameters), wordt er op de achtergrond [.underline]#geen# constructor meer toegevoegd.
 ====
@@ -233,8 +234,8 @@ Indien je zelf een constructor in een klasse definieert (met of zonder parameter
 [source,csharp,linenums]
 ----
 class Persoon {
-	public Persoon(string naam, DateTime geboortedatum) {  // <1>
-		_naam = naam;                                      // <2>
+	public Persoon(string naam, DateTime geboortedatum) {  
+		_naam = naam;                                      
 		_geboortedatum = geboortedatum;
 	}
 
@@ -244,8 +245,9 @@ class Persoon {
 }
 ----
 
-Let op, indien er in een klasse als `Persoon` slechts één constructor als onze voorgaande `public Persoon(string naam, DateTime geboortedatum)` aanwezig is, kan je geen objecten meer aanmaken zonder waardes te voorzien.
-Er is immers geen parameterloze constructor (__default constructor__) meer aanwezig.
+Let op : indien er in een klasse slechts één constructor aanwezig is én die heeft geen parameters, dan kan je geen objecten aanmaken zonder waardes te voorzien. Er is immers geen parameterloze constructor (__default constructor__) aanwezig, zelfs niet impliciet.
+
+Bijvoorbeeld, in klasse `Persoon` hierboven hebben we slechts 1 constructor, nl. `public Persoon(string naam, DateTime geboortedatum)`. Je kan dus geen parameterloze constructor gebruiken bij het aanmaken van `Persoon` objecten.
 
 Probeer je toch nog een object aan te maken van het type `Persoon` zonder dat je initiële waardes gaat voorzien, dan treedt een compilefout op...
 
