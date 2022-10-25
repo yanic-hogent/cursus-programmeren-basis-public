@@ -333,25 +333,10 @@ Console.WriteLine(String.Join("\n", kaarten));                 // <2>
 
 Deze tweede oplossing is beslist niet beter dan de eerste, ze is veel moeilijker te begrijpen.
 
-=== Oplossing D09aantalkarakters
+=== Oplossing D09aantalkarakters {missing-icon}
 
-[source,csharp,linenums]
-----
-string[] woorden;
-            
-woorden = new string[] { "dit", "zijn", "een", "aantal", "woorden" };                  // 3,7,10,16,23
-//woorden = new string[] { "dit", "zijn", "dan", "weer", "wat", "andere", "woorden" }; // 3,7,10,14,17,23,30
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
 
-int[] aantalKarakters = new int[woorden.Length];
-
-aantalKarakters[0] = woorden[0].Length;
-for (int i = 1; i < woorden.Length; i++)
-{
-    aantalKarakters[i] = aantalKarakters[i - 1] + woorden[i].Length; 
-}
-
-Console.WriteLine(string.Join(',', aantalKarakters)); // 3 7 10 16 23
-----
 
 === Oplossing D09durstenfeld
 
