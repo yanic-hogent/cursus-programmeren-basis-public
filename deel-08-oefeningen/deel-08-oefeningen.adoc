@@ -1,46 +1,14 @@
 = Programmeren Basis - Deel 08 - Oefeningen
 Frederiek De Wolf
-v2022.10.21.11.45
-// toc and section numbering
-:toc: preamble
-:toclevels: 4
-// geen auto section numbering voor oefeningen (handigere titels en toc)
-//:sectnums:  
-:sectlinks:
-:sectnumlevels: 4
-// source code formatting
-:prewrap!:
-:source-highlighter: rouge
-:source-language: csharp
-:rouge-style: github
-:rouge-css: class
-// inject css for highlights using docinfo
-:docinfodir: ../common
-:docinfo: shared-head
-// folders
-:imagesdir: images
-:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
-:deel-06-oplossingen: ../deel-06-oplossingen/deel-06-oplossingen.adoc
-:deel-08-oplossingen: ../deel-08-oplossingen/deel-08-oplossingen.adoc
-// experimental voor kdb: en btn: macro's van AsciiDoctor
-:experimental:
+v2022.10.25.09.00
+include::../common/header-oefeningen.adoc[]
+
 
 //preamble
 [.text-right]
 versie {revnumber}
   
- 
-[NOTE]
-======================================
-We raden je aan om zoveel mogelijk oefeningen te maken, dat is de beste voorbereiding.
-
-Als je te ver achterop raakt bij het volgen van deze cursus, dan zul je daar wellicht niet de tijd voor vinden want het zijn er behoorlijk veel.
-
-* Indien je tijd tekort komt : concentreer je dan op de *__essentiële oefeningen__* (*zonder* {extra-icon}).
-
-* Heb je wat tijd over : dan helpen de *__aanvullende oefeningen__* (*mét* {extra-icon}) om deze topics nog beter in de vingers te krijgen.
-======================================
-
+include::../common/oefeningen-inleiding.adoc[]
 
 == Array-variabelen en initializers 
  
@@ -332,13 +300,15 @@ int[] a = { 12, 34, 56, 78, 90 };
 int[] b = { 31, 42, 53, 64, 75 };
 
 Console.Write("De inhoud van a voor de wissel : ");
-Console.WriteLine( String.Join(a, ',') );
+Console.WriteLine( String.Join(',', a) );
 
 // SCHRIJF HIER JE CODE OM DE ARRAY INHOUDEN OM TE WISSELEN
 
 Console.Write("De inhoud van a na de wissel : ");
-Console.WriteLine( String.Join(a, ',') );
+Console.WriteLine( String.Join(',', a) );
 ----
+
+Let op : je moet zelf de nodige code schrijven om daadwerkelijk alle elementen te overlopen en om te wisselen, je mag bij deze oefening niet simpelweg `Array.Copy()` gebruiken of andere simpelere truken gebruiken (bv. enkel de variabelen vd arrays wisselen).
 
 De uitvoering van dit programma is als volgt :
 
@@ -395,6 +365,71 @@ Bassie
 Om bij de oefeningen link:#_oefening_d08omgekeerdevolgorde[D08omgekeerdevolgorde] en link:#_oefening_d08omgekeerdevolgordehoeveel[D08omgekeerdevolgordehoeveel] de waardes in omgekeerde volgorde af te drukken, heb je allicht de waardes in omgekeerde volgorde uitgelezen.  Dit startende op de positie van de laatste waarde, dan op de voorlaatste positie, en zo telkens één positie lager.
 
 Deze keer pas je link:{deel-08-oplossingen}#_oplossing_d08omgekeerdevolgordehoeveel[de oplossing van D08omgekeerdevolgordehoeveel, window=_blank] zo aan dat de inhoud van de array ook effectief wordt gespiegeld.  De laatste waarde wissel je om met de eerste waarde, de voorlaatste met de tweede, enzovoort.  Daarna kan je de inhoud van de gespiegelde array eenvoudigweg van voor naar achter afdrukken, om een identiek resultaat te bekomen.
+
+Let op : je moet zelf de nodige code schrijven om alles te overlopen en de volgorde om te draaien, je mag bij deze oefening niet simpelweg `Array.Reverse()` gebruiken!
+
+
+=== Oefening D08rijen
+
+Schrijf een programma dat kan nagaan of een rij getallen een rekenkundige dan wel meetkundige rij is.
+
+Een **rekenkundige rij** is een rij getallen waarbij het verschil tussen 2 opeenvolgende getallen steeds gelijk is
+
+- bv. 2, 5, 8, 11, 14 is een rekenkundige rij want het verschil is steeds +3
+- bv. 84.5, 74.5, 64.5, 54.5 is een rekenkundige rij want het verschil is steeds -10
+- bv. 5, 7, 10, 14 is geen rekenkundige rij want het verschil is niet steeds hetzelfde
+
+Een **meetkundige rij** is een rij getallen waarbij een getal steeds gelijk is aan het vorige getal maal eenzelfde factor.
+
+* bv. 3, 6, 12, 24 is een meetkundige rij met factor 2 (volgende getal is steeds vorige getal maal twee)
+* bv. 100, 50, 25, 12.5, 6.25, 3.125 is een meetkundig rij met factor 0.5 (volgende getal is steeds vorige getal maal 0.5)
+* bv. 5, 10, 30, 120 is geen meetkundige rij
+
+Het programma vraagt de gebruiker om max. 6 getallen, bewaart deze in een array en controleert achteraf of het een rekenkundige of een meetkundige rij is. Indien geen van beiden is het een "gewone" rij getallen.
+
+Indien de gebruiker minder dan 6 getallen wil invoeren kan dit door een lege regel in te geven (gewoon op kbd:[Enter] drukken zonder iets te typen), dan stopt het programma met vragen naar nog meer getallen.
+
+Je mag ervan uitgaan dat de gebruiker steeds correcte getallen ingeeft en altijd minstens 3 getallen invoert.
+
+Indien de gebruiker een rij van identieke getallen ingeeft, zullen we dit (enkel) zien als een rekenkundige rij met delta 0.
+
+Hieronder zie je enkele voorbeelduitvoeringen, let erop dat de kommagetallen er op jouw computer misschien anders uitzien (3.5 met punt versus 3,5 met komma).
+
+[source, shell]
+----
+Geef een getal : 2
+Geef een getal : 5
+Geef een getal : 8
+Geef een getal : 11
+Geef een getal : 14
+Geef een getal :      <1>
+Dit is een rekenkundige rij met delta 3
+----
+<1> Gebruiker drukt hier gewoon op kbd:[Enter] zonder iets in te voeren.
+
+[source, shell]
+----
+Geef een getal : 100
+Geef een getal : 50
+Geef een getal : 25
+Geef een getal : 12.5
+Geef een getal : 6.25
+Geef een getal : 3.125 <1>
+Dit is een meetkundige rij met factor 0.5
+----
+<1> Het programma vraagt geen verdere getallen omdat de gebruiker er al 6 ingaf.
+
+[source, shell]
+----
+Geef een getal : 5
+Geef een getal : 10
+Geef een getal : 35
+Geef een getal : 120
+Geef een getal :      <1>
+Dit is een gewone rij
+----
+<1> Gebruiker drukt hier gewoon op kbd:[Enter] zonder iets in te voeren.
+
 
 === Oefening D08fibonacci
 // D0813

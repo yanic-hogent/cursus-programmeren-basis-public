@@ -1,0 +1,65 @@
+= Programmeren Basis - Deel xx - Verdieping
+Yanic Inghelbrecht
+v2020.09.15.13.49
+include::../common/header-verdieping.adoc[]
+
+
+//preamble
+[.text-right]
+versie {revnumber}
+ 
+== Titel
+
+Een eerste paragraaf.
+
+Een tweede paragraaf
+
+Een <<{url-verdieping}#,verwijzing naar de verdieping>> link
+
+
+
+****
+Voorbeeld
+
+Een C# code fragment :
+
+[source,csharp,linenums,highlight=2..4;6-9;!8]
+----
+// Hello World! program
+namespace HelloWorld
+{
+    class Hello {
+        static void Main(string[] args) // <1>
+        {
+            System.Console.WriteLine("Hello World!"); <2>
+        }
+    }
+}
+----
+<1> callout na comment is niet selecteerbaar bij copy/paste
+<2> callout na comment is niet selecteerbaar bij copy/paste
+****
+
+blablabla
+
+
+=== Subtitel
+
+Blablabla
+
+Een shell code fragment :
+[source,shell]
+----
+// Hello World! program
+namespace HelloWorld
+{
+    class Hello {
+        static void Main(string[] args)
+        {
+            System.Console.WriteLine("Hello World!");
+        }
+    }
+}
+----
+
+Blablabla

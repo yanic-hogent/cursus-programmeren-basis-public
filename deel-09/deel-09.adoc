@@ -1,28 +1,8 @@
 = Programmeren Basis - Deel 09
 Yanic Inghelbrecht
 v2022.10.04.09.47
-// toc and section numbering
-:toc: preamble
-:toclevels: 4
-:sectnums: 
-:sectlinks:
-:sectnumlevels: 4
-// source code formatting
-:prewrap!:
-:source-highlighter: rouge
-:source-language: csharp
-:rouge-style: github
-:rouge-css: class
-// inject css for highlights using docinfo
-:docinfodir: ../common
-:docinfo: shared-head
-// folders
-:imagesdir: images
-:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
-:deel-07-oefeningen: ../deel-07-oefeningen/deel-07-oefeningen.adoc
-:deel-07-oplossingen: ../deel-07-oplossingen/deel-07-oplossingen.adoc
-// experimental voor kdb: en btn: macro's van AsciiDoctor
-:experimental:
+include::../common/header-theorie.adoc[]
+
 
 //preamble
 [.text-right]

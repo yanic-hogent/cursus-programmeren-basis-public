@@ -1,44 +1,14 @@
 ﻿= Programmeren Basis - Deel 07 - Oefeningen
 Yanic Inghelbrecht
-v2022.10.18.10.10
-// toc and section numbering
-:toc: preamble
-:toclevels: 4
-// geen auto section numbering voor oefeningen (handigere titels en toc)
-//:sectnums:  
-:sectlinks:
-:sectnumlevels: 4
-// source code formatting
-:prewrap!:
-:source-highlighter: rouge
-:source-language: csharp
-:rouge-style: github
-:rouge-css: class
-// inject css for highlights using docinfo
-:docinfodir: ../common
-:docinfo: shared-head
-// folders
-:imagesdir: images
-:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
-:deel-03-oplossingen: ../deel-03-oplossingen/deel-03-oplossingen.adoc
-// experimental voor kdb: en btn: macro's van AsciiDoctor
-:experimental:
-:extra-icon: ★
+v2022.10.25.09.00
+include::../common/header-oefeningen.adoc[]
+
 
 //preamble
 [.text-right]
 versie {revnumber}
- 
-[NOTE]
-======================================
-We raden je aan om zoveel mogelijk oefeningen te maken, dat is de beste voorbereiding.
 
-Als je te ver achterop raakt bij het volgen van deze cursus, dan zul je daar wellicht niet de tijd voor vinden want het zijn er behoorlijk veel.
-
-* Indien je tijd tekort komt : concentreer je dan op de *__essentiële oefeningen__* (*zonder* {extra-icon}).
-
-* Heb je wat tijd over : dan helpen de *__aanvullende oefeningen__* (*mét* {extra-icon}) om deze topics nog beter in de vingers te krijgen.
-======================================
+include::../common/oefeningen-inleiding.adoc[]
 
 
 == Visual Studio project en opstartobject
@@ -284,6 +254,44 @@ string medeklinkers = "bcdfghjklmnpqrstvwxyz";
 ----
 
 en voor elk karakter na te gaan of het in deze strings voorkomt.
+
+==== Oefening D07woordslang
+
+Schrijf een programma waarbij de gebruiker 5 woorden moet ingeven en het programma controleert of deze een woordslang vormen.
+
+Een woordslang is een reeks woorden waarbij elk woord begint met de laatste letter van het vorige woord.
+
+- bv. groe**n**, **n**ooi**t**, **t**rot**s**, **s**laa**p**, **p**unt is een woordslang
+- bv. groe**n**, **n**ooi**t**, **k**atro**l**, **l**eu**k**, **k**amer is geen woordslang ("nooit" eindigt met "t" maar "katrol" begint niet met "t")
+
+Het programma bewaart alle woorden in een array en begint daarna met de controle.
+
+De uitvoer is als volgt :
+
+- indien het een woordslang is, dan worden alle woorden na elkaar getoond
+- indien het geen woordslang is, dan worden de eerste twee woorden getoond die niet voldoen
+
+Aan de voorbeelduitvoeringen hieronder kun je precies zien wat de output moet zijn :
+
+[source, shell]
+----
+Geef een woord : groen
+Geef een woord : nooit
+Geef een woord : trots
+Geef een woord : slaap
+Geef een woord : punt
+de woordslang is groen-nooit-trots-slaap-punt
+----
+
+[source, shell]
+----
+Geef een woord : groen
+Geef een woord : nooit
+Geef een woord : katrol
+Geef een woord : leuk
+Geef een woord : kamer
+het is geen woordslang : nooit-katrol
+----
 
 
 ==== Oefening D07tussenaccolades

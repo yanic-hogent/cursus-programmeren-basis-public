@@ -1,29 +1,8 @@
 = Programmeren Basis - Deel 11 - Oplossingen
 Yanic Inghelbrecht
 v2022.10.19.17.00
-// toc and section numbering
-:toc: preamble
-:toclevels: 4
-// geen auto section numbering voor oefeningen (handigere titels en toc)
-//:sectnums: 
-:sectlinks:
-:sectnumlevels: 4
-// source code formatting
-:prewrap!:
-:source-highlighter: rouge
-:source-language: csharp
-:rouge-style: github
-:rouge-css: class
-// inject css for highlights using docinfo
-:docinfodir: ../common
-:docinfo: shared-head
-// folders
-:imagesdir: images
-:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
-:deel-01-oplossingen: ../deel-01-oplossingen/deel-01-oplossingen.adoc
-// experimental voor kdb: en btn: macro's van AsciiDoctor
-:experimental:
-:missing-icon: ☒
+include::../common/header-oplossingen.adoc[]
+
 
 //preamble
 [.text-right]

@@ -1,27 +1,7 @@
 = Programmeren Basis - Deel 04 - Oplossingen
 Frederiek De Wolf
 v2022.10.19.17.00
-// toc and section numbering
-:toc: preamble
-:toclevels: 4
-//:sectnums: 
-:sectlinks:
-:sectnumlevels: 4
-// source code formatting
-:prewrap!:
-:source-highlighter: rouge
-:source-language: csharp
-:rouge-style: github
-:rouge-css: class
-// inject css for highlights using docinfo
-:docinfodir: ../common
-:docinfo: shared-head
-// folders
-:imagesdir: images
-:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
-// experimental voor kdb: en btn: macro's van AsciiDoctor
-:experimental:
-:missing-icon: ☒
+include::../common/header-oplossingen.adoc[]
 
 //preamble
 [.text-right]

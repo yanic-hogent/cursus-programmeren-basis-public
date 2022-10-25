@@ -1,0 +1,21 @@
+= Programmeren Basis - Deel xx - Oefeningen
+Yanic Inghelbrecht
+v2020.09.15.13.49
+include::../common/header-oefeningen.adoc[]
+
+
+//preamble
+[.text-right]
+versie {revnumber}
+ 
+include::../common/oefeningen-inleiding.adoc[] 
+
+ 
+== Oefening Dxx.01
+
+Dit is de uitleg van de opgave...
+
+[source, shell]
+----
+verwachte input en output
+----

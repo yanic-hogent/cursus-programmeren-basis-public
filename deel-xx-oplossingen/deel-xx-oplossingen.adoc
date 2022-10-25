@@ -1,0 +1,17 @@
+= Programmeren Basis - Deel xx - Oplossingen
+Yanic Inghelbrecht
+v2020.09.15.13.49
+include::../common/header-oplossingen.adoc[]
+
+
+//preamble
+[.text-right]
+versie {revnumber}
+ 
+== Oplossing Dxx.01
+
+Dit is de uitleg bij de oplossing...
+
+[source]
+----
+----

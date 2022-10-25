@@ -1,28 +1,8 @@
 = Programmeren Basis - Deel 07 - Oplossingen
 Yanic Inghelbrecht
-v2022.10.19.17.00
-// toc and section numbering
-:toc: preamble
-:toclevels: 4
-// geen auto section numbering voor oefeningen (handigere titels en toc)
-//:sectnums: 
-:sectlinks:
-:sectnumlevels: 4
-// source code formatting
-:prewrap!:
-:source-highlighter: rouge
-:source-language: csharp
-:rouge-style: github
-:rouge-css: class
-// inject css for highlights using docinfo
-:docinfodir: ../common
-:docinfo: shared-head
-// folders
-:imagesdir: images
-:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
-// experimental voor kdb: en btn: macro's van AsciiDoctor
-:experimental:
-:missing-icon: ☒
+v2022.10.25.09.00
+include::../common/header-oplossingen.adoc[]
+
 
 //preamble
 [.text-right]
@@ -287,6 +267,11 @@ foreach (char c in tekst) {
 
 Console.WriteLine($"{aantalKlinkers} klinker(s) en {aantalMedeklinkers} medeklinker(s)");
 ----
+
+
+==== Oplossing D07woordslang {missing-icon}
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
 
 
 ==== Oplossing D07tussenaccolades

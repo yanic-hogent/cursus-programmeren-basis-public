@@ -1,28 +1,8 @@
 = Programmeren Basis - Deel 08 - Oplossingen
 Frederiek De Wolf
-v2022.10.21.11.45
-// toc and section numbering
-:toc: preamble
-:toclevels: 4
-// geen auto section numbering voor Oplossingen (handigere titels en toc)
-//:sectnums: 
-:sectlinks:
-:sectnumlevels: 4
-// source code formatting
-:prewrap!:
-:source-highlighter: rouge
-:source-language: csharp
-:rouge-style: github
-:rouge-css: class
-// inject css for highlights using docinfo
-:docinfodir: ../common
-:docinfo: shared-head
-// folders
-:imagesdir: images
-:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
-// experimental voor kdb: en btn: macro's van AsciiDoctor
-:experimental:
-:missing-icon: ☒
+v2022.10.25.09.00
+include::../common/header-oplossingen.adoc[]
+
 
 //preamble
 [.text-right]
@@ -391,6 +371,12 @@ for (int i = namen.Length - 1; i >= 0; i--) {
 === Oplossing D08volgordeomwisselen {missing-icon}
 
 Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
+
+
+=== Oplossing D08rijen {missing-icon}
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
+
 
 === Oplossing D08fibonacci
 // D0813

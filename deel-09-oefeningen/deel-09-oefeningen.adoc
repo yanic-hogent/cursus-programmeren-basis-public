@@ -1,48 +1,14 @@
 = Programmeren Basis - Deel 09 - Oefeningen
 Yanic Inghelbrecht
-v2022.10.21.11.45
-// toc and section numbering
-:toc: preamble
-:toclevels: 4
-// geen auto section numbering voor oefeningen (handigere titels en toc)
-//:sectnums:  
-:sectlinks:
-:sectnumlevels: 4
-// source code formatting
-:prewrap!:
-:source-highlighter: rouge
-:source-language: csharp
-:rouge-style: github
-:rouge-css: class
-// inject css for highlights using docinfo
-:docinfodir: ../common
-:docinfo: shared-head
-// folders
-:imagesdir: images
-:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
-:deel-04-oefeningen: ../deel-04-oefeningen/deel-04-oefeningen.adoc
-:deel-08-oefeningen: ../deel-08-oefeningen/deel-08-oefeningen.adoc
-:deel-09-oplossingen: ../deel-09-oplossingen/deel-09-oplossingen.adoc
+v2022.10.25.09.45
+include::../common/header-oefeningen.adoc[]
 
-// experimental voor kdb: en btn: macro's van AsciiDoctor
-:experimental:
 
 //preamble
 [.text-right]
 versie {revnumber}
    
- 
-[NOTE]
-======================================
-We raden je aan om zoveel mogelijk oefeningen te maken, dat is de beste voorbereiding.
-
-Als je te ver achterop raakt bij het volgen van deze cursus, dan zul je daar wellicht niet de tijd voor vinden want het zijn er behoorlijk veel.
-
-* Indien je tijd tekort komt : concentreer je dan op de *__essentiële oefeningen__* (*zonder* {extra-icon}).
-
-* Heb je wat tijd over : dan helpen de *__aanvullende oefeningen__* (*mét* {extra-icon}) om deze topics nog beter in de vingers te krijgen.
-======================================
-
+include::../common/oefeningen-inleiding.adoc[]
 
 == Vroegtijdig een loop beëindigen
 
@@ -174,7 +140,7 @@ Schrijf een programma dat de gebruiker vraagt om een woord in te typen en vervol
 
 Je mag ervan uitgaan dat de gebruiker steeds exact 1 woord ingeeft, dus alle symbolen zullen letters zijn (geen cijfers, geen leestekens).
 
-Elke letter van het alfabet heeft een score die op de overeenkomstige blokjes staat, je kunt deze opzoeken op link:https://nl.wikipedia.org/wiki/Scrabble[de Wikipedia pagina voor Scrabble, window=_blank]. De _IJ_ en blanco blokjes zijn voor ons niet relevant.
+Elke letter van het alfabet heeft een score die op de overeenkomstige blokjes staat, je kunt deze opzoeken op link:https://nl.wikipedia.org/wiki/Scrabble[de Wikipedia pagina voor Scrabble, window=_blank]. De __IJ__ en blanco blokjes zijn voor ons niet relevant.
 
 Daar zie je bv. dat een `A` 1 punt waard is, een `B` 3 punten, een `C` 5 punten, enz. Hoofdletters en kleine letters krijgen dezelfde score.
 
@@ -283,6 +249,52 @@ ruiten koning
 ruiten aas
 ----
 
+=== Oefening D09aantalkarakters
+
+Schrijf een programma dat de som van het aantal karaketers van een reeks woorden kan bepalen.
+
+In je programma begin je met een `woorden` array :
+
+[source,csharp,linenums]
+----
+string[] woorden;
+
+woorden = new string[] { "dit", "zijn", "een", "aantal", "woorden" };                  // 3,7,10,16,23
+//woorden = new string[] { "dit", "zijn", "dan", "weer", "wat", "andere", "woorden" }; // 3,7,10,14,17,23,30
+
+// <1>
+
+// <2>
+
+Console.WriteLine(string.Join(',', aantalKarakters)); 
+----
+<1> Creëer een nieuwe array voor de `int` waardes.
+<2> Vul deze op met de som van het aantal karakters.
+
+Je programma bouwt vervolgens een array met plaats voor evenveel `int` waardes als er woorden zijn in het `woorden` array.
+
+Het nieuwe array vul je op met het aantal karakters van het woord op de corresponderende positie in het `woorden` array, en alle woorden op voorafgaande posities.
+
+- Het eerste element in deze array zal __3__ zijn: het woord __dit__ bestaat immers uit __3__ karakters.
+- Het tweede element is __7__: __3__ verhoogt met __4__, het aantal karakters van het woord __zijn__.
+- Het derde element is __10__: __7__ verhoogt met __3__, het aantal karakters van het woord __een__.
+- ...
+
+De output van dit programma ziet er zo uit :
+
+[source,shell,linenums]
+----
+3,7,10,16,23
+----
+
+Of mogelijks...
+
+[source,shell,linenums]
+----
+3,7,10,14,17,23,30
+----
+
+Indien het `woorden` array de __andere woorderen__ bevat.
 
 === Oefening D09durstenfeld
 
