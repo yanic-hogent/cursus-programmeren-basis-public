@@ -1,0 +1,4 @@
+include::header-shared.adoc[]
+// geen auto section numbering voor oefeningen (handigere titels en toc)
+:sectnums!:
+:extra-icon: ★

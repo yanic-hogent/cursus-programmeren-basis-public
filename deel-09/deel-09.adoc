@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 09
 Yanic Inghelbrecht
-v2022.10.04.09.47
+v2022.10.26.13.00
 include::../common/header-theorie.adoc[]
 
 
@@ -40,7 +40,7 @@ Ons programma zal efficiënter omgaan met de __CPU cycles__ als we niet onnodig 
 ****
 [.underline]#Voorbeeld#
 
-Hernemen we eens link:{deel-07-oefeningen}#_oefening_d07bevatleesteken[de oefening van D07bevatleesteken, window="_blank"], waar de gebruiker een tekst kon invoeren en het programma dan toonde of de tekst wel/niet een leesteken bevat.
+Hernemen we eens link:{deel-07-oefeningen}#_oefening_d07bevatleesteken[de oefening van D07bevatleesteken, window=_blank], waar de gebruiker een tekst kon invoeren en het programma dan toonde of de tekst wel/niet een leesteken bevat.
 
 De oplossing zag er zo uit :
 
@@ -106,7 +106,7 @@ Je zou natuurlijk een __while loop__ of __do while loop__ kunnen gebruiken, bv. 
 ****
 [.underline]#Voorbeeld#
 
-We kunnen eens link:{deel-07-oplossingen}#_oplossing_d07bevatleesteken[oplossing D07bevatleesteken, window="_blank"] herschrijven met een while loop en de loop vroegtijdig beëindigen.
+We kunnen eens link:{deel-07-oplossingen}#_oplossing_d07bevatleesteken[oplossing D07bevatleesteken, window=_blank] herschrijven met een while loop en de loop vroegtijdig beëindigen.
 
 We krijgen dan :
 
@@ -236,7 +236,7 @@ Dit simpele voorbeeld was enigszins geforceerd, tijd voor een realistischere toe
 ****
 [.underline]#Voorbeeld#
 
-We zullen eens link:{deel-07-oplossingen}#_oplossing_d07bevatleesteken[oplossing D07bevatleesteken, window="_blank"] herschrijven en de __foreach loop__ vroegtijdig stoppen met `break`.
+We zullen eens link:{deel-07-oplossingen}#_oplossing_d07bevatleesteken[oplossing D07bevatleesteken, window=_blank] herschrijven en de __foreach loop__ vroegtijdig stoppen met `break`.
 
 We krijgen dan :
 
@@ -407,7 +407,7 @@ Als de gebruiker `Cornelia` ingeeft
 * dan zoeken we in het `namen` array naar `Cornelia` en vinden die naam op positie `3`
 * vervolgens kijken we op diezelfde positie `3` in array `leeftijden`
 * daar vinden we de leeftijd `18`
-* dus `Cornelia` is `23` jaar
+* dus `Cornelia` is `18` jaar
 
 Als de gebruiker `Jules` ingeeft
 
@@ -702,7 +702,7 @@ Let op, `null` is niet nul of zero, het betekent eerder iets als 'ledig', 'niets
 [ASIDE]
 ====
 
-Op zich lijkt dit wat vreemd. Bedenkt echter dat lang geleden, toen getallen enkel hoeveelheden voorstelden (bv. 6 koeien) men ook niet meteen het nut inzag van het getal `0` ("Hoezo, je hebt 0 koeien? Je hebt geen koeien!). link:https://www.amazon.com/Zero-Biography-Dangerous-Charles-Seife/dp/0140296476/[Interessant boek]
+Op zich lijkt dit wat vreemd. Bedenkt echter dat lang geleden, toen getallen enkel hoeveelheden voorstelden (bv. 6 koeien) men ook niet meteen het nut inzag van het getal `0` ("Hoezo, je hebt 0 koeien? Je hebt geen koeien!). link:https://www.amazon.com/Zero-Biography-Dangerous-Charles-Seife/dp/0140296476/[Interessant boek, window=_blank]
 
 Het heeft er natuurlijk ook mee te maken dat er in een geheugenlocatie altijd een waarde moet staan. Op een locatie 'niets' zetten is geen optie, dus hebben we een speciale waarde nodig om te zeggen dat er 'niets' is.
 
@@ -737,7 +737,7 @@ Console.WriteLine($"abc{s}def"); // <1>
 ----
 <1> output is `abcdef`
 
-In andere programmeertalen verschijnt effectief de tekst `null` op de console. De output wordt dan `abcnulldef`, wat natuurlijk link:https://www.youtube.com/watch?v=MbeXzJDYxS0[je zintuigen meteen op scherp zet, window="_blank"]  (want het duidt doorgaans op een bug).
+In andere programmeertalen verschijnt effectief de tekst `null` op de console. De output wordt dan `abcnulldef`, wat natuurlijk link:https://www.youtube.com/watch?v=MbeXzJDYxS0[je zintuigen meteen op scherp zet, window=_blank]  (want het duidt doorgaans op een bug).
 
 Er bestaan trouwens nog twee goedbedoelde string mogelijkheden :
 
@@ -889,7 +889,7 @@ Het array `woorden` zal in dit geval slechts 5 entries hebben, de twee lege stri
 
 De `.Split()` mogelijkheid komt o.a. goed van pas als je een **__comma separated values__ (CSV)** bestand wil verwerken in je programma. Dit is een simpel formaat om grote hoeveelheden data te exporteren uit een ander programma, bv. Microsoft Excel of een databank.
 
-In het Nederlands  link:https://nl.wikipedia.org/wiki/Kommagescheiden_bestand[kommagescheiden bestand]
+In het Nederlands  link:https://nl.wikipedia.org/wiki/Kommagescheiden_bestand[kommagescheiden bestand, window=_blank]
 ====
 
 
@@ -897,7 +897,11 @@ In het Nederlands  link:https://nl.wikipedia.org/wiki/Kommagescheiden_bestand[ko
 
 Stel je hebt een array met woorden en je wil deze aaneen plakken tot één enkele string, met een scheidingsteken ertussen. Bijvoorbeeld om de tekst te maken voor zo'n CSV bestand.
 
-Een simpele manier om dit te doen is `string.Join()` te gebruiken. Deze opdracht heeft 2 stukjes informatie nodig : 
+In link:{deel-08-oplossingen}#_oplossing_d08toongetallen[de oplossing van oefening D08toongetallen, window=_blank] programmeerden we dit nog zelf, maar met `string.Join()` is dit heel wat eenvoudiger.
+
+Je kunt de link:https://learn.microsoft.com/en-us/dotnet/api/system.string.join[online documentatie voor string.Join() hier raadplegen, window=_blank].
+
+Deze `string.Join()` opdracht heeft 2 stukjes informatie nodig : 
 
 - een string met het scheidingsteken
 - een `string` array dat de eigenlijke woorden bevat
@@ -944,7 +948,11 @@ Inlassen gebeurt met `.Insert()`, de algemene vorm is
 tekst.Insert( positie, inlasTekst )
 ----
 
+Je kunt de link:https://learn.microsoft.com/en-us/dotnet/api/system.string.insert[online documentatie voor string.Insert() hier raadplegen, window=_blank].
+
 Het resultaat is een _nieuwe_ string die gebaseerd is op `tekst` en waarin `inlasTekst` werd tussengevoegd op de gegeven `positie`.
+
+Bijvoorbeeld :
 
 [source,csharp,linenums]
 ----
@@ -964,6 +972,8 @@ Een deeltekst verwijderen kun je doen met `.Remove()`, de algemene vorm is
 ----
 tekst.Remove( beginPositie, lengte );
 ----
+
+Je kunt de link:https://learn.microsoft.com/en-us/dotnet/api/system.string.remove[online documentatie voor string.Remove() hier raadplegen, window=_blank].
 
 Er ontstaat een _nieuwe_ string gebaseerd op `tekst` en waarvan er `lengte` aantal karakters ontbreken, beginnend bij positie `beginPositie`.
 
@@ -985,6 +995,8 @@ Met `.Replace()` kunnen we in een tekst, alle voorkomens van een deeltekst *verv
 ----
 tekst.Replace( zoekTekst, vervangTekst );
 ----
+
+Je kunt de link:https://learn.microsoft.com/en-us/dotnet/api/system.string.replace[online documentatie voor string.Replace() hier raadplegen, window=_blank].
 
 Er ontstaat een _nieuwe_ string gebaseerd op `tekst`, waarin elk voorkomen van `zoekTekst` is vervangen door `vervangtekst`.
 

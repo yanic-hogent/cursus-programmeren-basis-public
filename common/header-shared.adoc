@@ -1,0 +1,46 @@
+// toc and section numbering
+:toc: preamble
+:toclevels: 4
+:sectnums: 
+:sectlinks:
+:sectnumlevels: 4
+// source code formatting
+:prewrap!:
+:source-highlighter: rouge
+:source-language: csharp
+:rouge-style: github
+:rouge-css: class
+// inject css for highlights using docinfo
+:docinfodir: ../common
+:docinfo: shared-head
+// paths
+:imagesdir: images
+:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
+
+:deel-01-oefeningen: ../deel-01-oefeningen/deel-01-oefeningen.adoc
+:deel-02-oefeningen: ../deel-02-oefeningen/deel-02-oefeningen.adoc
+:deel-03-oefeningen: ../deel-03-oefeningen/deel-03-oefeningen.adoc
+:deel-04-oefeningen: ../deel-04-oefeningen/deel-04-oefeningen.adoc
+:deel-05-oefeningen: ../deel-05-oefeningen/deel-05-oefeningen.adoc
+:deel-06-oefeningen: ../deel-06-oefeningen/deel-06-oefeningen.adoc
+:deel-07-oefeningen: ../deel-07-oefeningen/deel-07-oefeningen.adoc
+:deel-08-oefeningen: ../deel-08-oefeningen/deel-08-oefeningen.adoc
+:deel-09-oefeningen: ../deel-09-oefeningen/deel-09-oefeningen.adoc
+:deel-10-oefeningen: ../deel-10-oefeningen/deel-10-oefeningen.adoc
+:deel-11-oefeningen: ../deel-11-oefeningen/deel-11-oefeningen.adoc
+
+:deel-01-oplossingen: ../deel-01-oplossingen/deel-01-oplossingen.adoc
+:deel-02-oplossingen: ../deel-02-oplossingen/deel-02-oplossingen.adoc
+:deel-03-oplossingen: ../deel-03-oplossingen/deel-03-oplossingen.adoc
+:deel-04-oplossingen: ../deel-04-oplossingen/deel-04-oplossingen.adoc
+:deel-05-oplossingen: ../deel-05-oplossingen/deel-05-oplossingen.adoc
+:deel-06-oplossingen: ../deel-06-oplossingen/deel-06-oplossingen.adoc
+:deel-07-oplossingen: ../deel-07-oplossingen/deel-07-oplossingen.adoc
+:deel-08-oplossingen: ../deel-08-oplossingen/deel-08-oplossingen.adoc
+:deel-09-oplossingen: ../deel-09-oplossingen/deel-09-oplossingen.adoc
+:deel-10-oplossingen: ../deel-10-oplossingen/deel-10-oplossingen.adoc
+:deel-11-oplossingen: ../deel-11-oplossingen/deel-11-oplossingen.adoc
+
+// experimental voor kdb: en btn: macro's van AsciiDoctor
+:experimental:
+
