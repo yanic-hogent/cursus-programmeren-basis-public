@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 09 - Oefeningen
 Yanic Inghelbrecht
-v2022.11.08.12.45
+v2022.11.14.14.00
 include::../common/header-oefeningen.adoc[]
 
 
@@ -294,7 +294,7 @@ Of mogelijks...
 3,7,10,14,17,23,30
 ----
 
-Indien het `woorden` array de __andere woorderen__ bevat.
+Indien het `woorden` array de __andere woorden__ bevat.
 
 === Oefening D09durstenfeld
 
