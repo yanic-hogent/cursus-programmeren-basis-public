@@ -28,6 +28,13 @@
 :deel-09-oefeningen: ../deel-09-oefeningen/deel-09-oefeningen.adoc
 :deel-10-oefeningen: ../deel-10-oefeningen/deel-10-oefeningen.adoc
 :deel-11-oefeningen: ../deel-11-oefeningen/deel-11-oefeningen.adoc
+:deel-12-oefeningen: ../deel-12-oefeningen/deel-12-oefeningen.adoc
+:deel-13-oefeningen: ../deel-13-oefeningen/deel-13-oefeningen.adoc
+:deel-14-oefeningen: ../deel-14-oefeningen/deel-14-oefeningen.adoc
+:deel-15-oefeningen: ../deel-15-oefeningen/deel-15-oefeningen.adoc
+:deel-16-oefeningen: ../deel-16-oefeningen/deel-16-oefeningen.adoc
+:deel-17-oefeningen: ../deel-17-oefeningen/deel-17-oefeningen.adoc
+:deel-18-oefeningen: ../deel-18-oefeningen/deel-17-oefeningen.adoc
 
 :deel-01-oplossingen: ../deel-01-oplossingen/deel-01-oplossingen.adoc
 :deel-02-oplossingen: ../deel-02-oplossingen/deel-02-oplossingen.adoc
@@ -40,6 +47,13 @@
 :deel-09-oplossingen: ../deel-09-oplossingen/deel-09-oplossingen.adoc
 :deel-10-oplossingen: ../deel-10-oplossingen/deel-10-oplossingen.adoc
 :deel-11-oplossingen: ../deel-11-oplossingen/deel-11-oplossingen.adoc
+:deel-12-oplossingen: ../deel-12-oplossingen/deel-12-oplossingen.adoc
+:deel-13-oplossingen: ../deel-13-oplossingen/deel-13-oplossingen.adoc
+:deel-14-oplossingen: ../deel-14-oplossingen/deel-14-oplossingen.adoc
+:deel-15-oplossingen: ../deel-15-oplossingen/deel-15-oplossingen.adoc
+:deel-16-oplossingen: ../deel-16-oplossingen/deel-16-oplossingen.adoc
+:deel-17-oplossingen: ../deel-17-oplossingen/deel-17-oplossingen.adoc
+:deel-18-oplossingen: ../deel-18-oplossingen/deel-18-oplossingen.adoc
 
 // experimental voor kdb: en btn: macro's van AsciiDoctor
 :experimental:

@@ -86,6 +86,8 @@ versie {revnumber}
 ** link:deel-pa2-oefeningen/deel-pa2-oefeningen.adoc[Oefeningen]
 ** link:deel-pa2-oplossingen/deel-pa2-oplossingen.adoc[Oplossingen]
 
+* link:deel-sk1/deel-sk1.adoc[Deel SK1] : Snake
+
 * link:deel-12/deel-12.adoc[Deel 12]: Documentatie, afronding, DateTime/Timespan, dot, using en namespaces
 ** link:deel-12-oefeningen/deel-12-oefeningen.adoc[Oefeningen]
 ** link:deel-12-oplossingen/deel-12-oplossingen.adoc[Oplossingen]

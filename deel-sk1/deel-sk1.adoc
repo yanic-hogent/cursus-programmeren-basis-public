@@ -1,0 +1,16 @@
+= Programmeren Basis - Deel SK1
+Yanic Inghelbrecht
+v2022.11.14.14.00
+include::../common/header-theorie.adoc[]
+
+
+//preamble
+[.text-right]
+versie {revnumber}
+ 
+== Snake (TODO)
+
+In dit deel bouwen we het spelletje "Snake".
+
+Dit deel van de cursus moet nog verder worden uitgewerkt, je kunt de voorlopige code link:attachments/snake-v2022-11-10-13-00.zip[in deze zip file] vinden.
+
