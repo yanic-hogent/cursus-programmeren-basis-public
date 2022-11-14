@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 11 - Oefeningen
 Yanic Inghelbrecht
-v2022.10.18.14.30
+v2022.11.13.07.23
 include::../common/header-oefeningen.adoc[]
 
 
@@ -120,7 +120,7 @@ int aantal = GetCharCount("This is a local shop, for local people; there's nothi
 ----
 Na afloop zal `aantal` de waarde `8` bevatten.
 
-Er is natuurlijk link:https://www.youtube.com/watch?v=meF7NmfnXZ0[nog een verband tussen deze opgave en die van oefening D0707, window="_blank"].
+Er is natuurlijk link:https://www.youtube.com/watch?v=meF7NmfnXZ0[nog een verband tussen deze opgave en die van oefening D07aantalkeere, window="_blank"].
 	
 
 
@@ -223,9 +223,6 @@ voor 6 geeft dit 6
 voor 7 geeft dit 6
 voor 8 geeft dit 6
 ----
-
-Dit __clampen__ komt van pas als je een waarde tot een bepaald gebied wil beperken (bv. een spelerspositie binnen het speelveld houden), maar link:https://www.youtube.com/watch?v=9KL50dk9C54[ook in het dagelijks leven,window="_blank"] kun je er vanalles mee doen.
-
 
 === Oefening D11minmax
 // Y10.01
@@ -645,7 +642,7 @@ static void Main() {
 ----
 
 
-=== Oefening D11encrypted
+=== {extra-icon} Oefening D11encrypted
 
 Hieronder staat een code fragment dat demonstreert hoe een `GetEncryptedCodeFor()` method werkt.
 

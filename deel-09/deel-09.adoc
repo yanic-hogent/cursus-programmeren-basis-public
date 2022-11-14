@@ -621,7 +621,7 @@ Een array van `char` waarden definiëren we zo :
 
 [source,csharp,linenums]
 ----
-char[] leestekens = { '.', '!', "?" };
+char[] leestekens = { '.', '!', '?' };
 ----
 
 maar dit is dus een heel ander soort waarde dan een `string` met diezelfde leestekens in :
@@ -1004,8 +1004,8 @@ Er ontstaat een _nieuwe_ string gebaseerd op `tekst`, waarin elk voorkomen van `
 ----
 string tekst = "Help de wereld!";
 
-string tekstMetVerwijdering = tekst.Replace("el", "oo"); // <1>
+string tekstMetVerwijdering = tekst.Replace("el", "oooo"); // <1>
 
 Console.WriteLine(tekstMetVerwijdering);
 ----
-<1> vervang in `tekst` elke `el` door `oo`, de output is `Hoop de werood!`
+<1> vervang in `tekst` elke `el` door `oooo`, de output is `Hoooop de werooood!`

@@ -1,6 +1,6 @@
 ﻿= Programmeren Basis - Deel 10 - Oefeningen
 Frederiek De Wolf
-v2022.10.18.15.15
+v2022.11.14.11.45
 include::../common/header-oefeningen.adoc[]
 
 
@@ -258,6 +258,42 @@ Geef een getal : 5
 Ter info : de faculteit van __3__ is __(1 * 2 * 3)__ en die van __5__ is __(1 * 2 * 3 * 4 * 5)__.
 
 Voorzie in het programma een method `GetFaculteit` met een parameter van type `int` die een `int` waarde produceert.
+
+
+=== Oefening D10intervaloverlap
+
+Schrijf een method `IsOverlappend` die ons kan vertellen of twee intervallen overlappen.
+
+Een interval is een verzameling getallen, bepaald door een ondergrens en een bovengrens en alle getallen daartussen.
+
+Bijvoorbeeld het interval `[34,39]` bevat 34, 39 en alle getallen daartussen.
+
+De method `IsOverlappend` heeft 4 parameters : twee grenzen van interval 1 en twee grenzen van interval 2. De return value geeft aan met `true/false` of de intervallen minstens 1 gemeenschappelijk getal hebben.
+
+[source,csharp,linenums]
+----
+static bool IsOverlappend(int minInterval1, int maxInterval1, int minInterval2, int maxInterval2) { ... }
+----
+
+Je mag er hierbij van uitgaan dat geldt dat `minInterval1 \<= maxInterval1` en `minInterval2 \<= maxInterval2`.
+
+Probeer je method uit met de volgende code en controleer of de output klopt :
+
+[source,csharp,linenums]
+----
+Console.WriteLine( IsOverlappend(3, 6, 4, 10) ); // toont true
+Console.WriteLine( IsOverlappend(4, 10, 3, 6) ); // toont true
+Console.WriteLine( IsOverlappend(3, 6, 6, 10) ); // toont true
+Console.WriteLine( IsOverlappend(6, 10, 3, 6) ); // toont true
+Console.WriteLine( IsOverlappend(3, 6, 7, 10) ); // toont false
+Console.WriteLine( IsOverlappend(7, 10, 3, 6) ); // toont false
+Console.WriteLine( IsOverlappend(6, 6, 7, 7) );  // toont false
+Console.WriteLine( IsOverlappend(7, 7, 6, 6) );  // toont false
+Console.WriteLine( IsOverlappend(6, 6, 3, 10) ); // toont true
+Console.WriteLine( IsOverlappend(3, 10, 6, 6) ); // toont true
+Console.WriteLine( IsOverlappend(6, 6, 6, 10) ); // toont true
+Console.WriteLine( IsOverlappend(6, 10, 6, 6) ); // toont true
+----
 
 
 === Oefening D10temperatuur

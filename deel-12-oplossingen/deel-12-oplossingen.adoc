@@ -1,28 +1,7 @@
 = Programmeren Basis - Deel 12 - Oplossingen
 Yanic Inghelbrecht
-v2022.03.30.11.00
-// toc and section numbering
-:toc: preamble
-:toclevels: 4
-// geen auto section numbering voor oefeningen (handigere titels en toc)
-//:sectnums: 
-:sectlinks:
-:sectnumlevels: 4
-// source code formatting
-:prewrap!:
-:source-highlighter: rouge
-:source-language: csharp
-:rouge-style: github
-:rouge-css: class
-// inject css for highlights using docinfo
-:docinfodir: ../common
-:docinfo: shared-head
-// folders
-:imagesdir: images
-:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
-:deel-12-oplossingen: ../deel-12-oplossingen/deel-12-oplossingen.adoc
-// experimental voor kdb: en btn: macro's van AsciiDoctor
-:experimental:
+v2022.11.14.14.00
+include::../common/header-oplossingen.adoc[]
 
 //preamble
 [.text-right]
@@ -493,6 +472,11 @@ Het is best mogelijk dat deze code nog moet aangepast worden om rekening te houd
 
 
 
+=== Oplossing D12periodeoverlapt {missing-icon}
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
+
+
 == TimeSpan
 
 
@@ -539,7 +523,20 @@ TimeSpan levenstijd = vandaag - geboorteDatum;
 Console.WriteLine($"U bent {levenstijd.TotalDays} dagen oud");
 ----
 
+
+=== Oplossing D12gethuurbedrag {missing-icon}
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
+
+
+
 == Arrays en methods
+
+=== Oplossing D12getresultaat {missing-icon}
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
+
+
 
 === Oplossing D12doorsnede
 

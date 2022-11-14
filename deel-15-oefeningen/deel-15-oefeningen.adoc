@@ -1,33 +1,14 @@
 ﻿= Programmeren Basis - Deel 15 - Oefeningen
 Frederiek De Wolf
-v2022.05.06.10.00
-// toc and section numbering
-:toc: preamble
-:toclevels: 4
-// geen auto section numbering voor oefeningen (handigere titels en toc)
-//:sectnums:  
-:sectlinks:
-:sectnumlevels: 4
-// source code formatting
-:prewrap!:
-:source-highlighter: rouge
-:source-language: csharp
-:rouge-style: github
-:rouge-css: class
-// inject css for highlights using docinfo
-:docinfodir: ../common
-:docinfo: shared-head
-// folders
-:imagesdir: images
-:deel-11-oefeningen: ../deel-11-oefeningen/deel-11-oefeningen.adoc
-:deel-11-oplossingen: ../deel-11-oplossingen/deel-11-oplossingen.adoc
-:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
-// experimental voor kdb: en btn: macro's van AsciiDoctor
-:experimental:
+v2022.11.14.14.00
+include::../common/header-oefeningen.adoc[]
+
 
 //preamble
 [.text-right]
 versie {revnumber}
+
+include::../common/oefeningen-inleiding.adoc[]
 
 // Y4 en Y5 oefeningen zijn hierin verwerkt
 // FDW Oude prog2 oefenening C01-C07 reeds weggevallen of verwerkt in vorige delen

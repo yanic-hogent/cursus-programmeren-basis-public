@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 09 - Oefeningen
 Yanic Inghelbrecht
-v2022.10.25.09.45
+v2022.11.08.12.45
 include::../common/header-oefeningen.adoc[]
 
 
@@ -251,7 +251,7 @@ ruiten aas
 
 === Oefening D09aantalkarakters
 
-Schrijf een programma dat de som van het aantal karaketers van een reeks woorden kan bepalen.
+Schrijf een programma dat de som van het aantal karakters van een reeks woorden kan bepalen.
 
 In je programma begin je met een `woorden` array :
 
@@ -422,11 +422,11 @@ Let op :
 
 Pas link:{deel-09-oplossingen}#_oplossing_d09censuur[de oplossing van D09censuur] aan zodat de eerste en laatste letters van het scheldwoord NIET worden vervangen door een sterretje.
 
-Bijvoorbeeld, `De grootste druiloor van Gent` wordt `De grootste d******r van Gent`.
+Bijvoorbeeld, `De grootste druiloor van Gent` wordt `De grootste d++******++r van Gent`.
 
 Let erop dat ook hier hoodletter / kleine letters bewaard moeten blijven!
 
-Dus bv. `De grootste DruilooR van Gent` wordt `De grootste D******R van Gent`.
+Dus bv. `De grootste DruilooR van Gent` wordt `De grootste D++******++R van Gent`.
 
 
 === Oefening D09langstewoord

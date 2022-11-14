@@ -8,3 +8,13 @@ Als je te ver achterop raakt bij het volgen van deze cursus, dan zul je daar wel
 
 * Heb je wat tijd over : dan helpen de *__aanvullende oefeningen__* (*mét* {extra-icon}) om deze topics nog beter in de vingers te krijgen.
 ======================================
+
+[WARNING]
+======================================
+Enkele aandachtspunten bij het oplossen van deze oefeningen :
+
+* Volg de instructies in de oefeningen *nauwgezet*, je oplossing moet precies doen wat er gevraagd wordt. Als je oplossing slechts "min of meer, ongeveer" aan de opdracht voldoet ga je sommige problemen omzeilen i.p.v. ze op te lossen.
+
+* Gebruik enkel de programmeertechnieken die tot op dit moment in de cursus aan bod kwamen. We zullen verderop in de cursus technieken tegenkomen die tot eenvoudigere oplossingen leiden, maar hier willen we dat je het oplost met de topics die we tot op dit punt in de cursus behandelden.
+
+======================================

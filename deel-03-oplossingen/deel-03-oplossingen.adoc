@@ -182,7 +182,7 @@ double hoogte = double.Parse(hoogteAlsTekst);
 
 double schuineZijde = Math.Sqrt( Math.Pow(basis,2) + Math.Pow(hoogte,2) );
 
-Console.WriteLine($"De lengte van de schuine zijde is {schuineZijder}");
+Console.WriteLine($"De lengte van de schuine zijde is {schuineZijde}");
 ----
 
 

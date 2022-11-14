@@ -1,61 +1,29 @@
 = Programmeren Basis - Deel 12 - Oefeningen
 Yanic Inghelbrecht
-v2022.04.21.15.35
-// toc and section numbering
-:toc: preamble
-:toclevels: 4
-// geen auto section numbering voor oefeningen (handigere titels en toc)
-//:sectnums:  
-:sectlinks:
-:sectnumlevels: 4
-// source code formatting
-:prewrap!:
-:source-highlighter: rouge
-:source-language: csharp
-:rouge-style: github
-:rouge-css: class
-// inject css for highlights using docinfo
-:docinfodir: ../common
-:docinfo: shared-head
-// folders
-:imagesdir: images
-:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
-:deel-12-oplossingen: ../deel-12-oplossingen/deel-12-oplossingen.adoc
-// experimental voor kdb: en btn: macro's van AsciiDoctor
-:experimental:
+v2022.11.14.14.00
+include::../common/header-oefeningen.adoc[]
+
 
 //preamble
 [.text-right]
 versie {revnumber}
-   
-[NOTE]
-======================================
-Het is een aanrader bij elke oefeningenreeks te starten met eventuele *__inleidende oefeningen__*.
-Naast deze focus je vooral op de *__essentiële oefeningen__*.
 
-Heb je tijd over, dan helpen de *__aanvullende oefeningen__* je de stof nog beter in de vingers te krijgen.
-======================================
+include::../common/oefeningen-inleiding.adoc[]
 
-== Inleidende oefening
- 
-=== Documentatie
+== Documentatie
 
+=== Oefening D12documentatie
 
-
-==== Oefening D12documentatie
-
-Zoek de webpagina met de officiële .Net API documentatie over
+Zoek de webpagina met de officiële .NET API documentatie over
 
 * De `Sleep()` method waarmee we ons programma konden laten wachten
 * De `ReadKey()` method met een `bool` parameter
 
 en schrijf de links op waar je deze informatie vond.
 
+== Debugging
 
-
-=== Debugging
-
-==== Oefening D12palindroom
+=== Oefening D12palindroom
 
 Stel dat we onderstaande code zouden overnemen...
 
@@ -164,12 +132,9 @@ Ga op zoek naar de fout.  Start het programma opnieuw op en onderbreek de code o
 
 Maak eventueel gebruik van debugger opties als __Step Into__, __Over__ of __Out__ om stap voor stap door de code te gaan, en zo hopelijk uit te komen op het stukje code dat de __logische fout__ veroorzaakt.
 
+== Kommagetallen en afronden
 
-
-
-=== Kommagetallen en afronden
-
-==== Oefening D12soortenafrondingen
+=== Oefening D12soortenafrondingen
 
 Voorspel *eerst* wat de verschillende afgeronde waarden voor getal `g` zijn in onderstaande tabel.
 
@@ -187,12 +152,9 @@ Voorspel *eerst* wat de verschillende afgeronde waarden voor getal `g` zijn in o
 
 Schrijf *daarna* een programma dat deze waarden voor je berekent.
 
+== Afronden
 
-== Essentiële oefeningen
- 
-=== Afronden
-
-==== Oefening D12gasmaatschappij
+=== Oefening D12gasmaatschappij
 
 Een gasmaatschappij installeert meters die terug naar nul springen eenmaal ze 999999 kubieke meter passeren. 
 
@@ -241,7 +203,7 @@ Het totale verbruik is 80+120 = 200 kubiek :
 ****
 
 
-==== Oefening D12kapitaalnietafgerond
+=== Oefening D12kapitaalnietafgerond
 // Y2.12
 
 Schrijf een programma dat de gebruiker om het startkapitaal vraagt en een intrestvoet (in %).  Je mag ervan uitgaan dat de gebruiker braafjes de gevraagde waarden invoert.
@@ -281,7 +243,7 @@ jaar 20 : 265.33
 
 
 
-==== Oefening D12kapitaalwelafgerond
+=== Oefening D12kapitaalwelafgerond
 // Y2.12
 
 Herschrijf het programma uit de vorige oefening zodat de bank dit keer wel voor elk jaar verder rekent met het afgeronde kapitaal.
@@ -322,7 +284,7 @@ Merk op dat er na 20 jaar `0.02` Euro verschil is naargelang of de bank wel/niet
 
 
 
-==== Oefening D12kortingplusbtw
+=== Oefening D12kortingplusbtw
 // Y2.13
 
 Schrijf een programma dat de gebruiker vraagt om een prijs excl. BTW, een kortingspercentage en een BTW-percentage. Je mag ervan uitgaan dat de gebruiker braafjes de gevraagde waarden invoert.
@@ -355,11 +317,11 @@ LET OP : als je programma voor `incl. BTW` op `134,06` uitkomt klopt er iets nie
 
 
 
-=== DateTime
+== DateTime
 
 
 
-==== Oefening D12tonenmetonderdelen
+=== Oefening D12tonenmetonderdelen
 // Y2.01
 
 Schrijf een programma dat de huidige datum toont, gebruik hierbij de verschillende onderdelen van een `DateTime` waarde opvraagt zoals `.Month` en `.Hour`. Het aantal seconden en fractie van een seconde laat je achterwege.
@@ -373,7 +335,7 @@ De datum van vandaag is 12/11/2019 en het is nu 10u49.
 
 
 
-==== Oefening D12tonenmetformaatstring
+=== Oefening D12tonenmetformaatstring
 // Y2.02
 
 Dit is een (betere) variant van de vorige oefening.
@@ -391,7 +353,7 @@ De datum van vandaag is 12/11/2019 en het is nu 10u49.
 
 
 
-==== Oefening D12seizoen
+=== Oefening D12seizoen
 // Y2.06
 
 Schrijf een programma dat de gebruiker om een datum vraagt en aangeeft in welk weerkundig(!) seizoen deze datum valt.
@@ -420,7 +382,7 @@ Winter
 
 
 
-==== Oefening D12verjaardagen
+=== Oefening D12verjaardagen
 // Y2.03
 
 Schrijf een programma dat de gebruiker om 10 geboortedata vraagt en toont hoeveel verjaardagen er elke maand zijn. 
@@ -443,7 +405,7 @@ In maand 12, 1 verjaardag(en)
 	
 	
 	
-==== Oefening D12bertbeverzondertimespan
+=== Oefening D12bertbeverzondertimespan
 // Y2.04
 
 Schrijf een programma dat de gebruiker vraagt om zo snel mogelijk 2x na elkaar op de dezelfde toets te duwen. 
@@ -472,7 +434,7 @@ Dat waren 2 verschillende toetsen
 	
 
 
-==== Oefening D12feestdagen
+=== Oefening D12feestdagen
 // Y2.05
 
 Schrijf een programma dat de gebruiker om een datum vraagt en aangeeft of die datum dit jaar een feestdag is. 
@@ -516,7 +478,7 @@ Dat is "Dag van de Arbeid" <1>
 
 
 
-==== Oefening D12leeftijdinjaren
+=== Oefening D12leeftijdinjaren
 
 Schrijf een programma dat de geboortedatum van de gebruiker vraagt en vervolgens de huidige datum en de leeftijd van de gebruiker toont.
 
@@ -533,13 +495,95 @@ Als je klaar bent, kijk eens op
 
 om te zien waar je zoal rekening mee had kunnen/moeten houden ;)
 
+=== Oefening D12periodeoverlapt
+
+Schrijf de methods `DatumVanaf`, `Overlapt` en `PeriodeLabel`.
+
+Method `DatumVanaf` zal de gebruiker om een datum vragen en deze `DateTime` opleveren.  De gebruiker zal steeds opnieuw een datum moeten opgeven zolang deze niet gelijk is aan, of volgt op de meegegeven __minimum datum__.  Bij de call `DatumVanaf(datum1, "einddatum van periode 1")` bijvoorbeeld is `datum1` deze __minimum datum__.  Hier zal de gebruiker dus een datum gelijk aan `datum1`, of volgend op `datum1` moeten opgeven.
+
+Method `Overlapt` krijgt vier datums mee (vier `DateTime` parameters).  Per twee vormen ze een __periode__.  
+De eerste is de start van deze __periode__, de tweede het einde.  Start en einde maken beide deel uit van deze __periode__.
+Bij een call als `Overlapt(datum1, datum2, datum3, datum4)` loopt de __eerste periode__ vanaf `datum1` tot en met `datum2`, de __tweede periode__ vanaf `datum3` tot en met `datum4`.  Je weet niet welke __periode__, de __eerste__ of de __tweede__, vroeger start.  De __tweede periode__ zou net zo goed vroeger kunnen starten dan de __eerste__.
+De `Overlapt` method antwoordt in `bool` vorm op de vraag of de __eerste periode__ en __tweede periode__ overlappen.  Indien de startdatum van de __laatste periode__ ligt tussen de start- en einddatum van de __vroegste periode__ overlappen ze.
+
+Method `PeriodeLabel` genereert een eenvoudig `string` label die een __periode__, afgebakend door de twee meegegeven datums, voorstelt.  Bijvoorbeeld __20/11/2022 - 18/12/2022__ of __24/12/2022 - 08/01/2023__.  Je kan hier, voor de omzetting van `DateTime` naar `string`, de __formatstring "dd/MM/yyyy"__ inzetten.
+
+Vul volgende code aan...
+
+[source, csharp, linenums]
+----
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Opvragen start- en einddatum van periode 1...
+            DateTime datum1 = Datum("startdatum van periode 1");
+            DateTime datum2 = DatumVanaf(datum1, "einddatum van periode 1");
+
+            // Opvragen start- en einddatum van periode 2...
+            DateTime datum3 = Datum("startdatum van periode 2");
+            DateTime datum4 = DatumVanaf(datum3, "einddatum van periode 2");
+
+            // Controleren of deze periodes overlappen...
+            string overlappen = "overlappen";
+            if (!Overlapt(datum1, datum2, datum3, datum4)) overlappen += " niet";
+
+            // Afprinten van de output...
+            Console.Write($"Periode 1 ({PeriodeLabel(datum1, datum2)}) en periode 2 ({PeriodeLabel(datum3, datum4)}) {overlappen}.");
+        }
+
+        static DateTime Datum(string omschrijving)
+        {
+            return DatumVanaf(DateTime.MinValue, omschrijving);  // <4>
+        }
+
+        // <1>
+	
+	// <2>
+	
+	// <3>
+    }
+----
+<1> Vul hier aan met method `DatumVanaf`.
+<2> Vul hier aan met method `Overlapt`.
+<3> Vul hier aan met method `PeriodeLabel`.
+<4> Method `Datum` zal net als `DatumVanaf` een `DateTime` value opleveren die ten vroegste een bepaalde "minimum datum" zal zijn.  In dit geval wordt met `DateTime.MinValue` als argumentwaarde gewerkt bij de call naar `DatumVanaf`.  `DateTime.MinValue` zal de vroegst mogelijk datum reprensenteerbaar aan de hand van het `DateTime` opleveren.
+
+De uitvoer is...
+
+[source, shell]
+----
+Geef startdatum van periode 1 (dd/mm/jjjj) : 24/12/2022
+Geef einddatum van periode 1 (dd/mm/jjjj) : 08/01/2023
+Geef startdatum van periode 2 (dd/mm/jjjj) : 20/11/2022
+Geef einddatum van periode 2 (dd/mm/jjjj) : 18/12/2022
+Periode 1 (20/11/2022 - 18/12/2022) en periode 2 (24/12/2022 - 08/01/2023) overlappen niet.
+----
+
+Hierbij is nagegaan of de kerstvakantie van 2022 (periode 1) __overlapt met__ het WK voetbal 2022 (periode 2).
+
+Zelfs al zou hier het __WK__ lopen tot en met __24/12/2022__ dan nog is er geen sprake van overlap.  Dat zou wel het geval zijn bij einddatum __25/12/2022__.  Test het ook eens uit met die datums.
+
+Zolang de gebruiker een einddatum opgeeft die voor de startdatum (__minimum datum__) valt, krijgt hij een foutmelding te zien, en moet hij een nieuw datum opgeven...
+
+[source, shell]
+----
+Geef startdatum van periode 1 (dd/mm/jjjj) : 24/12/2022
+Geef einddatum van periode 1 (dd/mm/jjjj) : 08/01/2023
+Geef startdatum van periode 2 (dd/mm/jjjj) : 20/11/2022
+Geef einddatum van periode 2 (dd/mm/jjjj) : 18/12/2020
+De datum moet minstens 20/11/2022 zijn (of verder).
+Geef einddatum van periode 2 (dd/mm/jjjj) : 18/12/2021
+De datum moet minstens 20/11/2022 zijn (of verder).
+Geef einddatum van periode 2 (dd/mm/jjjj) : 18/12/2022
+Periode 1 (24/12/2022 - 08/01/2023) en periode 2 (20/11/2022 - 18/12/2022) overlappen niet.
+----
+
+== TimeSpan
 
 
-=== TimeSpan
 
-
-
-==== Oefening D12bertbevermettimespan
+=== Oefening D12bertbevermettimespan
 
 Neem link:{deel-12-oplossingen}#_oplossing_d12bertbeverzondertimespan[de oplossing van D12bertbeverzondertimespan] erbij. Dit was de oefening waarin de tijd gemeten werd tussen twee toetsdrukken van de gebruiker.
 
@@ -547,7 +591,7 @@ Herwerk de oplossing en probeer de `TimeSpan` mogelijkheden optimaal te benutten
 
 
 
-==== Oefening D12leeftijdindagen
+=== Oefening D12leeftijdindagen
 
 Schrijf een programma dat de geboortedatum van de gebruiker vraagt en toont hoeveel dagen oud de gebruiker is.
 
@@ -562,9 +606,72 @@ U bent 7296 dagen oud
 ----
 
 
-=== Arrays en methods
+=== Oefening D12gethuurbedrag
 
-==== Oefening D12doorsnede
+Schrijf een method `GetHuurBedrag` die de huurprijs van een gehuurd apparaat kan berekenen :
+
+[source,csharp,linenums]
+----
+static double GetHuurBedrag(DateTime afgehaald, DateTime teruggebracht, double dagPrijs) { ... }
+----
+
+De method heeft 2 parameters die de momenten aanduiden waarop het apparaat werd afgehaald en teruggebracht, alsook een parameter die de prijs per gehuurde dag voorstelt.
+
+De method berekent het aantal dagen tussen die 2 momenten en vermenigvuldigt dit met de prijs per dag. Elke begonnen "dag" moet *volledig* betaald worden, er worden geen stukjes van dagen verrekend. Je mag ervan uitgaan dat het `teruggebracht` moment altijd NA het `afgehaald` moment ligt.
+
+Schrijf een `Main` method waarin je de return value van de volgende oproepen op de console zet :
+
+[source, csharp, linenums]
+----
+GetHuurBedrag( new DateTime(2022, 11, 20, 16, 45, 00), new DateTime(2022, 11, 20, 17, 15, 00), 10 ); <1>
+GetHuurBedrag( new DateTime(2022, 11, 20, 16, 45, 00), new DateTime(2022, 11, 23, 16, 15, 00), 10 ); <2>
+GetHuurBedrag( new DateTime(2022, 11, 20, 16, 45, 00), new DateTime(2022, 11, 23, 17, 15, 00), 10 ); <3>
+----
+<1> resultaat is 10
+<2> resultaat is 30
+<3> resultaat is 40
+
+== Arrays en methods
+
+=== Oefening D12getresultaat
+
+Schrijf een method `GetResultaat` die de uitslag van een partij spelletjes van twee spelers kan bepalen.
+
+De method heeft 2 parameters die de scores van de twee spelers voorstellen en een return value die het resultaat van de partij aangeeft :
+
+[source,csharp,linenums]
+----
+static int GetResultaat(int[] scoresSpeler1, int[] scoresSpeler2) { ... }
+----
+
+Je mag ervan uitgaan dat de beide arrays steeds evenveel elementen bevatten. Elk array bevat de scores van een speler voor elk van de gespeelde spelletjes. 
+
+Per gespeeld spel, wint de hoogste score. De method moet dus tellen hoe vaak speler 1 won en hoe vaak speler 2 won (bij gelijke score wint er niemand).
+
+De return value geeft aan wie er won, en wel als volgt :
+
+* return value is `< 0` : speler 1 heeft de meeste spelletjes gewonnen
+* return value is `> 0` : speler 2 heeft de meeste spelletjes gewonnen
+* return value is `0` : er is geen winnaar
+
+Je mag zelf kiezen welke waarden je method retourneert. Indien bv. speler 1 wint mag de return value `-1` zijn, of `-100`, of `-33`, .. zolang de return value maar `< 0` is.
+
+Je kunt je method uitproberen met de volgende code in de `Main` method :
+
+[source,csharp,linenums]
+----
+int[] scoresA = {3, 7, 10};
+int[] scoresB = {4, 6, 9};
+int[] leeg = {};
+
+Console.WriteLine( GetResultaat(scoresA, scoresB) ); // toont negatief getal want speler 1 wint
+Console.WriteLine( GetResultaat(scoresB, scoresA) ); // toont positief getal want speler 2 wint
+Console.WriteLine( GetResultaat(scoresA, scoresA) ); // toont zero want gelijkspel
+Console.WriteLine( GetResultaat(leeg, leeg)       ); // toont zero want gelijkspel
+----
+
+
+=== Oefening D12doorsnede
 
 Schrijf een method `Doorsnede` die een array kan opleveren opgevuld met alle waardes die in twee andere arrays met getallen voorkomen.  
 
@@ -612,7 +719,7 @@ Doorsnede: 2,34
 geen doorsnede
 ----
 
-==== Oefening D12frequenties
+=== Oefening D12frequenties
 
 Maak een console applicatie dat *de gebruiker om __10 getallen__ vraagt*.
 
@@ -649,11 +756,7 @@ Frequenties:
   789 komt 4 voor
 ----
 
-== Aanvullende oefeningen
-
-=== Arrays en methods
-
-==== Oefening D12gemeenteraad
+=== {extra-icon} Oefening D12gemeenteraad
 
 Elke gemeente verkies bij de gemeenteraadsverkiezing een aantal raadsleden.  Elk raadslid krijgt een __zetel__ in de gemeenteraad.  
 
@@ -787,9 +890,9 @@ Voor __Gent__ zal de `Print` method het volgende weergeven:
 
 Test het ook nog eens voor __je eigen gemeente__, de resultaten kan je hier controleren: https://vlaanderenkiest.be/verkiezingen2018/
 
-=== Console invoer en methods
+== Console invoer en methods
 
-==== Oefening D12morsebeep
+=== {extra-icon} Oefening D12morsebeep
 
 Maak een programma dat meteen van ingetoetste karakers (letter __a__ tot en met __z__ worden aanvaard) de *__morse code__* gaat beepen.
 

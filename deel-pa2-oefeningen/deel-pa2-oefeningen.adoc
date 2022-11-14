@@ -192,7 +192,7 @@ U ben dus 25 jaar oud
 
 Merk op dat de antwoorden `0` en `99` ook zouden aanvaard worden (wegens grenzen inclusief).
 
-Indien de gebruiker een leeg antwoord geeft (of enkel whitespace, bv. 3 spaties) ziet de uivoering er zo uit :
+Indien de gebruiker een leeg antwoord geeft (of enkel whitespace, bv. 3 spaties) ziet de uitvoering er zo uit :
 
 [source,shell]
 ----

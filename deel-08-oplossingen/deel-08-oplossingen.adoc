@@ -87,11 +87,11 @@ System.Threading.Thread.Sleep(3000);
 Random rnd = new Random();
 while (true) {
 	// Kies een willekeurig lichaamsdeel
-	randomIndex = rnd.Next(0, 4);
+	int randomIndex = rnd.Next(0, 4);
 	string lichaamsdeel = lichaamsdelen[randomIndex]; // <1>
 
 	// kies een willekeurige kleur
-	int randomIndex = rnd.Next(0, 4);
+	randomIndex = rnd.Next(0, 4);
 	string kleur = kleuren[randomIndex];              // <1>
 
 	// toon de opdracht

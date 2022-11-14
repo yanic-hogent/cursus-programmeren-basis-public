@@ -1,27 +1,7 @@
 = Programmeren Basis - Deel 16 - Oplossingen
 Yanic Inghelbrecht
-v2022.05.06.10.00
-// toc and section numbering
-:toc: preamble
-:toclevels: 4
-// geen auto section numbering voor oefeningen (handigere titels en toc)
-//:sectnums: 
-:sectlinks:
-:sectnumlevels: 4
-// source code formatting
-:prewrap!:
-:source-highlighter: rouge
-:source-language: csharp
-:rouge-style: github
-:rouge-css: class
-// inject css for highlights using docinfo
-:docinfodir: ../common
-:docinfo: shared-head
-// folders
-:imagesdir: images
-:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
-// experimental voor kdb: en btn: macro's van AsciiDoctor
-:experimental:
+v2022.11.14.14.00
+include::../common/header-oplossingen.adoc[]
 
 //preamble
 [.text-right]
@@ -544,7 +524,7 @@ Console.WriteLine($"unieke getallen : {uniekeGetallenTekst}");
 <1> Vanaf hier verschilt het programma van oplossing D16uniekegetalleninvoeren en volgen we de drie stappen.
 
 
-=== Oplossing D16socialmediafilter
+=== Oplossing D16socialmediafilter {missing-icon}
 
 Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
 

@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 10 - Oplossingen
 Frederiek De Wolf
-v2022.10.19.17.00
+v2022.11.14.11.45
 include::../common/header-oplossingen.adoc[]
 
 
@@ -355,6 +355,12 @@ static int GetFaculteit(int getal) {
 	return result;
 }
 ----
+
+
+=== Oplossing D10intervaloverlap {missing-icon}
+
+Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
+
 
 
 === Oplossing D10temperatuur

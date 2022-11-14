@@ -1,27 +1,7 @@
 = Programmeren Basis - Deel 17 - Oplossingen
 Yanic Inghelbrecht
-v2022.05.06.10.00
-// toc and section numbering
-:toc: preamble
-:toclevels: 4
-// geen auto section numbering voor oefeningen (handigere titels en toc)
-//:sectnums: 
-:sectlinks:
-:sectnumlevels: 4
-// source code formatting
-:prewrap!:
-:source-highlighter: rouge
-:source-language: csharp
-:rouge-style: github
-:rouge-css: class
-// inject css for highlights using docinfo
-:docinfodir: ../common
-:docinfo: shared-head
-// folders
-:imagesdir: images
-:url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
-// experimental voor kdb: en btn: macro's van AsciiDoctor
-:experimental:
+v2022.11.14.14.00
+include::../common/header-oplossingen.adoc[]
 
 //preamble
 [.text-right]
@@ -69,7 +49,7 @@ while (true) {
 <2> Zoek de uitleg voor het scheldwoord op.
 
 
-=== Oplossing D17morse
+=== Oplossing D17morse {missing-icon}
 
 Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
 
@@ -229,12 +209,12 @@ Console.WriteLine($"Telefoonnummer is : {telefoon}");
 <2> we zetten de tekst om naar hoofdletters omdat `letterToDigit` alleen hoofdletters bevat en geen kleine letters.
 
 
-=== Oplossing D17gecombineerdetellingen
+=== Oplossing D17gecombineerdetellingen {missing-icon}
 
 Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
 
 
-=== Oplossing D17gemiddeldetellingen
+=== Oplossing D17gemiddeldetellingen {missing-icon}
 
 Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
 

@@ -368,7 +368,7 @@ static int BepaalMaximum(int[] getallen) {
 Een oplossing zonder deze speciale waarden kan natuurlijk ook, bv. door `min` en `max` te initialiseren met het eerste element uit het array.
 
 
-=== Oplossing D11bevatwaarde ☒
+=== Oplossing D11bevatwaarde {missing-icon}
 
 Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
 
