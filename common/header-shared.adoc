@@ -17,6 +17,26 @@
 :imagesdir: images
 :url-verdieping: ../{docname}-verdieping/{docname}-verdieping.adoc
 
+:deel-00: ../deel-00/deel-00.adoc
+:deel-01: ../deel-01/deel-01.adoc
+:deel-02: ../deel-02/deel-02.adoc
+:deel-03: ../deel-03/deel-03.adoc
+:deel-04: ../deel-04/deel-04.adoc
+:deel-05: ../deel-05/deel-05.adoc
+:deel-06: ../deel-06/deel-06.adoc
+:deel-07: ../deel-07/deel-07.adoc
+:deel-08: ../deel-08/deel-08.adoc
+:deel-09: ../deel-09/deel-09.adoc
+:deel-10: ../deel-10/deel-10.adoc
+:deel-11: ../deel-11/deel-11.adoc
+:deel-12: ../deel-12/deel-12.adoc
+:deel-13: ../deel-13/deel-13.adoc
+:deel-14: ../deel-14/deel-14.adoc
+:deel-15: ../deel-15/deel-15.adoc
+:deel-16: ../deel-16/deel-16.adoc
+:deel-17: ../deel-17/deel-17.adoc
+:deel-18: ../deel-18/deel-18.adoc
+
 :deel-01-oefeningen: ../deel-01-oefeningen/deel-01-oefeningen.adoc
 :deel-02-oefeningen: ../deel-02-oefeningen/deel-02-oefeningen.adoc
 :deel-03-oefeningen: ../deel-03-oefeningen/deel-03-oefeningen.adoc

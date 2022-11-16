@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 12
 Yanic Inghelbrecht
-v2022.11.14.14.00
+v2022.11.16.21.00
 include::../common/header-theorie.adoc[]
 
 
@@ -33,7 +33,7 @@ Op elke pagina zie je in de zijbalk wel iets staan over __classes__, __fields__,
 
 === Numerieke datatypes en (impliciete) afrondingsfouten
 
-In deel 0 zagen we dat waarden in een computer voorgesteld worden door combinaties van *bits*. In onze programma's legt het *datatype* van een variabele vast welk soort waarde we in de opslagplaats kunnen bijhouden.
+In link:{deel-00}[deel 00] zagen we dat waarden in een computer voorgesteld worden door combinaties van *bits*. In onze programma's legt het *datatype* van een variabele vast welk soort waarde we in de opslagplaats kunnen bijhouden.
 
 Voor getallen hebben we tot nu toe vooral gewerkt met `int` en `double`. 
 Er bestaan in C# echter veel meer numerieke datatypes. Ze verschillen o.a. in het aantal bits dat gebruikt wordt om de numerieke waarde voor te stellen.
@@ -338,7 +338,6 @@ Indien je een andere afrondingsstrategie wil gebruiken, moet je een variant gebr
 | Method | Resultaat type | Afronden naar ...
 
 | `Math.Round(getal, strategie)` | zelfde type als `getal` | hangt af van de `strategie` parameter (*)
-| `Math.Round(getal, strategie)` | zelfde type als `getal` | hangt af van de `strategie` parameter (*)
 |====
 
 Die `strategie` is een waarde van de link:https://docs.microsoft.com/en-us/dotnet/api/system.midpointrounding[enumeratie MidpointRounding]. De gebruikelijk afronding uit het dagelijks leven voor getallen die eindigen op `.5` is wellicht `MidpointRounding.AwayFromZero`.
@@ -381,7 +380,7 @@ Als je een kommagetal wil afronden tot op `n` cijfers na de komma, kun je deze v
 |====
 | Method | Resultaat type | Afronden op `n` cijfers na de komma met
 
-| `Math.Round(getal, n)` | zelfde type als `getal | "round half to even" ofte "banker’s rounding" strategie
+| `Math.Round(getal, n)` | zelfde type als `getal` | "round half to even" ofte "banker’s rounding" strategie
 | `Math.Round(getal, n, strategie)` | zelfde type als `getal` | hangt af van de `strategie` parameter (*)
 |====
 
@@ -457,12 +456,12 @@ De output van dit programma is :
 
 De `double` waarde voor `1.375` heeft als derde cijfer na de komma netjes een `5` (zoals verwacht), maar die voor `1.275` heeft dit niet. Als je dus laat afronden op twee cijfers na de komma, zal de opgegeven `MidpointRounding` strategie niet meespelen bij de `double` waarde voor `1.275`.
 
-Er wordt in dit voorbeeld gebruik gemaakt van de __format strings__ '0:f20').
+Er wordt in dit voorbeeld gebruik gemaakt van de __format string__ '0:f20' om het kommagetal helemaal te tonen (zie hieronder).
 ****
 
 ==== Interne waarden afronden of pas afronden bij output?
 
-In deel 07 kwam aan bod hoe we bij het omzetten van een kommagetal naar een geformatteerde string, ook al een expliciete afronding konden bekomen. Dit werkt natuurlijk ook met `decimal` waarden.
+In link:{deel-07}[deel 07] kwam aan bod hoe we bij het omzetten van een kommagetal naar een geformatteerde string, ook al een expliciete afronding konden bekomen. Dit werkt natuurlijk ook met `decimal` waarden.
 
 ****
 [.underline]#Voorbeeld van een geformatteerde string met afronding voor een decimal waarde#
@@ -493,7 +492,8 @@ Je moet je echter de vraag stellen : als je aan de gebruiker een afgerond tussen
 
 Hier is geen algemeen antwoord op te geven, het hangt af van de situatie.
 
-Bijvoorbeeld, op een factuur komen doorgaans meerdere regels met (afgeronde) bedragen voor, wiens som dan onderaan als totaalbedrag staat. Klanten verwachten natuurlijk dat het getoonde totaal daadwerkelijk overeenkomt met de som van de getoonde bedragen.
+Bijvoorbeeld, op een factuur komen doorgaans meerdere regels met (afgeronde) bedragen voor, wiens som dan onderaan als totaalbedrag staat. Klanten verwachten natuurlijk dat het getoonde totaal daadwerkelijk overeenkomt met de som van de getoonde bedragen. In link:{deel-12-oefeningen}#_oefening_d12kortingplusbtw[oefening D12kortingplusbtw] vind je hier een voorbeeld van.
+
 
 == DateTime en TimeSpan
 
