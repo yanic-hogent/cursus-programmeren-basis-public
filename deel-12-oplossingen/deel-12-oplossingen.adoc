@@ -90,7 +90,7 @@ foreach(decimal g in waarden) {
 ----
 
 
-=== Oplossing D12gasmaatschappij
+=== Oplossing D12gasmaatschappij {missing-icon}
 
 Voor deze oefening is er geen voorbeeld oplossing beschikbaar.
 
