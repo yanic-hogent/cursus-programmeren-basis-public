@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 12 - Oefeningen
 Yanic Inghelbrecht
-v2022.11.14.14.00
+v2022.11.22.10.00
 include::../common/header-oefeningen.adoc[]
 
 
@@ -557,7 +557,7 @@ Geef startdatum van periode 1 (dd/mm/jjjj) : 24/12/2022
 Geef einddatum van periode 1 (dd/mm/jjjj) : 08/01/2023
 Geef startdatum van periode 2 (dd/mm/jjjj) : 20/11/2022
 Geef einddatum van periode 2 (dd/mm/jjjj) : 18/12/2022
-Periode 1 (20/11/2022 - 18/12/2022) en periode 2 (24/12/2022 - 08/01/2023) overlappen niet.
+Periode 1 (24/12/2022 - 08/01/2023) en periode 2 (20/11/2022 - 18/12/2022) overlappen niet.
 ----
 
 Hierbij is nagegaan of de kerstvakantie van 2022 (periode 1) __overlapt met__ het WK voetbal 2022 (periode 2).
