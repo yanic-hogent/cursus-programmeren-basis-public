@@ -88,7 +88,7 @@ Zal bij uitvoer tot op die regel de __call stack__, en __overige variabelen op d
 [cols="3,2", options="header"]
 |===
 |Call Stack|Overige variabelen op het activatie record
-|`PrintDubbele(int getal = 123)` gebroken op __regel 11__|`int getal = 123`
+|`PrintDubbele(int getal = 123)` gebroken op __regel 11__|`int getal = 123` en `int dubbele = 246`
 |`Main()` invoceert op __regel 3__ bovenstaande activatie|`int a = 123` en `int b = 0` 
 |===
 
