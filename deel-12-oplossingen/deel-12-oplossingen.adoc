@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 12 - Oplossingen
 Yanic Inghelbrecht
-v2022.11.14.14.00
+v2022.11.29.15.00
 include::../common/header-oplossingen.adoc[]
 
 //preamble
@@ -636,13 +636,9 @@ class Program {
         // bij het eerste voorkomen van dat getal.
         frequenties[0] = 1;
         for (int i = 1; i < getallen.Length; i++) {
-            // Ga naar het eerste voorkomen van dat getal, en verhoog daar met 1...
-            for (int j = 0; j <= i; j++) {
-                if (getallen[j] == getallen[i]) {
-                    frequenties[j]++;
-                    break;
-                }
-            }
+            // Ga naar het eerste voorkomen van dat getal op positie `j`, en verhoog die frequentie.
+            int j = Array.IndexOf(getallen, getal);
+            frequenties[j]++;
         }
 
         // Afdrukken:
@@ -655,6 +651,7 @@ class Program {
     }
 }
 ----
+<1> Gans deze binnenste loop kan vervangen worden door `int j = Array.IndexOf(getallen, getal);    frequenties[j]++;`.
 
 === Oplossing D12gemeenteraad
 

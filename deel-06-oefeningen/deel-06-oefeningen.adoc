@@ -399,9 +399,11 @@ De som van tussenliggende 3-vouden en 5-vouden is 217 <1>
 === Oefening D06rechthoekopmaat
 // Y6.02
 
-Breid het vorige programma uit zodat de gebruiker om 2 positieve getallen wordt gevraagd (breedte en hoogte). Het programma toont dan een rechthoek met de gevraagde afmetingen.
+Schrijf een programma dat de gebruiker om 2 positieve getallen vraagt (breedte en hoogte) en vervolgens een rechthoek toont met de gevraagde afmetingen.
 
 Dit is quasi dezelfde opgave als in link:{deel-05-oefeningen}#_oefening_d05rechthoek[oefening D05rechthoek], maar baseer je oplossing voor het tekenen van de rechthoek op 1 of meerdere for loops.
+
+Zorg ervoor dat het programma de vragen herhaalt zolang de gebruiker geen deftig getal invoert (d.w.z. gebruik `TryParse` ipv `Parse`).
 
 Een voorbeeld uitvoering :
 

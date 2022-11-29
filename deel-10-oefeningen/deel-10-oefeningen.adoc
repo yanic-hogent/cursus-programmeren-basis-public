@@ -103,7 +103,7 @@ Pas de method `ToonVierkant` aan zodat een parameter `zijde` wordt meegegeven di
 
 Schrijf een method `ToonRechthoek` met 2 parameters (`breedte` en `hoogte`) die een rechthoek van sterretjes op de console zet. 
 
-Het programma vraagt de gebruiker om een `breedte` en een `hoogte`, en toont vervolgens een rechthoek van die afmeting.
+Het programma vraagt de gebruiker om een `breedte` en een `hoogte`, en toont vervolgens een rechthoek van die afmeting. Indien de gebruiker geen keurige getallen invoert, blijft het programma de vraag herhalen.
 
 Baseer je hierbij op de oplossing van oefening link:{deel-06-oefeningen}#_oefening_d06rechthoekopmaat[oefening D06rechthoekopmaat].
 

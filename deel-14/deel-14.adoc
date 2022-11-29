@@ -175,8 +175,10 @@ class Persoon {
 	}
 }
 ----
+<1> een dataveld `_naam`
+<2> een dataveld `_geboortedatum`
 
-<1> <2> We hebben twee *datavelden* (soms ook gewoon __velden__ genoemd) voor het bijhouden van de toestand van onze verschillende `Persoon` instanties:
+We hebben twee *datavelden* (soms ook gewoon __velden__ genoemd) voor het bijhouden van de toestand van onze verschillende `Persoon` instanties:
 
 - `_naam` van type `string` voor het bijhouden van de naam
 - `_geboortedatum` van type `DateTime` voor het bijhouden van de geboortedatum
@@ -258,15 +260,15 @@ Om te antwoorden op de vragen:
 - wat is zijn geboortedatum  (`GetGeboortedatum`)
 - wat is zijn leeftijd (`Leeftijd`)
 
-Moet elke object minstens beschikken over de kennis 
+Moet elk object minstens beschikken over de kennis 
 
-- wat de naam is => `string _naam`, want daarmee kan het gedrag van `GetNaam` vervuld worden
-- wat de geboortedatum is => `string _geboortedatum`, want daarmee kan `GetGeboortedatum` en `Leeftijd` vervuld worden
+- wat de naam is, dit geeft ons `string _naam` want daarmee kan het gedrag van `GetNaam` vervuld worden
+- wat de geboortedatum is, dit geeft ons `string _geboortedatum` want daarmee kan `GetGeboortedatum` en `Leeftijd` vervuld worden
 ****
 
 Op basis van het gewenste gedrag beslis je welke __toestand__ objecten van een bepaalde klasse kunnen aannemen.
 
-Of anders uitgedrukt: je voorziet voldoende datavelden om te kunnen voldoen aan het gedrag die de methods moeten implementeren.
+Of anders uitgedrukt: je voorziet voldoende datavelden om te kunnen voldoen aan het gedrag dat de methods moeten implementeren.
 
 === Terminologie
 

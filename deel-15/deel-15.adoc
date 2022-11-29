@@ -10,9 +10,9 @@ versie {revnumber}
 
 == Constructoren
 
-Om meteen bij het aanmaken van objecten initiële informatie te voorzien, kan je gebruik maken van een *constructor*.
+Om meteen bij het aanmaken van een object al wat informatie mee te geven, kan je gebruik maken van een *constructor*.
 
-Zo kan je het gecreëerde object meteen in een zinvolle toestand brengen.  De constructor heeft immers de datavelden geïnitialiseerd.
+De constructor kan de datavelden initialiseren en zo het nieuwe object meteen in een zinvolle toestand brengen.
 
 [discrete]
 === De situatie tot dusver
@@ -25,7 +25,7 @@ DateTime geboortedatum = new DateTime(2000, 1, 1);
 
 Persoon p1 = new Persoon();           // <1>
 p1.SetNaam("Jan");                    // <2>
-p1.SetGeboortedatum(geboortedatum);  
+p1.SetGeboortedatum(geboortedatum);   // <2>
 
 Persoon p2 = new Persoon();
 ----
@@ -42,7 +42,7 @@ Console.WriteLine(p2.Leeftijd());  // <2>
 <1> Levert een zinvol antwoord, bijvoorbeeld __21__ (in het jaar __2021__).
 <2> Levert geen zinvol antwoord, bijvoorbeeld __2020__ (in het jaar __2021__).
 
-`p2.Leeftijd()` levert geen zinvol antwoord, het `p2` object is immers louter aangemaakt, maar bevat nog geen betekenisvolle toestand.
+`p2.Leeftijd()` levert geen zinvol antwoord omdat `p2` object weliswaar is aangemaakt maar nog zinvolle data bevat.
 
 Voor de volledigheid, nog eens de code van de `Persoon` klasse...
 
@@ -83,7 +83,9 @@ class Persoon {
 
 === Eenvoudiger objecten maken via constructoren
 
-De typische opeenvolging van eerst een object aan te maken, om meteen daarna informatie in te stellen, kan eenvoudiger.  Vaak wil je meteen bij het aanmaken initiële informatie voor objecten voorzien.  Bijvoorbeeld...
+De typische opeenvolging van __'eerst een object aan te maken en meteen daarna informatie instellen'__, kan eenvoudiger. 
+
+Meestal wil je meteen bij het aanmaken van een object al direct de nodig informatie voorzien. Bijvoorbeeld...
 
 [source,csharp,linenums]
 ----
@@ -92,14 +94,14 @@ DateTime geboortedatum = new DateTime(2000, 1, 1);  // <1>
 Persoon p1 = new Persoon("Jan", geboortedatum);     // <2>
 Console.WriteLine(p1.Leeftijd());
 ----
-<1> Net zoals we bij het aanmaken van `DateTime` meteen opgeven dat gewerkt wordt met __jaar 2000__, __maand 1__ en __dag 1__...
-<2> ...wens je misschien wel bij het creëren van een `Persoon` meteen de __naam__ en __geboortedatum__ te kunnen voorzien.
+<1> Bij het aanmaken van een `DateTime`, geven we meteen mee dat het gaat om __jaar 2000__, __maand 1__ en __dag 1__.
+<2> Bij het aanmaken van een `Persoon`, geven we meteen de __naam__ en __geboortedatum__ mee.
 
-Voor het `DateTime` datatype werd zoiets dus reeds mogelijk gemaakt.  Om dat mogelijk te maken voor je eigen datatype voeg je aan de klasse die dat datatype definieert een __constructor__ toe.  
+Voor het `DateTime` datatype werd zoiets dus reeds mogelijk gemaakt door iemand bij Microsoft.  Om hetzelfde te bereiken voor je eigen datatype, moet je een __constructor__ toevoegen aan de klasse van je datatype.  
 
 === Constructor definiëren
 
-Een __constructor__ is een *speciaal soort method om objecten bij constructie te initialiseren*.  
+Een __constructor__ is *een speciaal soort method om objecten bij constructie te initialiseren*.  
 
 Een constructor heeft *geen teruggeeftype (zelfs niet void!)*, en moet dezelfde naam hebben als de klasse. Bijvoorbeeld...
 
@@ -142,7 +144,7 @@ class Persoon {
 <1> De constructor verwacht een `string naam` en een `DateTime geboortedatum`.
 <2> De ontvangen waardes worden aan de gepaste datavelden toegekend.
 
-Het is deze constructor die *automatisch wordt aangeroepen bij het aanmaken van een object*, bijvoorbeeld bij: `new Persoon("Jan", geboortedatum)`
+Het is deze constructor die *automatisch wordt aangeroepen bij het aanmaken van een object*, bijvoorbeeld bij `new Persoon("Jan", geboortedatum)`
 
 Merk op dat de constructor *datavelden initialiseert*.  
 Doorgaans doet de constructor niet veel meer dan de parameters kopiëren naar de datavelden.  
@@ -150,7 +152,7 @@ Doorgaans doet de constructor niet veel meer dan de parameters kopiëren naar de
 .Constructor bovenaan in een klasse definiëren
 [NOTE]
 ====
-Het is zeker geen technische vereiste, maar typisch zijn de constructoren de eerste members die je in een klasse ziet staan. 
+Het is zeker geen technische vereiste, maar typisch zijn de constructoren de eerste methods die je in een klasse ziet staan. 
 ====
 
 .Wanneer gebruiken we een Get of Set prefix?
@@ -189,7 +191,7 @@ class Factuur {
 
 In dit geval gaat deze constructor louter het veld `_vervaldatum` initialiseren.
 
-De *default constructor is `public` en parameterloos*.  Dit maakt het mogelijk een __"leeg object"__ te creëren (in een __default toestand__).   
+De *default constructor is `public` en parameterloos* en laat toe om een object te creëren zonder bijkomende informatie mee te (moeten) geven. De code van deze _default constructor_ zal het object in een zinvolle __default toestand__ brengen na constructie.
 
 `new` laten we volgen door de naam van het datatype en ronde haakjes, zonder dat waardes tussen de haakjes worden opgegeven.  Bijvoorbeeld...
 
@@ -201,13 +203,13 @@ Factuur f1 = new Factuur();  // <1>
 
 [NOTE]
 ====
-Indien je zelf geen enkele constructor in je klasse definieert, dan zal de compiler automatisch een default constructor toevoegen. Dit gebeurt achter de schermen, we zien dit niet expliciet in de code opduiken). 
+Indien je zelf geen enkele constructor in je klasse definieert, dan zal de compiler automatisch een default constructor toevoegen. Dit gebeurt achter de schermen, we zien dit niet expliciet in de code opduiken. 
 
 Deze 'impliciete' default constructor is dus `public` en parameterloos en bevat ook geen specifieke implementatie (__het doet niets__).
 
 De aanwezigheid van een default constructor is best handig in quasi elke klasse die we maken.  Zodra je een klasse gaat definiëren, bijvoorbeeld `class Gebouw { ... }`, kan je die bijgevolg meteen ook (zonder parameterwaardes) instantiëren, bijvoorbeeld: `new Gebouw()`.
 
-Indien je zelf een constructor in een klasse definieert (met of zonder parameters), wordt er op de achtergrond [.underline]#geen# constructor meer toegevoegd.
+*Belangrijk* : indien je zelf een constructor in een klasse definieert (met of zonder parameters), wordt er op de achtergrond [.underline]#geen# constructor meer toegevoegd.
 ====
 
 === Verplichte initialisatie
@@ -286,12 +288,41 @@ In dit geval zijn er twee constructoren, maar dat aantal is vrij uit te kiezen.
 ====
 Als een klasse meerdere constructoren bevat, moeten deze verschillen in de volgorde, het aantal, of de datatypes van de parameters.
 
-Indien dat niet het geval zou zijn, is het voor de compiler immers niet duidelijk welke constructor wordt gebruikt bij het aanmaken van een object.
+Indien dat niet het geval zou zijn, wordt het voor de compiler onmogelijk te bepalen welke constructor er precies moet worden gebruikt (omdat er meerdere keuzes mogelijk zijn).
 ====
 
 === Constructoren die elkaar oproepen
 
-Als je meerdere constructoren hebt is het soms handig om vanuit de ene constructor de andere te kunnen oproepen.  Een `this()` call in de hoofding van dergelijke constructor maakt dit mogelijk.  Zo wordt de opgeroepen constructor herbruikt (__DRY__).
+Als je meerdere constructor wil voorzien, zul je merken dat ze veel gelijklopende code bevatten.
+
+Je kunt deze code duplicatie vermijden (denk aan het _DRY_-principe) door een bepaalde constructor een andere constructor te laten oproepen. Deze oproep zorgt er dan voor dat die andere constructor alvast een deel van het initialisatie werk doet voor het nieuwe object. Er zullen in dit geval dus 2 constructoren uitgevoerd worden, die elk een stuk van het werk doen.
+
+De manier waarop je dit doet is wel een beetje ongewoon, je moet een `: this(...)` oproep toevoegen *in de hoofding* van de constructor. 
+
+Bijvoorbeeld, neem een klasse `Interval` die een interval met een instelbare onder- en een bovengrens voorstelt, bv. een interval van 5 tot 10. Stel dat we meestal beide grenzen willen opgeven maar vaak intervallen gebruiken die beginnen bij `0`, bv. een interval van 0 tot 20. We zouden dan 2 constructoren kunnen voorzien : eentje met parameters voor beide grenzen en eentje met enkel een parameter voor de bovengrens. Dat zou er dan zo kunnen uitzien :
+
+[source,csharp,linenums]
+----
+class Interval {
+	public Interval(int min, int max) {       // <1>
+		_min = min;
+		_max = max;
+		...
+	}
+
+	public Interval(int max) : this(0, max) { // <2>
+		...
+	} 
+	
+	...
+}
+----
+<1> dit is een constructor die twee datavelden invult.
+<2> deze constructor krijgt geen `min` informatie en roept de andere constructor op met een `min` waarde van `0`.
+
+Let goed op de ongewone plaats waar die `this(0, max)` oproep moet terechtkomen!
+
+Hieronder volgt nu een wat realistischer voorbeeld :
 
 ****
 [.underline]#Voorbeeld met meerdere constructoren die elkaar oproepen#
