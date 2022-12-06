@@ -408,7 +408,7 @@ Vaak is er één constructor met __alle parameters__ die door de andere construc
 class Counter {
 	public Counter(int initialValue, int stepValue) {  // <1>
 		_value = initialValue;
-		__stepValue = stepValue;
+		_stepValue = stepValue;
 	}
 
 	public Counter(int initialValue) : this(initialValue, 1) {}  // <2>
@@ -972,22 +972,22 @@ a|
 ----
 class Counter {
     public Counter() {
-	_value = 0;    
+	    _value = 0;    
         _stepValue = 1; 
     }
 
     private int _value;  
     public int Value() {
-	return _value;
+	    return _value;
     }
 
     private int _stepValue; 
     public int Step() {
-	return _stepValue;
+	    return _stepValue;
     }
 
     public void Advance() {
-	_value += Step();
+	    _value += Step();
     }
 }
 ----
@@ -996,7 +996,7 @@ a|
 ----
 class Counter {
     public Counter() {
-	Value = 0;    
+	    Value = 0;    
         Step = 1;  
     }
 
@@ -1334,7 +1334,7 @@ Deze informatie heeft de compiler nodig om naderhand bij het uitlezen van die va
 Je begrijpt ook meteen waarom er voor `string` een andere literal formaat is (tekst tussen double quotes, bijvoorbeeld `"hello"`), dan voor het `char` datatype (karakter tussen singe quotes, bijvoorbeeld `'a'`).  
 Het verschillend formaat is noodzakelijk om daaruit het type af te leiden.
 
-=== Type bepaald de mogelijkheden
+=== Type bepaalt de mogelijkheden
 
 *Het (data)type van een expressie bepaalt wat je kan doen met deze expressie, of met andere woorden: __hoe je deze grammaticaal kunt inzetten__.*  Bijvoorbeeld:
 
