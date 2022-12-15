@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 17
 Yanic Inghelbrecht
-v2022.11.14.14.00
+v2022.12.15.12.00
 include::../common/header-theorie.adoc[]
 
 
