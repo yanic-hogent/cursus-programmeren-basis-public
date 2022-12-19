@@ -1,6 +1,6 @@
 = Programmeren Basis - Deel 17 - Oefeningen
 Yanic Inghelbrecht
-v2022.11.14.14.00
+v2022.12.19.13.00
 include::../common/header-oefeningen.adoc[]
 
 
@@ -198,7 +198,7 @@ We zouden graag deze tellingen samenvoegen zodat we een overzicht kunnen maken v
 **Definieer een method `Gecombineerd` die twee tellingen samenvoegt** (bv. die van Jan en Piet) in een nieuw dictionary. Deze method zal twee parameters hebben, elk stelt een telling voor. De teruggeefwaarde van deze method is het nieuwe dictionary met de getelde totalen.
 
 * Indien beide tellingen eenzelfde transportmiddel bevatten, dan tellen we hun aantallen samen in het eindresultaat
-** Bv. het resultaat zal 'automobilist -> 251' bevatten (nl. 114 van Jan en 137 van Piet)
+** Bv. het resultaat zal 'voetganger -> 251' bevatten (nl. 114 van Jan en 137 van Piet)
 * Indien een transportmiddel slechts in 1 van beide tellingen voorkomt, wordt dat aantal gewoon overgenomen
 ** Bv. het resultaat zal 'stepper -> 2' bevatten (enkel Jan zag steppers)
 ** Bv. het resultaat zal 'paardrijder -> 1' bevatten (enkel Piet zag een paardrijder)
